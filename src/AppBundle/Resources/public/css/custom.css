@@ -1,0 +1,60 @@
+body {
+    background: linear-gradient(135deg,  #99aaa0 0%,#d197b3 33%,#e5c2c4 65%,#76588c 100%) center center / cover fixed; /* W3C */
+    height: 100%;
+
+    color: #333;
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    line-height: 1.42857;
+    -webkit-background-size: cover !important;
+    -moz-background-size: cover !important;
+    -o-background-size: cover !important;
+}
+div.battlefield-cell {
+    height: 32px;
+    width: 32px;
+    border: 1px solid #000;
+    text-align: center;
+    padding: 0;
+    font-size: 20px;
+}
+
+.battlefield-cell {
+    opacity: 0.75;
+}
+
+.battlefield-cell:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+.battlefield-cell[data-s="1"] {
+    background: #e1ffff;
+}
+.battlefield-cell[data-s="2"] {
+    background: #1e5799;
+}
+.battlefield-cell[data-s="3"] {
+    background: #000;
+}
+.battlefield-cell[data-s="4"] {
+    background: #6d0019;
+}
+
+.player-field>div:first-child>div,
+.player-field>div>div:first-child,
+.player-field>div:first-child>div:hover,
+.player-field>div>div:first-child:hover {
+    opacity: 1;
+    border: none;
+    cursor: default;
+}
+
+.player-area>.player-name {
+    font-size: 32px;
+}
+.player-id:after {
+    content: '\2F';
+}
+.player-area {
+    margin-top: 25px;
+}

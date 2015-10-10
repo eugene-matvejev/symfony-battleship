@@ -1,0 +1,20 @@
+{% extends '@App/blocks/body.html.twig' %}
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts
+    '@AppBundle/Resources/public/js/_controller.js'
+    '@AppBundle/Resources/public/js/battle.prototype.js'
+    '@AppBundle/Resources/public/js/player.prototype.js'
+    '@AppBundle/Resources/public/js/battlefield.prototype.js'
+    '@AppBundle/Resources/public/js/cell.prototype.js'
+    '@AppBundle/Resources/public/js/cell.container.prototype.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block content %}
+    <div id="battle-area">
+        Shitty JS don't work!!!
+    </div>
+{% endblock %}

@@ -1,0 +1,3 @@
+worldstores/battleship:
+  path:     /
+  defaults: { _controller: AppBundle:Default:index }

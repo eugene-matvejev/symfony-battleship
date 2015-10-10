@@ -1,0 +1,3 @@
+battleship:
+  resource: "@AppBundle/Resources/config/routing.yml"
+  prefix:   /

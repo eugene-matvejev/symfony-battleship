@@ -1,12 +1,22 @@
 $(document).ready(function() {
-        players = {
-            1: {id: 1, name: 'CPU'},
-            2: {id: 2, name: 'Human'}
-        };
+        players = [
+            {id: 1, name: 'CPU'},
+            {id: 2, name: 'Human 1'},
+            {id: 3, name: 'Human 2'},
+            {id: 4, name: 'Human 3'}
+        ];
     var battle = new Battle(players);
         battle.init();
 
     console.log(battle);
+
+    $('#battle-area')
+        .on('click', '.battlefield-cell', function(e) {
+            e.stopPropagation();
+            //var $el = $(this);
+            //console.log(this);
+            battle.update(this);
+        });
     //battleArea = new BattleArea();
     //battleArea.init();
 });
