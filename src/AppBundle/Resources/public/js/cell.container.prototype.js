@@ -1,14 +1,16 @@
-function BattlefieldData() {
-
+function CellContainer() {
+    this.navX = [];
+    this.navY = [];
+    this.data = [];
 }
-BattlefieldData.prototype = {
-    navX:     [],
-    navY:     [],
-    cellData: [],
-    cellState: {
-        waterLive: 1,
-        waterDied: 2,
-        shipLive: 3,
-        shipDied: 4
-    }
+
+CellContainer.prototype = {
+    //navX: [],
+    //navY: [],
+    //data: []
+};
+
+CellContainer.getHTML = function() {
+    return $($.parseHTML('<div class="row battlefield-cell-container">' +
+                         '</div>'));
 };

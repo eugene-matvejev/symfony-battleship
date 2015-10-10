@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>
+        {% block title %}best game ever!!{% endblock %}
+    </title>
+    {% block stylesheets %}
+        {% stylesheets
+        '@AppBundle/Resources/public/bootstrap-3.3.5-dist/css/bootstrap.min.css'
+        '@AppBundle/Resources/public/css/custom.css'
+        %}
+        <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
+        {% endstylesheets %}
+    {% endblock %}
+</head>
+<body>
+{% block body %}
+{% endblock %}
+{% block javascripts %}
+    {% javascripts
+    '@AppBundle/Resources/public/jquery/jquery-2.1.4.min.js'
+    '@AppBundle/Resources/public/bootstrap-3.3.5-dist/js/bootstrap.min.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+</body>
+</html>
