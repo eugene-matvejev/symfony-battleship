@@ -4,7 +4,7 @@ namespace AppBundle\Library\Traits;
 
 trait Nameable {
     /**
-     * @ORM\Column(name="amount", type="string", nullable=false)
+     * @ORM\Column(name="name", type="string", nullable=false)
      *
      * @var string
      */

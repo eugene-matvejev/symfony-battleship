@@ -8,30 +8,39 @@ use Doctrine\ORM\Query;
 /**
  * Battlefield
  *
- * ORM\Table(name="battlefields")
- * ORM\Entity(repositoryClass="AppBundle\Repository\BattlefieldRepository")
+ * @ORM\Table(name="battlefields")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\BattlefieldRepository")
  */
 class BattlefieldEntity
 {
     use Identifiable;
 
     /**
-     * @var
+     * @ORM\ManyToOne(targetEntity="PlayerEntity")
+     * @ORM\JoinColumn(name="player", referencedColumnName="id")
+     *
+     * @var PlayerEntity
      */
     private $player;
 
     /**
-     * @var
+     * @ORM\ManyToOne(targetEntity="GameEntity")
+     * @ORM\JoinColumn(name="game", referencedColumnName="id")
+     *
+     * @var GameEntity
      */
     private $game;
 
     /**
+     * @ORM\OneToMany(targetEntity="CellEntity", mappedBy="battlefield")
+     * @ORM\JoinColumn(name="id", referencedColumnName="battlefield")
+     *
      * @var CellEntity[]
      */
     private $cells;
 
     /**
-     * @return mixed
+     * @return PlayerEntity
      */
     public function getPlayer()
     {
@@ -40,6 +49,7 @@ class BattlefieldEntity
 
     /**
      * @param PlayerEntity $player
+     *
      * @return $this
      */
     public function setPlayer(PlayerEntity $player)
@@ -50,7 +60,7 @@ class BattlefieldEntity
     }
 
     /**
-     * @return mixed
+     * @return GameEntity
      */
     public function getGame()
     {
@@ -59,6 +69,7 @@ class BattlefieldEntity
 
     /**
      * @param GameEntity $game
+     *
      * @return $this
      */
     public function setGame(GameEntity $game)
@@ -68,7 +79,19 @@ class BattlefieldEntity
         return $this;
     }
 
-    public function addCell(CellEntity $cell) {
-        $this->cells[] = $cell;
+    /**
+     * @return CellEntity[]
+     */
+    public function getCells()
+    {
+        return $this->cells;
     }
+
+
+//    /**
+//     * @param CellEntity $cell
+//     */
+//    public function addCell(CellEntity $cell) {
+//        $this->cells[] = $cell;
+//    }
 }

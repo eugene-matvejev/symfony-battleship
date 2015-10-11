@@ -9,8 +9,8 @@ use Doctrine\ORM\Query;
 /**
  * Player
  *
- * ORM\Table(name="cellstate")
- * ORM\Entity(repositoryClass="AppBundle\Repository\CellStateRepository")
+ * @ORM\Table(name="cellState")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CellStateRepository")
  */
 class CellStateEntity
 {
