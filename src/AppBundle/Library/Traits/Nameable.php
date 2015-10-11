@@ -2,23 +2,31 @@
 
 namespace AppBundle\Library\Traits;
 
-trait Identifiable {
+trait Nameable {
     /**
-     * @ORM\Id
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(name="amount", type="string", nullable=false)
      *
-     * @var int
+     * @var string
      */
-    protected $id;
+    protected $name;
 
     /**
-     * Get id
-     *
-     * @return integer
+     * @return string
      */
-    public function getId()
+    public function getName()
     {
-        return $this->id;
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
     }
 }

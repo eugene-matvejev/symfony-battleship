@@ -1,7 +1,14 @@
 <?php
+
+namespace AppBundle\Repository;
+
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
+use Doctrine\DBAL\Types\Type as DQLType;
+
 /**
- * Created by PhpStorm.
- * User: eugenematvejev
- * Date: 11/10/15
- * Time: 01:34
+ * Class CellRepository
+ * @package AppBundle\Repository
  */
+class CellRepository extends EntityRepository {
+}

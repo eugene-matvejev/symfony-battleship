@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Query;
 
 /**
- * Payment
+ * Player
  *
  * @ORM\Table(name="players")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\PlayersRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\PlayerRepository")
  */
 class PlayerEntity
 {
