@@ -8,8 +8,8 @@ use Doctrine\ORM\Query;
 /**
  * Game
  *
- * ORM\Table(name="games")
- * ORM\Entity(repositoryClass="AppBundle\Repository\GameRepository")
+ * @ORM\Table(name="games")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\GameRepository")
  */
 class GameEntity
 {

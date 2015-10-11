@@ -8,8 +8,12 @@ use Doctrine\ORM\Query;
 /**
  * Cell
  *
- * ORM\Table(name="battlefields")
- * ORM\Entity(repositoryClass="AppBundle\Repository\CellRepository")
+ * @ORM\Table(name="cells")
+ * , uniqueConstraints={
+ *      ORM\UniqueConstraint(name="axisX", columns={"battlefieldId", "x"}),
+ *      ORM\UniqueConstraint(name="axisY", columns={"battlefieldId", "y"})
+ * })
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CellRepository")
  */
 class CellEntity
 {
@@ -30,14 +34,16 @@ class CellEntity
     private $y;
 
     /**
-     * @ORM\Column(name="state", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="CellStateEntity")
+     * @ORM\JoinColumn(name="state", referencedColumnName="id")
      *
      * @var integer
      */
     private $state;
 
     /**
-     * @ORM\Column(name="battlefield", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="BattlefieldEntity")
+     * @ORM\JoinColumn(name="battlefield", referencedColumnName="id")
      *
      * @var integer
      */
