@@ -1,7 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: eugenematvejev
- * Date: 11/10/15
- * Time: 14:45
- */
+
+namespace AppBundle\Model;
+
+class CellStateModel {
+    const WATER_LIVE = 1;
+    const WATER_DIED = 2;
+    const SHIP_LIVE  = 3;
+    const SHIP_DIED  = 4;
+}

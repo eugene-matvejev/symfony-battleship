@@ -52,9 +52,15 @@ div.battlefield-cell {
 .player-area>.player-name {
     font-size: 32px;
 }
-.player-id:after {
-    content: '\2F';
-}
 .player-area {
     margin-top: 25px;
+}
+
+
+
+#debug-area {
+    margin-top: 100px;
+    margin-bottom: 100px;
+    min-height: 100px;
+    border: 1px solid #f00;
 }

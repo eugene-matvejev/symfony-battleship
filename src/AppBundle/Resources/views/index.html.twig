@@ -14,7 +14,11 @@
 {% endblock %}
 
 {% block content %}
-    <div id="battle-area">
+    <div class="col-md-12" id="battle-area" data-turn-link="{{ path('worldstores/battleship/turn') }}"
+                                            data-start-link="{{ path('worldstores/battleship/start') }}">
         Shitty JS don't work!!!
+    </div>
+    <div class="col-md-12" id="debug-area">
+
     </div>
 {% endblock %}

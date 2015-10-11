@@ -16,23 +16,28 @@ Battle.prototype = {
             console.log(player.battlefield);
             this.players.push(player);
         }
+        this.startGame();
     },
     update: function(el) {
-        //var player = $el.parent().parent().attr('data-player-id'),
-        //    x      = $el.attr('data-x'),
-        //    y      = $el.attr('data-y'),
-        //    state  = $el.attr('data-s');
         var player = el.parentElement.parentElement.getAttribute('data-player-id'),
             x      = el.getAttribute('data-x'),
             y      = el.getAttribute('data-y'),
             state  = el.getAttribute('data-s');
 
-        console.log(player, x, y, state);
         var cell = this.getCellData(player, x, y);
+
+        console.log(player, x, y, state);
         console.log(cell);
+
+        if(cell instanceof Cell)
+            this.sendCell({x: cell.x, y: cell.y, player: player});
     },
     getCellData: function(playerId, x, y) {
-        return this.getPlayer(playerId).battlefield.getCellData(x, y);
+        var player = this.getPlayer(playerId);
+
+        return player instanceof Player
+            ? player.battlefield.getCellData(x, y)
+            : undefined;
     },
     getPlayer: function(playerId) {
         for(var i in this.players) {
@@ -41,18 +46,60 @@ Battle.prototype = {
         }
         return undefined;
     },
-    sendCell: function(action, cell) {
-        var self = this;
-        $.ajax({
-            url: '/action',
-            method: 'GET',
-            data: cell,
-            success: function(response) {
-                console.log('success >>>' , response);
-            },
-            error: function(response) {
-                console.log('error >>>' , response);
-            }
-        })
+    sendCell: function(cell) {
+        console.log(cell)
+        var self = this,
+            ajax = $.ajax({
+                contentType: 'application/json',
+                dataType: 'json',
+                method: 'GET',
+                url: self.$area.attr('data-turn-link'),
+                data: cell,
+                success: function(response) {
+                    console.log('success >>>' , response);
+                    $("#debug-area").html(response);
+                },
+                error: function(response) {
+                    console.log('error >>>' , response);
+                    $("#debug-area").html(response);
+                }
+            });
+        //$("#debug-area").html('reponse').append(ajax.responseText);
+    },
+    startGame: function() {
+        var arr = [];
+        for(var i in this.players) {
+            var player = {};
+                player = {id: this.players[i].id, name: this.players[i].name, data: []};
+                for(var j in this.players[i].battlefield.cells.data) {
+                    player.data.push(this.players[i].battlefield.cells.data[j]);
+                }
+            arr.push(player);
+        }
+
+        console.log(arr);
+        console.log(JSON.stringify(arr));
+
+        var self = this,
+            ajax = $.ajax({
+                //url: "/webservices/PodcastService.asmx/CreateMarkers",
+                // The key needs to match your method's input parameter (case-sensitive).
+                //data: JSON.stringify({ Markers: markers }),
+                contentType: "application/json; charset=utf-8",
+                //dataType: "json",
+                //contentType: 'application/json',
+                dataType: 'json',
+                method: 'POST',
+                url: self.$area.attr('data-start-link'),
+                data: JSON.stringify(arr),
+                success: function(response) {
+                    console.log('success >>>' , response);
+                    $("#debug-area").html(response);
+                },
+                error: function(response) {
+                    console.log('error >>>' , response);
+                    $("#debug-area").html(response);
+                }
+            });
     }
 };
