@@ -8,10 +8,9 @@ use Doctrine\ORM\Query;
 /**
  * Cell
  *
- * @ORM\Table(name="cells")
- * , uniqueConstraints={
- *      ORM\UniqueConstraint(name="axisX", columns={"battlefieldId", "x"}),
- *      ORM\UniqueConstraint(name="axisY", columns={"battlefieldId", "y"})
+ * @ORM\Table(name="cells", uniqueConstraints={
+ *      @ORM\UniqueConstraint(name="axisX", columns={"battlefield", "x"}),
+ *      @ORM\UniqueConstraint(name="axisY", columns={"battlefield", "y"})
  * })
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CellRepository")
  */
