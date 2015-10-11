@@ -86,12 +86,4 @@ class BattlefieldEntity
     {
         return $this->cells;
     }
-
-
-//    /**
-//     * @param CellEntity $cell
-//     */
-//    public function addCell(CellEntity $cell) {
-//        $this->cells[] = $cell;
-//    }
 }

@@ -22,7 +22,6 @@ trait Identifiable {
         return $this->id;
     }
 
-
     /**
      * @param integer $id
      *

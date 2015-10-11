@@ -51,16 +51,12 @@ class DefaultController extends Controller
     public function startAction(Request $request) {
 
         $model = $this->initModel($request);
-        $model->save();
-////        $json = json_decode($request->getContent());
-        $____ = [];
-////        foreach($json as $player) {
-////            $____[] = [$player->name, $player->id, $player->data];
-////        }
-
-//        $this->getDoctrine()->getManager();
-        return new JsonResponse([$____]);
-        return new JsonResponse([$request->getContent()]);
+        $json = json_decode($request->getContent());
+        $json->id = 'php';
+//        $model->save();
+//        $model->get
+//        return new JsonResponse([]);
+        return new JsonResponse($json);
     }
 
     /**

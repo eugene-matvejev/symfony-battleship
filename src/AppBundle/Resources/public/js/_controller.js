@@ -5,17 +5,17 @@ $(document).ready(function() {
             {id: 3, name: 'Human 2'},
             {id: 4, name: 'Human 3'}
         ];
-    var battle = new Battle(players);
-        battle.init();
+    var game = new Game(players);
+        game.init();
 
-    console.log(battle);
+    console.log(game);
 
     $('#battle-area')
         .on('click', '.battlefield-cell', function(e) {
             e.stopPropagation();
             //var $el = $(this);
             //console.log(this);
-            battle.update(this);
+            game.update(this);
         });
     //battleArea = new BattleArea();
     //battleArea.init();

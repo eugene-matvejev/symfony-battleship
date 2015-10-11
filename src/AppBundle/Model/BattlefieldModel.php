@@ -129,21 +129,20 @@ class BattlefieldModel {
      */
     public function save() {
         $this->data = json_decode($this->data);
-
-        $cellStates = [
-            CellStateModel::WATER_LIVE => $this->cellStateRepository->findOneBy(['id' => CellStateModel::WATER_LIVE]),
-            CellStateModel::WATER_DIED => $this->cellStateRepository->findOneBy(['id' => CellStateModel::WATER_DIED]),
-            CellStateModel::SHIP_LIVE  => $this->cellStateRepository->findOneBy(['id' => CellStateModel::SHIP_LIVE]),
-            CellStateModel::SHIP_LIVE  => $this->cellStateRepository->findOneBy(['id' => CellStateModel::SHIP_LIVE])
-        ];
+        $cellStates = $this->cellStateRepository->getStates();
 
         foreach($this->data as $playerData) {
-            $player = (new PlayerEntity())
+            $player = $this->playerRepository->findOneBy(['id' => $playerData->id]);
+            if(!$player instanceof PlayerEntity) {
+                $player = (new PlayerEntity())
                     ->setId($playerData->id)
                     ->setName($playerData->name);
-            $this->entityManager->persist($player);
+                $this->entityManager->persist($player);
+            }
 
             $game = (new GameEntity());
+            $game = $this->gameRepository->findOneBy(['id' => $game->id]);
+
             $this->entityManager->persist($game);
 
             $battlefield = (new BattlefieldEntity())
