@@ -35,7 +35,7 @@ class CellEntity
      * @ORM\ManyToOne(targetEntity="CellStateEntity")
      * @ORM\JoinColumn(name="state", referencedColumnName="id")
      *
-     * @var integer
+     * @var CellStateEntity
      */
     private $state;
 

@@ -1,13 +1,13 @@
 worldstores/battleship:
     path:     /
-    defaults: { _controller: AppBundle:Default:index }
+    defaults: { _controller: AppBundle:Game:index }
 worldstores/battleship/turn:
     path:     /turn
-    defaults: { _controller: AppBundle:Default:turn }
+    defaults: { _controller: AppBundle:Game:turn }
 worldstores/battleship/start:
     path:     /start
-    defaults: { _controller: AppBundle:Default:start }
+    defaults: { _controller: AppBundle:Game:start }
 worldstores/battleship/finish:
     path:     /finish
-    defaults: { _controller: AppBundle:Default:finish }
+    defaults: { _controller: AppBundle:Game:finish }
 

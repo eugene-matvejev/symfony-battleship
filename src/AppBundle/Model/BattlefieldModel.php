@@ -42,26 +42,16 @@ class BattlefieldModel {
     private $entityManager;
 
     /**
-     * @var \stdClass
-     */
-    private $json;
-
-    /**
      * @var CellStateEntity[]
      */
     private $cellStates;
 
     /**
-     * @param \stdClass         $json
      * @param CellStateEntity[] $cellStates
      */
-    public function __construct(\stdClass $json, array $cellStates) {
-        $this->json       = $json;
+    public function __construct(array $cellStates) {
         $this->cellStates = $cellStates;
-        $cellStateModel   = (new CellStateModel())
-                ->setCellStates($cellStates);
-        $this->ai         = (new Core())
-                ->setCellStateModel($cellStateModel);
+        $this->ai         = (new Core())->setCellStateModel((new CellStateModel())->setCellStates($cellStates));
     }
 
     /**
@@ -131,37 +121,29 @@ class BattlefieldModel {
     }
 
     /**
+     * @param \stdClass $json
+     *
      * @return \stdClass
      */
-    public function getJson()
+    public function save(\stdClass $json)
     {
-        return $this->json;
-    }
-
-    /**
-     *
-     */
-    public function save()
-    {
-
-        $game = $this->gameRepository->findOneBy(['id' => $this->json->id]);
+        $game = $this->gameRepository->findOneBy(['id' => $json->id]);
         if(!$game instanceof GameEntity) {
-            $game = (new GameEntity())
-                    ->setName($this->json->name);
+            $game = new GameEntity();
             $this->entityManager->persist($game);
             $this->entityManager->flush();
-            $this->json->id = $game->getId();
+            $json->id = $game->getId();
         }
 
-        foreach($this->json->data as $json) {
-            $player = $this->playerRepository->findOneBy(['name' => $json->player->name]);
+        foreach($json->data as $gameJSON) {
+            $player = $this->playerRepository->findOneBy(['name' => $gameJSON->player->name]);
             if(!$player instanceof PlayerEntity) {
                 $player = (new PlayerEntity())
                     ->setName($json->player->name);
                 $this->entityManager->persist($player);
                 $this->entityManager->flush();
             }
-            $json->player->id = $player->getId();
+            $gameJSON->player->id = $player->getId();
 
             $battlefield = $this->battlefieldRepository->findOneBy(['player' => $player, 'game' => $game]);
             if(!$battlefield instanceof BattlefieldEntity) {
@@ -170,17 +152,17 @@ class BattlefieldModel {
                     ->setPlayer($player);
                 $this->entityManager->persist($battlefield);
                 $this->entityManager->flush();
-                $json->battlefield->id = $battlefield->getId();
+                $gameJSON->battlefield->id = $battlefield->getId();
             }
 
-            foreach($json->cells as $cellData) {
+            foreach($gameJSON->cells as $cellData) {
                 $cell = (new CellEntity())
                         ->setX($cellData->x)
                         ->setY($cellData->y)
                         ->setState($this->cellStates[$cellData->s])
                         ->setBattlefield($battlefield);
 
-                if($json->player->name == 'CPU' && !$this->ai->isTurnDone()) {
+                if($gameJSON->player->name == 'CPU' && !$this->ai->isTurnDone()) {
                     $this->ai->turn($cell);
                 }
 
@@ -188,6 +170,8 @@ class BattlefieldModel {
             }
             $this->entityManager->flush();
         }
+
+        return $json;
     }
 
     /**
@@ -208,9 +192,9 @@ class BattlefieldModel {
          * @var $cell CellEntity
          */
 
-        $cellStateModel = (new CellStateModel())
-                        ->setCellStates($this->cellStates);
-        $cellStateModel->swapStatus($cell);
+        (new CellStateModel())
+            ->setCellStates($this->cellStates)
+            ->swapStatus($cell);
 
         $this->entityManager->persist($cell);
         $this->entityManager->flush();
@@ -231,16 +215,17 @@ class BattlefieldModel {
      */
     public function AITurn(\stdClass $json)
     {
-        $turnJSON    = new \stdClass();
         $cpuPlayer   = $this->playerRepository->findOneBy(['name' => 'CPU']);
         $game        = $this->gameRepository->findOneBy(['id' => $json->game->id]);
         $battlefield = $this->battlefieldRepository->findOneBy(['player' => $cpuPlayer, 'game' => $game]);
+
         /**
          * @var $battlefield BattlefieldEntity
          * @var $cpuPlayer PlayerEntity
          * @var $game GameEntity
          */
 
+        $turnJSON    = new \stdClass();
         foreach($battlefield->getCells() as $cell) {
             if($this->ai->isTurnDone())
                 return $turnJSON;

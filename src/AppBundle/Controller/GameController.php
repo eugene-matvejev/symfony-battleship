@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class DefaultController extends Controller
+class GameController extends Controller
 {
     /**
      * @return Response
@@ -50,9 +50,9 @@ class DefaultController extends Controller
      */
     public function startAction(Request $request) {
 
-        $model = $this->initModel(json_decode($request->getContent()));
-        $model->save();
-        return new JsonResponse($model->getJSON());
+        $model = $this->initModel();
+        $json = $model->save(json_decode($request->getContent()));
+        return new JsonResponse($json);
     }
 
     /**
@@ -70,8 +70,8 @@ class DefaultController extends Controller
      *
      * @return BattlefieldModel
      */
-    private function initModel(\stdClass $json) {
-        return (new BattlefieldModel($json, $this->getDoctrine()->getRepository('AppBundle:CellStateEntity')->getStates()))
+    private function initModel() {
+        return (new BattlefieldModel($this->getDoctrine()->getRepository('AppBundle:CellStateEntity')->getStates()))
                 ->setPlayerRepository($this->getDoctrine()->getRepository('AppBundle:PlayerEntity'))
                 ->setGameRepository($this->getDoctrine()->getRepository('AppBundle:GameEntity'))
                 ->setBattlefieldRepository($this->getDoctrine()->getRepository('AppBundle:BattlefieldEntity'))
