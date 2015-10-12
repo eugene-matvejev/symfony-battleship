@@ -26,11 +26,13 @@ class DefaultController extends Controller
      * @return JsonResponse
      */
     public function turnAction(Request $request) {
-        $player = $request->get('player');
-        $x      = $request->get('x');
-        $y      = $request->get('y');
+        $json = json_decode($request->getContent());
+        $model = $this->initModel(new \stdClass());
 
-        return new JsonResponse(['x' => $x, 'y' => $y, 'player' => $player]);
+        return new JsonResponse([
+            $model->PlayerTurn($json),
+            $model->AIturn($json)
+        ]);
     }
 
     /**
@@ -50,13 +52,9 @@ class DefaultController extends Controller
      */
     public function startAction(Request $request) {
 
-        $model = $this->initModel($request);
-        $json = json_decode($request->getContent());
-        $json->id = 'php';
-//        $model->save();
-//        $model->get
-//        return new JsonResponse([]);
-        return new JsonResponse($json);
+        $model = $this->initModel(json_decode($request->getContent()));
+        $model->save();
+        return new JsonResponse($model->getJSON());
     }
 
     /**
@@ -70,16 +68,16 @@ class DefaultController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param \stdClass $json
+     *
      * @return BattlefieldModel
      */
-    private function initModel(Request $request) {
-        return (new BattlefieldModel($request))
+    private function initModel(\stdClass $json) {
+        return (new BattlefieldModel($json, $this->getDoctrine()->getRepository('AppBundle:CellStateEntity')->getStates()))
+                ->setPlayerRepository($this->getDoctrine()->getRepository('AppBundle:PlayerEntity'))
+                ->setGameRepository($this->getDoctrine()->getRepository('AppBundle:GameEntity'))
                 ->setBattlefieldRepository($this->getDoctrine()->getRepository('AppBundle:BattlefieldEntity'))
                 ->setCellRepository($this->getDoctrine()->getRepository('AppBundle:CellEntity'))
-                ->setCellStateRepository($this->getDoctrine()->getRepository('AppBundle:CellStateEntity'))
-                ->setGameRepository($this->getDoctrine()->getRepository('AppBundle:GameEntity'))
-                ->setPlayerRepository($this->getDoctrine()->getRepository('AppBundle:PlayerEntity'))
                 ->setEntityManager($this->getDoctrine()->getManager());
     }
 }

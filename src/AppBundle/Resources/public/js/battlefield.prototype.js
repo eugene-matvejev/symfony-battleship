@@ -1,21 +1,16 @@
 function Battlefield() {
+    this.id    = 'unk';
+    this.cells = new CellContainer();
 }
 
 Battlefield.prototype = {
     size: 10,
-    cells: undefined,
     $area: undefined,
     setArea: function($el) {
         this.$area = $el;
         return this;
     },
-    init: function() {
-        this.initData();
-        this.mockData();
-        this.initHTML();
-    },
     initData: function() {
-        this.cells = new CellContainer();
         for(var x = 0; x < this.size; x++) {
             var cells = [];
 
@@ -29,11 +24,10 @@ Battlefield.prototype = {
             this.cells.data.push(cells);
         }
     },
-    initHTML: function() {
-        var cellContainer = CellContainer.getHTML();
-            xAxis         = cellContainer.clone();
+    updateHTML: function() {
+        var cellContainer = CellContainer.getHTML(),
+            xAxis         = cellContainer.clone().append(Cell.getHTML(undefined, undefined, undefined, undefined));
 
-        xAxis.append(Cell.getHTML(undefined, undefined, undefined, undefined));
         for(var i in this.cells.navX) {
             xAxis.append(Cell.getHTML(undefined, undefined, undefined, Battlefield.formatXAxis(this.cells.navX[i])));
         }
@@ -45,8 +39,6 @@ Battlefield.prototype = {
             html.append(Cell.getHTML(undefined, undefined, undefined, Battlefield.formatYAxis(this.cells.navY[i])));
             for(var j in this.cells.data[i]) {
                 var cell = this.cells.data[i][j];
-
-                //console.log(cell);
 
                 html.append(cell.getHTML());
             }

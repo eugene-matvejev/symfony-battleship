@@ -5,12 +5,8 @@ function CellContainer() {
 }
 
 CellContainer.prototype = {
-    //navX: [],
-    //navY: [],
-    //data: []
 };
 
 CellContainer.getHTML = function() {
-    return $($.parseHTML('<div class="row battlefield-cell-container">' +
-                         '</div>'));
+    return $($.parseHTML('<div class="row battlefield-cell-container"></div>'));
 };

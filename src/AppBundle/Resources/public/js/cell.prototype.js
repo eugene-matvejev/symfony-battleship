@@ -5,6 +5,11 @@ function Cell(x, y, state) {
 }
 
 Cell.prototype = {
+    setState: function(state) {
+        this.s = state;
+
+        return this;
+    },
     getHTML: function() {
         return Cell.getHTML(this.x, this.y, this.s);
     }
@@ -19,5 +24,5 @@ Cell.states = {
 Cell.getHTML = function(x, y, state, txt) {
     return $($.parseHTML('<div class="col-md-1 battlefield-cell" data-x="' + x + '" data-y="' + y + '" data-s="' + state +'">' +
                              (txt !== undefined ? txt : '') +
-                        '</div>'));
+                         '</div>'));
 };

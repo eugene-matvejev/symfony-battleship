@@ -9,8 +9,7 @@ use Doctrine\ORM\Query;
  * Cell
  *
  * @ORM\Table(name="cells", uniqueConstraints={
- *      @ORM\UniqueConstraint(name="axisX", columns={"battlefield", "x"}),
- *      @ORM\UniqueConstraint(name="axisY", columns={"battlefield", "y"})
+ *      @ORM\UniqueConstraint(name="axisXY", columns={"battlefield", "x", "y"})
  * })
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CellRepository")
  */
@@ -89,7 +88,7 @@ class CellEntity
     }
 
     /**
-     * @return int
+     * @return CellStateEntity
      */
     public function getState()
     {

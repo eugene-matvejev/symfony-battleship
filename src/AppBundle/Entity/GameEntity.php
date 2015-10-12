@@ -14,5 +14,5 @@ use Doctrine\ORM\Query;
  */
 class GameEntity
 {
-    use Identifiable, Nameable;
+    use Identifiable;
 }
