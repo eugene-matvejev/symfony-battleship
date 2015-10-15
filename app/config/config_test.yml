@@ -11,6 +11,16 @@ framework:
 web_profiler:
     toolbar: false
     intercept_redirects: false
+#
+#swiftmailer:
+#    disable_delivery: true
 
-swiftmailer:
-    disable_delivery: true
+doctrine:
+    dbal:
+        driver:   pdo_mysql
+        host:     %database_host_test%
+        port:     %database_port_test%
+        dbname:   %database_name_test%
+        user:     %database_user_test%
+        password: %database_password_test%
+        charset:  UTF8
