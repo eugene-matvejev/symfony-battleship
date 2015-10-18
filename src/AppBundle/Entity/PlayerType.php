@@ -4,15 +4,14 @@ namespace AppBundle\Entity;
 use AppBundle\Library\Traits\Identifiable;
 use AppBundle\Library\Traits\Nameable;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Query;
 
 /**
- * Player
+ * PlayerType
  *
- * @ORM\Table(name="cellState")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CellStateRepository")
+ * @ORM\Table(name="playerType")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\PlayerTypeRepository")
  */
-class CellStateEntity
+class PlayerType
 {
     use Identifiable, Nameable;
 }

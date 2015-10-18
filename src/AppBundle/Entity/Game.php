@@ -7,12 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Query;
 
 /**
- * Player
+ * Game
  *
- * @ORM\Table(name="players")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\PlayerRepository")
+ * @ORM\Table(name="games")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\GameRepository")
  */
-class PlayerEntity
+class Game
 {
-    use Identifiable, Nameable;
+    use Identifiable;
 }

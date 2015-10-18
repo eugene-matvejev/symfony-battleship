@@ -11,36 +11,36 @@ use Doctrine\ORM\Query;
  * @ORM\Table(name="battlefields")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\BattlefieldRepository")
  */
-class BattlefieldEntity
+class Battlefield
 {
     use Identifiable;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PlayerEntity")
+     * @ORM\ManyToOne(targetEntity="Player")
      * @ORM\JoinColumn(name="player", referencedColumnName="id")
      *
-     * @var PlayerEntity
+     * @var Player
      */
     private $player;
 
     /**
-     * @ORM\ManyToOne(targetEntity="GameEntity")
+     * @ORM\ManyToOne(targetEntity="Game")
      * @ORM\JoinColumn(name="game", referencedColumnName="id")
      *
-     * @var GameEntity
+     * @var Game
      */
     private $game;
 
     /**
-     * @ORM\OneToMany(targetEntity="CellEntity", mappedBy="battlefield")
+     * @ORM\OneToMany(targetEntity="Cell", mappedBy="battlefield")
      * @ORM\JoinColumn(name="id", referencedColumnName="battlefield")
      *
-     * @var CellEntity[]
+     * @var Cell[]
      */
     private $cells;
 
     /**
-     * @return PlayerEntity
+     * @return Player
      */
     public function getPlayer()
     {
@@ -48,11 +48,11 @@ class BattlefieldEntity
     }
 
     /**
-     * @param PlayerEntity $player
+     * @param Player $player
      *
      * @return $this
      */
-    public function setPlayer(PlayerEntity $player)
+    public function setPlayer(Player $player)
     {
         $this->player = $player;
 
@@ -60,7 +60,7 @@ class BattlefieldEntity
     }
 
     /**
-     * @return GameEntity
+     * @return Game
      */
     public function getGame()
     {
@@ -68,11 +68,11 @@ class BattlefieldEntity
     }
 
     /**
-     * @param GameEntity $game
+     * @param Game $game
      *
      * @return $this
      */
-    public function setGame(GameEntity $game)
+    public function setGame(Game $game)
     {
         $this->game = $game;
 
@@ -80,7 +80,7 @@ class BattlefieldEntity
     }
 
     /**
-     * @return CellEntity[]
+     * @return Cell[]
      */
     public function getCells()
     {

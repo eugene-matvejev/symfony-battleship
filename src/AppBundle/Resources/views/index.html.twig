@@ -2,12 +2,12 @@
 {% block javascripts %}
     {{ parent() }}
     {% javascripts
-    '@AppBundle/Resources/public/js/_controller.js'
-    '@AppBundle/Resources/public/js/game.prototype.js'
-    '@AppBundle/Resources/public/js/player.prototype.js'
-    '@AppBundle/Resources/public/js/battlefield.prototype.js'
-    '@AppBundle/Resources/public/js/cell.prototype.js'
-    '@AppBundle/Resources/public/js/cell.container.prototype.js'
+    '@AppBundle/Resources/public/js/_game.controller.js'
+    '@AppBundle/Resources/public/js/prototypes/core/game.prototype.js'
+    '@AppBundle/Resources/public/js/prototypes/core/player.prototype.js'
+    '@AppBundle/Resources/public/js/prototypes/core/battlefield.prototype.js'
+    '@AppBundle/Resources/public/js/prototypes/core/cell.prototype.js'
+    '@AppBundle/Resources/public/js/prototypes/core/cell.container.prototype.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -19,6 +19,5 @@
         Shitty JS don't work!!!
     </div>
     <div class="col-md-12" id="debug-area">
-
     </div>
 {% endblock %}

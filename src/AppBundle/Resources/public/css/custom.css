@@ -1,26 +1,119 @@
 body {
-    background: linear-gradient(135deg,  #99aaa0 0%,#d197b3 33%,#e5c2c4 65%,#76588c 100%) center center / cover fixed; /* W3C */
     height: 100%;
 
     color: #333;
     font-family: 'Lato', sans-serif;
     font-size: 16px;
     line-height: 1.42857;
-    -webkit-background-size: cover !important;
-    -moz-background-size: cover !important;
-    -o-background-size: cover !important;
+    -webkit-background-size: cover;
+       -moz-background-size: cover;
+         -o-background-size: cover;
+            background-size: cover;
+    background: linear-gradient(135deg,  #99aaa0 0%,#d197b3 33%,#e5c2c4 65%,#76588c 100%) center center / cover fixed; /* W3C */
 }
-div.battlefield-cell {
-    height: 32px;
-    width: 32px;
-    border: 1px solid #000;
-    text-align: center;
+body>.container {
+    width: 100%;
     padding: 0;
-    font-size: 20px;
+    margin: 0;
 }
 
+
+
+.page-sidebar,
+.page-content {
+    padding-left: 0;
+    -webkit-transition: all 0.5s ease;
+       -moz-transition: all 0.5s ease;
+         -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+    color: #fff;
+}
+.page-sidebar {
+    position: fixed;
+    width: 250px;
+    height: 100%;
+    left: 0;
+    z-index: 1000;
+    overflow-y: auto;
+    background: linear-gradient(to bottom,  #b26cab 0%,#765c8b 100%); /* W3C */
+}
+.page-content {
+    padding-left: 275px;
+}
+.page-sidebar.toggled {
+    width: 0;
+}
+.page-content.toggled {
+    padding-left: 25px;
+}
+.page-content:not(.toggled) .toggle-btn {
+    opacity: 0;
+}
+.page-content.toggled .toggle-btn {
+    opacity: 1;
+}
+.toggle-btn {
+    cursor: pointer;
+}
+.page-header {
+    font-size: 24px;
+    line-height: 28px;
+    padding-left: 20px;
+}
+.sidebar-brand>.page-header {
+}
+.sidebar-nav {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.sidebar-nav>li {
+    width: 250px;
+}
+.sidebar-nav>li.sidebar-brand span {
+    float: right;
+    padding-right: 10px;
+}
+.sidebar-nav>li:not(.sidebar-brand) {
+    padding: 10px 15px;
+    font-size: 16px;
+    text-align: right;
+    text-transform: uppercase;
+    background: transparent;
+}
+.sidebar-nav>li:not(.sidebar-brand):hover {
+    background: #fff;
+    color: #000;
+    cursor: pointer;
+}
+.page-content:not(.toggled) .toggle-btn {
+    opacity: 0;
+}
+/*.page-content:not(.toggled) .toggle-btn {*/
+    /*opacity: 0;*/
+    /*-webkit-transition: opacity .1s ease-in;*/
+       /*-moz-transition: opacity .1s ease-in;*/
+         /*-o-transition: opacity .1s ease-in;*/
+            /*transition: opacity .1s ease-in;*/
+/*}*/
+/*.page-content.toggled .toggle-btn {*/
+    /*opacity: 1;*/
+    /*-webkit-transition: opacity .1s ease-out;*/
+       /*-moz-transition: opacity .1s ease-out;*/
+         /*-o-transition: opacity .1s ease-out;*/
+            /*transition: opacity .1s ease-out;*/
+/*}​*/
+
+
+
 .battlefield-cell {
+    height: 32px;
+    width: 32px;
+    padding: 0;
     opacity: 0.75;
+    font-size: 20px;
+    border: 1px solid #000;
+    text-align: center;
 }
 
 .battlefield-cell:hover {
@@ -63,4 +156,9 @@ div.battlefield-cell {
     margin-bottom: 100px;
     min-height: 100px;
     border: 1px solid #f00;
+}
+
+
+.player-area[data-player-typeof="2"] .battlefield-cell:hover {
+    cursor: no-drop;
 }

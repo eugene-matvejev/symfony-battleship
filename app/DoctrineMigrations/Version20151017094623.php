@@ -2,14 +2,14 @@
 
 namespace Application\Migrations;
 
-use AppBundle\Model\CellStateModel;
+use AppBundle\Model\PlayerModel;
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20151011160358 extends AbstractMigration
+class Version20151017094623 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -21,12 +21,10 @@ class Version20151011160358 extends AbstractMigration
 
         $this->addSql('
             INSERT INTO
-                cellState
+                playerType
             VALUES
-                ('. CellStateModel::WATER_LIVE .', "untouched water"),
-                ('. CellStateModel::WATER_DIED .', "shooted water"),
-                ('. CellStateModel::SHIP_LIVE .', "live ship"),
-                ('. CellStateModel::SHIP_DIED .', "damaged ship");');
+                ('. PlayerModel::TYPE_CPU .', "Player controlled by computer"),
+                ('. PlayerModel::TYPE_HUMAN .', "Player controlled by human");');
     }
 
     /**
@@ -35,5 +33,6 @@ class Version20151011160358 extends AbstractMigration
     public function down(Schema $schema)
     {
         // this down() migration is auto-generated, please modify it to your needs
+
     }
 }

@@ -20,9 +20,10 @@ class ComposerCommand extends ScriptHandler
             return;
         }
 
+        static::executeCommand($event, $consoleDir, 'doctrine:database:create --env=prod --if-not-exists');
+
         if($event->isDevMode()) {
             static::executeCommand($event, $consoleDir, 'doctrine:database:create --env=test --if-not-exists');
         }
-        static::executeCommand($event, $consoleDir, 'doctrine:database:create --env=prod --if-not-exists');
     }
 }
