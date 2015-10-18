@@ -5,14 +5,14 @@
     <title>
         {% block title %}best game ever!!{% endblock %}
     </title>
-    {% block stylesheets %}
-        {% stylesheets
-        '@AppBundle/Resources/public/bootstrap-3.3.5-dist/css/bootstrap.min.css'
-        '@AppBundle/Resources/public/css/custom.css'
-        %}
-        <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
-        {% endstylesheets %}
-    {% endblock %}
+{% block stylesheets %}
+    {% stylesheets filter='cssrewrite'
+    '@AppBundle/Resources/public/bootstrap-3.3.5-dist/css/bootstrap.min.css'
+    '@AppBundle/Resources/public/css/custom.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
+    {% endstylesheets %}
+{% endblock %}
 </head>
 <body>
 {% block body %}
@@ -21,6 +21,8 @@
     {% javascripts
     '@AppBundle/Resources/public/jquery/jquery-2.1.4.min.js'
     '@AppBundle/Resources/public/bootstrap-3.3.5-dist/js/bootstrap.min.js'
+    '@AppBundle/Resources/public/js/prototypes/gui/page.mgr.protorype.js'
+    '@AppBundle/Resources/public/js/_page.controller.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

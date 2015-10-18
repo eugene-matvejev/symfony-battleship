@@ -13,7 +13,7 @@ use Doctrine\ORM\Query;
  * })
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CellRepository")
  */
-class CellEntity
+class Cell
 {
     use Identifiable;
 
@@ -32,15 +32,15 @@ class CellEntity
     private $y;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CellStateEntity")
+     * @ORM\ManyToOne(targetEntity="CellState")
      * @ORM\JoinColumn(name="state", referencedColumnName="id")
      *
-     * @var CellStateEntity
+     * @var CellState
      */
     private $state;
 
     /**
-     * @ORM\ManyToOne(targetEntity="BattlefieldEntity")
+     * @ORM\ManyToOne(targetEntity="Battlefield")
      * @ORM\JoinColumn(name="battlefield", referencedColumnName="id")
      *
      * @var integer
@@ -88,7 +88,7 @@ class CellEntity
     }
 
     /**
-     * @return CellStateEntity
+     * @return CellState
      */
     public function getState()
     {
@@ -96,11 +96,11 @@ class CellEntity
     }
 
     /**
-     * @param CellStateEntity $state
+     * @param CellState $state
      *
      * @return $this
      */
-    public function setState(CellStateEntity $state)
+    public function setState(CellState $state)
     {
         $this->state = $state;
 
@@ -116,11 +116,11 @@ class CellEntity
     }
 
     /**
-     * @param BattlefieldEntity $battlefield
+     * @param Battlefield $battlefield
      *
      * @return $this
      */
-    public function setBattlefield(BattlefieldEntity $battlefield)
+    public function setBattlefield(Battlefield $battlefield)
     {
         $this->battlefield = $battlefield;
 

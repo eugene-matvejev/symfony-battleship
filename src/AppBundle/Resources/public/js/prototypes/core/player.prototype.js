@@ -1,5 +1,6 @@
-function Player($el) {
-    this.$area       = $el;
+function Player($el, _typeof) {
+    this.$html       = $el;
+    this.typeof      = _typeof !== undefined ? Player.typeof.cpu : Player.typeof.human;
     this.battlefield = new Battlefield();
     this.battlefield.initData();
     this.battlefield.mockData();
@@ -7,7 +8,8 @@ function Player($el) {
 
 Player.prototype = {
     id: 'undefined',
-    name: undefined,
+    name: 'undefined',
+    typeof: 'undefined',
     setId: function(id) {
         this.id = id;
 
@@ -22,12 +24,17 @@ Player.prototype = {
         var $html = this.getLayoutHTML();
         this.battlefield.setArea($html.find('.player-field'))
                         .updateHTML();
-        this.$area.append($html);
+        this.$html.append($html);
     },
     getLayoutHTML: function() {
-        return $($.parseHTML('<div class="col-md-6 player-area ">' +
+        return $($.parseHTML('<div class="col-md-6 player-area"' +
+                        ' ' + Player.tag.id + '="' + this.id + '"' +
+                        ' ' + Player.tag.typeof + '="' + this.typeof + '">' +
                                  '<div class="player-name">' + this.name + '</div>' +
-                                 '<div class="player-field" data-player-id="' + this.id + '"></div>' +
+                                 '<div class="player-field"></div>' +
                              '</div>'));
     }
 };
+
+Player.tag    = { id: 'data-player-id', typeof: 'data-player-typeof' };
+Player.typeof = { cpu: 1, human: 2 };

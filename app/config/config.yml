@@ -33,14 +33,30 @@ framework:
 
 # Twig Configuration
 twig:
-    debug:            "%kernel.debug%"
-    strict_variables: "%kernel.debug%"
+    debug:            %kernel.debug%
+    strict_variables: %kernel.debug%
 
 # Assetic Configuration
 assetic:
-    debug:          "%kernel.debug%"
+    debug:          %kernel.debug%
     use_controller: false
-    bundles:        [AppBundle]
+    bundles:        [ AppBundle ]
+    assets:
+        eot:
+            inputs: '%kernel.root_dir%/../src/AppBundle/Resources/public/bootstrap-3.3.5-dist/fonts/glyphicons-halflings-regular.eot'
+            output: 'Resources/public/bootstrap-3.3.5-dist/fonts/glyphicons-halflings-regular.eot'
+        svg:
+            inputs: '%kernel.root_dir%/../src/AppBundle/Resources/public/bootstrap-3.3.5-dist/fonts/glyphicons-halflings-regular.svg'
+            output: 'Resources/public/bootstrap-3.3.5-dist/fonts/glyphicons-halflings-regular.svg'
+        ttf:
+            inputs: '%kernel.root_dir%/../src/AppBundle/Resources/public/bootstrap-3.3.5-dist/fonts/glyphicons-halflings-regular.ttf'
+            output: 'Resources/public/bootstrap-3.3.5-dist/fonts/glyphicons-halflings-regular.ttf'
+        woff:
+            inputs: '%kernel.root_dir%/../src/AppBundle/Resources/public/bootstrap-3.3.5-dist/fonts/glyphicons-halflings-regular.woff'
+            output: 'Resources/public/bootstrap-3.3.5-dist/fonts/glyphicons-halflings-regular.woff'
+        woff2:
+            inputs: '%kernel.root_dir%/../src/AppBundle/Resources/public/bootstrap-3.3.5-dist/fonts/glyphicons-halflings-regular.woff2'
+            output: 'Resources/public/bootstrap-3.3.5-dist/fonts/glyphicons-halflings-regular.woff2'
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
@@ -65,7 +81,7 @@ doctrine:
         #   2. Uncomment database_path in parameters.yml.dist
         #   3. Uncomment next line:
         #     path:     "%database_path%"
-
+        server_version: 5
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         naming_strategy: doctrine.orm.naming_strategy.underscore

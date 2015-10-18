@@ -2,8 +2,8 @@
 
 namespace AppBundle\Model;
 
-use AppBundle\Entity\CellEntity;
-use AppBundle\Entity\CellStateEntity;
+use AppBundle\Entity\Cell;
+use AppBundle\Entity\CellState;
 
 class CellStateModel {
     const WATER_LIVE = 1;
@@ -12,12 +12,12 @@ class CellStateModel {
     const SHIP_DIED  = 4;
 
     /**
-     * @var CellStateEntity[]
+     * @var CellState[]
      */
     private $cellStates;
 
     /**
-     * @return CellStateEntity[]
+     * @return CellState[]
      */
     public function getCellStates()
     {
@@ -25,7 +25,7 @@ class CellStateModel {
     }
 
     /**
-     * @param CellStateEntity[] $cellStates
+     * @param CellState[] $cellStates
      *
      * @return $this
      */
@@ -36,7 +36,11 @@ class CellStateModel {
         return $this;
     }
 
-    public function swapStatus(CellEntity $cell) {
+    /**
+     * @param Cell $cell
+     */
+    public function swapStatus(Cell $cell)
+    {
         switch($cell->getState()->getId()) {
             case self::WATER_LIVE:
                 $cell->setState($this->cellStates[self::WATER_DIED]);

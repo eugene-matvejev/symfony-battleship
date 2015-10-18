@@ -11,3 +11,8 @@
 /bin/
 /composer.phar
 /.idea/*
+/web/assets/*
+/web/bundles/*
+/web/css/*
+/web/js/*
+

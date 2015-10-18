@@ -2,7 +2,7 @@
 
 namespace AppBundle\Library\AI;
 
-use AppBundle\Entity\CellEntity;
+use AppBundle\Entity\Cell;
 use AppBundle\Model\CellStateModel;
 
 class Core {
@@ -50,9 +50,9 @@ class Core {
     }
 
     /**
-     * @param CellEntity $cell
+     * @param Cell $cell
      */
-    public function turn(CellEntity $cell)
+    public function turn(Cell $cell)
     {
         if(in_array($cell->getState()->getId(), [CellStateModel::WATER_LIVE, CellStateModel::SHIP_LIVE])) {
             $this->cellStateModel->swapStatus($cell);

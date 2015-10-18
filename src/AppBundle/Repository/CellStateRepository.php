@@ -4,7 +4,6 @@ namespace AppBundle\Repository;
 
 use AppBundle\Model\CellStateModel;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query;
 
 /**
  * Class CellStateRepository

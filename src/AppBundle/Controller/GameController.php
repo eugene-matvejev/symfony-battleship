@@ -66,16 +66,15 @@ class GameController extends Controller
     }
 
     /**
-     * @param \stdClass $json
-     *
      * @return BattlefieldModel
      */
     private function initModel() {
-        return (new BattlefieldModel($this->getDoctrine()->getRepository('AppBundle:CellStateEntity')->getStates()))
-                ->setPlayerRepository($this->getDoctrine()->getRepository('AppBundle:PlayerEntity'))
-                ->setGameRepository($this->getDoctrine()->getRepository('AppBundle:GameEntity'))
-                ->setBattlefieldRepository($this->getDoctrine()->getRepository('AppBundle:BattlefieldEntity'))
-                ->setCellRepository($this->getDoctrine()->getRepository('AppBundle:CellEntity'))
+        return (new BattlefieldModel($this->getDoctrine()->getRepository('AppBundle:CellState')->getStates()))
+                ->setPlayerRepository($this->getDoctrine()->getRepository('AppBundle:Player'))
+                ->setPlayerTypeRepository($this->getDoctrine()->getRepository('AppBundle:PlayerType'))
+                ->setGameRepository($this->getDoctrine()->getRepository('AppBundle:Game'))
+                ->setBattlefieldRepository($this->getDoctrine()->getRepository('AppBundle:Battlefield'))
+                ->setCellRepository($this->getDoctrine()->getRepository('AppBundle:Cell'))
                 ->setEntityManager($this->getDoctrine()->getManager());
     }
 }

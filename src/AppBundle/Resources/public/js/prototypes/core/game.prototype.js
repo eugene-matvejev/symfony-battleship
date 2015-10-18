@@ -1,45 +1,50 @@
 function Game(players) {
-    this.$area   = $("#battle-area");
+    this.$area = $('#battle-area');
 
     for(var i in players) {
-        var player = (new Player(this.$area))
+        var player = (new Player(this.$area, players[i].name == 'CPU' ? true : undefined))
             .setName(players[i].name);
         this.players.push(player);
     }
     this.init();
 }
+
 Game.prototype = {
     id: 'undefined',
-    name: 'undefined',
     players: [],
     json: {},
     update: function(el) {
-        var player = el.parentElement.parentElement.getAttribute('data-player-id'),
-            x      = el.getAttribute('data-x'),
-            y      = el.getAttribute('data-y'),
-            state  = el.getAttribute('data-s');
+        var playerId  = el.parentElement.parentElement.parentElement.getAttribute(Player.tag.id),
+            cellX     = el.getAttribute(Cell.tag.x),
+            cellY     = el.getAttribute(Cell.tag.y),
+            cellState = el.getAttribute(Cell.tag.state);
 
-        var cell = this.getCellData(player, x, y);
+        var player = this.getPlayerById(playerId),
+            cell   = this.getCellData(playerId, cellX, cellY);
 
-        console.log(player, x, y, state, cell);
+        console.log(playerId, player, cellX, cellY, cellState, cell);
 
-        if(cell instanceof Cell)
-            this.sendCell({x: cell.x, y: cell.y, game: {id: this.id, player: {id: player}}});
+        if(player.typeof !== Player.typeof.human && cell instanceof Cell)
+            this.sendCell({x: cell.x, y: cell.y, game: {id: this.id, player: {id: playerId, type: player.typeof}}});
+    },
+    wipeHTML: function() {
+        this.$area.html('');
     },
     updateHTML: function() {
-        console.log('updating HTML...');
+        this.wipeHTML();
 
-        this.$area.html('');
         for(var i in this.players) {
             this.players[i].updateHTML();
         }
     },
     getCellData: function(playerId, x, y) {
         var player = this.getPlayerById(playerId);
-
-        return player instanceof Player
-            ? player.battlefield.getCellData(x, y)
-            : undefined;
+        if(player instanceof Player) {
+            var cell = player.battlefield.getCellData(x, y);
+            if(cell instanceof Cell)
+                return cell;
+        }
+        return undefined;
     },
     getPlayerById: function(id) {
         for(var i in this.players) {
@@ -56,10 +61,8 @@ Game.prototype = {
         return undefined;
     },
     sendCell: function(cell) {
-        //console.clear();
-        console.log(cell);
-
         var self = this;
+        console.log(JSON.stringify(cell));
         $.ajax({
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
@@ -87,7 +90,7 @@ Game.prototype = {
             console.log(player);
                 var cells  = player.battlefield.cells.data,
                 json   = {
-                    player: {id: player.id, name: player.name},
+                    player: {id: player.id, name: player.name, type: player.typeof},
                     battlefield: {id: player.battlefield.id},
                     cells: []
                 };
@@ -104,6 +107,7 @@ Game.prototype = {
         var serializedJSON = JSON.stringify(gameJSON),
             self = this;
 
+        console.log(serializedJSON);
         $.ajax({
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
