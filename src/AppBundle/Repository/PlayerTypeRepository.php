@@ -2,18 +2,29 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\PlayerType;
 use AppBundle\Model\PlayerModel;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class PlayerRepository
+ * Class PlayerTypeRepository
  * @package AppBundle\Repository
  */
-class PlayerTypeRepository extends EntityRepository {
-    public function getTypes() {
-        return [
-            PlayerModel::TYPE_CPU => $this->findOneBy(['id' => PlayerModel::TYPE_CPU]),
-            PlayerModel::TYPE_HUMAN => $this->findOneBy(['id' => PlayerModel::TYPE_HUMAN])
-        ];
+class PlayerTypeRepository extends EntityRepository
+{
+    /**
+     * @return PlayerType[]
+     */
+    public function getTypes()
+    {
+        $arr = [];
+        foreach($this->findBy(['id' => PlayerModel::getTypes()]) as $type) {
+            /**
+             * @var $type PlayerType
+             */
+            $arr[$type->getId()] = $type;
+        }
+
+        return $arr;
     }
 }

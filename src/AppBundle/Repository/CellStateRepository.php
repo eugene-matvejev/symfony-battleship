@@ -2,20 +2,29 @@
 
 namespace AppBundle\Repository;
 
-use AppBundle\Model\CellStateModel;
+use AppBundle\Entity\CellState;
+use AppBundle\Model\CellModel;
 use Doctrine\ORM\EntityRepository;
 
 /**
  * Class CellStateRepository
  * @package AppBundle\Repository
  */
-class CellStateRepository extends EntityRepository {
-    public function getStates() {
-        return [
-            CellStateModel::WATER_LIVE => $this->findOneBy(['id' => CellStateModel::WATER_LIVE]),
-            CellStateModel::WATER_DIED => $this->findOneBy(['id' => CellStateModel::WATER_DIED]),
-            CellStateModel::SHIP_LIVE  => $this->findOneBy(['id' => CellStateModel::SHIP_LIVE]),
-            CellStateModel::SHIP_DIED  => $this->findOneBy(['id' => CellStateModel::SHIP_DIED])
-        ];
+class CellStateRepository extends EntityRepository
+{
+    /**
+     * @return CellState[]
+     */
+    public function getStates()
+    {
+        $arr = [];
+        foreach($this->findBy(['id' => CellModel::getStates()]) as $state) {
+            /**
+             * @var $state CellState
+             */
+            $arr[$state->getId()] = $state;
+        }
+
+        return $arr;
     }
 }

@@ -24,13 +24,22 @@ class GameController extends Controller
      * @return JsonResponse
      */
     public function turnAction(Request $request) {
-        $json = json_decode($request->getContent());
         $model = $this->initModel(new \stdClass());
 
-        return new JsonResponse([
-            $model->PlayerTurn($json),
-            $model->AIturn($json)
-        ]);
+        return new JsonResponse($model->nextTurn(json_decode($request->getContent())));
+    }
+
+
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function startAction(Request $request)
+    {
+        $model = $this->initModel();
+
+        return new JsonResponse($model->save(json_decode($request->getContent())));
     }
 
     /**
@@ -38,8 +47,8 @@ class GameController extends Controller
      *
      * @return JsonResponse
      */
-    public function saveAction(Request $request) {
-
+    public function finishAction(Request $request)
+    {
         return new JsonResponse($request);
     }
 
@@ -48,20 +57,8 @@ class GameController extends Controller
      *
      * @return JsonResponse
      */
-    public function startAction(Request $request) {
-
-        $model = $this->initModel();
-        $json = $model->save(json_decode($request->getContent()));
-        return new JsonResponse($json);
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return JsonResponse
-     */
-    public function finishAction(Request $request) {
-
+    public function saveAction(Request $request)
+    {
         return new JsonResponse($request);
     }
 

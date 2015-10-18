@@ -9,7 +9,8 @@ use Doctrine\ORM\EntityRepository;
  * Class GameRepository
  * @package AppBundle\Repository
  */
-class GameRepository extends EntityRepository {
+class GameRepository extends EntityRepository
+{
     /**
      * @param int $id
      *

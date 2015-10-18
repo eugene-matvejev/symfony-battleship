@@ -8,5 +8,6 @@ use Doctrine\ORM\EntityRepository;
  * Class PlayerRepository
  * @package AppBundle\Repository
  */
-class PlayerRepository extends EntityRepository {
+class PlayerRepository extends EntityRepository
+{
 }

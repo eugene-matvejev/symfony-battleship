@@ -2,7 +2,7 @@
 
 namespace Application\Migrations;
 
-use AppBundle\Model\CellStateModel;
+use AppBundle\Model\CellModel;
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
@@ -23,10 +23,10 @@ class Version20151011160358 extends AbstractMigration
             INSERT INTO
                 cellState
             VALUES
-                ('. CellStateModel::WATER_LIVE .', "untouched water"),
-                ('. CellStateModel::WATER_DIED .', "shooted water"),
-                ('. CellStateModel::SHIP_LIVE .', "live ship"),
-                ('. CellStateModel::SHIP_DIED .', "damaged ship");');
+                ('. CellModel::STATE_WATER_LIVE .', "untouched water"),
+                ('. CellModel::STATE_WATER_DIED .', "shooted water"),
+                ('. CellModel::STATE_SHIP_LIVE .', "live ship"),
+                ('. CellModel::STATE_SHIP_DIED .', "damaged ship");');
     }
 
     /**
