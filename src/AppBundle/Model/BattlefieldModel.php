@@ -203,10 +203,6 @@ class BattlefieldModel
                     ->setState($this->cellStates[$cellData->s])
                     ->setBattlefield($battlefield);
 
-//                if($participant->player->type = PlayerModel::TYPE_HUMAN && !$this->ai->isTurnDoneForPlayer($battlefield->getPlayer())) {
-//                    $this->ai->turn($cell);
-//                }
-
                 $this->entityManager->persist($cell);
             }
             $this->entityManager->flush();
@@ -216,13 +212,6 @@ class BattlefieldModel
 
         }
 
-//        $_game = $this->gameRepository->find(['id' => $game->getId()]);
-//        /**
-//         * @var $_battlefields Battlefield[]
-//         */
-//        $_battlefields = $this->battlefieldRepository->findBy(['game' => $_game]);
-//        foreach($_battlefields as $_battlefield) {
-//        }
         return $json;
     }
 

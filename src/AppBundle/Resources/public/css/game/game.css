@@ -1,0 +1,58 @@
+
+
+.battlefield-cell {
+    height: 32px;
+    width: 32px;
+    padding: 0;
+    opacity: 0.75;
+    font-size: 20px;
+    border: 1px solid #000;
+    text-align: center;
+}
+
+.battlefield-cell:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+.battlefield-cell[data-s="1"] {
+    background: #e1ffff;
+}
+.battlefield-cell[data-s="2"] {
+    background: #1e5799;
+}
+.battlefield-cell[data-s="3"] {
+    background: #000;
+}
+.battlefield-cell[data-s="4"] {
+    background: #6d0019;
+}
+
+.player-field>div:first-child>div,
+.player-field>div>div:first-child,
+.player-field>div:first-child>div:hover,
+.player-field>div>div:first-child:hover {
+    opacity: 1;
+    border: none;
+    cursor: default;
+}
+
+.player-area>.player-name {
+    font-size: 32px;
+}
+.player-area {
+    margin-top: 25px;
+}
+
+
+
+.player-area[data-player-typeof="2"] .battlefield-cell:hover {
+    cursor: no-drop;
+}
+
+div#game-area,
+div#debug-area,
+div#stats-area {
+    display: inline-block;
+    width: 100%;
+}
+

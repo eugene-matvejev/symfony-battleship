@@ -1,14 +1,22 @@
 {% extends '@App/blocks/layout.html.twig' %}
 {% block body %}
-    {{ parent() }}
     <div class="container">
+        <div class="page-loading">
+            <div class="loading-animation">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
         <div class="page-sidebar">
             {% include '@App/blocks/sidebar.html.twig' %}
         </div>
         <div class="page-content">
             <div class="page-header">
                 <span class="toggle-btn glyphicon glyphicon-menu-hamburger"></span>
-                <span class="page-section-title"> xxxx  xxxx  xxxx  xxxx  xxxx  xxxx </span>
+                <span class="page-section-title"></span>
             </div>
             <div class="container-fluid">
                 <div class="row">
@@ -20,4 +28,5 @@
             </div>
         </div>
     </div>
+    {{ parent() }}
 {% endblock %}

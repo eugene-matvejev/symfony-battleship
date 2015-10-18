@@ -1,5 +1,5 @@
 function Game(players) {
-    this.$area = $('#battle-area');
+    this.$area = $('#game-area');
 
     for(var i in players) {
         var player = (new Player(this.$area, players[i].name == 'CPU' ? true : undefined))
@@ -136,6 +136,9 @@ Game.prototype = {
         this.name = json.name;
         this.id   = json.id;
         this.updateHTML();
+
+        (new PageMgr())
+            .loadingMode(false);
     },
     updateCells: function(json) {
         for(var i in json) {

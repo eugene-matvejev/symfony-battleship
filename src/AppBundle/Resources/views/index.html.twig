@@ -1,4 +1,14 @@
 {% extends '@App/blocks/body.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets filter='cssrewrite'
+    '@AppBundle/Resources/public/css/game/game.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}" type="text/css"/>
+    {% endstylesheets %}
+{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
     {% javascripts
@@ -14,10 +24,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="col-md-12" id="battle-area" data-turn-link="{{ path('worldstores/battleship/turn') }}"
-                                            data-start-link="{{ path('worldstores/battleship/start') }}">
-        Shitty JS don't work!!!
-    </div>
-    <div class="col-md-12" id="debug-area">
-    </div>
+    <div id="game-area" data-turn-link="{{ path('worldstores/battleship/turn') }}" data-start-link="{{ path('worldstores/battleship/start') }}"></div>
+    <div id="debug-area"></div>
+    <div id="stats-area"></div>
 {% endblock %}
