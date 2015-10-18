@@ -43,7 +43,7 @@ class Cell
      * @ORM\ManyToOne(targetEntity="Battlefield")
      * @ORM\JoinColumn(name="battlefield", referencedColumnName="id")
      *
-     * @var integer
+     * @var Battlefield
      */
     private $battlefield;
 
@@ -108,7 +108,7 @@ class Cell
     }
 
     /**
-     * @return int
+     * @return Battlefield
      */
     public function getBattlefield()
     {

@@ -23,6 +23,20 @@ class BattlefieldRepository extends EntityRepository {
     }
 
     /**
+     * @param int $gameId
+     *
+     * @return Battlefield[]
+     */
+    public function findByGameId($gameId)
+    {
+        return $this->createQueryBuilder('b')
+            ->select('b', 'g')
+            ->join('b.game', 'g')
+            ->where('g.id = :game')->setParameter('game', $gameId)
+            ->getQuery()->getResult();
+    }
+
+    /**
      * @param Game $game
      *
      * @return Battlefield[]

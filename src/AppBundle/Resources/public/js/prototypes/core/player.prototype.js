@@ -3,7 +3,8 @@ function Player($el, _typeof) {
     this.typeof      = _typeof !== undefined ? Player.typeof.cpu : Player.typeof.human;
     this.battlefield = new Battlefield();
     this.battlefield.initData();
-    this.battlefield.mockData();
+    if(this.typeof == Player.typeof.human)
+        this.battlefield.mockData();
 }
 
 Player.prototype = {
