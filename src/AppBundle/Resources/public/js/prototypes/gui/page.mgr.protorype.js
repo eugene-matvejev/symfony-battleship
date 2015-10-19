@@ -1,9 +1,9 @@
 function PageMgr() {
     this.$docTitle  = $('head>title');
-    this.$container = $('div.container');
-    this.$loading   = this.$container.find('div.page-loading');
-    this.$sidebar   = this.$container.find('div.page-sidebar');
-    this.$content   = this.$container.find('div.page-content');
+    this.$container = $('.container');
+    this.$loading   = this.$container.find('.page-loading');
+    this.$sidebar   = this.$container.find('.page-sidebar');
+    this.$content   = this.$container.find('.page-content');
     this.$pageTitle = this.$content.find('.page-section-title');
 }
 
@@ -13,7 +13,6 @@ PageMgr.prototype = {
         this.$sidebar.toggleClass(PageMgr.classes.toggle);
     },
     switchSection: function(el) {
-        console.log(el);
         this.toggleTitle(el);
         switch(el.getAttribute(PageMgr.index.action)) {
             case PageMgr.action.game._new:
@@ -21,7 +20,6 @@ PageMgr.prototype = {
             default:
                 switch(el.getAttribute(PageMgr.index.section)) {
                     case PageMgr.section.game:
-                        //this.toggleTitle($(this));
                         break;
                     case PageMgr.section.stats:
                         break;
@@ -30,10 +28,8 @@ PageMgr.prototype = {
         }
     },
     toggleTitle: function(el) {
-        var postfix = el.innerText,//.text(),
+        var postfix = el.innerText,
             prefix  = this.$sidebar.find('.' + PageMgr.classes.title).text();
-        //var postfix = $el.text(),
-        //    prefix  = this.$sidebar.find('.' + PageMgr.classes.title).text();
         this.$docTitle.text(prefix + ' :: ' + postfix);
         this.$pageTitle.text(postfix);
 

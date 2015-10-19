@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Model\BattlefieldModel;
+use AppBundle\Model\GameModel;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -63,15 +63,16 @@ class GameController extends Controller
     }
 
     /**
-     * @return BattlefieldModel
+     * @return GameModel
      */
     private function initModel() {
-        return (new BattlefieldModel($this->getDoctrine()->getRepository('AppBundle:CellState')->getStates()))
-                ->setPlayerRepository($this->getDoctrine()->getRepository('AppBundle:Player'))
-                ->setPlayerTypeRepository($this->getDoctrine()->getRepository('AppBundle:PlayerType'))
-                ->setGameRepository($this->getDoctrine()->getRepository('AppBundle:Game'))
-                ->setBattlefieldRepository($this->getDoctrine()->getRepository('AppBundle:Battlefield'))
-                ->setCellRepository($this->getDoctrine()->getRepository('AppBundle:Cell'))
-                ->setEntityManager($this->getDoctrine()->getManager());
+        return (new GameModel($this->getDoctrine()->getRepository('AppBundle:CellState')->getStates()))
+            ->setBattlefieldRepository($this->getDoctrine()->getRepository('AppBundle:Battlefield'))
+            ->setCellRepository($this->getDoctrine()->getRepository('AppBundle:Cell'))
+            ->setGameRepository($this->getDoctrine()->getRepository('AppBundle:Game'))
+            ->setGameResultRepository($this->getDoctrine()->getRepository('AppBundle:GameResult'))
+            ->setPlayerRepository($this->getDoctrine()->getRepository('AppBundle:Player'))
+            ->setPlayerTypeRepository($this->getDoctrine()->getRepository('AppBundle:PlayerType'))
+            ->setEntityManager($this->getDoctrine()->getManager());
     }
 }

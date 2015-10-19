@@ -3,7 +3,6 @@ namespace AppBundle\Entity;
 
 use AppBundle\Library\Traits\Identifiable;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Query;
 
 /**
  * Cell
