@@ -5,25 +5,18 @@ use AppBundle\Library\Traits\Identifiable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Battlefield
+ * GameResult
  *
- * @ORM\Table(name="battlefields")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\BattlefieldRepository")
+ * @ORM\Table(name="gamesResults")
+ * @ORM\HasLifecycleCallbacks
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\GameResultRepository")
  */
-class Battlefield
+class GameResult
 {
     use Identifiable;
 
     /**
-     * @ORM\OneToMany(targetEntity="Cell", mappedBy="battlefield")
-     * @ORM\JoinColumn(name="id", referencedColumnName="battlefield")
-     *
-     * @var Cell[]
-     */
-    private $cells;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Game")
+     * @ORM\OneToOne(targetEntity="Game")
      * @ORM\JoinColumn(name="game", referencedColumnName="id")
      *
      * @var Game
@@ -36,15 +29,14 @@ class Battlefield
      *
      * @var Player
      */
-    private $player;
+    private $winner;
 
     /**
-     * @return Cell[]
+     * @ORM\Column(name="timestamp", type="datetime", nullable=false)
+     *
+     * @var \DateTime
      */
-    public function getCells()
-    {
-        return $this->cells;
-    }
+    private $timestamp;
 
     /**
      * @return Game
@@ -55,7 +47,7 @@ class Battlefield
     }
 
     /**
-     * @param Game $game
+     * @param $game
      *
      * @return $this
      */
@@ -69,9 +61,9 @@ class Battlefield
     /**
      * @return Player
      */
-    public function getPlayer()
+    public function getWinner()
     {
-        return $this->player;
+        return $this->winner;
     }
 
     /**
@@ -79,10 +71,18 @@ class Battlefield
      *
      * @return $this
      */
-    public function setPlayer(Player $player)
+    public function setWinner(Player $player)
     {
-        $this->player = $player;
+        $this->winner = $player;
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setTimestamp()
+    {
+        $this->timestamp = new \DateTime();
     }
 }

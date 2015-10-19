@@ -1,5 +1,6 @@
 function Game(players) {
-    this.$area = $('#game-area');
+    this.pageMgr = new PageMgr();
+    this.$area   = $('#game-area');
 
     for(var i in players) {
         var player = (new Player(this.$area, players[i].name == 'CPU' ? true : undefined))
@@ -61,8 +62,9 @@ Game.prototype = {
         return undefined;
     },
     sendCell: function(cell) {
+        this.pageMgr.loadingMode(true);
         var self = this;
-        console.log(JSON.stringify(cell));
+
         $.ajax({
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
@@ -72,9 +74,11 @@ Game.prototype = {
             success: function(response) {
                 $("#debug-area").html(JSON.stringify(response));
                 self.updateCells(response);
+                self.pageMgr.loadingMode(false);
             },
             error: function(response) {
                 $("#debug-area").html(response.responseText);
+                self.pageMgr.loadingMode(false);
             }
         });
     },
@@ -117,9 +121,11 @@ Game.prototype = {
             success: function(response) {
                 self.updateEntireData(response);
                 $("#debug-area").html(JSON.stringify(response));
+                self.pageMgr.loadingMode(false);
             },
             error: function(response) {
                 $("#debug-area").html(response.responseText);
+                self.pageMgr.loadingMode(false);
             }
         });
     },
@@ -137,8 +143,7 @@ Game.prototype = {
         this.id   = json.id;
         this.updateHTML();
 
-        (new PageMgr())
-            .loadingMode(false);
+        this.pageMgr.loadingMode(false);
     },
     updateCells: function(json) {
         for(var i in json) {

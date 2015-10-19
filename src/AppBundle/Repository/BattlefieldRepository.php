@@ -44,10 +44,8 @@ class BattlefieldRepository extends EntityRepository {
     public function findNotCPUsByGame(Game $game)
     {
         return $this->createQueryBuilder('b')
-//            ->select('b', 'p', 'pt')
             ->select('b', 'p')
             ->join('b.player', 'p')
-//            ->join('p.type', 'pt')
             ->where('b.game = :game')->setParameter('game', $game)
             ->andWhere('p.type != :type')->setParameter('type', PlayerModel::TYPE_CPU)
             ->getQuery()->getResult();

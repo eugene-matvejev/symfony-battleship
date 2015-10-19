@@ -5,9 +5,9 @@ namespace AppBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class CellRepository
+ * Class GameResultRepository
  * @package AppBundle\Repository
  */
-class CellRepository extends EntityRepository
+class GameResultRepository extends EntityRepository
 {
 }
