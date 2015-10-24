@@ -108,6 +108,29 @@ body>.container {
 
 
 
+#notification-area {
+    width: calc(100% - 50px);
+    border: 1px solid;
+    min-height: 100px;
+    position: absolute;
+    border-radius: 10px;
+
+    font-size: 72px;
+    z-index: 1;
+    text-align: center;
+    font-style: italic;
+}
+#notification-area>.notification-control {
+    float: right;
+    margin: 10px;
+    font-size: 24px;
+}
+#notification-area>.notification-control:hover {
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+
 
 
 #debug-area {

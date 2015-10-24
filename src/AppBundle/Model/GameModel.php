@@ -165,13 +165,13 @@ class GameModel
     }
 
     /**
-     * @param ObjectManager $entityManager
+     * @param ObjectManager $em
      *
      * @return $this
      */
-    public function setEntityManager(ObjectManager $entityManager)
+    public function setEntityManager(ObjectManager $em)
     {
-        $this->entityManager = $entityManager;
+        $this->entityManager = $em;
 
         return $this;
     }
@@ -266,14 +266,14 @@ class GameModel
         $battlefields = $this->battlefieldRepository->findByGameId($json->game->id);
 
         foreach($battlefields as $battlefield) {
+            $std->{$battlefield->getPlayer()->getId()} = $this->playerTurn($battlefield, $json);
+
             if($this->detectVictory($battlefield)) {
                 $std->victory = new \stdClass();
                 $std->victory->pid = $battlefield->getPlayer()->getId();
 
                 return $std;
             }
-
-            $std->{$battlefield->getPlayer()->getId()} = $this->playerTurn($battlefield, $json);
         }
 
         return $std;

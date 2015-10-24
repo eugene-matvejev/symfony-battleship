@@ -1,6 +1,7 @@
 function Game(players) {
-    this.pageMgr = new PageMgr();
-    this.$area   = $('#game-area');
+    this.pageMgr  = new PageMgr();
+    this.alertMgr = new AlertMgr();
+    this.$area    = $('#game-area');
 
     for(var i in players) {
         var player = (new Player(this.$area, players[i].name == 'CPU' ? true : undefined))
@@ -72,12 +73,12 @@ Game.prototype = {
             url: self.$area.attr('data-turn-link'),
             data: JSON.stringify(cell),
             success: function(response) {
-                $("#debug-area").html(JSON.stringify(response));
+                self.debugHTML(JSON.stringify(response));
                 self.updateCells(response);
                 self.pageMgr.loadingMode(false);
             },
             error: function(response) {
-                $("#debug-area").html(response.responseText);
+                self.debugHTML(response.responseText);
                 self.pageMgr.loadingMode(false);
             }
         });
@@ -120,11 +121,11 @@ Game.prototype = {
             data: serializedJSON,
             success: function(response) {
                 self.updateEntireData(response);
-                $("#debug-area").html(JSON.stringify(response));
+                self.debugHTML(JSON.stringify(response));
                 self.pageMgr.loadingMode(false);
             },
             error: function(response) {
-                $("#debug-area").html(response.responseText);
+                self.debugHTML(response.responseText);
                 self.pageMgr.loadingMode(false);
             }
         });
@@ -147,9 +148,45 @@ Game.prototype = {
     },
     updateCells: function(json) {
         for(var i in json) {
-            this.updateCellDataByPlayer(json[i])
+
+            if(this.detectVictory(i)) {
+                console.log('asda');
+                json[i].pid != this.getHumanPlayer().id
+                    ? this.alertMgr.show('VICTORY', AlertMgr.type.success)
+                    : this.alertMgr.show('LOOSER', AlertMgr.type.error);
+            } else             this.updateCellDataByPlayer(json[i]);
+
         }
+
+        if(this.detectVictory(json)) {
+            (new AlertMgr()).show('VICTORY', AlertMgr.type.success);
+        }
+
         this.updateHTML();
+    },
+    getHumanPlayer: function() {
+        for(var i in this.players) {
+            if(this.players[i].typeof == Player.typeof.human)
+                return this.players[i];
+        }
+
+        return undefined;
+    },
+    detectVictory: function(index) {
+        //this.debugHTML('++++++++', true);
+        //for(var i in json) {
+        //    if(i == Game.victory)
+        //        return true;
+        //    this.debugHTML(i, true);
+        //}
+        //return false;
+        //this.debugHTML('++++++++', true);
+        //for(var i in json) {
+        return index == Game.victory
+                //return true;
+            //this.debugHTML(i, true);
+        //}
+        //return false;
     },
     updateCellDataByPlayer: function(json) {
         for(var i in this.players) {
@@ -166,5 +203,12 @@ Game.prototype = {
                 }
             }
         }
+    },
+    debugHTML: function(txt, extend) {
+        if(extend !== undefined)
+            txt = $('#debug-area').text() + txt;
+        $("#debug-area").html(txt);
     }
 };
+
+Game.victory = 'victory';

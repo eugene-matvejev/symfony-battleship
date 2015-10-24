@@ -58,21 +58,9 @@ Battlefield.prototype = {
         return undefined;
     },
     mockData: function() {
-        this.cells.data[1][4].s =
-        this.cells.data[1][5].s =
-        this.cells.data[1][6].s = Cell.states.shipDied;
-
-        this.cells.data[3][4].s =
-        this.cells.data[3][5].s =
-        this.cells.data[3][6].s =
-
-        this.cells.data[5][4].s =
-        this.cells.data[5][5].s =
-        this.cells.data[5][6].s =
-
-        this.cells.data[7][4].s =
-        this.cells.data[7][5].s =
-        this.cells.data[7][6].s = Cell.states.shipLive;
+        this.cells.data[0][4].s = Cell.states.shipLive
+        this.cells.data[0][5].s =
+        this.cells.data[0][6].s = Cell.states.shipDied;
     }
 };
 
