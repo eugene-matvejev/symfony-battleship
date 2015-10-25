@@ -1,10 +1,10 @@
-function Battlefield() {
+function Battlefield(size) {
     this.id    = 'unk';
+    this.size  = size;
     this.cells = new CellContainer();
 }
 
 Battlefield.prototype = {
-    size: 10,
     $area: undefined,
     setArea: function($el) {
         this.$area = $el;
@@ -58,9 +58,9 @@ Battlefield.prototype = {
         return undefined;
     },
     mockData: function() {
-        this.cells.data[0][4].s = Cell.states.shipLive
-        this.cells.data[0][5].s =
-        this.cells.data[0][6].s = Cell.states.shipDied;
+        this.cells.data[0][2].s = Cell.states.shipLive
+        this.cells.data[0][3].s =
+        this.cells.data[0][4].s = Cell.states.shipDied;
     }
 };
 

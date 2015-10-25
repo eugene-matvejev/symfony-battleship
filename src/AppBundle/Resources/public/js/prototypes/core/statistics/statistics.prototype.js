@@ -1,12 +1,12 @@
-function StatisticsMgr() {
+function Statistics() {
     this.apiMgr   = new APIMgr();
     this.$area    = $('div#stats-area');
 }
 
-StatisticsMgr.prototype = {
+Statistics.prototype = {
     fetch: function() {
         var self = this;
-        this.apiMgr.request(self.$area.attr(StatisticsMgr.resources.link), 'GET', undefined, function(json) { self.updateHTML(json); });
+        this.apiMgr.request(self.$area.attr(Statistics.resources.link), 'GET', undefined, function(json) { self.updateHTML(json); });
     },
     updateHTML: function(json) {
         var $table = this.getTableHTML().append({});
@@ -21,10 +21,10 @@ StatisticsMgr.prototype = {
         return $($.parseHTML(
            '<table class="table">' +
                 '<tr>' +
-                   '<th>' + StatisticsMgr.text.id + '</th>' +
-                   '<th>' + StatisticsMgr.text.gameStart + '</th>' +
-                   '<th>' + StatisticsMgr.text.gameEnded + '</th>' +
-                   '<th>' + StatisticsMgr.text.winner + '</th>' +
+                   '<th>' + Statistics.text.id + '</th>' +
+                   '<th>' + Statistics.text.gameStart + '</th>' +
+                   '<th>' + Statistics.text.gameEnded + '</th>' +
+                   '<th>' + Statistics.text.winner + '</th>' +
                 '</tr>' +
            '</table>'
         ));
@@ -41,8 +41,8 @@ StatisticsMgr.prototype = {
 };
 
 
-StatisticsMgr.resources = { link: 'data-stats-link' };
-StatisticsMgr.text = {
+Statistics.resources = { link: 'data-stats-link' };
+Statistics.text = {
     id: 'id',
     gameStart: 'Game started at',
     gameEnded: 'Game finished at',

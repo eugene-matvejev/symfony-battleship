@@ -127,13 +127,28 @@ body>.container {
     font-weight: bolder;
     cursor: pointer;
 }
+#modal-area {
+    color: #000;
+}
+#modal-area h4,
+#modal-area label {
+    text-transform: uppercase;
+}
 
 
+div#debug-area {
+    /*width: calc(100% - 50px);*/
+    /*margin: 50px auto;*/
+    /*margin-top: 100px;*/
+    /*margin-bottom: 100px;*/
+    /*min-height: 100px;*/
+    /*border: 1px solid #f00;*/
+}
 
-
-#debug-area {
-    margin-top: 100px;
-    margin-bottom: 100px;
-    min-height: 100px;
-    border: 1px solid #f00;
+div#debug-area .page-header {
+    display: inherit;
+}
+div#debug-area pre {
+    background: transparent;
+    border: 0;
 }
