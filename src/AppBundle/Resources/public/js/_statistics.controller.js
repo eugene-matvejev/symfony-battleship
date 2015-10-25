@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    var statisticsMgr = new StatisticsMgr();
+    var statisticsMgr = new Statistics();
 
     $('.page-sidebar')
         .on('click', 'li[data-section="stats-area"]', function(e) {
@@ -8,4 +8,3 @@ $(document).ready(function () {
             statisticsMgr.fetch();
         });
 });
-

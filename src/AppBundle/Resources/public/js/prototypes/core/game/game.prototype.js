@@ -1,15 +1,9 @@
-function Game(players) {
+function Game() {
+    this.apiMgr   = new APIMgr();
     this.pageMgr  = new PageMgr();
     this.alertMgr = new AlertMgr();
+    this.modalMgr = new ModalMgr();
     this.$area    = $('#game-area');
-    this.apiMgr   = new APIMgr();
-
-    for(var i in players) {
-        var player = (new Player(this.$area, players[i].name == 'CPU' ? true : undefined))
-            .setName(players[i].name);
-        this.players.push(player);
-    }
-    this.init();
 }
 
 Game.prototype = {
@@ -68,16 +62,23 @@ Game.prototype = {
         var self = this;
         this.apiMgr.request(this.$area.attr('data-turn-link'), 'POST', JSON.stringify(cell),
             function(json) {
-                self.debugHTML(JSON.stringify(json));
+                //self.debugHTML(JSON.stringify(json));
                 self.updateCells(json);
                 self.pageMgr.loadingMode(false);
             }, function(json) {
-                self.debugHTML(json.responseText);
+                //self.debugHTML(json.responseText);
                 self.pageMgr.loadingMode(false);
             }
         );
     },
-    init: function() {
+    init: function(players, battlefieldSize) {
+        for(var i in players) {
+            this.players.push((new Player(this.$area, players[i].name == 'CPU' ? true : undefined))
+                                .setName(players[i].name)
+                                .initBattlefield(battlefieldSize)
+            );
+        }
+
         var gameJSON = {
             id: (this.id !== undefined ? this.id : 'unk'),
             name: (this.name !== undefined ? this.name : 'unk'),
@@ -108,11 +109,11 @@ Game.prototype = {
         this.apiMgr.request(this.$area.attr('data-start-link'), 'POST', JSON.stringify(gameJSON),
             function(json) {
                 self.updateEntireData(json);
-                self.debugHTML(JSON.stringify(json));
+                //self.debugHTML(JSON.stringify(json));
                 self.pageMgr.loadingMode(false);
             },
             function(json) {
-                self.debugHTML(json.responseText);
+                //self.debugHTML(json.responseText);
                 self.pageMgr.loadingMode(false);
             }
         );
@@ -178,11 +179,67 @@ Game.prototype = {
             }
         }
     },
-    debugHTML: function(txt, extend) {
-        if(extend !== undefined)
-            txt = $('#debug-area').text() + txt;
-        $("#debug-area").html(txt);
+    //debugHTML: function(txt, extend) {
+    //    if(extend !== undefined)
+    //        txt = $('#debug-area').text() + txt;
+    //    $("#debug-area").html(txt);
+    //},
+    initNewGame: function() {
+        this.modalMgr.updateHTML(this.getNewGameApplicationModalHTML());
+        this.modalMgr.show();
+    },
+    modal: {
+        getHTML: function() {
+            $($.parseHTML(
+                '<div class="modal fade">' +
+                    '<div class="modal-dialog">' +
+                        '<div class="modal-content">' +
+                            '<div class="modal-header">' +
+                                '<button type="button" class="close" data-dismiss="modal">' +
+                                    '<span aria-hidden="true">&times;</span>' +
+                                '</button>' +
+                                '<h4 class="modal-title">нour details</h4>' +
+                            '</div>' +
+                            '<div class="modal-body">' +
+                                '<div class="form-group">' +
+                                    '<label for="' + Game.indexes.modal.playerName + '">your nickname</label>' +
+                                    '<input type="text" class="form-control" id="' + Game.indexes.modal.playerName + '" placeholder="">' +
+                                '</div>' +
+                                '<div class="form-group">' +
+                                    '<label for="' + Game.indexes.modal.battlefieldSize + '">battlefiend size</label>' +
+                                    '<input type="test" class="form-control" id="' + Game.indexes.modal.battlefieldSize + '" placeholder="between 5 and 25">' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="modal-footer">' +
+                                '<button type="button" id="new-game-btn" class="btn btn-primary" disabled="disabled">next step</button>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>'
+            ));
+        },
+        validate: function(el, type) {
+            switch(type) {
+                case Game.indexes.modal.playerName:
+                    break;
+                case Game.indexes.modal.battlefieldSize:
+                    break;
+            }
+        }
+    },
+    getNewGameApplicationModalHTML: function() {
+        return
     }
 };
 
 Game.victory = 'victory';
+Game.indexes = {
+    modal: {
+        playerName: 'player-nickname',
+        battlefieldSize: 'game-battlefield-size'
+    }
+};
+Game.limits = {
+    minBattlefieldSize: 5,
+    maxBattlefieldSize: 20
+};

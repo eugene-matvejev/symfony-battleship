@@ -1,6 +1,6 @@
 $(document).ready(function () {
     var pageMgr = (new PageMgr())
-        .loadingMode(true)
+        //.loadingMode(true)
         .toggleTitle(document.querySelector('li[data-action="game-new"]'));
 
     $('.page-sidebar, .page-content')

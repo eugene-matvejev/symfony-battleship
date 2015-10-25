@@ -14,12 +14,12 @@
     {{ parent() }}
     {% javascripts
     '@AppBundle/Resources/public/js/prototypes/api/api.mgr.prototype.js'
-    '@AppBundle/Resources/public/js/prototypes/core/statistics.mgr.prototype.js'
-    '@AppBundle/Resources/public/js/prototypes/core/game.prototype.js'
-    '@AppBundle/Resources/public/js/prototypes/core/player.prototype.js'
-    '@AppBundle/Resources/public/js/prototypes/core/battlefield.prototype.js'
-    '@AppBundle/Resources/public/js/prototypes/core/cell.prototype.js'
-    '@AppBundle/Resources/public/js/prototypes/core/cell.container.prototype.js'
+    '@AppBundle/Resources/public/js/prototypes/core/statistics/statistics.prototype.js'
+    '@AppBundle/Resources/public/js/prototypes/core/game/cell.prototype.js'
+    '@AppBundle/Resources/public/js/prototypes/core/game/cell.container.prototype.js'
+    '@AppBundle/Resources/public/js/prototypes/core/game/battlefield.prototype.js'
+    '@AppBundle/Resources/public/js/prototypes/core/game/player.prototype.js'
+    '@AppBundle/Resources/public/js/prototypes/core/game/game.prototype.js'
     '@AppBundle/Resources/public/js/_game.controller.js'
     '@AppBundle/Resources/public/js/_statistics.controller.js'
     %}
@@ -31,6 +31,11 @@
     <div id="game-area" data-turn-link="{{ path('battleship.game.api.turn') }}"
                         data-start-link="{{ path('battleship.game.api.start') }}">
     </div>
+    <div id="modal-area">
+    </div>
     <div id="stats-area" data-stats-link="{{ path('battleship.game.api.statistics') }}"></div>
-    <div id="debug-area"></div>
+    <div id="debug-area">
+        <span class="page-header"></span>
+        <pre></pre>
+    </div>
 {% endblock %}
