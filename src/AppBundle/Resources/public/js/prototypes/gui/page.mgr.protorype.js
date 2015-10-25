@@ -6,6 +6,11 @@ function PageMgr() {
     this.$content   = this.$container.find('.page-content');
     this.$pageTitle = this.$content.find('.page-section-title');
 }
+//<div id="game-area" data-turn-link="{{ path('battleship.game.api.turn') }}"
+//data-start-link="{{ path('battleship.game.api.start') }}">
+//</div>
+//<div id="stats-area" data-stats-link="{{ path('battleship.game.api.statistics') }}"></div>
+//<div id="debug-area"></div>
 
 PageMgr.prototype = {
     toggleSidebar: function() {
@@ -14,18 +19,26 @@ PageMgr.prototype = {
     },
     switchSection: function(el) {
         this.toggleTitle(el);
-        switch(el.getAttribute(PageMgr.index.action)) {
-            case PageMgr.action.game._new:
+        this.hideAll();
+        switch(el.getAttribute(PageMgr.indexes.action)) {
+            case PageMgr.actions.game._new:
                 break;
             default:
-                switch(el.getAttribute(PageMgr.index.section)) {
-                    case PageMgr.section.game:
-                        break;
-                    case PageMgr.section.stats:
+                var section = el.getAttribute(PageMgr.indexes.section);
+                switch(section) {
+                    case PageMgr.sections.game:
+                    case PageMgr.sections.stats:
+                        this.show(section);
                         break;
                 }
                 break;
         }
+    },
+    hideAll: function() {
+        $('div#game-area, div#stats-area').addClass(PageMgr.classes.hidden);
+    },
+    show: function(id) {
+        $('div#' + id).removeClass(PageMgr.classes.hidden);
     },
     toggleTitle: function(el) {
         var postfix = el.innerText,
@@ -48,7 +61,7 @@ PageMgr.prototype = {
     }
 };
 
-PageMgr.index   = { action: 'data-action', section: 'data-section' };
-PageMgr.classes = { toggle: 'toggled', title: 'page-header', hidden: 'hidden', locked: 'no-scroll-mode' };
-PageMgr.section = { game: 'game-area', stats: 'stats-area' };
-PageMgr.action  = { game: { _new: 'game-new' } };
+PageMgr.indexes  = { action: 'data-action', section: 'data-section' };
+PageMgr.classes  = { toggle: 'toggled', title: 'page-header', hidden: 'hidden', locked: 'no-scroll-mode' };
+PageMgr.sections = { game: 'game-area', stats: 'stats-area' };
+PageMgr.actions  = { game: { _new: 'game-new' } };

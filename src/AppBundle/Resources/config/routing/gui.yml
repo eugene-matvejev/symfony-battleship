@@ -1,3 +1,4 @@
 battleship.game.gui.index:
   path:     /
   defaults: { _controller: AppBundle:Game:index }
+  methods:  [GET]

@@ -3,7 +3,14 @@ function APIMgr() {
 }
 
 APIMgr.prototype = {
-    fetch: function(requestURL, requestMethod, requestData, onSuccess, onError) {
+    request: function(requestURL, requestMethod, requestData, onSuccess, onError) {
+        //debugger;
+        if(onError === undefined) {
+            onError = function(json) {
+                $("#debug-area").html(json.responseText);
+            };
+        }
+
         $.ajax({
             contentType: "application/json; charset=utf-8",
             dataType: 'json',

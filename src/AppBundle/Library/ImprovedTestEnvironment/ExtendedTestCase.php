@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\HttpFoundation\Response;
 
-class CustomTestCase extends WebTestCase
+class ExtendedTestCase extends WebTestCase
 {
     /**
      * @var Client
