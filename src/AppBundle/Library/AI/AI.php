@@ -12,12 +12,10 @@ class AI
      * @var CellModel
      */
     private $cellModel;
-
     /**
      * @var bool[]
      */
     private $cpuTurnsPerPlayer;
-
     /**
      * @param CellModel $model
      */

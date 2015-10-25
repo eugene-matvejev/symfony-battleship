@@ -2,6 +2,7 @@
 namespace AppBundle\Entity;
 
 use AppBundle\Library\Traits\Identifiable;
+use AppBundle\Library\Traits\Timestampable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class GameResult
 {
-    use Identifiable;
+    use Identifiable, Timestampable;
 
     /**
      * @ORM\OneToOne(targetEntity="Game")
@@ -30,13 +31,6 @@ class GameResult
      * @var Player
      */
     private $winner;
-
-    /**
-     * @ORM\Column(name="timestamp", type="datetime", nullable=false)
-     *
-     * @var \DateTime
-     */
-    private $timestamp;
 
     /**
      * @return Game
@@ -76,13 +70,5 @@ class GameResult
         $this->winner = $player;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function setTimestamp()
-    {
-        $this->timestamp = new \DateTime();
     }
 }

@@ -2,17 +2,47 @@
 
 namespace AppBundle\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use AppBundle\Library\ImprovedTestEnvironment\ExtendedAssertTestCase;
 
-class GameControllerTest extends WebTestCase
+class GameControllerTest extends ExtendedAssertTestCase
 {
-    public function testIndex()
+    /**
+     * @test
+     * @see AppBundle\Controller\GameController::indexAction()
+     */
+    public function index()
     {
-        $client = static::createClient();
+        $client = $this->getClient();
 
-        $client->request('GET', '/');
+        $client->request('GET', $this->getRouter()->generate('battleship.game.gui.index'));
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
-//        $this->assertContains('Welcome to Symfony', $crawler->filter('#container h1')->text());
+        $this->assertCorrectResponse($client->getResponse());
     }
+
+    /**
+     * @test
+     * @see AppBundle\Controller\GameController::startAction()
+     */
+    public function start()
+    {
+        $client = $this->getClient();
+
+        $client->request('POST', $this->getRouter()->generate('battleship.game.api.start'));
+
+        $this->assertJsonCorrectResponse($client->getResponse());
+    }
+
+    /**
+     * @test
+     * @see AppBundle\Controller\GameController::turnAction()
+     */
+    public function turn()
+    {
+        $client = $this->getClient();
+
+        $client->request('POST', $this->getRouter()->generate('battleship.game.api.turn'));
+
+        $this->assertJsonCorrectResponse($client->getResponse());
+    }
+
 }

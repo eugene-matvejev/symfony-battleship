@@ -66,32 +66,16 @@ Game.prototype = {
     sendCell: function(cell) {
         this.pageMgr.loadingMode(true);
         var self = this;
-        this.apiMgr.fetch(this.$area.attr('data-turn-link'), 'POST', JSON.stringify(cell),
-            function(response) {
-                self.debugHTML(JSON.stringify(response));
-                self.updateCells(response);
+        this.apiMgr.request(this.$area.attr('data-turn-link'), 'POST', JSON.stringify(cell),
+            function(json) {
+                self.debugHTML(JSON.stringify(json));
+                self.updateCells(json);
                 self.pageMgr.loadingMode(false);
-            }, function(response) {
-                self.debugHTML(response.responseText);
+            }, function(json) {
+                self.debugHTML(json.responseText);
                 self.pageMgr.loadingMode(false);
             }
         );
-        $.ajax({
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            method: 'POST',
-            url: self.$area.attr('data-turn-link'),
-            data: JSON.stringify(cell),
-            success: function(response) {
-                self.debugHTML(JSON.stringify(response));
-                self.updateCells(response);
-                self.pageMgr.loadingMode(false);
-            },
-            error: function(response) {
-                self.debugHTML(response.responseText);
-                self.pageMgr.loadingMode(false);
-            }
-        });
     },
     init: function() {
         var gameJSON = {
@@ -119,26 +103,19 @@ Game.prototype = {
         }
 
         this.json = gameJSON;
-        var serializedJSON = JSON.stringify(gameJSON),
-            self = this;
+        var self = this;
 
-        console.log(serializedJSON);
-        $.ajax({
-            contentType: "application/json; charset=utf-8",
-            dataType: 'json',
-            method: 'POST',
-            url: self.$area.attr('data-start-link'),
-            data: serializedJSON,
-            success: function(response) {
-                self.updateEntireData(response);
-                self.debugHTML(JSON.stringify(response));
+        this.apiMgr.request(this.$area.attr('data-start-link'), 'POST', JSON.stringify(gameJSON),
+            function(json) {
+                self.updateEntireData(json);
+                self.debugHTML(JSON.stringify(json));
                 self.pageMgr.loadingMode(false);
             },
-            error: function(response) {
-                self.debugHTML(response.responseText);
+            function(json) {
+                self.debugHTML(json.responseText);
                 self.pageMgr.loadingMode(false);
             }
-        });
+        );
     },
     setId: function(id) {
         this.id = id;
