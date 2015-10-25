@@ -19,23 +19,12 @@ class AI
     private $cpuTurnsPerPlayer;
 
     /**
-     *
-     */
-    public function __construct()
-    {
-        $this->cpuTurnsPerPlayer = [];
-    }
-
-    /**
      * @param CellModel $model
-     *
-     * @return $this
      */
-    public function setCellModel(CellModel $model)
+    public function __construct(CellModel $model)
     {
-        $this->cellModel = $model;
-
-        return $this;
+        $this->cellModel         = $model;
+        $this->cpuTurnsPerPlayer = [];
     }
 
     /**

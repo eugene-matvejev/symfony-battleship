@@ -2,6 +2,7 @@ function Game(players) {
     this.pageMgr  = new PageMgr();
     this.alertMgr = new AlertMgr();
     this.$area    = $('#game-area');
+    this.apiMgr   = new APIMgr();
 
     for(var i in players) {
         var player = (new Player(this.$area, players[i].name == 'CPU' ? true : undefined))
@@ -65,7 +66,16 @@ Game.prototype = {
     sendCell: function(cell) {
         this.pageMgr.loadingMode(true);
         var self = this;
-
+        this.apiMgr.fetch(this.$area.attr('data-turn-link'), 'POST', JSON.stringify(cell),
+            function(response) {
+                self.debugHTML(JSON.stringify(response));
+                self.updateCells(response);
+                self.pageMgr.loadingMode(false);
+            }, function(response) {
+                self.debugHTML(response.responseText);
+                self.pageMgr.loadingMode(false);
+            }
+        );
         $.ajax({
             contentType: "application/json; charset=utf-8",
             dataType: 'json',
@@ -173,20 +183,7 @@ Game.prototype = {
         return undefined;
     },
     detectVictory: function(index) {
-        //this.debugHTML('++++++++', true);
-        //for(var i in json) {
-        //    if(i == Game.victory)
-        //        return true;
-        //    this.debugHTML(i, true);
-        //}
-        //return false;
-        //this.debugHTML('++++++++', true);
-        //for(var i in json) {
-        return index == Game.victory
-                //return true;
-            //this.debugHTML(i, true);
-        //}
-        //return false;
+        return index == Game.victory;
     },
     updateCellDataByPlayer: function(json) {
         for(var i in this.players) {

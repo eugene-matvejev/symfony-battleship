@@ -10,7 +10,7 @@ class PlayerModel
     /**
      * @return int[]
      */
-    public static function getTypes()
+    public static function getAllTypes()
     {
         return [self::TYPE_CPU, self::TYPE_HUMAN];
     }

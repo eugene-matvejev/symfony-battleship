@@ -25,7 +25,7 @@ class GameResult
 
     /**
      * @ORM\ManyToOne(targetEntity="Player")
-     * @ORM\JoinColumn(name="player", referencedColumnName="id")
+     * @ORM\JoinColumn(name="winner", referencedColumnName="id")
      *
      * @var Player
      */

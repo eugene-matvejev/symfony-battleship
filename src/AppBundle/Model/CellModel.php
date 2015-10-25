@@ -4,37 +4,42 @@ namespace AppBundle\Model;
 
 use AppBundle\Entity\Cell;
 use AppBundle\Entity\CellState;
+use AppBundle\Repository\CellStateRepository;
 
 class CellModel
 {
+    /**
+     * @var CellStateRepository
+     */
+    private $cellStateRepository;
+
+    /**
+     * @var CellState[]
+     */
+    private static $cellStates;
+
     const STATE_WATER_LIVE = 1;
     const STATE_WATER_DIED = 2;
     const STATE_SHIP_LIVE  = 3;
     const STATE_SHIP_DIED  = 4;
 
     /**
-     * @var CellState[]
+     * @param CellStateRepository $repo
      */
-    private $cellStates;
+    function __construct(CellStateRepository $repo)
+    {
+        $this->cellStateRepository = $repo;
+    }
 
     /**
      * @return CellState[]
      */
     public function getCellStates()
     {
-        return $this->cellStates;
-    }
+        if(empty(self::$cellStates))
+            self::$cellStates = $this->cellStateRepository->getStates();
 
-    /**
-     * @param CellState[] $states
-     *
-     * @return $this
-     */
-    public function setCellStates(array $states)
-    {
-        $this->cellStates = $states;
-
-        return $this;
+        return self::$cellStates;
     }
 
     /**
@@ -44,10 +49,10 @@ class CellModel
     {
         switch($cell->getState()->getId()) {
             case self::STATE_WATER_LIVE:
-                $cell->setState($this->cellStates[self::STATE_WATER_DIED]);
+                $cell->setState($this->getCellStates()[self::STATE_WATER_DIED]);
                 break;
             case self::STATE_SHIP_LIVE:
-                $cell->setState($this->cellStates[self::STATE_SHIP_DIED]);
+                $cell->setState($this->getCellStates()[self::STATE_SHIP_DIED]);
                 break;
             case self::STATE_WATER_DIED:
             case self::STATE_SHIP_DIED:
@@ -91,7 +96,7 @@ class CellModel
     /**
      * @return int[]
      */
-    public static function getStates()
+    public static function getAllStates()
     {
         return [self::STATE_WATER_LIVE, self::STATE_WATER_DIED, self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED];
     }
