@@ -23,23 +23,12 @@ class GameController extends Controller
      *
      * @return JsonResponse
      */
-    public function turnAction(Request $request) {
-        $model = $this->initModel(new \stdClass());
-
-        return new JsonResponse($model->nextTurn(json_decode($request->getContent())));
-    }
-
-
-    /**
-     * @param Request $request
-     *
-     * @return JsonResponse
-     */
     public function startAction(Request $request)
     {
-        $model = $this->initModel();
+        $model = $this->get('battleship.game.services.game.model');
+        $json  = $model->init($request->getContent());
 
-        return new JsonResponse($model->save(json_decode($request->getContent())));
+        return new JsonResponse($json);
     }
 
     /**
@@ -47,32 +36,11 @@ class GameController extends Controller
      *
      * @return JsonResponse
      */
-    public function finishAction(Request $request)
+    public function turnAction(Request $request)
     {
-        return new JsonResponse($request);
-    }
+        $model = $this->get('battleship.game.services.game.model');
+        $json  = $model->nextTurn($request->getContent());
 
-    /**
-     * @param Request $request
-     *
-     * @return JsonResponse
-     */
-    public function saveAction(Request $request)
-    {
-        return new JsonResponse($request);
-    }
-
-    /**
-     * @return GameModel
-     */
-    private function initModel() {
-        return (new GameModel($this->getDoctrine()->getRepository('AppBundle:CellState')->getStates()))
-            ->setBattlefieldRepository($this->getDoctrine()->getRepository('AppBundle:Battlefield'))
-            ->setCellRepository($this->getDoctrine()->getRepository('AppBundle:Cell'))
-            ->setGameRepository($this->getDoctrine()->getRepository('AppBundle:Game'))
-            ->setGameResultRepository($this->getDoctrine()->getRepository('AppBundle:GameResult'))
-            ->setPlayerRepository($this->getDoctrine()->getRepository('AppBundle:Player'))
-            ->setPlayerTypeRepository($this->getDoctrine()->getRepository('AppBundle:PlayerType'))
-            ->setEntityManager($this->getDoctrine()->getManager());
+        return new JsonResponse($json);
     }
 }

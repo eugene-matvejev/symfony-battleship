@@ -18,7 +18,7 @@ class PlayerTypeRepository extends EntityRepository
     public function getTypes()
     {
         $arr = [];
-        foreach($this->findBy(['id' => PlayerModel::getTypes()]) as $type) {
+        foreach($this->findBy(['id' => PlayerModel::getAllTypes()]) as $type) {
             /**
              * @var $type PlayerType
              */

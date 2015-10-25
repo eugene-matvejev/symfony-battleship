@@ -1,7 +1,7 @@
 $(document).ready(function () {
     var pageMgr = (new PageMgr())
-                    .loadingMode(true)
-                    .toggleTitle(document.querySelector('li[data-action="game-new"]'));
+        .loadingMode(true)
+        .toggleTitle(document.querySelector('li[data-action="game-new"]'));
 
     $('.page-sidebar, .page-content')
         .on('click', '.toggle-btn, .switch-btn', function(e) {
@@ -14,6 +14,5 @@ $(document).ready(function () {
             e.preventDefault();
             pageMgr.switchSection(this);
         });
-
 });
 

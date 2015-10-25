@@ -18,7 +18,7 @@ class CellStateRepository extends EntityRepository
     public function getStates()
     {
         $arr = [];
-        foreach($this->findBy(['id' => CellModel::getStates()]) as $state) {
+        foreach($this->findBy(['id' => CellModel::getAllStates()]) as $state) {
             /**
              * @var $state CellState
              */
