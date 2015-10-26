@@ -2,14 +2,11 @@ battleship.game.api.statistics:
   path:     /statistics
   defaults: { _controller: AppBundle:Statistics:overall }
   methods:  [GET]
-
+battleship.game.api.init:
+  path:     /init
+  defaults: { _controller: AppBundle:Game:init }
+  methods:  [POST]
 battleship.game.api.turn:
   path:     /turn
   defaults: { _controller: AppBundle:Game:turn }
   methods:  [POST]
-
-battleship.game.api.start:
-  path:     /start
-  defaults: { _controller: AppBundle:Game:start }
-  methods:  [POST]
-

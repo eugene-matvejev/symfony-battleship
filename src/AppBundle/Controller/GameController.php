@@ -23,7 +23,7 @@ class GameController extends Controller
      *
      * @return JsonResponse
      */
-    public function startAction(Request $request)
+    public function initAction(Request $request)
     {
         $model = $this->get('battleship.game.services.game.model');
         $json  = $model->init($request->getContent());

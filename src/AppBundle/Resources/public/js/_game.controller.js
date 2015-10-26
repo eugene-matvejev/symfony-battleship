@@ -1,17 +1,19 @@
 $(document).ready(function() {
     var game = new Game();
         game.pageMgr.switchSection(document.querySelector('li[data-action="game-new"]'));
-        game.initNewGame();
+        game.modal.initGame();
 
     $('#game-area')
         .on('click', '.player-area[data-player-typeof="' + Player.typeof.cpu + '"] .battlefield-cell', function(e) {
             e.stopPropagation();
+
             game.update(this);
         });
     $('.page-sidebar')
         .on('click', 'li[data-action="game-new"]', function(e) {
             e.stopPropagation();
-            game.initNewGame();
+
+            game.modal.initGame();
         });
 
     $('#modal-area')
@@ -29,6 +31,8 @@ $(document).ready(function() {
         })
         .on('click', '#new-game-btn', function(e) {
             e.stopPropagation();
+
+            game.modalMgr.hide();
             game.init(
                 [
                     {id:  1, name: 'CPU'},
@@ -36,6 +40,5 @@ $(document).ready(function() {
                 ],
                 document.getElementById(Game.indexes.modal.battlefieldSize).value
             );
-            game.modalMgr.hide();
         });
 });

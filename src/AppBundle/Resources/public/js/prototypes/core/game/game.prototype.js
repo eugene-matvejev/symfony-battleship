@@ -13,14 +13,10 @@ Game.prototype = {
     json: {},
     update: function(el) {
         var playerId  = el.parentElement.parentElement.parentElement.getAttribute(Player.tag.id),
+            player    = this.getPlayerById(playerId),
             cellX     = el.getAttribute(Cell.tag.x),
             cellY     = el.getAttribute(Cell.tag.y),
-            cellState = el.getAttribute(Cell.tag.state);
-
-        var player = this.getPlayerById(playerId),
-            cell   = this.getCellData(playerId, cellX, cellY);
-
-        console.log(playerId, player, cellX, cellY, cellState, cell);
+            cell      = this.getCellData(playerId, cellX, cellY);
 
         if(player.typeof !== Player.typeof.human && cell instanceof Cell)
             this.sendCell({x: cell.x, y: cell.y, game: {id: this.id, player: {id: playerId, type: player.typeof}}});
@@ -61,22 +57,20 @@ Game.prototype = {
     sendCell: function(cell) {
         this.pageMgr.loadingMode(true);
         var self = this;
-        this.apiMgr.request(this.$area.attr('data-turn-link'), 'POST', JSON.stringify(cell),
+        this.apiMgr.request(this.$area.attr(Game.indexes.resource.link.turn), 'POST', JSON.stringify(cell),
             function(json) {
-                //self.debugHTML(JSON.stringify(json));
                 self.updateCells(json);
                 self.pageMgr.loadingMode(false);
             }
-            //}, function(json) {
-            //    //self.debugHTML(json.responseText);
-            //    self.pageMgr.loadingMode(false);
-            //}
         );
     },
     init: function(players, battlefieldSize) {
         this.wipeHTML();
         this.players = [];
+        this.id = 'undefined';
+
         this.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="game-area"]'));
+
         for(var i in players) {
             this.players.push((new Player(this.$area, players[i].name == 'CPU' ? true : undefined))
                                 .setName(players[i].name)
@@ -84,34 +78,32 @@ Game.prototype = {
             );
         }
 
-        this.id = 'undefined';
         var gameJSON = {
             id: this.id,
             data: []
         };
 
         for(var i in this.players) {
-            var player = this.players[i];
-            console.log(player);
-                var cells  = player.battlefield.cells.data,
+            var player = this.players[i],
+                cells  = player.battlefield.cells.data,
                 json   = {
                     player: {id: player.id, name: player.name, type: player.typeof},
                     battlefield: {id: player.battlefield.id},
                     cells: []
                 };
 
-                for(var j in cells) {
-                    for(var k in cells[j]) {
-                        json.cells.push(cells[j][k]);
-                    }
+            for(var j in cells) {
+                for(var k in cells[j]) {
+                    json.cells.push(cells[j][k]);
                 }
+            }
             gameJSON.data.push(json);
         }
 
         this.json = gameJSON;
         var self = this;
 
-        this.apiMgr.request(this.$area.attr('data-start-link'), 'POST', JSON.stringify(gameJSON),
+        this.apiMgr.request(this.$area.attr(Game.indexes.resource.link.init), 'POST', JSON.stringify(gameJSON),
             function(json) {
                 self.updateEntireData(json);
                 self.pageMgr.loadingMode(false);
@@ -169,19 +161,21 @@ Game.prototype = {
             }
         }
     },
-    initNewGame: function() {
-        this.modalMgr.updateHTML(this.modal.getHTML());
-        this.modalMgr.show();
-
-        return this;
-    },
     initModalModule: function() {
+        this.modal.alertMgr = this.alertMgr;
         this.modal.modalMgr = this.modalMgr;
 
         return this;
     },
     modal: {
+        alertMgr: undefined,
         modalMgr: undefined,
+        initGame: function() {
+            this.alertMgr.hide();
+            this.modalMgr.updateHTML(this.getHTML()).show();
+
+            return this;
+        },
         getHTML: function() {
             return $($.parseHTML(
                 '<div class="modal fade">' +
@@ -250,6 +244,12 @@ Game.indexes = {
     },
     json: {
         victory: 'victory'
+    },
+    resource: {
+        link: {
+            turn: 'data-turn-link',
+            init: 'data-init-link'
+        }
     }
 };
 Game.limits = {
