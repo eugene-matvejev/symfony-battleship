@@ -70,3 +70,22 @@ Enjoy!
 [11]: https://symfony.com/doc/2.7/cookbook/logging/monolog.html
 [12]: https://symfony.com/doc/2.7/cookbook/assetic/asset_management.html
 [13]: https://symfony.com/doc/2.7/bundles/SensioGeneratorBundle/index.html
+
+
+To setup you need use composer
+execute all commands from project root directory
+
+
+composer install (will create databases as well)
+
+php app/console doctrine:migrations:migrate --env=prod
+
+for launch unit tests you need PHPUnit 
+php app/console doctrine:migrations:migrate --env=test 
+phpunit -c app
+
+
+
+
+
+
