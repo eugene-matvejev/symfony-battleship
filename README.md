@@ -82,10 +82,5 @@ php app/console doctrine:migrations:migrate --env=prod
 
 for launch unit tests you need PHPUnit 
 php app/console doctrine:migrations:migrate --env=test 
+
 phpunit -c app
-
-
-
-
-
-
