@@ -44,5 +44,4 @@ class GameControllerTest extends ExtendedAssertTestCase
 
         $this->assertJsonCorrectResponse($client->getResponse());
     }
-
 }
