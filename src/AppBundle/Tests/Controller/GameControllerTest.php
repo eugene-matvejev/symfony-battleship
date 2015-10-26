@@ -21,13 +21,13 @@ class GameControllerTest extends ExtendedAssertTestCase
 
     /**
      * @test
-     * @see AppBundle\Controller\GameController::startAction()
+     * @see AppBundle\Controller\GameController::initAction()
      */
-    public function start()
+    public function init()
     {
         $client = $this->getClient();
 
-        $client->request('POST', $this->getRouter()->generate('battleship.game.api.start'));
+        $client->request('POST', $this->getRouter()->generate('battleship.game.api.init'));
 
         $this->assertJsonCorrectResponse($client->getResponse());
     }
