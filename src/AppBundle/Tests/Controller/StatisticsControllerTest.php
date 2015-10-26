@@ -16,7 +16,7 @@ class StatisticsControllerTest extends ExtendedAssertTestCase
         $client = $this->getClient();
 
         $client->request('GET', $this->getRouter()->generate('battleship.game.api.statistics'));
-        print $client->getResponse()->getContent();
+
         $this->assertJsonCorrectResponse($client->getResponse());
     }
 }
