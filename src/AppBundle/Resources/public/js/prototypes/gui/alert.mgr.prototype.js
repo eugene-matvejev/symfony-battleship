@@ -7,12 +7,12 @@ AlertMgr.prototype = {
     show: function(txt, type) {
         this.$content.html(txt);
         this.applyColor(type);
-        this.$container.removeClass('hidden');
+        this.$container.removeClass(PageMgr.classes.hidden);
 
         return this;
     },
     hide: function() {
-        this.$container.addClass('hidden');
+        this.$container.addClass(PageMgr.classes.hidden);
 
         return this;
     },

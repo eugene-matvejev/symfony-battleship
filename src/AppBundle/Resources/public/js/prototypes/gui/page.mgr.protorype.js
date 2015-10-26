@@ -1,4 +1,5 @@
 function PageMgr() {
+    this.modalMgr   = new ModalMgr();
     this.$docTitle  = $('head>title');
     this.$container = $('.container');
     this.$loading   = this.$container.find('.page-loading');
@@ -50,9 +51,11 @@ PageMgr.prototype = {
     },
     loadingMode: function(enable) {
         if(enable) {
+            this.modalMgr.updateHTML('').show();
             this.$loading.removeClass(PageMgr.classes.hidden);
             this.$container.addClass(PageMgr.classes.locked);
         } else {
+            this.modalMgr.updateHTML('').hide();
             this.$loading.addClass(PageMgr.classes.hidden);
             this.$container.removeClass(PageMgr.classes.locked);
         }

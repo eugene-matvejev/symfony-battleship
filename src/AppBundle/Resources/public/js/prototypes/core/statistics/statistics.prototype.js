@@ -1,14 +1,23 @@
 function Statistics() {
     this.apiMgr   = new APIMgr();
+    this.pageMgr  = new PageMgr();
     this.$area    = $('div#stats-area');
 }
 
 Statistics.prototype = {
     fetch: function() {
         var self = this;
-        this.apiMgr.request(self.$area.attr(Statistics.resources.link), 'GET', undefined, function(json) { self.updateHTML(json); });
+        this.pageMgr.loadingMode(true);
+        this.apiMgr.request(self.$area.attr(Statistics.resources.link), 'GET', undefined,
+            function(json) {
+                self.updateHTML(json);
+                self.pageMgr.loadingMode(false);
+            }
+        );
     },
     updateHTML: function(json) {
+        this.$area.html('');
+
         var $table = this.getTableHTML().append({});
 
         for(var i in json) {
