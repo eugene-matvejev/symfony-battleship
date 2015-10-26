@@ -18,24 +18,15 @@ $(document).ready(function() {
     $('#modal-area')
         .on('input', '#player-nickname', function(e) {
             e.stopPropagation();
-            var mask = /^[a-zA-Z0-9\.\-\ \@]+$/;
 
-            if(this.value.length > 0 && !mask.test(this.value))
-                this.value = this.value.substr(0, this.value.length - 1);
-
-            game.modalMgr.isModalFilled();
+            game.modal.validate(this);
+            game.modal.unlockSubmition();
         })
         .on('input', '#game-battlefield-size', function(e) {
             e.stopPropagation();
 
-            if(this.value.length > 0 && isNaN(this.value))
-                this.value = this.value.substr(0, this.value.length - 1);
-            else if(this.value.length > 1 && this.value < Game.limits.minBattlefieldSize)
-                this.value = Game.limits.minBattlefieldSize;
-            else if(this.value.length > 2 || this.value > Game.limits.maxBattlefieldSize)
-                this.value = Game.limits.maxBattlefieldSize;
-
-            game.modalMgr.isModalFilled();
+            game.modal.validate(this);
+            game.modal.unlockSubmition();
         })
         .on('click', '#new-game-btn', function(e) {
             e.stopPropagation();

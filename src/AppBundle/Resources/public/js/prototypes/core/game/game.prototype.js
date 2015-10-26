@@ -4,6 +4,7 @@ function Game() {
     this.alertMgr = new AlertMgr();
     this.modalMgr = new ModalMgr();
     this.$area    = $('#game-area');
+    this.initModalModule();
 }
 
 Game.prototype = {
@@ -65,10 +66,11 @@ Game.prototype = {
                 //self.debugHTML(JSON.stringify(json));
                 self.updateCells(json);
                 self.pageMgr.loadingMode(false);
-            }, function(json) {
-                //self.debugHTML(json.responseText);
-                self.pageMgr.loadingMode(false);
             }
+            //}, function(json) {
+            //    //self.debugHTML(json.responseText);
+            //    self.pageMgr.loadingMode(false);
+            //}
         );
     },
     init: function(players, battlefieldSize) {
@@ -111,11 +113,12 @@ Game.prototype = {
                 self.updateEntireData(json);
                 //self.debugHTML(JSON.stringify(json));
                 self.pageMgr.loadingMode(false);
-            },
-            function(json) {
-                //self.debugHTML(json.responseText);
-                self.pageMgr.loadingMode(false);
             }
+            //},
+            //function(json) {
+            //    //self.debugHTML(json.responseText);
+            //    //self.pageMgr.loadingMode(false);
+            //}
         );
     },
     setId: function(id) {
@@ -185,12 +188,16 @@ Game.prototype = {
     //    $("#debug-area").html(txt);
     //},
     initNewGame: function() {
-        this.modalMgr.updateHTML(this.getNewGameApplicationModalHTML());
+        this.modalMgr.updateHTML(this.modal.getHTML());
         this.modalMgr.show();
     },
+    initModalModule: function() {
+        this.modal.modalMgr = this.modalMgr;
+    },
     modal: {
+        modalMgr: undefined,
         getHTML: function() {
-            $($.parseHTML(
+            return $($.parseHTML(
                 '<div class="modal fade">' +
                     '<div class="modal-dialog">' +
                         '<div class="modal-content">' +
@@ -218,17 +225,35 @@ Game.prototype = {
                 '</div>'
             ));
         },
-        validate: function(el, type) {
-            switch(type) {
+        validate: function(el) {
+            switch(el.id) {
                 case Game.indexes.modal.playerName:
-                    break;
+                    if(el.value.length > 0 && !Game.limits.playerNameRegex.test(el.value)) {
+                        el.value = el.value.substr(0, el.value.length - 1);
+                        return false;
+                    }
+                    return true;
                 case Game.indexes.modal.battlefieldSize:
-                    break;
+                    if(el.value.length > 0 && isNaN(el.value))
+                        el.value = el.value.substr(0, el.value.length - 1);
+                    else if(el.value.length > 1 && el.value < Game.limits.minBattlefieldSize)
+                        el.value = Game.limits.minBattlefieldSize;
+                    else if(el.value.length > 2 || el.value > Game.limits.maxBattlefieldSize)
+                        el.value = Game.limits.maxBattlefieldSize;
+                    else
+                        return true;
+                    return false;
+            }
+        },
+        unlockSubmition: function() {
+            this.modalMgr.disableSubmision();
+            var playerName      = document.getElementById(Game.indexes.modal.playerName),
+                battlefieldSize = document.getElementById(Game.indexes.modal.battlefieldSize);
+
+            if(this.validate(playerName) && this.validate(battlefieldSize) && battlefieldSize.value > Game.limits.minBattlefieldSize) {
+                this.modalMgr.enableSubmision();
             }
         }
-    },
-    getNewGameApplicationModalHTML: function() {
-        return
     }
 };
 
@@ -241,5 +266,6 @@ Game.indexes = {
 };
 Game.limits = {
     minBattlefieldSize: 5,
-    maxBattlefieldSize: 20
+    maxBattlefieldSize: 20,
+    playerNameRegex: /^[a-zA-Z0-9\.\-\ \@]+$/
 };

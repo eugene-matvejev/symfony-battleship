@@ -1,13 +1,18 @@
 function APIMgr() {
-
+    this.debugArea = document.querySelector('#debug-area');
+    this.debugText = document.querySelector('#debug-area>div.debug-content');
+    this.pageMgr   = new PageMgr();
 }
 
 APIMgr.prototype = {
     request: function(requestURL, requestMethod, requestData, onSuccess, onError) {
         //debugger;
         if(onError === undefined) {
+            var self = this;
             onError = function(json) {
-                $("#debug-area").html(json.responseText);
+                console.log(json);
+                self.pageMgr.loadingMode(false);
+                self.debugText.innerHTML = json.responseText;
             };
         }
 

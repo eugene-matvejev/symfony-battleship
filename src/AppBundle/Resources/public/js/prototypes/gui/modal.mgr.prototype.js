@@ -12,18 +12,11 @@ ModalMgr.prototype = {
     updateHTML: function(html) {
         this.$area.html(html);
     },
-    isModalFilled: function() {
-        var self = this;
-        this.$area.find('.form-group>input').each(function() {
-            if(this.value.length < 1 || this.id == Game.indexes.modal.battlefieldSize && this.value < Game.limits.minBattlefieldSize) {
-                self.$area.find('button.btn[type="button"]').attr('disabled', 'disabled');
-                return false;
-            }
-        });
-
-        this.$area.find('button.btn[type="button"]').attr('disabled', false);
-
-        return true;
+    enableSubmision: function() {
+        this.$area.find('button.btn[type="button"]').removeAttr('disabled');
+    },
+    disableSubmision: function() {
+        this.$area.find('button.btn[type="button"]').attr('disabled', 'disabled');
     }
 };
 
