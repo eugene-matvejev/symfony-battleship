@@ -1,8 +1,7 @@
 $(document).ready(function() {
     var game = new Game();
+        game.pageMgr.switchSection(document.querySelector('li[data-action="game-new"]'));
         game.initNewGame();
-        //game.init([{id: 1, name: 'CPU'}, {id: 4, name: 'Player'}]);
-        //game.updateHTML();
 
     $('#game-area')
         .on('click', '.player-area[data-player-typeof="' + Player.typeof.cpu + '"] .battlefield-cell', function(e) {

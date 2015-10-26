@@ -4,6 +4,7 @@ $(document).ready(function() {
     $('#notification-area')
         .on('click', 'span.notification-control', function(e) {
             e.stopPropagation();
+
             alertMgr.hide();
         })
 });

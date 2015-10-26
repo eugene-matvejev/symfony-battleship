@@ -74,6 +74,9 @@ Game.prototype = {
         );
     },
     init: function(players, battlefieldSize) {
+        this.wipeHTML();
+        this.players = [];
+        this.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="game-area"]'));
         for(var i in players) {
             this.players.push((new Player(this.$area, players[i].name == 'CPU' ? true : undefined))
                                 .setName(players[i].name)
@@ -81,9 +84,9 @@ Game.prototype = {
             );
         }
 
+        this.id = 'undefined';
         var gameJSON = {
-            id: (this.id !== undefined ? this.id : 'unk'),
-            name: (this.name !== undefined ? this.name : 'unk'),
+            id: this.id,
             data: []
         };
 
@@ -111,14 +114,8 @@ Game.prototype = {
         this.apiMgr.request(this.$area.attr('data-start-link'), 'POST', JSON.stringify(gameJSON),
             function(json) {
                 self.updateEntireData(json);
-                //self.debugHTML(JSON.stringify(json));
                 self.pageMgr.loadingMode(false);
             }
-            //},
-            //function(json) {
-            //    //self.debugHTML(json.responseText);
-            //    //self.pageMgr.loadingMode(false);
-            //}
         );
     },
     setId: function(id) {
@@ -139,18 +136,11 @@ Game.prototype = {
     },
     updateCells: function(json) {
         for(var i in json) {
-
-            if(this.detectVictory(i)) {
-                console.log('asda');
+            if(i ==  Game.indexes.json.victory) {
                 json[i].pid != this.getHumanPlayer().id
                     ? this.alertMgr.show('VICTORY', AlertMgr.type.success)
                     : this.alertMgr.show('LOOSER', AlertMgr.type.error);
-            } else             this.updateCellDataByPlayer(json[i]);
-
-        }
-
-        if(this.detectVictory(json)) {
-            (new AlertMgr()).show('VICTORY', AlertMgr.type.success);
+            } else this.updateCellDataByPlayer(json[i]);
         }
 
         this.updateHTML();
@@ -162,9 +152,6 @@ Game.prototype = {
         }
 
         return undefined;
-    },
-    detectVictory: function(index) {
-        return index == Game.victory;
     },
     updateCellDataByPlayer: function(json) {
         for(var i in this.players) {
@@ -182,17 +169,16 @@ Game.prototype = {
             }
         }
     },
-    //debugHTML: function(txt, extend) {
-    //    if(extend !== undefined)
-    //        txt = $('#debug-area').text() + txt;
-    //    $("#debug-area").html(txt);
-    //},
     initNewGame: function() {
         this.modalMgr.updateHTML(this.modal.getHTML());
         this.modalMgr.show();
+
+        return this;
     },
     initModalModule: function() {
         this.modal.modalMgr = this.modalMgr;
+
+        return this;
     },
     modal: {
         modalMgr: undefined,
@@ -257,11 +243,13 @@ Game.prototype = {
     }
 };
 
-Game.victory = 'victory';
 Game.indexes = {
     modal: {
         playerName: 'player-nickname',
         battlefieldSize: 'game-battlefield-size'
+    },
+    json: {
+        victory: 'victory'
     }
 };
 Game.limits = {
