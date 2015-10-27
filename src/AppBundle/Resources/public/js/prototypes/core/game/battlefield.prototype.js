@@ -18,7 +18,7 @@ Battlefield.prototype = {
             this.cells.navY.push(x);
 
             for(var y = 0; y < this.size; y++) {
-                cells.push(new Cell(x, y, Cell.states.seaLive));
+                cells.push(new Cell(x, y, Cell.state.seaLive));
             }
 
             this.cells.data.push(cells);
@@ -45,7 +45,7 @@ Battlefield.prototype = {
             this.$area.append(html);
         }
     },
-    getCellData: function(x, y) {
+    getCell: function(x, y) {
         for(var _x in this.cells.data) {
             if(x != _x)
                 continue;
@@ -58,9 +58,9 @@ Battlefield.prototype = {
         return undefined;
     },
     mockData: function() {
-        this.cells.data[0][2].s = Cell.states.shipLive
+        this.cells.data[0][2].s = Cell.state.shipLive;
         this.cells.data[0][3].s =
-        this.cells.data[0][4].s = Cell.states.shipDied;
+        this.cells.data[0][4].s = Cell.state.shipDied;
     }
 };
 

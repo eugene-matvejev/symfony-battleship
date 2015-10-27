@@ -8,7 +8,7 @@ Statistics.prototype = {
     fetch: function() {
         var self = this;
         this.pageMgr.loadingMode(true);
-        this.apiMgr.request(self.$area.attr(Statistics.resources.link), 'GET', undefined,
+        this.apiMgr.request('GET', self.$area.attr(Statistics.resources.link), undefined,
             function(json) {
                 self.updateHTML(json);
                 self.pageMgr.loadingMode(false);

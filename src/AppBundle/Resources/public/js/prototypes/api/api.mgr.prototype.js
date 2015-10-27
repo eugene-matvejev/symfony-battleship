@@ -5,7 +5,7 @@ function APIMgr() {
 }
 
 APIMgr.prototype = {
-    request: function(requestURL, requestMethod, requestData, onSuccess, onError) {
+    request: function(requestMethod, requestURL, requestData, onSuccess, onError) {
         //debugger;
         if(onError === undefined) {
             var self = this;

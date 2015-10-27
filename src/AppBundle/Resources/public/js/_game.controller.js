@@ -4,7 +4,7 @@ $(document).ready(function() {
         game.modal.initGame();
 
     $('#game-area')
-        .on('click', '.player-area[data-player-typeof="' + Player.typeof.cpu + '"] .battlefield-cell', function(e) {
+        .on('click', '.player-area:not(.finished)[data-player-typeof="' + Player.typeof.cpu + '"] .battlefield-cell[data-s="' + Cell.state.seaLive + '"]', function(e) {
             e.stopPropagation();
 
             game.update(this);
@@ -17,18 +17,23 @@ $(document).ready(function() {
         });
 
     $('#modal-area')
-        .on('input', '#player-nickname', function(e) {
+        .on('input', '#' + Game.resource.config.trigger.player + ', #' + Game.resource.config.trigger.bfsize, function(e) {
             e.stopPropagation();
 
-            game.modal.validate(this);
             game.modal.unlockSubmition();
         })
-        .on('input', '#game-battlefield-size', function(e) {
-            e.stopPropagation();
-
-            game.modal.validate(this);
-            game.modal.unlockSubmition();
-        })
+        //.on('input', '#player-nickname', function(e) {
+        //    e.stopPropagation();
+        //
+        //    game.modal.validate(this);
+        //    game.modal.unlockSubmition();
+        //})
+        //.on('input', '#game-battlefield-size', function(e) {
+        //    e.stopPropagation();
+        //
+        //    game.modal.validate(this);
+        //    game.modal.unlockSubmition();
+        //})
         .on('click', '#new-game-btn', function(e) {
             e.stopPropagation();
 
