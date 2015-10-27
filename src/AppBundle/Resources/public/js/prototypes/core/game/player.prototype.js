@@ -25,6 +25,9 @@ Player.prototype = {
 
         return this;
     },
+    getJSON: function() {
+        return {id: this.id, name: this.name, type: this.typeof};
+    },
     updateHTML: function() {
         var $html = this.getLayoutHTML();
         this.battlefield.setArea($html.find('.player-field'))
