@@ -1,27 +1,20 @@
-function Player($el, _typeof) {
-    this.$html       = $el;
-    this.typeof      = _typeof !== undefined ? Player.typeof.cpu : Player.typeof.human;
+function Player($el, name, type) {
+    this.$html = $el;
+    this.name  = name;
+    this.type  = type !== undefined ? Player.resource.config.type.cpu : Player.resource.config.type.human;
 }
 
 Player.prototype = {
     id: 'undefined',
-    name: 'undefined',
-    typeof: 'undefined',
     initBattlefield: function(size) {
-        this.battlefield = new Battlefield(size);
-        this.battlefield.initData();
-        if(this.typeof == Player.typeof.human)
+        this.battlefield = (new Battlefield(size)).initData();
+        if(this.typeof == Player.resource.config.type.human)
             this.battlefield.mockData();
 
         return this;
     },
     setId: function(id) {
         this.id = id;
-
-        return this;
-    },
-    setName: function(name) {
-        this.name = name;
 
         return this;
     },
@@ -36,13 +29,23 @@ Player.prototype = {
     },
     getLayoutHTML: function() {
         return $($.parseHTML('<div class="col-md-6 player-area"' +
-                        ' ' + Player.tag.id + '="' + this.id + '"' +
-                        ' ' + Player.tag.typeof + '="' + this.typeof + '">' +
+                        ' ' + Player.resource.config.trigger.id + '="' + this.id + '"' +
+                        ' ' + Player.resource.config.trigger.type + '="' + this.type + '">' +
                                  '<div class="player-name">' + this.name + '</div>' +
                                  '<div class="player-field"></div>' +
                              '</div>'));
     }
 };
 
-Player.tag    = { id: 'data-player-id', typeof: 'data-player-typeof' };
-Player.typeof = { cpu: 1, human: 2 };
+Player.resource = {
+    config: {
+        trigger: {
+            id: 'data-player-id',
+            type: 'data-player-typeof'
+        },
+        type: {
+            cpu: 1,
+            human: 2
+        }
+    }
+};

@@ -180,6 +180,8 @@ class GameModel
         if(empty($json))
             return [];
 
+        //{"game":{"id":188},"player":{"id":1,"name":"CPU","type":1},"cell":{"x":0,"y":1}}
+
         $json = json_decode($json);
         $std  = new \stdClass();
 
@@ -225,7 +227,7 @@ class GameModel
             case PlayerModel::TYPE_CPU:
 //            case PlayerModel::TYPE_HUMAN:
                 foreach($battlefield->getCells() as $cell) {
-                    if($cell->getX() != $json->x || $cell->getY() != $json->y)
+                    if($cell->getX() != $json->cell->x || $cell->getY() != $json->cell->y)
                         continue;
 
                     $this->cellModel->switchState($cell);

@@ -1,10 +1,10 @@
 function PageMgr() {
     this.modalMgr   = new ModalMgr();
     this.$docTitle  = $('head>title');
-    this.$container = $('.container');
-    this.$loading   = this.$container.find('.page-loading');
-    this.$sidebar   = this.$container.find('.page-sidebar');
-    this.$content   = this.$container.find('.page-content');
+    this.$document  = $('.container');
+    this.$loading   = this.$document.find('.page-loading');
+    this.$sidebar   = this.$document.find('.page-sidebar');
+    this.$content   = this.$document.find('.page-content');
     this.$pageTitle = this.$content.find('.page-section-title');
 }
 //<div id="game-area" data-turn-link="{{ path('battleship.game.api.turn') }}"
@@ -51,13 +51,13 @@ PageMgr.prototype = {
     },
     loadingMode: function(enable) {
         if(enable) {
-            this.modalMgr.updateHTML('').show();
             this.$loading.removeClass(PageMgr.classes.hidden);
-            this.$container.addClass(PageMgr.classes.locked);
+            this.modalMgr.updateHTML('').show();
+            //this.$document.addClass(PageMgr.classes.locked);
         } else {
-            this.modalMgr.updateHTML('').hide();
             this.$loading.addClass(PageMgr.classes.hidden);
-            this.$container.removeClass(PageMgr.classes.locked);
+            this.modalMgr.updateHTML('').hide();
+            //this.$container.removeClass(PageMgr.classes.locked);
         }
 
         return this;

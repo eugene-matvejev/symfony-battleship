@@ -1,10 +1,18 @@
 $(document).ready(function() {
     var game = new Game();
         game.pageMgr.switchSection(document.querySelector('li[data-action="game-new"]'));
-        game.modal.initGame();
+        //game.modal.initGame();
+    game.modalMgr.hide();
+    game.init(
+        [
+            {id:  1, name: 'CPU'},
+            {id: '', name: 'Human'}
+        ],
+        20
+    );
 
     $('#game-area')
-        .on('click', '.player-area:not(.finished)[data-player-typeof="' + Player.typeof.cpu + '"] .battlefield-cell[data-s="' + Cell.state.seaLive + '"]', function(e) {
+        .on('click', '.player-area:not(.finished)[data-player-typeof="' + Player.resource.config.type.cpu + '"] .battlefield-cell[data-s="' + Cell.state.seaLive + '"]', function(e) {
             e.stopPropagation();
 
             game.update(this);
@@ -22,18 +30,6 @@ $(document).ready(function() {
 
             game.modal.unlockSubmition();
         })
-        //.on('input', '#player-nickname', function(e) {
-        //    e.stopPropagation();
-        //
-        //    game.modal.validate(this);
-        //    game.modal.unlockSubmition();
-        //})
-        //.on('input', '#game-battlefield-size', function(e) {
-        //    e.stopPropagation();
-        //
-        //    game.modal.validate(this);
-        //    game.modal.unlockSubmition();
-        //})
         .on('click', '#new-game-btn', function(e) {
             e.stopPropagation();
 
@@ -41,9 +37,9 @@ $(document).ready(function() {
             game.init(
                 [
                     {id:  1, name: 'CPU'},
-                    {id: '', name: document.getElementById(Game.indexes.modal.playerName).value}
+                    {id: '', name: document.getElementById(Game.resource.config.trigger.player).value}
                 ],
-                document.getElementById(Game.indexes.modal.battlefieldSize).value
+                document.getElementById(Game.resource.config.trigger.bfsize).value
             );
         });
 });

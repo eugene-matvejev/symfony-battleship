@@ -1,5 +1,5 @@
 function ModalMgr() {
-    this.$area = $('#' + ModalMgr.container);
+    this.$area = $('#modal-area');
 }
 
 ModalMgr.prototype = {
@@ -29,5 +29,3 @@ ModalMgr.prototype = {
         return this;
     }
 };
-
-ModalMgr.container = 'modal-area';
