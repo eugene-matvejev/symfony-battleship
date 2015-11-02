@@ -1,6 +1,6 @@
 function APIMgr() {
     //this.debugArea = document.querySelector('#debug-area');
-    this.debugText = document.querySelector('#debug-area>div.debug-content');
+    this.$debugText = $('#debug-area>div.debug-content');
     this.pageMgr   = new PageMgr();
 }
 
@@ -29,7 +29,7 @@ APIMgr.prototype = {
     },
     updateDebugHTML: function(html, extend) {
         extend !== undefined
-            ? this.debugText.innerHTML =+ html
-            : this.debugText.innerHTML = html;
+            ? this.$debugText.html(this.$debugText.html() + html)
+            : this.$debugText.html(html);
     }
 };

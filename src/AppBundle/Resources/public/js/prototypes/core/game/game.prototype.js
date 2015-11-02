@@ -10,7 +10,7 @@ function Game() {
 
 Game.prototype = {
     id: 'undefined',
-    data: undefined,
+    data: {},
     setId: function(id) {
         this.id = id;
 
@@ -20,25 +20,21 @@ Game.prototype = {
         return {id: this.id};
     },
     initSubModules: function() {
-        this.player.data   = this.data;
-
-        this.cell.player   = this.player;
-
-        this.modal.alertMgr = this.alertMgr;
-        this.modal.modalMgr = this.modalMgr;
-
-
-        this.html.$area    = this.$area;
-        this.html.data     = this.data;
+        this.html.super =
+        this.cell.super =
+        this.modal.super =
+        this.player.super = this;
 
         return this;
     },
     init: function(players, battlefieldSize) {
+        //this.pageMgr.loadingMode(false);
+
         this.data = {};
         this.id   = 'undefined';
-        this.pageMgr.loadingMode(true)
-                    .switchSection(document.querySelector('.page-sidebar li[data-section="game-area"]'));
         this.html.wipe();
+        //this.pageMgr.loadingMode(true);
+        this.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="game-area"]'));
 
         var json = {
             id: this.id,
@@ -46,9 +42,9 @@ Game.prototype = {
         };
 
         for(var i in players) {
-            var _player = (new Player(this.$area, players[i].name == 'CPU' ? true : undefined))
-                            .setName(players[i].name)
+            var _player = (new Player(this.$area, players[i].name, players[i].name == 'CPU' ? true : undefined))
                             .initBattlefield(battlefieldSize);
+            console.log(_player);
             var _cells  = _player.battlefield.cells.data;
             var _json   = {
                 player: {id: _player.id, name: _player.name, type: _player.typeof},
@@ -66,19 +62,23 @@ Game.prototype = {
 
             this.data[i] = _player;
         }
+        this.pageMgr.loadingMode(false);
+
+        console.log(json);
 
         var self = this;
-        this.apiMgr.request('POST', this.$area.attr(Game.indexes.resource.link.init), JSON.stringify(json),
+        this.apiMgr.request('POST', this.$area.attr(Game.resource.config.route.init), JSON.stringify(json),
             function(json) {
-                self.updateAll(json);
+                //self.html.update();
                 self.pageMgr.loadingMode(false);
+                self.updateAll(json);
             }
         );
     },
     update: function(el) {
-        var playerId  = el.parentElement.parentElement.parentElement.getAttribute(Player.tag.id),
+        var playerId  = el.parentElement.parentElement.parentElement.getAttribute(Player.resource.config.trigger.id),
             player    = this.player.getById(playerId);
-        if(player instanceof Player && player.typeof !== Player.typeof.human) {
+        if(player instanceof Player && player.type !== Player.resource.config.type.human) {
             var cellX = el.getAttribute(Cell.tag.x),
                 cellY = el.getAttribute(Cell.tag.y),
                 cell  = this.cell.get(player.id, cellX, cellY);
@@ -95,32 +95,31 @@ Game.prototype = {
                 player.setId(_player.id);
         }
         this.setId(json.id);
+
+
+        //debugger;
+        console.log('asd')
+        console.log(json);
         this.html.update();
     },
     player: {
-        getById: function(id) {
-            for(var i in this.data) {
-                if(this.data[i].id == id)
-                    return this.data[i];
+        findByCriteria: function(criteria, value) {
+            for(var i in this.super.data) {
+                if(this.super.data[i][criteria] == value)
+                    return this.super.data[i];
             }
-
-            return undefined;
+        },
+        getById: function(id) {
+            return this.findByCriteria('id', id);
         },
         getByName: function(name) {
-            for(var i in this.data) {
-                if(this.data[i].name == name)
-                    return this.data[i];
-            }
-
-            return undefined;
+            return this.findByCriteria('name', name);
         },
         getByType: function(type) {
-            for(var i in this.data) {
-                if(this.data[i].typeof == type)
-                    return this.data[i];
-            }
-
-            return undefined;
+            return this.findByCriteria('type', type);
+        },
+        getHuman: function() {
+            return this.getByType(Player.resource.config.type.human);
         }
     },
     cell: {
@@ -128,23 +127,25 @@ Game.prototype = {
             var self = this;
 
             //this.pageMgr.loadingMode(true);
-            this.apiMgr.request('POST', this.$area.attr(this.constructor.indexes.resource.link.turn), JSON.stringify(cell),
+            console.log(JSON.stringify(cell));
+            this.super.apiMgr.request('POST', this.super.$area.attr(Game.resource.config.route.turn), JSON.stringify(cell),
                 function(json) {
                     self.updateAll(json);
-                    self.pageMgr.loadingMode(false);
+                    self.super.pageMgr.loadingMode(false);
                 }
             );
+
         },
         updateAll: function(json) {
             for(var i in json) {
-                if(i ==  Game.indexes.json.victory) {
-                    json[i].pid != this.getHumanPlayer().id
-                        ? this.alertMgr.show('VICTORY', AlertMgr.type.success)
-                        : this.alertMgr.show('LOOSER', AlertMgr.type.error);
+                if(i ==  Game.resource.config.json.victory) {
+                    json[i].pid != this.super.player.getHuman().id
+                        ? this.super.alertMgr.show('VICTORY', AlertMgr.type.success)
+                        : this.super.alertMgr.show('LOOSER', AlertMgr.type.error);
                 } else this.updateByPlayer(json[i]);
             }
+            this.super.html.update();
 
-            this.updateHTML();
         },
         updateByPlayer: function(json) {
             for(var i in this.players) {
@@ -180,38 +181,37 @@ Game.prototype = {
         update: function() {
             this.wipe();
 
-            for(var i in this.data) {
-                var player = this.data[i];
+            for(var i in this.super.data) {
+                var player = this.super.data[i];
+                console.log(player);
                 player.updateHTML();
             }
         }
     },
     modal: {
         initGame: function() {
-            this.alertMgr.hide();
-            this.modalMgr.updateHTML(Game.resource.html.modal).show();
+            this.super.alertMgr.hide();
+            this.super.modalMgr.updateHTML(Game.resource.html.modal).show();
 
             return this;
         },
         validate: function(el) {
+            var limits = Game.resource.config.limits;
             switch(el.id) {
                 case Game.resource.config.trigger.player:
-                    if(el.value.length > 0 && !Game.resource.config.limits.nameRegex.test(el.value)) {
+                    if(el.value.length > 0 && !limits.nameRegex.test(el.value)) {
                         el.value = el.value.substr(0, el.value.length - 1);
                         return false;
                     }
                     return true;
                 case Game.resource.config.trigger.bfsize:
-                    var limits = Game.resource.config.limits;
                     if(el.value.length > 0 && isNaN(el.value))
                         el.value = el.value.substr(0, el.value.length - 1);
                     else if(el.value.length > 1 && el.value < limits.minBFSize)
                         el.value = limits.minBFSize;
                     else if(el.value.length > 2 || el.value > limits.maxBFSize)
                         el.value = limits.maxBFSize;
-                    else
-                        return true;
-                    return false;
+                    return el.value >= limits.minBFSize && el.value <= limits.maxBFSize;
             }
         },
         unlockSubmition: function() {
@@ -220,7 +220,7 @@ Game.prototype = {
                 player  = document.getElementById(config.trigger.player),
                 bfSize  = document.getElementById(config.trigger.bfsize);
 
-            if(this.validate(player) && this.validate(bfSize) && bfSize.value > config.limits.minBFSize) {
+            if(this.validate(player) && this.validate(bfSize) && bfSize.value >= config.limits.minBFSize) {
                 this.modalMgr.enableSubmision();
             }
         }

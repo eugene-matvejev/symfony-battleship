@@ -23,6 +23,8 @@ Battlefield.prototype = {
 
             this.cells.data.push(cells);
         }
+
+        return this;
     },
     updateHTML: function() {
         var cellContainer = CellContainer.getHTML(),
