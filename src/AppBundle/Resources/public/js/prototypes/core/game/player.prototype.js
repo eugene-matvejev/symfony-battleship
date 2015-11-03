@@ -8,7 +8,7 @@ Player.prototype = {
     id: 'undefined',
     initBattlefield: function(size) {
         this.battlefield = (new Battlefield(size)).initData();
-        if(this.typeof == Player.resource.config.type.human)
+        if(this.type == Player.resource.config.type.human)
             this.battlefield.mockData();
 
         return this;
@@ -19,7 +19,7 @@ Player.prototype = {
         return this;
     },
     getJSON: function() {
-        return {id: this.id, name: this.name, type: this.typeof};
+        return {id: this.id, name: this.name, type: this.type};
     },
     updateHTML: function() {
         var $html = this.getLayoutHTML();
@@ -41,7 +41,7 @@ Player.resource = {
     config: {
         trigger: {
             id: 'data-player-id',
-            type: 'data-player-typeof'
+            type: 'data-player-type'
         },
         type: {
             cpu: 1,
