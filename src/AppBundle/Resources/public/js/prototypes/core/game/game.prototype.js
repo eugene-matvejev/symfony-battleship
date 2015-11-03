@@ -4,7 +4,6 @@ function Game() {
     this.alertMgr = new AlertMgr();
     this.modalMgr = new ModalMgr();
     this.$area    = $('#game-area');
-    this.data     = {};
     this.initSubModules();
 }
 
@@ -28,50 +27,46 @@ Game.prototype = {
         return this;
     },
     init: function(players, battlefieldSize) {
-        //this.pageMgr.loadingMode(false);
-
         this.data = {};
         this.id   = 'undefined';
-        this.html.wipe();
-        //this.pageMgr.loadingMode(true);
-        this.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="game-area"]'));
+        //this.modalMgr.hide();
+        this.pageMgr.loadingMode(true);
+        this.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="' + PageMgr.resource.config.section.game + '"]'));
 
+        this.html.wipe();
         var json = {
             id: this.id,
             data: []
         };
 
         for(var i in players) {
-            var _player = (new Player(this.$area, players[i].name, players[i].name == 'CPU' ? true : undefined))
-                            .initBattlefield(battlefieldSize);
-            console.log(_player);
-            var _cells  = _player.battlefield.cells.data;
-            var _json   = {
-                player: {id: _player.id, name: _player.name, type: _player.typeof},
-                battlefield: {id: _player.battlefield.id},
+            var player = (new Player(this.$area, players[i].name, players[i].name == 'CPU' ? true : undefined))
+                                    .initBattlefield(battlefieldSize);
+            var cells  = player.battlefield.cells.data;
+            var _json  = {
+                player: {id: player.id, name: player.name, type: player.type},
+                battlefield: {id: player.battlefield.id},
                 cells: []
             };
 
-            for(var j in _cells) {
-                for(var k in _cells[j]) {
-                    _json.cells.push(_cells[j][k]);
+            for(var j in cells) {
+                for(var k in cells[j]) {
+                    _json.cells.push(cells[j][k]);
                 }
             }
 
             json.data.push(_json);
 
-            this.data[i] = _player;
+            this.data[i] = player;
         }
-        this.pageMgr.loadingMode(false);
-
-        console.log(json);
 
         var self = this;
         this.apiMgr.request('POST', this.$area.attr(Game.resource.config.route.init), JSON.stringify(json),
             function(json) {
-                //self.html.update();
-                self.pageMgr.loadingMode(false);
+                //self.modalMgr.hide();
+                debugger;
                 self.updateAll(json);
+                self.pageMgr.loadingMode(false);
             }
         );
     },
@@ -94,12 +89,8 @@ Game.prototype = {
             if(player instanceof Player)
                 player.setId(_player.id);
         }
+
         this.setId(json.id);
-
-
-        //debugger;
-        console.log('asd')
-        console.log(json);
         this.html.update();
     },
     player: {
@@ -126,64 +117,50 @@ Game.prototype = {
         send: function(cell) {
             var self = this;
 
-            //this.pageMgr.loadingMode(true);
-            console.log(JSON.stringify(cell));
+            this.super.pageMgr.loadingMode(true);
             this.super.apiMgr.request('POST', this.super.$area.attr(Game.resource.config.route.turn), JSON.stringify(cell),
                 function(json) {
-                    self.updateAll(json);
                     self.super.pageMgr.loadingMode(false);
+                    self.update(json);
                 }
             );
 
         },
-        updateAll: function(json) {
+        update: function(json) {
             for(var i in json) {
                 if(i ==  Game.resource.config.json.victory) {
                     json[i].pid != this.super.player.getHuman().id
-                        ? this.super.alertMgr.show('VICTORY', AlertMgr.type.success)
-                        : this.super.alertMgr.show('LOOSER', AlertMgr.type.error);
-                } else this.updateByPlayer(json[i]);
+                        ? this.super.alertMgr.show('VICTORY', AlertMgr.resource.config.type.success)
+                        : this.super.alertMgr.show('LOOSER', AlertMgr.resource.config.type.error);
+                } else {
+                    var cell = this.get(json[i].pid, json[i].x, json[i].y);
+                    if(cell instanceof Cell) {
+                        cell.setState(json[i].s)
+                    }
+                }
+
             }
             this.super.html.update();
 
         },
-        updateByPlayer: function(json) {
-            for(var i in this.players) {
-                if(this.players[i].id == json.pid) {
-                    var cells = this.players[i].battlefield.cells.data;
-                    for(var j in cells) {
-                        for(var k in cells[j]) {
-                            var cell = cells[j][k];
-                            if(cell.x == json.x && cell.y == json.y) {
-                                cell.setState(json.s);
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
-        },
         get: function(pid, x, y) {
-            var player = this.player.getById(pid);
+            var player = this.super.player.getById(pid);
             if(player instanceof Player) {
                 var cell = player.battlefield.getCell(x, y);
                 if(cell instanceof Cell)
                     return cell;
             }
-
-            return undefined;
         }
     },
     html: {
         wipe: function() {
-            this.$area.html('');
+            this.super.$area.html('');
         },
         update: function() {
             this.wipe();
 
             for(var i in this.super.data) {
                 var player = this.super.data[i];
-                console.log(player);
                 player.updateHTML();
             }
         }
@@ -215,13 +192,13 @@ Game.prototype = {
             }
         },
         unlockSubmition: function() {
-            this.modalMgr.disableSubmision();
+            this.super.modalMgr.disableSubmision();
             var config = Game.resource.config,
                 player  = document.getElementById(config.trigger.player),
                 bfSize  = document.getElementById(config.trigger.bfsize);
 
-            if(this.validate(player) && this.validate(bfSize) && bfSize.value >= config.limits.minBFSize) {
-                this.modalMgr.enableSubmision();
+            if(this.validate(player) && this.validate(bfSize)) {
+                this.super.modalMgr.enableSubmision();
             }
         }
     }
