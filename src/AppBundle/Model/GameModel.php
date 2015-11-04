@@ -1,9 +1,7 @@
 <?php
-
 namespace AppBundle\Model;
 
 use AppBundle\Entity\Battlefield;
-use AppBundle\Entity\CellState;
 use AppBundle\Entity\Cell;
 use AppBundle\Entity\Game;
 use AppBundle\Entity\GameResult;
@@ -24,42 +22,34 @@ class GameModel
      * @var BattlefieldRepository
      */
     private $battlefieldRepository;
-
     /**
      * @var CellRepository
      */
     private $cellRepository;
-
     /**
      * @var CellStateRepository
      */
     private $cellStateRepository;
-
     /**
      * @var GameRepository
      */
     private $gameRepository;
-
     /**
      * @var GameResultRepository
      */
     private $gameResultRepository;
-
     /**
      * @var PlayerRepository
      */
     private $playerRepository;
-
     /**
      * @var PlayerTypeRepository
      */
     private $playerTypeRepository;
-
     /**
      * @var ObjectManager
      */
-    private $entityManager;
-
+    private $om;
     /**
      * @var CellModel
      */
@@ -72,7 +62,7 @@ class GameModel
                          GameResultRepository $gameResultRepository,
                          PlayerRepository $playerRepository,
                          PlayerTypeRepository $playerTypeRepository,
-                         ObjectManager $entityManager,
+                         ObjectManager $om,
                          CellModel $cellModel,
                          AI $ai
     ) {
@@ -83,7 +73,7 @@ class GameModel
         $this->gameResultRepository  = $gameResultRepository;
         $this->playerRepository      = $playerRepository;
         $this->playerTypeRepository  = $playerTypeRepository;
-        $this->entityManager         = $entityManager;
+        $this->om                    = $om;
         $this->cellModel             = $cellModel;
         $this->ai                    = $ai;
     }
@@ -100,37 +90,24 @@ class GameModel
 
         $json = json_decode($json);
 
-        $game = $this->gameRepository->findOneBy(['id' => $json->id]);
-        if(!$game instanceof Game) {
-            $game = new Game();
-            $this->entityManager->persist($game);
-            $this->entityManager->flush();
-            $json->id = $game->getId();
-        }
+        $game = new Game();
+        $this->om->persist($game);
 
-        $playerStates = $this->playerTypeRepository->getTypes();
+        $playerTypes = $this->playerTypeRepository->getTypes();
         foreach($json->data as $_player) {
             $player = $this->playerRepository->findOneBy(['name' => $_player->player->name]);
 
             if(!$player instanceof Player) {
                 $player = (new Player())
                     ->setName($_player->player->name)
-                    ->setType($playerStates[PlayerModel::TYPE_HUMAN]);
-                $this->entityManager->persist($player);
-                $this->entityManager->flush();
-            }
-            $_player->player->id = $player->getId();
-
-            $battlefield = $this->battlefieldRepository->findOneBy(['player' => $player, 'game' => $game]);
-            if(!$battlefield instanceof Battlefield) {
-                $battlefield = (new Battlefield())
-                    ->setGame($game)
-                    ->setPlayer($player);
-                $this->entityManager->persist($battlefield);
-                $this->entityManager->flush();
-                $_player->battlefield->id = $battlefield->getId();
+                    ->setType($playerTypes[PlayerModel::TYPE_HUMAN]);
+                $this->om->persist($player);
             }
 
+            $battlefield = (new Battlefield())
+                ->setGame($game)
+                ->setPlayer($player);
+            $game->addBattlefield($battlefield);
 
             foreach($_player->cells as $_cell) {
                 $cell = (new Cell())
@@ -138,21 +115,39 @@ class GameModel
                     ->setY($_cell->y)
                     ->setState($battlefield->getPlayer()->getType()->getId() != PlayerModel::TYPE_CPU
                         ? $this->cellModel->getCellStates()[$_cell->s]
-                        : $this->cellModel->getCellStates()[CellModel::STATE_WATER_LIVE])
-                    ->setBattlefield($battlefield);
-
-                $this->entityManager->persist($cell);
+                        : $this->cellModel->getCellStates()[CellModel::STATE_WATER_LIVE]);
+                $battlefield->addCell($cell);
             }
-
-            $this->entityManager->flush();
 
             if($battlefield->getPlayer()->getType()->getId() == PlayerModel::TYPE_CPU) {
                 $this->initCPUBattlefield($battlefield);
             }
 
         }
+        $this->om->flush();
 
-        return $json;
+        return $this->getJSON($game);
+    }
+
+    public function getJSON(Game $game)
+    {
+        $std = new \stdClass();
+        $std->id = $game->getId();
+        $std->data = [];
+        foreach($game->getBattlefields() as $battlefield) {
+            $_json = new \stdClass();
+            $_json->id = $battlefield->getId();
+            $_json->player = PlayerModel::getJSON($battlefield->getPlayer());
+            $_json->cells = [];
+
+            foreach($battlefield->getCells() as $cell) {
+                $_json->cells[] = CellModel::getJSON($cell, true);
+            }
+
+            $std->data[] = $_json;
+        }
+
+        return $std;
     }
 
     /**
@@ -160,14 +155,12 @@ class GameModel
      */
     public function initCPUBattlefield(Battlefield $battlefield)
     {
-        foreach($this->cellRepository->findBy(['battlefield' => $battlefield]) as $cell) {
-            /**
-             * @var $cell Cell
-             */
-            if($cell->getX() == 1 && $cell->getY() == 1)
+        foreach($battlefield->getCells() as $cell) {
+            if($cell->getX() == 1 && $cell->getY() == 1) {
                 $cell->setState($this->cellModel->getCellStates()[CellModel::STATE_SHIP_LIVE]);
+                break;
+            }
         }
-        $this->entityManager->flush();
     }
 
     /**
@@ -184,10 +177,16 @@ class GameModel
 
         $json = json_decode($json);
         $std  = new \stdClass();
+        $game = $this->gameRepository->find($json->game->id);
+        if($game->getResult() !== null) {
+            $std->victory = new \stdClass();
+            $std->victory->pid = $game->getResult()->getWinner()->getId();
+            return $std;
+        }
+//            return
+//        $battlefields = $this->battlefieldRepository->findByGameId($json->game->id);
 
-        $battlefields = $this->battlefieldRepository->findByGameId($json->game->id);
-
-        foreach($battlefields as $battlefield) {
+        foreach($game->getBattlefields() as $battlefield) {
             $std->{$battlefield->getPlayer()->getId()} = $this->playerTurn($battlefield, $json);
 
             if($this->detectVictory($battlefield)) {
@@ -217,8 +216,8 @@ class GameModel
                         break;
 
                     if($this->ai->turn($cell)) {
-                        $this->entityManager->persist($cell);
-                        $this->entityManager->flush();
+                        $this->om->persist($cell);
+                        $this->om->flush();
 
                         return CellModel::getJSON($cell);
                     }
@@ -232,8 +231,8 @@ class GameModel
 
                     $this->cellModel->switchState($cell);
 
-                    $this->entityManager->persist($cell);
-                    $this->entityManager->flush();
+                    $this->om->persist($cell);
+                    $this->om->flush();
 
                     return CellModel::getJSON($cell);
                 }
@@ -253,15 +252,18 @@ class GameModel
                 return false;
         }
 
-        if($this->gameResultRepository->findOneBy(['game' => $battlefield->getGame()]) instanceof GameResult)
+        $game = $battlefield->getGame();
+        if($game->getResult() !== null) {
             return true;
+        }
 
-        $gameResult = (new GameResult())
-            ->setGame($battlefield->getGame())
+        $result = (new GameResult())
             ->setWinner($battlefield->getPlayer());
+        $game->setResult($result);
 
-        $this->entityManager->persist($gameResult);
-        $this->entityManager->flush();
+        $this->om->persist($game);
+        $this->om->flush();
+
         return true;
     }
 }

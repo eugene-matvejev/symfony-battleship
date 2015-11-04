@@ -63,16 +63,19 @@ class CellModel
 
     /**
      * @param Cell $cell
+     * @param bool $ignorePlayer|null
      *
      * @return \stdClass
      */
-    public static function getJSON(Cell $cell)
+    public static function getJSON(Cell $cell, $ignorePlayer = null)
     {
         $std = new \stdClass();
         $std->x = $cell->getX();
         $std->y = $cell->getY();
         $std->s = $cell->getState()->getId();
-        $std->pid = $cell->getBattlefield()->getPlayer()->getId();
+        if(!$ignorePlayer) {
+            $std->pid = $cell->getBattlefield()->getPlayer()->getId();
+        }
 
         return $std;
     }
