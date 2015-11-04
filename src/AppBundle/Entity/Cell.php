@@ -19,27 +19,24 @@ class Cell
     /**
      * @ORM\Column(name="x", type="integer", nullable=false)
      *
-     * @var integer
+     * @var int
      */
     private $x;
-
     /**
      * @ORM\Column(name="y", type="integer", nullable=false)
      *
-     * @var integer
+     * @var int
      */
     private $y;
-
     /**
-     * @ORM\ManyToOne(targetEntity="CellState")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CellState")
      * @ORM\JoinColumn(name="state", referencedColumnName="id")
      *
      * @var CellState
      */
     private $state;
-
     /**
-     * @ORM\ManyToOne(targetEntity="Battlefield")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Battlefield")
      * @ORM\JoinColumn(name="battlefield", referencedColumnName="id")
      *
      * @var Battlefield

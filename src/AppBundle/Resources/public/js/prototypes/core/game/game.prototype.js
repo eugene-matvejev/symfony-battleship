@@ -60,11 +60,13 @@ Game.prototype = {
             this.data[i] = player;
         }
 
+        console.log(json);
         var self = this;
         this.apiMgr.request('POST', this.$area.attr(Game.resource.config.route.init), JSON.stringify(json),
             function(json) {
                 //self.modalMgr.hide();
-                debugger;
+                //debugger;
+                console.log(json);
                 self.updateAll(json);
                 self.pageMgr.loadingMode(false);
             }
@@ -84,6 +86,24 @@ Game.prototype = {
     },
     updateAll: function(json) {
         for(var i in json.data) {
+            /**
+             $std = new \stdClass();
+             $std->id = $game->getId();
+             $std->data = [];
+             foreach($game->getBattlefields() as $battlefield) {
+            $_json = new \stdClass();
+            $_json->id = $battlefield->getId();
+            $_json->player = PlayerModel::getJSON($battlefield->getPlayer());
+            $_json->cells = [];
+
+            foreach($battlefield->getCells() as $cell) {
+                $_json->cells[] = CellModel::getJSON($cell, true);
+            }
+
+            $std->data[] = $_json;
+        }
+
+             return $std;             */
             var _player = json.data[i].player,
                 player  = this.player.getByName(_player.name);
             if(player instanceof Player)

@@ -16,7 +16,7 @@ class Player
     use Identifiable, Nameable;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PlayerType")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PlayerType")
      * @ORM\JoinColumn(name="type", referencedColumnName="id")
      *
      * @var PlayerType

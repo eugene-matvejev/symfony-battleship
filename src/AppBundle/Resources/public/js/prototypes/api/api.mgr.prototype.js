@@ -1,5 +1,4 @@
 function APIMgr() {
-    //this.debugArea = document.querySelector('#debug-area');
     this.$debugText = $('#debug-area>div.debug-content');
     this.pageMgr   = new PageMgr();
 }

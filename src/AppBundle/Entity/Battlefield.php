@@ -2,6 +2,7 @@
 namespace AppBundle\Entity;
 
 use AppBundle\Library\Traits\Identifiable;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,28 +16,56 @@ class Battlefield
     use Identifiable;
 
     /**
-     * @ORM\OneToMany(targetEntity="Cell", mappedBy="battlefield")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Cell", mappedBy="battlefield", cascade={"persist"})
      * @ORM\JoinColumn(name="id", referencedColumnName="battlefield")
      *
-     * @var Cell[]
+     * @var ArrayCollection|Cell[]
      */
     private $cells;
-
     /**
-     * @ORM\ManyToOne(targetEntity="Game")
-     * @ORM\JoinColumn(name="game", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Game")
+     * @ORM\JoinColumn(name="game")
      *
      * @var Game
      */
     private $game;
-
     /**
-     * @ORM\ManyToOne(targetEntity="Player")
-     * @ORM\JoinColumn(name="player", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Player")
+     * @ORM\JoinColumn(name="player")
      *
      * @var Player
      */
     private $player;
+
+    public function __construct()
+    {
+        $this->cells = new ArrayCollection();
+    }
+
+    /**
+     * @param Cell $cell
+     *
+     * @return $this
+     */
+    public function addCell(Cell $cell)
+    {
+        $cell->setBattlefield($this);
+        $this->cells->add($cell);
+
+        return $this;
+    }
+
+    /**
+     * @param Cell $cell
+     *
+     * @return $this
+     */
+    public function removeCell(Cell $cell)
+    {
+        $this->cells->removeElement($cell);
+
+        return $this;
+    }
 
     /**
      * @return Cell[]
