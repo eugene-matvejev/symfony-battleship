@@ -17,21 +17,21 @@ class Battlefield
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Cell", mappedBy="battlefield", cascade={"persist"})
-     * @ORM\JoinColumn(name="id", referencedColumnName="battlefield")
+     * @ORM\JoinColumn(name="id", referencedColumnName="battlefield", nullable=false)
      *
      * @var ArrayCollection|Cell[]
      */
     private $cells;
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Game")
-     * @ORM\JoinColumn(name="game")
+     * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)
      *
      * @var Game
      */
     private $game;
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Player")
-     * @ORM\JoinColumn(name="player")
+     * @ORM\JoinColumn(name="player", referencedColumnName="id", nullable=false)
      *
      * @var Player
      */

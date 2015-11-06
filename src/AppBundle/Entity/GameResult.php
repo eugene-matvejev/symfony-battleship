@@ -16,12 +16,39 @@ class GameResult
 {
     use Identifiable, Timestampable;
     /**
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Game", mappedBy="id")
+     * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)
+     *
+     * @var Game
+     */
+    private $game;
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Player", inversedBy="id")
-     * @ORM\JoinColumn(name="winner", referencedColumnName="id")
+     * @ORM\JoinColumn(name="winner", referencedColumnName="id", nullable=false)
      *
      * @var Player
      */
     private $winner;
+
+    /**
+     * @return Game
+     */
+    public function getGame()
+    {
+        return $this->game;
+    }
+
+    /**
+     * @param Game $game
+     *
+     * @return $this
+     */
+    public function setGame(Game $game)
+    {
+        $this->game = $game;
+
+        return $this;
+    }
 
     /**
      * @return Player

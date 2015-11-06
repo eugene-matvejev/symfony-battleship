@@ -18,7 +18,7 @@ class Game
     use Identifiable, Timestampable;
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Battlefield", mappedBy="game", cascade={"persist"})
-     * @ORM\JoinColumn(name="id", referencedColumnName="game")
+     * @ORM\JoinColumn(name="id", referencedColumnName="game", nullable=false)
      *
      * @var ArrayCollection|Battlefield[]
      */
@@ -85,6 +85,7 @@ class Game
      */
     public function setResult(GameResult $result)
     {
+        $result->setGame($this);
         $this->result = $result;
 
         return $this;

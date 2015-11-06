@@ -30,14 +30,14 @@ class Cell
     private $y;
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CellState")
-     * @ORM\JoinColumn(name="state", referencedColumnName="id")
+     * @ORM\JoinColumn(name="state", referencedColumnName="id", nullable=false)
      *
      * @var CellState
      */
     private $state;
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Battlefield")
-     * @ORM\JoinColumn(name="battlefield", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Battlefield", inversedBy="id")
+     * @ORM\JoinColumn(name="battlefield", referencedColumnName="id", nullable=false)
      *
      * @var Battlefield
      */
