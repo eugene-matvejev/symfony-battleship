@@ -17,7 +17,7 @@ class Player
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PlayerType")
-     * @ORM\JoinColumn(name="type", referencedColumnName="id")
+     * @ORM\JoinColumn(name="type", referencedColumnName="id", nullable=false)
      *
      * @var PlayerType
      */
