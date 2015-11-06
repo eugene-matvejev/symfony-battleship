@@ -1,5 +1,6 @@
 function PageMgr() {
     this.modalMgr   = new ModalMgr();
+    this.alertMgr   = new AlertMgr();
     this.$docTitle  = $('head>title');
     this.$document  = $('.container');
     this.$loading   = this.$document.find('.page-loading');
@@ -15,6 +16,7 @@ PageMgr.prototype = {
     switchSection: function(el) {
         this.toggleTitle(el);
         this.hideAll();
+        this.alertMgr.hide();
         var config = PageMgr.resource.config;
         switch(el.getAttribute(config.trigger.action)) {
             case config.action.game.new:
