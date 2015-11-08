@@ -1,6 +1,11 @@
 $(document).ready(function() {
-    var game = new Game();
-        game.pageMgr.switchSection(document.querySelector('li[data-action="' + PageMgr.resource.config.action.game.new + '"]'));
+    var game         = new Game(),
+        gameConfig   = Game.resources.config,
+        cellConfig   = Cell.resources.config,
+        pageConfig   = PageMgr.resources.config,
+        playerConfig = Player.resources.config;
+    game.pageMgr.switchSection(document.querySelector('li[data-action="' + pageConfig.action.game.new + '"]'));
+    console.log('.player-area:not(.finished)[' + playerConfig.trigger.type +'="' + playerConfig.type.cpu + '"] .battlefield-cell[data-s="' + cellConfig.state.seaLive + '"]');
     //game.modal.initGame();
     game.init(
         [
@@ -11,20 +16,21 @@ $(document).ready(function() {
     );
 
     $('#game-area')
-        .on('click', '.player-area:not(.finished)[' + Player.resource.config.trigger.type +'="' + Player.resource.config.type.cpu + '"] .battlefield-cell[data-s="' + Cell.state.seaLive + '"]', function(e) {
+        .on('click', '.player-area:not(.finished)[' + playerConfig.trigger.type +'="' + playerConfig.type.cpu + '"] .battlefield-cell[data-s="' + cellConfig.state.seaLive + '"]', function(e) {
+            debugger;
             e.stopPropagation();
 
             game.update(this);
         });
     $('.page-sidebar')
-        .on('click', 'li[data-action="' + PageMgr.resource.config.action.game.new + '"]', function(e) {
+        .on('click', 'li[data-action="' + pageConfig.action.game.new + '"]', function(e) {
             e.stopPropagation();
 
             game.modal.initGame();
         });
 
     $('#modal-area')
-        .on('input', '#' + Game.resource.config.trigger.player + ', #' + Game.resource.config.trigger.bfsize, function(e) {
+        .on('input', '#' + gameConfig.trigger.player + ', #' + gameConfig.trigger.bfsize, function(e) {
             e.stopPropagation();
 
             game.modal.unlockSubmition();
@@ -36,9 +42,9 @@ $(document).ready(function() {
             game.init(
                 [
                     {id:  1, name: 'CPU'},
-                    {id: '', name: document.getElementById(Game.resource.config.trigger.player).value}
+                    {id: '', name: document.getElementById(gameConfig.trigger.player).value}
                 ],
-                document.getElementById(Game.resource.config.trigger.bfsize).value
+                document.getElementById(gameConfig.trigger.bfsize).value
             );
         });
 });

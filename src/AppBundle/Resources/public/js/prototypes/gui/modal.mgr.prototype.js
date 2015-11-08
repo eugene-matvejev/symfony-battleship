@@ -4,6 +4,7 @@ function ModalMgr() {
 
 ModalMgr.prototype = {
     show: function() {
+        this.$area.removeClass(PageMgr.resources.config.trigger.css.hidden);
         this.$area.find('.modal').modal({ keyboard: false });
 
         return this;

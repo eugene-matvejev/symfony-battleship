@@ -6,23 +6,23 @@ function AlertMgr() {
 AlertMgr.prototype = {
     show: function(txt, type) {
         this.$content.html(txt);
-        this.$area.removeClass(PageMgr.resource.config.trigger.css.hidden);
+        this.$area.removeClass(PageMgr.resources.config.trigger.css.hidden);
         this.applyColor(type);
 
         return this;
     },
     hide: function() {
-        this.$area.addClass(PageMgr.resource.config.trigger.css.hidden);
+        this.$area.addClass(PageMgr.resources.config.trigger.css.hidden);
 
         return this;
     },
     applyColor: function(type) {
         console.log(type);
         switch(type) {
-            case AlertMgr.resource.config.type.info:
-            case AlertMgr.resource.config.type.success:
-            case AlertMgr.resource.config.type.warning:
-            case AlertMgr.resource.config.type.error:
+            case AlertMgr.resources.config.type.info:
+            case AlertMgr.resources.config.type.success:
+            case AlertMgr.resources.config.type.warning:
+            case AlertMgr.resources.config.type.error:
                 console.log(type);
 
                 this.$area.removeClass().addClass('alert alert-' + type);
@@ -33,7 +33,7 @@ AlertMgr.prototype = {
     }
 };
 
-AlertMgr.resource = {
+AlertMgr.resources = {
     config: {
         type: {
             info: 'info',

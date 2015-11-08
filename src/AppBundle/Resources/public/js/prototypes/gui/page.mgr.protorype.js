@@ -2,22 +2,25 @@ function PageMgr() {
     this.modalMgr   = new ModalMgr();
     this.alertMgr   = new AlertMgr();
     this.$docTitle  = $('head>title');
-    this.$document  = $('.container');
-    this.$loading   = this.$document.find('.page-loading');
-    this.$sidebar   = this.$document.find('.page-sidebar');
-    this.$content   = this.$document.find('.page-content');
+    this.$loading   = $('.page-loading');
+    this.$sidebar   = $('.page-sidebar');
+    this.$content   = $('.page-content');
     this.$pageTitle = this.$content.find('.page-section-title');
 }
 PageMgr.prototype = {
     toggleSidebar: function() {
-        this.$content.toggleClass(PageMgr.resource.config.trigger.css.toggle);
-        this.$sidebar.toggleClass(PageMgr.resource.config.trigger.css.toggle);
+        var toggleClass = PageMgr.resources.config.trigger.css.toggle;
+
+        this.$content.toggleClass(toggleClass);
+        this.$sidebar.toggleClass(toggleClass);
     },
     switchSection: function(el) {
+        var config = PageMgr.resources.config;
+
         this.toggleTitle(el);
         this.hideAll();
         this.alertMgr.hide();
-        var config = PageMgr.resource.config;
+
         switch(el.getAttribute(config.trigger.action)) {
             case config.action.game.new:
                 break;
@@ -33,25 +36,26 @@ PageMgr.prototype = {
         }
     },
     hideAll: function() {
-        $('div#game-area, div#stats-area').addClass(PageMgr.resource.config.trigger.css.hidden);
+        this.$content.find('.container-fluid>.row>div:not(#notification-area):not(#debug-area)').addClass(PageMgr.resources.config.trigger.css.hidden);
     },
     show: function(id) {
-        $('div#' + id).removeClass(PageMgr.resource.config.trigger.css.hidden);
+        $('div#' + id).removeClass(PageMgr.resources.config.trigger.css.hidden);
     },
     toggleTitle: function(el) {
         var postfix = el.innerText,
-            prefix  = this.$sidebar.find('.' + PageMgr.resource.config.trigger.css.title).text();
+            prefix  = this.$sidebar.find('.' + PageMgr.resources.config.trigger.css.title).text();
         this.$docTitle.text(prefix + ' :: ' + postfix);
         this.$pageTitle.text(postfix);
 
         return this;
     },
     loadingMode: function(enable) {
+        var hiddenClass = PageMgr.resources.config.trigger.css.hidden;
         if(enable) {
-            this.$loading.removeClass(PageMgr.resource.config.trigger.css.hidden);
+            this.$loading.removeClass(hiddenClass);
             this.modalMgr.updateHTML('').show();
         } else {
-            this.$loading.addClass(PageMgr.resource.config.trigger.css.hidden);
+            this.$loading.addClass(hiddenClass);
             this.modalMgr.updateHTML('').hide();
         }
 
@@ -59,7 +63,7 @@ PageMgr.prototype = {
     }
 };
 
-PageMgr.resource = {
+PageMgr.resources = {
     config: {
         action: {
             game: {
