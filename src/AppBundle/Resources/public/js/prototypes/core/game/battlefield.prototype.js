@@ -1,15 +1,14 @@
-function Battlefield(size) {
+function Battlefield(size, $el) {
     this.id    = 'unk';
+    //this.$area = $el;
+    this.$html = $el;
     this.size  = size;
     this.cells = new CellContainer();
+    this.initModules();
+    this.initData();
 }
 
 Battlefield.prototype = {
-    $area: undefined,
-    setArea: function($el) {
-        this.$area = $el;
-        return this;
-    },
     initData: function() {
         for(var x = 0; x < this.size; x++) {
             var cells = [];
@@ -18,7 +17,7 @@ Battlefield.prototype = {
             this.cells.navY.push(x);
 
             for(var y = 0; y < this.size; y++) {
-                cells.push(new Cell(x, y, Cell.state.seaLive));
+                cells.push(new Cell(x, y, Cell.resources.config.state.seaLive));
             }
 
             this.cells.data.push(cells);
@@ -26,25 +25,33 @@ Battlefield.prototype = {
 
         return this;
     },
-    updateHTML: function() {
-        var cellContainer = CellContainer.getHTML(),
-            xAxis         = cellContainer.clone().append(Cell.getHTML(undefined, undefined, undefined, undefined));
+    initModules: function() {
+        this.html.super = this;
 
-        for(var i in this.cells.navX) {
-            xAxis.append(Cell.getHTML(undefined, undefined, undefined, Battlefield.formatXAxis(this.cells.navX[i])));
-        }
-        this.$area.html(xAxis);
+        return this;
+    },
+    html: {
+        update: function() {
+            var _layout = Cell.resources.html.layout,
+                $row    = CellContainer.resources.html.layout(),
+                xAxis   = $row.clone().append(_layout(undefined, undefined, undefined, undefined));
 
-        for(var i in this.cells.navY) {
-            var html = cellContainer.clone();
+            //for(var i in this.super.cells.navX) {
+            //}
+            this.$html.html(xAxis);
 
-            html.append(Cell.getHTML(undefined, undefined, undefined, Battlefield.formatYAxis(this.cells.navY[i])));
-            for(var j in this.cells.data[i]) {
-                var cell = this.cells.data[i][j];
+            for(var i in this.super.cells.navY) {
+                var html = $row.clone();
 
-                html.append(cell.getHTML());
+                xAxis.append(_layout(undefined, undefined, undefined, Battlefield.formatXAxis(this.cells.navX[i])));
+                html.append(_layout(undefined, undefined, undefined, Battlefield.formatYAxis(this.cells.navY[i])));
+                for(var j in this.cells.data[i]) {
+                    var cell = this.cells.data[i][j];
+
+                    html.append(cell.getHTML());
+                }
+                this.$html.append(html);
             }
-            this.$area.append(html);
         }
     },
     getCell: function(x, y) {
@@ -60,9 +67,9 @@ Battlefield.prototype = {
         return undefined;
     },
     mockData: function() {
-        this.cells.data[0][2].s = Cell.state.shipLive;
+        this.cells.data[0][2].s = Cell.resources.config.state.shipLive;
         this.cells.data[0][3].s =
-        this.cells.data[0][4].s = Cell.state.shipDied;
+        this.cells.data[0][4].s = Cell.resources.config.state.shipDied;
     }
 };
 
