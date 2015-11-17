@@ -77,9 +77,12 @@ body>.container {
     background: transparent;
     clear: both;
 }
+.sidebar-nav>li.selected,
 .sidebar-nav>li:not(.sidebar-brand):hover {
     background: #fff;
     color: #000;
+}
+.sidebar-nav>li:not(.sidebar-brand):not(.selected):hover {
     cursor: pointer;
 }
 .page-content:not(.toggled) .toggle-btn {

@@ -5,11 +5,9 @@ function APIMgr() {
 
 APIMgr.prototype = {
     request: function(requestMethod, requestURL, requestData, onSuccess, onError) {
-        //debugger;
+        var self = this;
         if(onError === undefined) {
-            var self = this;
             onError = function(json) {
-                console.log(json);
                 self.pageMgr.loadingMode(false);
                 self.updateDebugHTML(json.responseText, true);
             };

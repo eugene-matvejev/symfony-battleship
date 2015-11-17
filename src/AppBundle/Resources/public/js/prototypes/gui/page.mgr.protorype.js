@@ -9,53 +9,69 @@ function PageMgr() {
 }
 PageMgr.prototype = {
     toggleSidebar: function() {
-        var toggleClass = PageMgr.resources.config.trigger.css.toggle;
+        var _css = PageMgr.resources.config.trigger.css;
 
-        this.$content.toggleClass(toggleClass);
-        this.$sidebar.toggleClass(toggleClass);
+        this.$content.toggleClass(_css.toggle);
+        this.$sidebar.toggleClass(_css.toggle);
+
+        return this;
     },
     switchSection: function(el) {
-        var config = PageMgr.resources.config;
+        var _config = PageMgr.resources.config;
 
         this.toggleTitle(el);
         this.hideAll();
         this.alertMgr.hide();
 
-        switch(el.getAttribute(config.trigger.action)) {
-            case config.action.game.new:
+        switch(el.getAttribute(_config.trigger.action)) {
+            case _config.action.game.new:
                 break;
             default:
-                var section = el.getAttribute(config.trigger.section);
-                switch(section) {
-                    case config.section.game:
-                    case config.section.statistics:
-                        this.show(section);
+                var _section = el.getAttribute(_config.trigger.section);
+                switch(_section) {
+                    case _config.section.game:
+                    case _config.section.statistics:
+                        this.show(_section);
                         break;
                 }
                 break;
         }
+
+        return this;
     },
     hideAll: function() {
-        this.$content.find('.container-fluid>.row>div:not(#notification-area):not(#debug-area)').addClass(PageMgr.resources.config.trigger.css.hidden);
+        var _css = PageMgr.resources.config.trigger.css;
+
+        this.$content.find('.container-fluid>.row>div:not(#notification-area):not(#debug-area)').addClass(_css.hidden);
+        this.$sidebar.find('li:not(.sidebar-brand)').removeClass(_css.selected);
+
+        return this;
     },
     show: function(id) {
-        $('div#' + id).removeClass(PageMgr.resources.config.trigger.css.hidden);
+        var _css = PageMgr.resources.config.trigger.css;
+
+        this.$content.find('div#' + id).removeClass(_css.hidden);
+        this.$sidebar.find('li[data-section="' + id + '"]').addClass(_css.selected);
+
+        return this;
     },
     toggleTitle: function(el) {
         var postfix = el.innerText,
             prefix  = this.$sidebar.find('.' + PageMgr.resources.config.trigger.css.title).text();
+
         this.$docTitle.text(prefix + ' :: ' + postfix);
         this.$pageTitle.text(postfix);
 
         return this;
     },
     loadingMode: function(enable) {
-        var hiddenClass = PageMgr.resources.config.trigger.css.hidden;
+        var _css = PageMgr.resources.config.trigger.css;
+
         if(enable) {
-            this.$loading.removeClass(hiddenClass);
+            this.$loading.removeClass(_css.hidden);
             this.modalMgr.updateHTML('').show();
         } else {
-            this.$loading.addClass(hiddenClass);
+            this.$loading.addClass(_css.hidden);
             this.modalMgr.updateHTML('').hide();
         }
 
@@ -76,8 +92,9 @@ PageMgr.resources = {
         },
         trigger: {
             css: {
-                toggle: 'toggled',
+                selected: 'selected',
                 title: 'page-header',
+                toggle: 'toggled',
                 hidden: 'hidden'
             },
             action: 'data-action',

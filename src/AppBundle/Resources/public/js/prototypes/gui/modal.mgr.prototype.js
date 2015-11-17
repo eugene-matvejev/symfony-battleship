@@ -20,14 +20,10 @@ ModalMgr.prototype = {
 
         return this;
     },
-    enableSubmision: function() {
-        this.$area.find('button.btn[type="button"]').removeAttr('disabled');
-
-        return this;
-    },
-    disableSubmision: function() {
-        this.$area.find('button.btn[type="button"]').attr('disabled', 'disabled');
-
-        return this;
+    unlockSubmision: function(enable) {
+        var $btn = this.$area.find('button.btn[type="button"]');
+        enable === undefined || enable
+            ? $btn.removeAttr('disabled')
+            : $btn.attr('disabled', 'disabled')
     }
 };
