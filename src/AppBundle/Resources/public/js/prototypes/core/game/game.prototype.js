@@ -4,12 +4,11 @@ function Game() {
     this.alertMgr = new AlertMgr();
     this.modalMgr = new ModalMgr();
     this.$area    = $('#game-area');
-    this.initModules();
 }
 
 Game.prototype = {
     id: 'undefined',
-    data: {},
+    data: [],
     setId: function(id) {
         this.id = id;
 
@@ -18,21 +17,13 @@ Game.prototype = {
     getJSON: function() {
         return {id: this.id};
     },
-    initModules: function() {
-        this.html.super =
-        this.cell.super =
-        this.modal.super =
-        this.player.super = this;
-
-        return this;
-    },
     init: function(players, battlefieldSize) {
-        this.data = {};
+        this.data = [];
         this.id   = 'undefined';
         this.pageMgr.loadingMode(true);
         this.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="' + PageMgr.resources.config.section.game + '"]'));
 
-        this.html.wipe();
+        this.htmlWipe();
         var json = {
             id: this.id,
             data: []
@@ -42,163 +33,152 @@ Game.prototype = {
             var player = (new Player(this.$area, players[i].name, players[i].name == 'CPU' ? true : undefined, battlefieldSize)),
                 cells  = player.battlefield.cells.data,
                 _json  = {
-                player: {id: player.id, name: player.name, type: player.type},
-                battlefield: {id: player.battlefield.id},
-                cells: []
-            };
+                    player: {id: player.id, name: player.name, type: player.type},
+                    battlefield: {id: player.battlefield.id},
+                    cells: []
+                };
 
-            for(var j in cells) {
-                for(var k in cells[j]) {
-                    _json.cells.push(cells[j][k]);
+            for(var x in cells) {
+                for(var y in cells[x]) {
+                    _json.cells.push(cells[x][y]);
                 }
             }
 
             json.data.push(_json);
 
-            this.data[i] = player;
+            this.data.push(player);
         }
 
         var self = this;
         this.apiMgr.request('POST', this.$area.attr(Game.resources.config.route.init), JSON.stringify(json),
             function(json) {
-                self.updateAll(json);
+                self.parseInitResponse(json);
                 self.pageMgr.loadingMode(false);
             }
         );
     },
-    update: function(el) {
-        var _config = Player.resources.config,
-            player  = this.player.getById(el.parentElement.parentElement.parentElement.getAttribute(_config.trigger.id));
-        if(player instanceof Player && player.type !== _config.type.human) {
-                _config = Cell.resources.config;
-            var cellX   = el.getAttribute(_config.html.attr.x),
-                cellY   = el.getAttribute(_config.html.attr.y),
-                cell    = this.cell.get(player.id, cellX, cellY);
-
-            if(cell instanceof Cell)
-                this.cell.send({game: this.getJSON(), player: player.getJSON(), cell: cell.getJSON()});
-        }
-    },
-    updateAll: function(json) {
+    parseInitResponse: function(json) {
         for(var i in json.data) {
             var _player = json.data[i].player,
-                player  = this.player.getByName(_player.name);
+                player  = this.findPlayerByName(_player.name);
             if(player instanceof Player)
                 player.setId(_player.id);
         }
 
         this.setId(json.id);
-        this.html.update();
+        this.htmlUpdate();
     },
-    player: {
-        findByCriteria: function(criteria, value) {
-            for(var i in this.super.data) {
-                if(this.super.data[i][criteria] == value)
-                    return this.super.data[i];
-            }
-        },
-        getById: function(id) {
-            return this.findByCriteria('id', id);
-        },
-        getByName: function(name) {
-            return this.findByCriteria('name', name);
-        },
-        getByType: function(type) {
-            return this.findByCriteria('type', type);
-        },
-        getHuman: function() {
-            return this.getByType(Player.resources.config.type.human);
+    htmlWipe: function() {
+        this.$area.html('');
+    },
+    htmlUpdate: function() {
+        //for(var i in this.data) {
+        //    this.data[i].player.htmlUpdate();
+        //}
+    },
+    updateGame: function(el) {
+        var _config = Player.resources.config,
+            player  = this.findPlayerById(el.parentElement.parentElement.parentElement.getAttribute(_config.trigger.id));
+        if(player instanceof Player && player.type !== _config.type.human) {
+                _config = Cell.resources.config;
+            var cell    = this.cellGet(player.id, el.getAttribute(_config.html.attr.x), el.getAttribute(_config.html.attr.y));
+
+            if(cell instanceof Cell)
+                this.cellSend({game: this.getJSON(), player: player.getJSON(), cell: cell.getJSON()});
         }
     },
-    cell: {
-        send: function(cell) {
-            var self = this;
+    findByPlayerCriteria: function(criteria, value) {
+        for(var i in this.data) {
+            if(this.data[i][criteria] == value)
+                return this.data[i];
+        }
+    },
+    findPlayerById: function(id) {
+        return this.findByPlayerCriteria('id', id);
+    },
+    findPlayerByName: function(name) {
+        return this.findByPlayerCriteria('name', name);
+    },
+    findPlayerByType: function(type) {
+        return this.findByPlayerCriteria('type', type);
+    },
+    findHumanPlayer: function() {
+        return this.findPlayerByType(Player.resources.config.type.human);
+    },
+    cellSend: function(cell) {
+        var self = this;
 
-            this.super.pageMgr.loadingMode(true);
-            this.super.apiMgr.request('POST', this.super.$area.attr(Game.resources.config.route.turn), JSON.stringify(cell),
-                function(json) {
-                    self.super.pageMgr.loadingMode(false);
-                    self.update(json);
+        this.pageMgr.loadingMode(true);
+        this.apiMgr.request('POST', this.$area.attr(Game.resources.config.route.turn), JSON.stringify(cell),
+            function(json) {
+                self.pageMgr.loadingMode(false);
+                self.cellUpdate(json);
+            }
+        );
+
+    },
+    cellUpdate: function(json) {
+        var _config = Game.resources.config;
+        for(var i in json) {
+            if(i ==  _config.json.victory) {
+                json[i].pid != this.findHumanPlayer().id
+                    ? this.alertMgr.show(_config.text.win, AlertMgr.resources.config.type.success)
+                    : this.alertMgr.show(_config.text.loss, AlertMgr.resources.config.type.error);
+            } else {
+                var cell = this.cellGet(json[i].pid, json[i].x, json[i].y);
+                if(cell instanceof Cell) {
+                    cell.setState(json[i].s)
                 }
-            );
+            }
 
-        },
-        update: function(json) {
-            var _config = Game.resources.config;
-            for(var i in json) {
-                if(i ==  _config.json.victory) {
-                    json[i].pid != this.super.player.getHuman().id
-                        ? this.super.alertMgr.show(_config.text.win, AlertMgr.resources.config.type.success)
-                        : this.super.alertMgr.show(_config.text.loss, AlertMgr.resources.config.type.error);
-                } else {
-                    var cell = this.get(json[i].pid, json[i].x, json[i].y);
-                    if(cell instanceof Cell) {
-                        cell.setState(json[i].s)
-                    }
+        }
+        this.htmlUpdate();
+    },
+    cellGet: function(pid, x, y) {
+        var player = this.findPlayerById(pid);
+        if(player instanceof Player) {
+            var cell = player.battlefield.getCell(x, y);
+            if(cell instanceof Cell)
+                return cell;
+        }
+    },
+    modalGameInitiation: function() {
+        this.alertMgr.hide();
+        this.modalMgr.updateHTML(Game.resources.html.modal).show();
+
+        return this;
+    },
+    modalValidateInput: function(el) {
+        var _config = Game.resources.config;
+        //debugger;
+
+        switch(el.id) {
+            case _config.trigger.player:
+                console.log(el.value);
+                if(!_config.limits.namePattern.test(el.value)) {
+                    el.value = el.value.substr(0, el.value.length - 1);
+                    return false;
                 }
-
-            }
-            this.super.html.update();
-
-        },
-        get: function(pid, x, y) {
-            var player = this.super.player.getById(pid);
-            if(player instanceof Player) {
-                var cell = player.battlefield.getCell(x, y);
-                if(cell instanceof Cell)
-                    return cell;
-            }
+                return true;
+            case _config.trigger.bfsize:
+                if(el.value.length > 0 && isNaN(el.value))
+                    el.value = el.value.substr(0, el.value.length - 1);
+                else if(el.value.length > 1 && el.value < _config.limits.minBFSize)
+                    el.value = _config.limits.minBFSize;
+                else if(el.value.length > 2 || el.value > _config.limits.maxBFSize)
+                    el.value = _config.limits.maxBFSize;
+                return el.value >= _config.limits.minBFSize && el.value <= _config.limits.maxBFSize;
         }
     },
-    html: {
-        wipe: function() {
-            this.super.$area.html('');
-        },
-        update: function() {
-            this.wipe();
+    modalUnlockSubmition: function() {
+        this.modalMgr.unlockSubmision(false);
 
-            for(var i in this.super.data) {
-                var player = this.super.data[i];
-                player.html.update();
-            }
-        }
-    },
-    modal: {
-        initGame: function() {
-            this.super.alertMgr.hide();
-            this.super.modalMgr.updateHTML(Game.resources.html.modal).show();
+        var _config = Game.resources.config,
+            player  = document.getElementById(_config.trigger.player),
+            bfSize  = document.getElementById(_config.trigger.bfsize);
 
-            return this;
-        },
-        validate: function(el) {
-            var _config = Game.resources.config;
-
-            switch(el.id) {
-                case _config.trigger.player:
-                    if(el.value.length > 0 && !_config.limits.nameRegex.test(el.value) || el.value.length > _config.limits.maxNLengh) {
-                        el.value = el.value.substr(0, el.value.length - 1);
-                        return false;
-                    }
-                    return el.value.length >= _config.limits.minBFSize && el.value.length <= _config.limits.maxNLengh;
-                case _config.trigger.bfsize:
-                    if(el.value.length > 0 && isNaN(el.value))
-                        el.value = el.value.substr(0, el.value.length - 1);
-                    else if(el.value.length > 1 && el.value < _config.limits.minBFSize)
-                        el.value = _config.limits.minBFSize;
-                    else if(el.value.length > 2 || el.value > _config.limits.maxBFSize)
-                        el.value = _config.limits.maxBFSize;
-                    return el.value >= _config.limits.minBFSize && el.value <= _config.limits.maxBFSize;
-            }
-        },
-        unlockSubmition: function() {
-            this.super.modalMgr.disableSubmision();
-            var _config = Game.resources.config,
-                player  = document.getElementById(_config.trigger.player),
-                bfSize  = document.getElementById(_config.trigger.bfsize);
-
-            if(this.validate(player) && this.validate(bfSize)) {
-                this.super.modalMgr.enableSubmision();
-            }
+        if(this.modalValidateInput(player) && this.modalValidateInput(bfSize)) {
+            this.modalMgr.unlockSubmision(true);
         }
     }
 };
@@ -215,9 +195,7 @@ Game.resources.config = {
     limits: {
         minBFSize: 5,
         maxBFSize: 20,
-        minNLengh: 3,
-        maxNLengh: 255,
-        nameRegex: /^[a-zA-Z0-9\.\-\ \@]+$/
+        namePattern: /^[a-zA-Z0-9\.\-\ \@]{1,255}$/
     },
     route: {
         turn: 'data-turn-link',

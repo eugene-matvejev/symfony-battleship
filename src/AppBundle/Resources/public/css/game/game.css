@@ -1,15 +1,13 @@
-
-
 .battlefield-cell {
     height: 32px;
     width: 32px;
     padding: 0;
     opacity: 0.75;
-    font-size: 20px;
+    font-size: 12px;
+    line-height: 32px;
     border: 1px solid #000;
     text-align: center;
 }
-
 .battlefield-cell:hover {
     opacity: 1;
     cursor: pointer;
@@ -27,26 +25,23 @@
     background: #6d0019;
 }
 
-.player-field>div:first-child>div,
-.player-field>div>div:first-child,
-.player-field>div:first-child>div:hover,
-.player-field>div>div:first-child:hover {
-    opacity: 1;
-    border: none;
-    cursor: default;
-}
-
 .player-area>.player-name {
     font-size: 32px;
 }
 .player-area {
     margin-top: 25px;
 }
-
-
-
-.player-area[data-player-typeof="2"] .battlefield-cell:hover {
+.player-area .battlefield-cell:not([data-s="undefined"]):hover {
     cursor: no-drop;
+}
+.player-area:not([data-player-type="2"]) .battlefield-cell:not([data-s="2"]):not([data-s="4"]):hover {
+    cursor: pointer;
+}
+
+.player-field div[data-s="undefined"] {
+    opacity: 1;
+    border: none;
+    cursor: default;
 }
 
 div#game-area,
@@ -54,4 +49,3 @@ div#stats-area {
     display: inline-block;
     width: 100%;
 }
-

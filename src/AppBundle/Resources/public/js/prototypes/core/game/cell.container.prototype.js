@@ -5,6 +5,9 @@ function CellContainer() {
 }
 
 CellContainer.prototype = {
+    getJSON: function() {
+        return this.data;
+    }
 };
 
 CellContainer.resources = {};

@@ -1,11 +1,10 @@
 function Battlefield(size, $el) {
     this.id    = 'unk';
-    //this.$area = $el;
     this.$html = $el;
     this.size  = size;
     this.cells = new CellContainer();
-    this.initModules();
-    this.initData();
+
+    this.initData().htmlUpdate();
 }
 
 Battlefield.prototype = {
@@ -17,7 +16,7 @@ Battlefield.prototype = {
             this.cells.navY.push(x);
 
             for(var y = 0; y < this.size; y++) {
-                cells.push(new Cell(x, y, Cell.resources.config.state.seaLive));
+                cells.push(new Cell(x, y, undefined));
             }
 
             this.cells.data.push(cells);
@@ -25,34 +24,29 @@ Battlefield.prototype = {
 
         return this;
     },
-    initModules: function() {
-        this.html.super = this;
+    htmlUpdate: function() {
+        var _layout = Cell.resources.html.layout,
+            _format = Battlefield.resources.config.format,
+            _$row   = CellContainer.resources.html.layout(),
+            $top    = _$row.clone().append(_layout());
 
-        return this;
-    },
-    html: {
-        update: function() {
-            var _layout = Cell.resources.html.layout,
-                $row    = CellContainer.resources.html.layout(),
-                xAxis   = $row.clone().append(_layout(undefined, undefined, undefined, undefined));
+        this.$html.html($top);
 
-            //for(var i in this.super.cells.navX) {
-            //}
-            this.$html.html(xAxis);
+        for(var x in this.cells.navX) {
+            var $row = _$row.clone();
 
-            for(var i in this.super.cells.navY) {
-                var html = $row.clone();
+            $top.append(_layout(undefined, undefined, undefined, _format.xAxis(this.cells.navX[x])));
+            $row.append(_layout(undefined, undefined, undefined, _format.yAxis(this.cells.navY[x])));
 
-                xAxis.append(_layout(undefined, undefined, undefined, Battlefield.formatXAxis(this.cells.navX[i])));
-                html.append(_layout(undefined, undefined, undefined, Battlefield.formatYAxis(this.cells.navY[i])));
-                for(var j in this.cells.data[i]) {
-                    var cell = this.cells.data[i][j];
-
-                    html.append(cell.getHTML());
-                }
-                this.$html.append(html);
+            for(var y in this.cells.data[x]) {
+                $row.append(this.cells.data[x][y].$html);
             }
+
+            $row.append(_layout(undefined, undefined, undefined, _format.yAxis(this.cells.navY[x])));
+            this.$html.append($row);
         }
+
+        this.$html.append($top.clone());
     },
     getCell: function(x, y) {
         for(var _x in this.cells.data) {
@@ -67,15 +61,24 @@ Battlefield.prototype = {
         return undefined;
     },
     mockData: function() {
-        this.cells.data[0][2].s = Cell.resources.config.state.shipLive;
-        this.cells.data[0][3].s =
-        this.cells.data[0][4].s = Cell.resources.config.state.shipDied;
+        var _config = Cell.resources.config;
+
+        this.getCell(0, 2).setState(_config.state.shipLive);
+        this.getCell(0, 3).setState(_config.state.shipDied);
+        this.getCell(0, 4).setState(_config.state.shipDied);
+        this.getCell(0, 5).setState(_config.state.shipDied);
     }
 };
 
-Battlefield.formatXAxis = function(i) {
-    return i + 1;
-};
-Battlefield.formatYAxis = function(i) {
-    return String.fromCharCode(i + 97);
+Battlefield.resources = {
+    config: {
+        format: {
+            xAxis: function (i) {
+                return i + 1;
+            },
+            yAxis: function (i) {
+                return String.fromCharCode(i + 97);
+            }
+        }
+    }
 };

@@ -1,28 +1,22 @@
 function Cell(x, y, state) {
     this.x = x;
     this.y = y;
-    this.s = state;
+    this.s = state !== undefined ? state : Cell.resources.config.state.seaLive;
     this.$html = Cell.resources.html.layout(this.x, this.y, this.s, undefined);
-    this.initModules();
 }
 
 Cell.prototype = {
     setState: function(state) {
         this.s = state;
-        this.html.update(Cell.resources.config.html.attr.state, this.s);
+        this.htmlUpdate(Cell.resources.config.html.attr.state, this.s);
 
         return this;
     },
     getJSON: function() {
         return {x: this.x, y: this.y};
     },
-    initModules: function() {
-        this.html.parent = this;
-    },
-    html: {
-        update: function(attr, val) {
-            this.parent.$html.attr(attr, val);
-        }
+    htmlUpdate: function(attr, val) {
+        this.$html.attr(attr, val);
     }
 };
 

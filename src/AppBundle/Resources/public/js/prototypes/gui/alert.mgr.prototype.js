@@ -6,8 +6,8 @@ function AlertMgr() {
 AlertMgr.prototype = {
     show: function(txt, type) {
         this.$content.html(txt);
+        this.colorByType(type);
         this.$area.removeClass(PageMgr.resources.config.trigger.css.hidden);
-        this.applyColor(type);
 
         return this;
     },
@@ -16,15 +16,13 @@ AlertMgr.prototype = {
 
         return this;
     },
-    applyColor: function(type) {
-        console.log(type);
+    colorByType: function(type) {
+        var _config = AlertMgr.resources.config;
         switch(type) {
-            case AlertMgr.resources.config.type.info:
-            case AlertMgr.resources.config.type.success:
-            case AlertMgr.resources.config.type.warning:
-            case AlertMgr.resources.config.type.error:
-                console.log(type);
-
+            case _config.type.info:
+            case _config.type.success:
+            case _config.type.warning:
+            case _config.type.error:
                 this.$area.removeClass().addClass('alert alert-' + type);
                 break;
         }
