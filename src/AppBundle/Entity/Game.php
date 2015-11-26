@@ -24,13 +24,11 @@ class Game
      */
     private $battlefields;
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\GameResult", mappedBy="id", cascade={"persist"})
-     * @ORM\JoinColumn(name="result", referencedColumnName="id", nullable=true)
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\GameResult", mappedBy="game", cascade={"persist"})
      *
      * @var GameResult
      */
     private $result;
-
 
     public function __construct()
     {

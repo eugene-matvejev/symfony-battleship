@@ -7,7 +7,8 @@ use AppBundle\Entity\GameResult;
 
 class StatisticsModel
 {
-    const TIME_FORMAT = 'd - m - Y / H:i';
+    const TIME_FORMAT       = 'd - m - Y / H:i';
+    const RECORDS_PER_PAGE  = 10;
     /**
      * @var GameResultRepository
      */
@@ -19,16 +20,15 @@ class StatisticsModel
     }
 
     /**
-     * @return GameResult
+     * @param int|null $page
+     *
+     * @return mixed[]
      */
-    public function overallStatistics()
+    public function overallStatistics(\int $page = 1) : array
     {
-        $results = $this->gameResultRepository->findBy([], ['timestamp' => 'DESC']);
+        $results = $this->gameResultRepository->getResultsInDescendingDate($page, self::RECORDS_PER_PAGE);
         $json = [];
         foreach ($results as $gameResult) {
-            /**
-             * @var $gameResult GameResult
-             */
             $json[] = [
                 'id'     => $gameResult->getGame()->getId(),
                 'time1'  => $gameResult->getGame()->getTimestamp()->format(self::TIME_FORMAT),

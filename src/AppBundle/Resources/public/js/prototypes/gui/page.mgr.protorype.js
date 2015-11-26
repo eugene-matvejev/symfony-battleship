@@ -79,26 +79,42 @@ PageMgr.prototype = {
     }
 };
 
-PageMgr.resources = {
-    config: {
-        action: {
-            game: {
-                new: 'game-new'
-            }
+PageMgr.resources = {};
+PageMgr.resources.config = {
+    action: {
+        game: {
+            new: 'game-new'
+        }
+    },
+    section: {
+        game: 'game-area',
+        statistics: 'stats-area'
+    },
+    trigger: {
+        css: {
+            selected: 'selected',
+            title: 'page-header',
+            toggle: 'toggled',
+            hidden: 'hidden'
         },
-        section: {
-            game: 'game-area',
-            statistics: 'stats-area'
+        action: 'data-action',
+        section: 'data-section'
+    }
+};
+PageMgr.resources.html = {
+    pagination: {
+        div: function(txt, page) {
+            return $($.parseHTML(
+                '<div class="pagination-el" data-to="' + ( page !== undefined ? page : 'undefined' ) + '">' + (txt !== undefined ? txt : '') +
+                '</div>'
+            ));
         },
-        trigger: {
-            css: {
-                selected: 'selected',
-                title: 'page-header',
-                toggle: 'toggled',
-                hidden: 'hidden'
-            },
-            action: 'data-action',
-            section: 'data-section'
+        layout: function() {
+            return $($.parseHTML(
+                '<div class="pagination-layout">' +
+
+                '</div>'
+            ));
         }
     }
 };

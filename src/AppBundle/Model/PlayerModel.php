@@ -12,7 +12,7 @@ class PlayerModel
     /**
      * @return int[]
      */
-    public static function getAllTypes()
+    public static function getAllTypes() : array
     {
         return [self::TYPE_CPU, self::TYPE_HUMAN];
     }
@@ -22,7 +22,7 @@ class PlayerModel
      *
      * @return \stdClass
      */
-    public static function getJSON(Player $player)
+    public static function getJSON(Player $player) : \stdClass
     {
         $std = new \stdClass();
         $std->id = $player->getId();

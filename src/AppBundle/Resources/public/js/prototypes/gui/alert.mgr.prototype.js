@@ -17,12 +17,12 @@ AlertMgr.prototype = {
         return this;
     },
     colorByType: function(type) {
-        var _config = AlertMgr.resources.config;
+        var _type = AlertMgr.resources.config.type;
         switch(type) {
-            case _config.type.info:
-            case _config.type.success:
-            case _config.type.warning:
-            case _config.type.error:
+            case _type.info:
+            case _type.success:
+            case _type.warning:
+            case _type.error:
                 this.$area.removeClass().addClass('alert alert-' + type);
                 break;
         }

@@ -34,7 +34,7 @@ class CellModel
     /**
      * @return CellState[]
      */
-    public function getCellStates()
+    public function getCellStates() : array
     {
         if(empty(self::$cellStates))
             self::$cellStates = $this->cellStateRepository->getStates();
@@ -67,7 +67,7 @@ class CellModel
      *
      * @return \stdClass
      */
-    public static function getJSON(Cell $cell, $ignorePlayer = null)
+    public static function getJSON(Cell $cell, $ignorePlayer = null) : \stdClass
     {
         $std = new \stdClass();
         $std->x = $cell->getX();
@@ -83,7 +83,7 @@ class CellModel
     /**
      * @return int[]
      */
-    public static function getLiveStates()
+    public static function getLiveStates() : array
     {
         return [self::STATE_WATER_LIVE, self::STATE_SHIP_LIVE];
     }
@@ -91,7 +91,7 @@ class CellModel
     /**
      * @return int[]
      */
-    public static function getDiedStates()
+    public static function getDiedStates() : array
     {
         return [self::STATE_WATER_DIED, self::STATE_SHIP_DIED];
     }
@@ -99,7 +99,7 @@ class CellModel
     /**
      * @return int[]
      */
-    public static function getAllStates()
+    public static function getAllStates() : array
     {
         return [self::STATE_WATER_LIVE, self::STATE_WATER_DIED, self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED];
     }

@@ -27,6 +27,7 @@ services:
     class: AppBundle\Library\AI\AI
     arguments:
       - @battleship.game.services.cell.model
+      - @logger
 
   # Repositories
   battleship.game.services.battlefield.repository:

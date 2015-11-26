@@ -3,8 +3,8 @@
 {% block stylesheets %}
     {{ parent() }}
     {% stylesheets filter='cssrewrite'
-    '@AppBundle/Resources/public/css/game/game.css'
-    '@AppBundle/Resources/public/css/game/statistics.css'
+    'bundles/app/css/game/game.css'
+    'bundles/app/css/game/statistics.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}" type="text/css"/>
     {% endstylesheets %}
