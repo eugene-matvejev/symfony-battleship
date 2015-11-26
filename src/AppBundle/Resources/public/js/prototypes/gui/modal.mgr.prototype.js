@@ -24,6 +24,8 @@ ModalMgr.prototype = {
         var $btn = this.$area.find('button.btn[type="button"]');
         enable === undefined || enable
             ? $btn.removeAttr('disabled')
-            : $btn.attr('disabled', 'disabled')
+            : $btn.attr('disabled', 'disabled');
+
+        return this;
     }
 };

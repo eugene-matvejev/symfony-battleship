@@ -5,9 +5,9 @@
     <title></title>
 {% block stylesheets %}
     {% stylesheets filter='cssrewrite'
-    '@AppBundle/Resources/public/bootstrap-3.3.5-dist/css/bootstrap.min.css'
-    '@AppBundle/Resources/public/css/layout/layout.css'
-    '@AppBundle/Resources/public/css/layout/animations.css'
+    'bundles/app/bootstrap-3.3.5-dist/css/bootstrap.min.css'
+    'bundles/app/css/layout/layout.css'
+    'bundles/app/css/layout/animations.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}" type="text/css"/>
     {% endstylesheets %}

@@ -46,7 +46,7 @@ class Cell
     /**
      * @return int
      */
-    public function getX()
+    public function getX() : \int
     {
         return $this->x;
     }
@@ -66,7 +66,7 @@ class Cell
     /**
      * @return int
      */
-    public function getY()
+    public function getY() : \int
     {
         return $this->y;
     }
@@ -86,7 +86,7 @@ class Cell
     /**
      * @return CellState
      */
-    public function getState()
+    public function getState() : CellState
     {
         return $this->state;
     }
@@ -106,7 +106,7 @@ class Cell
     /**
      * @return Battlefield
      */
-    public function getBattlefield()
+    public function getBattlefield() : Battlefield
     {
         return $this->battlefield;
     }

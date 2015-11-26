@@ -139,7 +139,9 @@ body>.container {
     padding-left: 0;
     padding-right: 0;
 }
-
+.pagination-area {
+    text-align: center;
+}
 
 
 div#debug-area .page-header {

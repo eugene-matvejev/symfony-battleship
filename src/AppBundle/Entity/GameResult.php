@@ -16,7 +16,7 @@ class GameResult
 {
     use Identifiable, Timestampable;
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Game", mappedBy="id")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Game", mappedBy="result")
      * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)
      *
      * @var Game
@@ -33,7 +33,7 @@ class GameResult
     /**
      * @return Game
      */
-    public function getGame()
+    public function getGame() : Game
     {
         return $this->game;
     }
@@ -53,7 +53,7 @@ class GameResult
     /**
      * @return Player
      */
-    public function getWinner()
+    public function getWinner() : Player
     {
         return $this->winner;
     }

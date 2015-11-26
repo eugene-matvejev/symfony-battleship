@@ -14,7 +14,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Battlefield
 {
     use Identifiable;
-
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Cell", mappedBy="battlefield", cascade={"persist"})
      * @ORM\JoinColumn(name="id", referencedColumnName="battlefield", nullable=false)

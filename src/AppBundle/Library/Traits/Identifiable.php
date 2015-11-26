@@ -8,14 +8,12 @@ trait Identifiable {
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @var integer
+     * @var int
      */
     protected $id;
 
     /**
-     * Get id
-     *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -23,7 +21,7 @@ trait Identifiable {
     }
 
     /**
-     * @param integer $id
+     * @param int $id
      *
      * @return $this
      */

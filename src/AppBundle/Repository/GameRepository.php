@@ -18,9 +18,8 @@ class GameRepository extends EntityRepository
      *
      * @return Game
      */
-    public function findById($id)
+    public function findById(\int $id)
     {
-//        $this->
         return $this->findOneBy(['id' => $id]);
     }
 }
