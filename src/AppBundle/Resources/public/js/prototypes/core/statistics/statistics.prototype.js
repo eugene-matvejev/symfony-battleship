@@ -1,7 +1,8 @@
 function Statistics() {
-    this.apiMgr   = new APIMgr();
-    this.pageMgr  = new PageMgr();
-    this.$area    = $('div#stats-area');
+    this.apiMgr     = new APIMgr();
+    this.pageMgr    = new PageMgr();
+    this.$area      = $('div#stats-area');
+    this.$paginator = new UI($area);
 }
 
 Statistics.prototype = {
