@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Entity;
 
 use AppBundle\Library\Traits\Identifiable;
@@ -9,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Player
  *
  * @ORM\Table(name="players")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\PlayerRepository")
+ * @ORM\Entity()
  */
 class Player
 {

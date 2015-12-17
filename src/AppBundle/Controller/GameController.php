@@ -5,12 +5,11 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class GameController extends Controller
 {
     /**
-     * @return Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction()
     {
@@ -20,7 +19,7 @@ class GameController extends Controller
     /**
      * @param Request $request
      *
-     * @return JsonResponse
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function initAction(Request $request)
     {
@@ -33,7 +32,7 @@ class GameController extends Controller
     /**
      * @param Request $request
      *
-     * @return JsonResponse
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function turnAction(Request $request)
     {

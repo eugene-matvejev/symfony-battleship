@@ -2,15 +2,19 @@ function Statistics() {
     this.apiMgr     = new APIMgr();
     this.pageMgr    = new PageMgr();
     this.$area      = $('div#stats-area');
-    this.$paginator = new UI($area);
+    this.$paginator = new UI(this.$area, undefined, undefined, undefined, undefined);
 }
 
 Statistics.prototype = {
-    fetch: function() {
-        var self = this;
+    fetch: function(page) {
+
+        page = page !== undefined ? page : 1;
+
+        var self = this,
+            url  = this.$area.attr(Statistics.resources.config.route.data) + page;
         this.pageMgr.loadingMode(true);
 
-        this.apiMgr.request('GET', self.$area.attr(Statistics.resources.config.route.data), undefined,
+        this.apiMgr.request('GET', url, undefined,
             function(json) {
                 self.htmlUpdate(json);
                 self.pageMgr.loadingMode(false);

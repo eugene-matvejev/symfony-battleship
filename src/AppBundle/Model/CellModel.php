@@ -3,18 +3,17 @@
 namespace AppBundle\Model;
 
 use AppBundle\Entity\Cell;
-use AppBundle\Entity\CellState;
-use AppBundle\Repository\CellStateRepository;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 
 class CellModel
 {
     /**
-     * @var CellStateRepository
+     * @var \AppBundle\Repository\CellStateRepository
      */
     private $cellStateRepository;
 
     /**
-     * @var CellState[]
+     * @var \AppBundle\Entity\CellState[]
      */
     private static $cellStates;
 
@@ -24,15 +23,15 @@ class CellModel
     const STATE_SHIP_DIED  = 4;
 
     /**
-     * @param CellStateRepository $repo
+     * @param Registry $doctrine
      */
-    function __construct(CellStateRepository $repo)
+    function __construct(Registry $doctrine)
     {
-        $this->cellStateRepository = $repo;
+        $this->cellStateRepository = $doctrine->getRepository('AppBundle:CellState');
     }
 
     /**
-     * @return CellState[]
+     * @return \AppBundle\Entity\CellState[]
      */
     public function getCellStates() : array
     {
@@ -62,20 +61,19 @@ class CellModel
     }
 
     /**
-     * @param Cell $cell
-     * @param bool $ignorePlayer|null
+     * @param Cell       $cell
+     * @param bool|false $ignorePlayer
      *
      * @return \stdClass
      */
-    public static function getJSON(Cell $cell, $ignorePlayer = null) : \stdClass
+    public static function getJSON(Cell $cell, $ignorePlayer = false) : \stdClass
     {
         $std = new \stdClass();
         $std->x = $cell->getX();
         $std->y = $cell->getY();
         $std->s = $cell->getState()->getId();
-        if(!$ignorePlayer) {
+        if(!$ignorePlayer)
             $std->pid = $cell->getBattlefield()->getPlayer()->getId();
-        }
 
         return $std;
     }

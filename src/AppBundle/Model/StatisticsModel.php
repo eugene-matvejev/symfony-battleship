@@ -4,6 +4,7 @@ namespace AppBundle\Model;
 
 use AppBundle\Repository\GameResultRepository;
 use AppBundle\Entity\GameResult;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 
 class StatisticsModel
 {
@@ -14,9 +15,9 @@ class StatisticsModel
      */
     private $gameResultRepository;
 
-    function __construct(GameResultRepository $repo)
+    function __construct(Registry $doctrine)
     {
-        $this->gameResultRepository = $repo;
+        $this->gameResultRepository = $doctrine->getRepository('AppBundle:GameResult');
     }
 
     /**
@@ -24,7 +25,7 @@ class StatisticsModel
      *
      * @return mixed[]
      */
-    public function overallStatistics(\int $page = 1) : array
+    public function overallStatistics(\int $page) : array
     {
         $results = $this->gameResultRepository->getResultsInDescendingDate($page, self::RECORDS_PER_PAGE);
         $json = [];

@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="games")
  * @ORM\HasLifecycleCallbacks
- * @ORM\Entity(repositoryClass="AppBundle\Repository\GameRepository")
+ * @ORM\Entity()
  */
 class Game
 {

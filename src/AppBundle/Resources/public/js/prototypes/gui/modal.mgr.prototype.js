@@ -11,6 +11,8 @@ ModalMgr.prototype = {
     },
     hide: function() {
         this.$area.find('.modal').modal('hide');
+        $('body').removeClass('modal-open');
+
         $('.modal-backdrop.fade.in').remove(); //TODO REMOVE HACK
 
         return this;

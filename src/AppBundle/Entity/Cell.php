@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Entity;
 
 use AppBundle\Library\Traits\Identifiable;
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="cells", uniqueConstraints={
  *      @ORM\UniqueConstraint(name="axisXY", columns={"battlefield", "x", "y"})
  * })
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CellRepository")
+ * @ORM\Entity()
  */
 class Cell
 {

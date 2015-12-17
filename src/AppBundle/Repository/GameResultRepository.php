@@ -6,7 +6,7 @@ use AppBundle\Entity\GameResult;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class GameResultRepository
+ * GameResultRepository
  * @package AppBundle\Repository
  */
 class GameResultRepository extends EntityRepository

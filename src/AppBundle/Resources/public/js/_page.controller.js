@@ -13,6 +13,11 @@ $(document).ready(function () {
             e.stopPropagation();
 
             pageMgr.switchSection(this);
+        })
+        .on('click', 'button.button:not(.disabled)', function(e) {
+            e.stopPropagation();
+
+            pageMgr.fetch();
         });
 });
 

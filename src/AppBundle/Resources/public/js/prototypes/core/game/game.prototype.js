@@ -194,7 +194,7 @@ Game.resources.config = {
     },
     limits: {
         minBFSize: 5,
-        maxBFSize: 20,
+        maxBFSize: 15,
         namePattern: /^[a-zA-Z0-9\.\-\ \@]{1,255}$/
     },
     route: {
@@ -206,29 +206,34 @@ Game.resources.config = {
     }
 };
 Game.resources.html = {
-    modal: '<div class="modal fade">' +
-                '<div class="modal-dialog">' +
-                    '<div class="modal-content">' +
-                        '<div class="modal-header">' +
-                            '<button type="button" class="close" data-dismiss="modal">' +
-                                '<span aria-hidden="true">&times;</span>' +
-                            '</button>' +
-                            '<h4 class="modal-title">your details</h4>' +
+    modal: function() {
+        var config = Game.resources.config;
+
+        return '<div class="modal fade">' +
+            '<div class="modal-dialog">' +
+                '<div class="modal-content">' +
+                    '<div class="modal-header">' +
+                        '<button type="button" class="close" data-dismiss="modal">' +
+                            '<span aria-hidden="true">&times;</span>' +
+                        '</button>' +
+                        '<h4 class="modal-title">your details</h4>' +
+                    '</div>' +
+                    '<div class="modal-body">' +
+                        '<div class="form-group">' +
+                            '<label for="' + config.trigger.player + '">your nickname</label>' +
+                            '<input type="text" class="form-control" id="' + config.trigger.player + '" placeholder="">' +
                         '</div>' +
-                        '<div class="modal-body">' +
-                            '<div class="form-group">' +
-                                '<label for="' + Game.resources.config.trigger.player + '">your nickname</label>' +
-                                '<input type="text" class="form-control" id="' + Game.resources.config.trigger.player + '" placeholder="">' +
-                            '</div>' +
-                            '<div class="form-group">' +
-                                '<label for="' + Game.resources.config.trigger.bfsize + '">battlefiend size</label>' +
-                                '<input type="test" class="form-control" id="' + Game.resources.config.trigger.bfsize + '" placeholder="between 5 and 25">' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="modal-footer">' +
-                            '<button type="button" id="new-game-btn" class="btn btn-primary" disabled="disabled">next step</button>' +
+                        '<div class="form-group">' +
+                            '<label for="' + config.trigger.bfsize + '">battlefiend size</label>' +
+                            '<input type="test" class="form-control" id="' + config.trigger.bfsize + '"' +
+                                ' placeholder="between ' + config.limits.minBFSize + ' and ' + config.limits.maxBFSize + '">' +
                         '</div>' +
                     '</div>' +
+                    '<div class="modal-footer">' +
+                        '<button type="button" id="new-game-btn" class="btn btn-primary" disabled="disabled">next step</button>' +
+                    '</div>' +
                 '</div>' +
-            '</div>'
+            '</div>' +
+        '</div>'
+    }
 };

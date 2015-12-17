@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Entity;
 
 use AppBundle\Library\Traits\Identifiable;

@@ -3,24 +3,27 @@ services:
   battleship.game.services.cell.model:
     class: AppBundle\Model\CellModel
     arguments:
-      - @battleship.game.services.cell.state.repository
+      - @doctrine
+#      - @battleship.game.services.cell.state.repository
   battleship.game.services.game.model:
     class: AppBundle\Model\GameModel
     arguments:
-      - @battleship.game.services.battlefield.repository
-      - @battleship.game.services.cell.repository
-      - @battleship.game.services.cell.state.repository
-      - @battleship.game.services.game.repository
-      - @battleship.game.services.game.result.repository
-      - @battleship.game.services.player.repository
-      - @battleship.game.services.player.type.repository
+#      - @battleship.game.services.battlefield.repository
+#      - @battleship.game.services.cell.repository
+#      - @battleship.game.services.cell.state.repository
+#      - @battleship.game.services.game.repository
+#      - @battleship.game.services.game.result.repository
+#      - @battleship.game.services.player.repository
+#      - @battleship.game.services.player.type.repository
+#      - @doctrine.orm.entity_manager
       - @doctrine.orm.entity_manager
       - @battleship.game.services.cell.model
       - @battleship.game.services.ai.core
   battleship.game.services.statistics.model:
     class: AppBundle\Model\StatisticsModel
     arguments:
-      - @battleship.game.services.game.result.repository
+      - @doctrine
+#      - @battleship.game.services.game.result.repository
 
   # AI
   battleship.game.services.ai.core:
@@ -29,39 +32,39 @@ services:
       - @battleship.game.services.cell.model
       - @logger
 
-  # Repositories
-  battleship.game.services.battlefield.repository:
-    class: Doctrine\ORM\EntityRepository
-    factory: [@doctrine.orm.entity_manager, getRepository]
-    arguments:
-      - AppBundle\Entity\Battlefield
-  battleship.game.services.cell.repository:
-    class: Doctrine\ORM\EntityRepository
-    factory: [@doctrine.orm.entity_manager, getRepository]
-    arguments:
-      - AppBundle\Entity\Cell
-  battleship.game.services.cell.state.repository:
-    class: Doctrine\ORM\EntityRepository
-    factory: [@doctrine.orm.entity_manager, getRepository]
-    arguments:
-      - AppBundle\Entity\CellState
-  battleship.game.services.game.repository:
-    class: Doctrine\ORM\EntityRepository
-    factory: [@doctrine.orm.entity_manager, getRepository]
-    arguments:
-      - AppBundle\Entity\Game
-  battleship.game.services.game.result.repository:
-    class: Doctrine\ORM\EntityRepository
-    factory: [@doctrine.orm.entity_manager, getRepository]
-    arguments:
-      - AppBundle\Entity\GameResult
-  battleship.game.services.player.repository:
-    class: Doctrine\ORM\EntityRepository
-    factory: [@doctrine.orm.entity_manager, getRepository]
-    arguments:
-      - AppBundle\Entity\Player
-  battleship.game.services.player.type.repository:
-    class: Doctrine\ORM\EntityRepository
-    factory: [@doctrine.orm.entity_manager, getRepository]
-    arguments:
-      - AppBundle\Entity\PlayerType
+#  # Repositories
+#  battleship.game.services.battlefield.repository:
+#    class: Doctrine\ORM\EntityRepository
+#    factory: [@doctrine.orm.entity_manager, getRepository]
+#    arguments:
+#      - AppBundle\Entity\Battlefield
+#  battleship.game.services.cell.repository:
+#    class: Doctrine\ORM\EntityRepository
+#    factory: [@doctrine.orm.entity_manager, getRepository]
+#    arguments:
+#      - AppBundle\Entity\Cell
+#  battleship.game.services.cell.state.repository:
+#    class: Doctrine\ORM\EntityRepository
+#    factory: [@doctrine.orm.entity_manager, getRepository]
+#    arguments:
+#      - AppBundle\Entity\CellState
+#  battleship.game.services.game.repository:
+#    class: Doctrine\ORM\EntityRepository
+#    factory: [@doctrine.orm.entity_manager, getRepository]
+#    arguments:
+#      - AppBundle\Entity\Game
+#  battleship.game.services.game.result.repository:
+#    class: Doctrine\ORM\EntityRepository
+#    factory: [@doctrine.orm.entity_manager, getRepository]
+#    arguments:
+#      - AppBundle\Entity\GameResult
+#  battleship.game.services.player.repository:
+#    class: Doctrine\ORM\EntityRepository
+#    factory: [@doctrine.orm.entity_manager, getRepository]
+#    arguments:
+#      - AppBundle\Entity\Player
+#  battleship.game.services.player.type.repository:
+#    class: Doctrine\ORM\EntityRepository
+#    factory: [@doctrine.orm.entity_manager, getRepository]
+#    arguments:
+#      - AppBundle\Entity\PlayerType

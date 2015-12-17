@@ -7,7 +7,7 @@ use AppBundle\Model\CellModel;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class CellStateRepository
+ * CellStateRepository
  * @package AppBundle\Repository
  */
 class CellStateRepository extends EntityRepository
@@ -19,9 +19,7 @@ class CellStateRepository extends EntityRepository
     {
         $arr = [];
         foreach($this->findBy(['id' => CellModel::getAllStates()]) as $state) {
-            /**
-             * @var $state CellState
-             */
+            /** @var CellState $state */
             $arr[$state->getId()] = $state;
         }
 

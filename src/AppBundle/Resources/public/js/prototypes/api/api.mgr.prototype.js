@@ -6,6 +6,7 @@ function APIMgr() {
 APIMgr.prototype = {
     request: function(requestMethod, requestURL, requestData, onSuccess, onError) {
         var self = this;
+        console.log(requestMethod, requestURL)
         if(onError === undefined) {
             onError = function(json) {
                 self.pageMgr.loadingMode(false);
