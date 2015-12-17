@@ -30,13 +30,13 @@ body>.container {
 }
 .page-sidebar,
 .sidebar-nav>li {
-    width: 275px;
+    width: 250px;
 }
 .page-sidebar.toggled {
     width: 0;
 }
 .page-content {
-    padding-left: 300px;
+    padding-left: 275px;
 }
 .page-content.toggled {
     padding-left: 25px;

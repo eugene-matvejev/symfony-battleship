@@ -7,7 +7,7 @@ use AppBundle\Model\PlayerModel;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class PlayerTypeRepository
+ * PlayerTypeRepository
  * @package AppBundle\Repository
  */
 class PlayerTypeRepository extends EntityRepository
@@ -19,9 +19,7 @@ class PlayerTypeRepository extends EntityRepository
     {
         $arr = [];
         foreach($this->findBy(['id' => PlayerModel::getAllTypes()]) as $type) {
-            /**
-             * @var $type PlayerType
-             */
+            /** @var PlayerType $type */
             $arr[$type->getId()] = $type;
         }
 

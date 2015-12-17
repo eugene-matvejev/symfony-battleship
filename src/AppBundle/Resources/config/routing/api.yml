@@ -1,7 +1,9 @@
 battleship.game.api.statistics:
-  path:     /statistics
-  defaults: { _controller: AppBundle:Statistics:overall }
+  path:     /statistics/page/{page}
+  defaults: { _controller: AppBundle:Statistics:overall}
   methods:  [GET]
+  requirements:
+      page: \d+
 #  requirements:
 #    _format: json
 battleship.game.api.init:

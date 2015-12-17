@@ -8,7 +8,7 @@ use AppBundle\Model\PlayerModel;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Class BattlefieldRepository
+ * BattlefieldRepository
  * @package AppBundle\Repository
  */
 class BattlefieldRepository extends EntityRepository {

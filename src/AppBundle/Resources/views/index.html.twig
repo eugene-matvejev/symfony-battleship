@@ -33,7 +33,7 @@
     </div>
     <div id="modal-area">
     </div>
-    <div id="stats-area" data-stats-link="{{ path('battleship.game.api.statistics') }}"></div>
+    <div id="stats-area" data-stats-link="{{ path('battleship.game.api.statistics', {'page' : 0})|trim('0') }}"></div>
     <div id="debug-area">
         <span class="page-header">for debugging purposes</span>
         <div class="debug-content"></div>

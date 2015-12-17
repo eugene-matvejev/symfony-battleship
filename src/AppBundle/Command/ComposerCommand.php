@@ -1,11 +1,12 @@
 <?php
+
 namespace AppBundle\Command;
 
 use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler;
 use Composer\Script\CommandEvent;
 
 /**
- * Class ProvisionCommand
+ * ProvisionCommand
  */
 class ComposerCommand extends ScriptHandler
 {

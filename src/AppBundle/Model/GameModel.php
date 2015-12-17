@@ -8,13 +8,11 @@ use AppBundle\Entity\GameResult;
 use AppBundle\Entity\Player;
 use AppBundle\Library\AI\AI;
 use AppBundle\Repository\BattlefieldRepository;
-use AppBundle\Repository\CellRepository;
 use AppBundle\Repository\CellStateRepository;
-use AppBundle\Repository\GameRepository;
 use AppBundle\Repository\GameResultRepository;
-use AppBundle\Repository\PlayerRepository;
 use AppBundle\Repository\PlayerTypeRepository;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityRepository;
 
 class GameModel
 {
@@ -23,7 +21,7 @@ class GameModel
      */
     private $battlefieldRepository;
     /**
-     * @var CellRepository
+     * @var EntityRepository
      */
     private $cellRepository;
     /**
@@ -31,7 +29,7 @@ class GameModel
      */
     private $cellStateRepository;
     /**
-     * @var GameRepository
+     * @var EntityRepository
      */
     private $gameRepository;
     /**
@@ -39,7 +37,7 @@ class GameModel
      */
     private $gameResultRepository;
     /**
-     * @var PlayerRepository
+     * @var EntityRepository
      */
     private $playerRepository;
     /**
@@ -55,24 +53,15 @@ class GameModel
      */
     private $cellModel;
 
-    function __construct(BattlefieldRepository $battlefieldRepository,
-                         CellRepository $cellRepository,
-                         CellStateRepository $cellStateRepository,
-                         GameRepository $gameRepository,
-                         GameResultRepository $gameResultRepository,
-                         PlayerRepository $playerRepository,
-                         PlayerTypeRepository $playerTypeRepository,
-                         ObjectManager $om,
-                         CellModel $cellModel,
-                         AI $ai
-    ) {
-        $this->battlefieldRepository = $battlefieldRepository;
-        $this->cellRepository        = $cellRepository;
-        $this->cellStateRepository   = $cellStateRepository;
-        $this->gameRepository        = $gameRepository;
-        $this->gameResultRepository  = $gameResultRepository;
-        $this->playerRepository      = $playerRepository;
-        $this->playerTypeRepository  = $playerTypeRepository;
+    function __construct(ObjectManager $om, CellModel $cellModel, AI $ai)
+    {
+        $this->battlefieldRepository = $om->getRepository('AppBundle:Battlefield');
+        $this->cellRepository        = $om->getRepository('AppBundle:Cell');
+        $this->cellStateRepository   = $om->getRepository('AppBundle:CellState');
+        $this->gameRepository        = $om->getRepository('AppBundle:Game');
+        $this->gameResultRepository  = $om->getRepository('AppBundle:GameResult');
+        $this->playerRepository      = $om->getRepository('AppBundle:Player');
+        $this->playerTypeRepository  = $om->getRepository('AppBundle:PlayerType');
         $this->om                    = $om;
         $this->cellModel             = $cellModel;
         $this->ai                    = $ai;
@@ -183,14 +172,15 @@ class GameModel
         $json = json_decode($json);
         $std  = new \stdClass();
         $game = $this->gameRepository->find($json->game->id);
-        if($game->getResult() !== null) {
+        if(null !== $game->getResult()) {
             $std->victory = new \stdClass();
-            $std->victory->pid = $game->getResult()->getWinner()->getId();
+//            $std->victory->pid = $game->getResult()->getWinner()->getId();
 
             return $std;
         }
 
         foreach($game->getBattlefields() as $battlefield) {
+            /** @var Battlefield $battlefield */
             $std->{$battlefield->getPlayer()->getId()} = $this->playerTurn($battlefield, $json);
 
             if($this->detectVictory($battlefield)) {
@@ -215,41 +205,10 @@ class GameModel
         $_cell = null;
         switch($battlefield->getPlayer()->getType()->getId()) {
             case PlayerModel::TYPE_HUMAN:
-//            case PlayerModel::TYPE_CPU:
-//                if($this->ai->isTurnDoneForPlayer($battlefield->getPlayer()))
-//                    break;
                 $_cell = $this->ai->turn($battlefield);
-
-//                $this->om->persist($cell);
-//                $this->om->flush();
-//
-//                return CellModel::getJSON($cell);
-//                foreach($battlefield->getCells() as $cell) {
-//                    if($this->ai->isTurnDoneForPlayer($cell->getBattlefield()->getPlayer()))
-//                        break;
-//
-//                    if($this->ai->($cell)) {
-//                        $this->om->persist($cell);
-//                        $this->om->flush();
-//
-//                        return CellModel::getJSON($cell);
-//                    }
-//                }
-//                foreach($battlefield->getCells() as $cell) {
-//                    if($this->ai->isTurnDoneForPlayer($cell->getBattlefield()->getPlayer()))
-//                        break;
-//
-//                    if($this->ai->turn($cell)) {
-//                        $this->om->persist($cell);
-//                        $this->om->flush();
-//
-//                        return CellModel::getJSON($cell);
-//                    }
-//                }
                 break;
             default:
             case PlayerModel::TYPE_CPU:
-//            case PlayerModel::TYPE_HUMAN:
                 foreach($battlefield->getCells() as $cell) {
                     if($cell->getX() !== $json->cell->x || $cell->getY() !== $json->cell->y)
                         continue;
@@ -275,7 +234,7 @@ class GameModel
     public function detectVictory(Battlefield $battlefield) : \bool
     {
         foreach($battlefield->getCells() as $cell) {
-            if($cell->getState()->getId() == CellModel::STATE_SHIP_LIVE)
+            if($cell->getState()->getId() === CellModel::STATE_SHIP_LIVE)
                 return false;
         }
 
