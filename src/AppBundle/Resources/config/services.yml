@@ -3,7 +3,7 @@ services:
   battleship.game.services.cell.model:
     class: AppBundle\Model\CellModel
     arguments:
-      - @doctrine
+      - @doctrine.orm.entity_manager
 #      - @battleship.game.services.cell.state.repository
   battleship.game.services.game.model:
     class: AppBundle\Model\GameModel
@@ -22,9 +22,8 @@ services:
   battleship.game.services.statistics.model:
     class: AppBundle\Model\StatisticsModel
     arguments:
-      - @doctrine
+      - @doctrine.orm.entity_manager
 #      - @battleship.game.services.game.result.repository
-
   # AI
   battleship.game.services.ai.core:
     class: AppBundle\Library\AI\AI

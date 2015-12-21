@@ -6,6 +6,16 @@ $(document).ready(function () {
             e.stopPropagation();
 
             statisticsMgr.pageMgr.switchSection(this);
-            statisticsMgr.fetch();
+            statisticsMgr.fetch(1);
+        });
+
+    $('div#stats-area')
+        .on('click', 'button[data-page]', function(e) {
+            e.stopPropagation();
+
+            var page = this.getAttribute('data-page');
+            //console.log(this, page);
+            //statisticsMgr.pageMgr.switchSection(this);
+            statisticsMgr.fetch(page);
         });
 });

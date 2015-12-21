@@ -7,7 +7,6 @@ use Doctrine\ORM\EntityRepository;
 
 /**
  * GameResultRepository
- * @package AppBundle\Repository
  */
 class GameResultRepository extends EntityRepository
 {
@@ -17,8 +16,20 @@ class GameResultRepository extends EntityRepository
      *
      * @return GameResult[]
      */
-    public function getResultsInDescendingDate(\int $page, \int $perPage)
+    public function getResultsInDescendingDate(\int $page, \int $perPage) : array
     {
         return $this->findBy([], ['timestamp' => 'DESC'], $perPage, ($page < 1 ? 0 : $page - 1) * $perPage);
+    }
+
+    /**
+     * @return int
+     */
+    public function countTotalResults() : \int
+    {
+        return $this
+            ->createQueryBuilder('q')
+            ->select('COUNT(q.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

@@ -11,17 +11,8 @@ use Doctrine\ORM\EntityRepository;
  * BattlefieldRepository
  * @package AppBundle\Repository
  */
-class BattlefieldRepository extends EntityRepository {
-    /**
-     * @param Game $game
-     *
-     * @return Battlefield[]
-     */
-    public function findByGame(Game $game)
-    {
-        return $this->findOneBy(['game' => $game]);
-    }
-
+class BattlefieldRepository extends EntityRepository
+{
     /**
      * @param int $gameId
      *

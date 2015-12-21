@@ -4,7 +4,7 @@ namespace AppBundle\Model;
 
 use AppBundle\Repository\GameResultRepository;
 use AppBundle\Entity\GameResult;
-use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class StatisticsModel
 {
@@ -15,9 +15,9 @@ class StatisticsModel
      */
     private $gameResultRepository;
 
-    function __construct(Registry $doctrine)
+    function __construct(ObjectManager $om)
     {
-        $this->gameResultRepository = $doctrine->getRepository('AppBundle:GameResult');
+        $this->gameResultRepository = $om->getRepository('AppBundle:GameResult');
     }
 
     /**
@@ -29,18 +29,29 @@ class StatisticsModel
     {
         $results = $this->gameResultRepository->getResultsInDescendingDate($page, self::RECORDS_PER_PAGE);
         $json = [];
-        foreach ($results as $gameResult) {
+        foreach ($results as $result) {
             $json[] = [
-                'id'     => $gameResult->getGame()->getId(),
-                'time1'  => $gameResult->getGame()->getTimestamp()->format(self::TIME_FORMAT),
-                'time2'  => $gameResult->getTimestamp()->format(self::TIME_FORMAT),
+                'id'     => $result->getGame()->getId(),
+                'time1'  => $result->getGame()->getTimestamp()->format(self::TIME_FORMAT),
+                'time2'  => $result->getTimestamp()->format(self::TIME_FORMAT),
                 'winner' => [
-                    'name' => $gameResult->getWinner()->getName(),
-                    'type' => $gameResult->getWinner()->getType()->getId()
+                    'name' => $result->getWinner()->getName(),
+                    'type' => $result->getWinner()->getType()->getId()
                 ]
             ];
         }
 
-        return $json;
+        return [
+            'data' => $json,
+            'meta' => [
+                'config' => [
+                    'perPage' => self::RECORDS_PER_PAGE
+                ],
+                'page' => [
+                    'curr' => $page,
+                    'total' => ceil($this->gameResultRepository->countTotalResults() / self::RECORDS_PER_PAGE)
+                ]
+            ]
+        ];
     }
 }
