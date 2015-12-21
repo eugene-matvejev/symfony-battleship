@@ -17,14 +17,12 @@ class ComposerCommand extends ScriptHandler
     {
         $consoleDir = static::getConsoleDir($event, 'install assets');
 
-        if (null === $consoleDir) {
-            return;
-        }
+        if (null !== $consoleDir) {
+            static::executeCommand($event, $consoleDir, 'doctrine:database:create --env=prod --if-not-exists');
 
-        static::executeCommand($event, $consoleDir, 'doctrine:database:create --env=prod --if-not-exists');
-
-        if($event->isDevMode()) {
-            static::executeCommand($event, $consoleDir, 'doctrine:database:create --env=test --if-not-exists');
+            if($event->isDevMode()) {
+                static::executeCommand($event, $consoleDir, 'doctrine:database:create --env=test --if-not-exists');
+            }
         }
     }
 }
