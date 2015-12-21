@@ -3,17 +3,18 @@
 namespace AppBundle\Model;
 
 use AppBundle\Entity\Cell;
-use Doctrine\Bundle\DoctrineBundle\Registry;
+use AppBundle\Entity\CellState;
+use AppBundle\Repository\CellStateRepository;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class CellModel
 {
     /**
-     * @var \AppBundle\Repository\CellStateRepository
+     * @var CellStateRepository
      */
     private $cellStateRepository;
-
     /**
-     * @var \AppBundle\Entity\CellState[]
+     * @var CellState[]
      */
     private static $cellStates;
 
@@ -23,19 +24,19 @@ class CellModel
     const STATE_SHIP_DIED  = 4;
 
     /**
-     * @param Registry $doctrine
+     * @param ObjectManager $om
      */
-    function __construct(Registry $doctrine)
+    function __construct(ObjectManager $om)
     {
-        $this->cellStateRepository = $doctrine->getRepository('AppBundle:CellState');
+        $this->cellStateRepository = $om->getRepository('AppBundle:CellState');
     }
 
     /**
-     * @return \AppBundle\Entity\CellState[]
+     * @return CellState[]
      */
     public function getCellStates() : array
     {
-        if(empty(self::$cellStates))
+        if(null === self::$cellStates)
             self::$cellStates = $this->cellStateRepository->getStates();
 
         return self::$cellStates;
@@ -43,8 +44,10 @@ class CellModel
 
     /**
      * @param Cell $cell
+     *
+     * @return Cell
      */
-    public function switchState(Cell $cell)
+    public function switchState(Cell $cell) : Cell
     {
         switch($cell->getState()->getId()) {
             case self::STATE_WATER_LIVE:
@@ -53,11 +56,13 @@ class CellModel
             case self::STATE_SHIP_LIVE:
                 $cell->setState($this->getCellStates()[self::STATE_SHIP_DIED]);
                 break;
-            case self::STATE_WATER_DIED:
-            case self::STATE_SHIP_DIED:
-            default:
-                break;
+//            case self::STATE_WATER_DIED:
+//            case self::STATE_SHIP_DIED:
+//            default:
+//                break;
         }
+
+        return $cell;
     }
 
     /**
@@ -72,7 +77,7 @@ class CellModel
         $std->x = $cell->getX();
         $std->y = $cell->getY();
         $std->s = $cell->getState()->getId();
-        if(!$ignorePlayer)
+        if(true !== $ignorePlayer)
             $std->pid = $cell->getBattlefield()->getPlayer()->getId();
 
         return $std;

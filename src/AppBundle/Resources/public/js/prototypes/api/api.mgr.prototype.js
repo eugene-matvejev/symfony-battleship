@@ -1,12 +1,11 @@
 function APIMgr() {
-    this.$debugText = $('#debug-area>div.debug-content');
     this.pageMgr   = new PageMgr();
 }
 
 APIMgr.prototype = {
     request: function(requestMethod, requestURL, requestData, onSuccess, onError) {
+        console.log(requestMethod, requestURL, requestData);
         var self = this;
-        console.log(requestMethod, requestURL)
         if(onError === undefined) {
             onError = function(json) {
                 self.pageMgr.loadingMode(false);
@@ -15,19 +14,13 @@ APIMgr.prototype = {
         }
 
         $.ajax({
-            contentType: "application/json; charset=utf-8",
+            contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             method: requestMethod,
-            beforeSent: self.updateDebugHTML(requestData),
             url: requestURL,
             data: requestData,
             success: onSuccess,
             error: onError
         });
-    },
-    updateDebugHTML: function(html, extend) {
-        extend !== undefined
-            ? this.$debugText.html(this.$debugText.html() + html)
-            : this.$debugText.html(html);
     }
 };

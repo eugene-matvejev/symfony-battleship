@@ -200,7 +200,7 @@ class GameModel
      *
      * @return \stdClass
      */
-    public function playerTurn(Battlefield $battlefield, \stdClass $json)
+    public function playerTurn(Battlefield $battlefield, \stdClass $json) : \stdClass
     {
         $_cell = null;
         switch($battlefield->getPlayer()->getType()->getId()) {

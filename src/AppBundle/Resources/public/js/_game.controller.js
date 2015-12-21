@@ -11,7 +11,7 @@ $(document).ready(function() {
     game.pageMgr.switchSection(el);
     var statisticsMgr = new Statistics();
         statisticsMgr.pageMgr.switchSection(el);
-        statisticsMgr.fetch();
+        statisticsMgr.fetch(1);
 
 
     //game.init(

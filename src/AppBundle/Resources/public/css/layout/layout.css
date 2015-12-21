@@ -138,12 +138,8 @@ body>.container {
 .container-fluid {
     padding-left: 0;
     padding-right: 0;
+    padding-bottom: 25px;
 }
 .pagination-area {
     text-align: center;
-}
-
-
-div#debug-area .page-header {
-    display: inherit;
 }

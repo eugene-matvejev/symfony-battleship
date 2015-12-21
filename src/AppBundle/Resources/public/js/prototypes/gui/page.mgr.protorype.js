@@ -42,7 +42,7 @@ PageMgr.prototype = {
     hideAll: function() {
         var _css = PageMgr.resources.config.trigger.css;
 
-        this.$content.find('.container-fluid>.row>div:not(#notification-area):not(#debug-area)').addClass(_css.hidden);
+        this.$content.find('.container-fluid>.row>div:not(#notification-area)').addClass(_css.hidden);
         this.$sidebar.find('li:not(.sidebar-brand)').removeClass(_css.selected);
 
         return this;
