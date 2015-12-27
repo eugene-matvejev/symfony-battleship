@@ -1,0 +1,21 @@
+battleship.game.api.statistics:
+  path:     /statistics/page/{page}
+  defaults: { _controller: GameBundle:Statistics:overall}
+  methods:  [GET]
+  requirements:
+      page: \d+
+#  requirements:
+#    _format: json
+battleship.game.api.init:
+  path:     /init
+  defaults: { _controller: GameBundle:Game:init }
+  methods:  [POST]
+  requirements:
+#    _format: json
+#    _content: '\"data\"\:[^\,\}]*'
+battleship.game.api.turn:
+  path:     /turn
+  defaults: { _controller: GameBundle:Game:turn }
+  methods:  [POST]
+#  requirements:
+#    _format: json
