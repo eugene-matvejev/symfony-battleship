@@ -2,8 +2,8 @@
 
 namespace Application\Migrations;
 
-use AppBundle\Model\CellModel;
-use AppBundle\Model\PlayerModel;
+use GameBundle\Model\CellModel;
+use GameBundle\Model\PlayerModel;
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
