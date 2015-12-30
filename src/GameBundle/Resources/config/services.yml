@@ -29,7 +29,13 @@ services:
     class: GameBundle\Library\AI\AI
     arguments:
       - @battleship.game.services.cell.model
+      - @battleship.game.services.ai.strategy.service
       - @logger
+  battleship.game.services.ai.strategy.service:
+    class: GameBundle\Library\AI\Coordinate\CoordinateStrategy
+    arguments:
+      - %battleshipt.config.ship.size.min%
+      - %battleshipt.config.ship.size.max%
 
 #  # Repositories
 #  battleship.game.services.battlefield.repository:
