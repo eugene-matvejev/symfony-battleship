@@ -9,7 +9,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * GameResult
  *
- * @ORM\Table(name="gamesResults")
+ * @ORM\Table(
+ *     name="gamesResults",
+ *     indexes={
+ *          @ORM\Index(name="INDEX_GAME_RESULT_GAME", columns={"game"}),
+ *          @ORM\Index(name="INDEX_GAME_RESULT_WINNER", columns={"winner"})
+ *     }
+ * )
  * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="GameBundle\Repository\GameResultRepository")
  */

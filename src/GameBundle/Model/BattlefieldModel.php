@@ -21,15 +21,23 @@ class BattlefieldModel
      */
     public static function getCellByCoordinates(Battlefield $battlefield, \int $x, \int $y)
     {
-        if(null === self::$indexed[$battlefield->getId()]) {
+//        foreach($battlefield->getCells() as $cell) {
+//            if($cell->getX() === $x && $cell->getY())
+//                return $cell;
+//        }
+//
+//        return null;
+
+        if(!isset(self::$indexed[$battlefield->getId()])) {
+            self::$indexed[$battlefield->getId()] = [];
             foreach($battlefield->getCells() as $cell) {
+                if(!isset(self::$indexed[$battlefield->getId()][$cell->getX()])) {
+                    self::$indexed[$battlefield->getId()][$cell->getX()] = [];
+                }
                 self::$indexed[$battlefield->getId()][$cell->getX()][$cell->getY()] = $cell;
-//                if($cell->getX() === $x && $cell->getY() === $y) {
-//                    return $cell;
-//                }
             }
         }
-        return null !== self::$indexed[$battlefield->getId()][$x][$y] ? self::$indexed[$battlefield->getId()][$x][$y] : null;
+        return isset(self::$indexed[$battlefield->getId()][$x][$y]) ? self::$indexed[$battlefield->getId()][$x][$y] : null;
     }
 
 

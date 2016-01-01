@@ -8,15 +8,20 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Cell
  *
- * @ORM\Table(name="cells", uniqueConstraints={
- *      @ORM\UniqueConstraint(name="axisXY", columns={"battlefield", "x", "y"})
- * })
+ * @ORM\Table(
+ *      name="cells",
+ *      uniqueConstraints={
+ *          @ORM\UniqueConstraint(name="axisXY", columns={"battlefield", "x", "y"})
+ *      },
+ *      indexes={
+ *          @ORM\Index(name="INDEX_CELL_BATTLEFIELD", columns={"battlefield"})
+ *      }
+ * )
  * @ORM\Entity()
  */
 class Cell
 {
     use Identifiable;
-
     /**
      * @ORM\Column(name="x", type="integer", nullable=false)
      *
