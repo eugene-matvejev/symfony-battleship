@@ -9,7 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Battlefield
  *
- * @ORM\Table(name="battlefields")
+ * @ORM\Table(
+ *     name="battlefields",
+ *     indexes={
+ *          @ORM\Index(name="INDEX_BATTLEFIELD_GAME", columns={"game"}),
+ *          @ORM\Index(name="INDEX_BATTLEFIELD_PLAYER", columns={"player"})
+ *     })
  * @ORM\Entity(repositoryClass="GameBundle\Repository\BattlefieldRepository")
  */
 class Battlefield

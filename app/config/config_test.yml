@@ -23,4 +23,4 @@ doctrine:
     dbname:   %database_name_test%
     user:     %database_user_test%
     password: %database_password_test%
-    charset:  UTF8
+    charset:  %database_encoding%

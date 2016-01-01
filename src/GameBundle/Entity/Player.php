@@ -15,7 +15,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Player
 {
     use Identifiable, Nameable;
-
     /**
      * @ORM\ManyToOne(targetEntity="GameBundle\Entity\PlayerType")
      * @ORM\JoinColumn(name="type", referencedColumnName="id", nullable=false)

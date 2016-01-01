@@ -6,7 +6,7 @@ use GameBundle\Entity\Battlefield;
 use GameBundle\Entity\Cell;
 use GameBundle\Entity\Player;
 use GameBundle\Library\AI\Coordinate\CoordinateStrategy;
-use GameBundle\Library\AI\Exception\AIException;
+use GameBundle\Library\Exception\AIException;
 use GameBundle\Model\BattlefieldModel;
 use GameBundle\Model\CellModel;
 use Symfony\Bridge\Monolog\Logger;
@@ -69,25 +69,26 @@ class AI
      */
     public function turn(Battlefield $battlefield) : Cell
     {
-        $this->logger->addDebug('----------------------------------------------');
+        $this->logger->addDebug('---------------------------------------------- BF: '. $battlefield->getId());
 
-        $cells = $this->strategyService->findPair($battlefield);
+        $cells = $this->strategyService->chooseStrategy($battlefield);
         $log = [];
 
         foreach($cells as $cell) {
             $log[] = CellModel::getJSON($cell);
         }
 
-        $this->logger->addDebug(__FUNCTION__ . ' :: '. print_r($log, true));
+        $this->logger->addDebug(__CLASS__ .':'. __FUNCTION__ . ' :: cells: '. print_r($log, true));
 
-        if(null === $cell = $this->bombardInRange($cells)) {
-            $cells = BattlefieldModel::getLiveCells($battlefield);
-            if(null === $cell = $this->bombardInRange($cells)) {
-                throw new AIException('Unable to hit any cell');
+        try {
+            $cell = $this->bombardInRange($cells);
+            if($cell === null) {
+                $cells = BattlefieldModel::getLiveCells($battlefield);
+                return $this->bombardInRange($cells);
             }
+        } catch(AIException $e) {
+            $this->logger->addDebug(__CLASS__ .':'. __FUNCTION__ . $e);
         }
-
-        $this->logger->addDebug('----------------------------------------------');
 
         return $cell;
     }
@@ -96,20 +97,18 @@ class AI
     /**
      * @param Cell[] $cells
      *
-     * @return Cell
+     * @return Cell|null
+     * @throws AIException
      */
     private function bombardInRange(array $cells)
     {
         $count = count($cells);
-        if(0 !== $count) {
-            /** because starts from 0 */
-            $rand = rand(0, $count - 1);
-            $cell = $cells[$rand];
-
-            return $this->bombard($cell);
+        $arr = [];
+        foreach($cells as $el) {
+            $arr[] = $el;
         }
 
-        return null;
+        return 0 !== $count ? $this->bombard($arr[rand(0, $count - 1)]) : null;
     }
 
     /**

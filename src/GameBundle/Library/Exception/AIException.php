@@ -1,6 +1,6 @@
 <?php
 
-namespace GameBundle\Library\AI\Exception;
+namespace GameBundle\Library\Exception;
 
 /**
  * AIException
