@@ -131,16 +131,16 @@ class GameModel
         $std->data = [];
 
         foreach($game->getBattlefields() as $battlefield) {
-            $_json = new \stdClass();
-            $_json->id = $battlefield->getId();
-            $_json->player = PlayerModel::getJSON($battlefield->getPlayer());
-            $_json->cells = [];
+            $json = new \stdClass();
+            $json->id = $battlefield->getId();
+            $json->player = PlayerModel::getJSON($battlefield->getPlayer());
+            $json->cells = [];
 
             foreach($battlefield->getCells() as $cell) {
-                $_json->cells[] = CellModel::getJSON($cell, true);
+                $json->cells[] = CellModel::getJSON($cell, true);
             }
 
-            $std->data[] = $_json;
+            $std->data[] = $json;
         }
 
         return $std;
