@@ -2,10 +2,11 @@
 
 namespace GameBundle\Repository;
 
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr;
 use GameBundle\Entity\Battlefield;
 use GameBundle\Entity\Game;
 use GameBundle\Model\PlayerModel;
-use Doctrine\ORM\EntityRepository;
 
 /**
  * BattlefieldRepository
@@ -17,13 +18,15 @@ class BattlefieldRepository extends EntityRepository
      *
      * @return Battlefield[]
      */
-    public function findByGameId($gameId)
+    public function findByGameId(\int $gameId) : array
     {
-        return $this->createQueryBuilder('b')
+        return $this
+            ->createQueryBuilder('b')
             ->select('b', 'g')
             ->join('b.game', 'g')
-            ->where('g.id = :game')->setParameter('game', $gameId)
-            ->getQuery()->getResult();
+            ->where((new Expr())->eq('g.id', $gameId))
+            ->getQuery()
+            ->getResult();
     }
 
     /**
@@ -31,13 +34,15 @@ class BattlefieldRepository extends EntityRepository
      *
      * @return Battlefield[]
      */
-    public function findNotCPUsByGame(Game $game)
+    public function findNotCPUsByGame(Game $game) : array
     {
-        return $this->createQueryBuilder('b')
+        return $this
+            ->createQueryBuilder('b')
             ->select('b', 'p')
             ->join('b.player', 'p')
-            ->where('b.game = :game')->setParameter('game', $game)
-            ->andWhere('p.type != :type')->setParameter('type', PlayerModel::TYPE_CPU)
-            ->getQuery()->getResult();
+            ->where((new Expr())->eq('b.game', $game))
+            ->andWhere((new Expr())->neq('p.type', PlayerModel::TYPE_CPU))
+            ->getQuery()
+            ->getResult();
     }
 }

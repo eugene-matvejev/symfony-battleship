@@ -179,15 +179,15 @@ class CoordinateStrategy
 
         $x1 = $x - 1;
         $x2 = $x + 1;
-        $matches = 0;
+        $matches = 1;
 
-        for($i = 0; $i < $this->maxShipSize + 2; $i++) {
+        for($i = 0; $i < $this->maxShipSize; $i++) {
             if(null === $cell1) {
-                if(null !== $cell1 = $this->verifyCell($cell, $x1, $cell->getY()))
+                if(null !== $cell1 = $this->verifyCell($cell->getBattlefield(), $x1, $cell->getY()))
                     $matches++;
             }
             if(null === $cell2) {
-                if(null !== $cell2 = $this->verifyCell($cell, $x2, $cell->getY()))
+                if(null !== $cell2 = $this->verifyCell($cell->getBattlefield(), $x2, $cell->getY()))
                     $matches++;
             }
             $x1--; $x2++;
@@ -202,30 +202,30 @@ class CoordinateStrategy
 
         for($i = 0; $i < $this->maxShipSize + 2; $i++) {
             if(null === $cell1) {
-                $cell1 = $this->verifyCell($cell, $cell->getX(), $y1);
+                $cell1 = $this->verifyCell($cell->getBattlefield(), $cell->getX(), $y1);
             }
             if(null === $cell2) {
-                $cell2 = $this->verifyCell($cell, $cell->getX(), $y2);
+                $cell2 = $this->verifyCell($cell->getBattlefield(), $cell->getX(), $y2);
             }
             $y1--; $y2++;
         }
 
         return null !== $cell1 && null !== $cell2;
     }
-//
+
     /**
-     * @param Cell $cell
-     * @param int  $x
-     * @param int  $y
+     * @param Battlefield $battlefield
+     * @param int         $x
+     * @param int         $y
      *
      * @return bool|null
      */
-    private function verifyCell(Cell $cell, \int $x, \int $y)
+    private function keepSearch(Battlefield $battlefield, \int $x, \int $y)
     {
-        $_cell = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $x, $y);
-        if(null !== $_cell) {
-            if($_cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
-                return $_cell->getState()->getId() !== CellModel::STATE_WATER_DIED;
+        $cell = BattlefieldModel::getCellByCoordinates($battlefield, $x, $y);
+        if(null !== $cell) {
+            if($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
+                return $cell->getState()->getId() !== CellModel::STATE_WATER_DIED;
             }
 
             return null;

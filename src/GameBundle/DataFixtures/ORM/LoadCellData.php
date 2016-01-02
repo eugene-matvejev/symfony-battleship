@@ -6,13 +6,10 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use GameBundle\Entity\CellState;
-use GameBundle\Entity\Player;
-use GameBundle\Entity\PlayerType;
 use GameBundle\Model\CellModel;
-use GameBundle\Model\PlayerModel;
 
 /**
- * Class LoadLanguageData
+ * LoadLanguageData
  */
 class LoadCellData extends AbstractFixture implements OrderedFixtureInterface
 {

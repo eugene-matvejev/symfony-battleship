@@ -2,9 +2,10 @@
 
 namespace GameBundle\Repository;
 
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr;
 use GameBundle\Entity\CellState;
 use GameBundle\Model\CellModel;
-use Doctrine\ORM\EntityRepository;
 
 /**
  * CellStateRepository
@@ -14,14 +15,12 @@ class CellStateRepository extends EntityRepository
     /**
      * @return CellState[]
      */
-    public function getStates()
+    public function getStates() : array
     {
-        $arr = [];
-        foreach($this->findBy(['id' => CellModel::getAllStates()]) as $state) {
-            /** @var CellState $state */
-            $arr[$state->getId()] = $state;
-        }
-
-        return $arr;
+        return $this
+            ->createQueryBuilder('q', 'q.id')
+            ->where((new Expr())->in('q.id', CellModel::getAllStates()))
+            ->getQuery()
+            ->getResult();
     }
 }
