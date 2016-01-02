@@ -49,6 +49,9 @@ class CoordinateStrategy
             if($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
                 continue;
             }
+            if($this->isShipDead($cell)) {
+                continue;
+            }
 
             $this->logger->addCritical(__FUNCTION__ .': cell: '. $cell->getId());
 
@@ -190,14 +193,15 @@ class CoordinateStrategy
             }
 
             if($matches >= $this->maxShipSize) {
+                $this->logger->addCritical(__FUNCTION__ .': 0true');
                 return true;
             }
 
             $x1--; $x2++;
         }
 
-        if(false === $cell1 && false === $cell2) {
-            $this->logger->addCritical(__FUNCTION__ .': true');
+        if(true === $cell1 && true === $cell2) {
+            $this->logger->addCritical(__FUNCTION__ .': 1true');
             return true;
         }
         $cell1 = $cell2 = true;
@@ -214,14 +218,15 @@ class CoordinateStrategy
             }
 
             if($matches >= $this->maxShipSize) {
+                $this->logger->addCritical(__FUNCTION__ .': 2true');
                 return true;
             }
 
             $y1--; $y2++;
         }
 
-        $this->logger->addCritical(__FUNCTION__ .': '. (false === $cell1 && false === $cell2 ? 'true' : 'false'));
-        return false === $cell1 && false === $cell2;
+        $this->logger->addCritical(__FUNCTION__ .': 3'. (false === $cell1 && false === $cell2 ? 'true' : 'false'));
+        return true === $cell1 && true === $cell2;
     }
 
     /**
@@ -231,7 +236,7 @@ class CoordinateStrategy
      *
      * @return bool
      */
-    private function keepSearch(Battlefield $battlefield, int $x, int $y)
+    private function keepSearch(Battlefield $battlefield, int $x, int $y) : bool
     {
         $cell = BattlefieldModel::getCellByCoordinates($battlefield, $x, $y);
 

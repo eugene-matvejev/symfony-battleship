@@ -82,7 +82,7 @@ class AI
 
         try {
             $cell = $this->bombardInRange($cells);
-            if($cell === null) {
+            if(null === $cell) {
                 $cells = BattlefieldModel::getLiveCells($battlefield);
                 return $this->bombardInRange($cells);
             }
