@@ -2,7 +2,7 @@
 
 namespace GameBundle\Library\Traits;
 
-trait Timestampable
+trait Timestamped
 {
     /**
      * @ORM\Column(name="timestamp", type="datetime", nullable=false)
@@ -22,7 +22,7 @@ trait Timestampable
     /**
      * @return \DateTime
      */
-    public function getTimestamp()
+    public function getTimestamp() : \DateTime
     {
         return $this->timestamp;
     }

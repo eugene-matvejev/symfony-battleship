@@ -2,8 +2,10 @@
 
 namespace GameBundle\Entity;
 
+use GameBundle\Library\Interfaces\IdentifiableInterface;
+use GameBundle\Library\Interfaces\TimestampedInterface;
 use GameBundle\Library\Traits\Identifiable;
-use GameBundle\Library\Traits\Timestampable;
+use GameBundle\Library\Traits\Timestamped;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,9 +21,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="GameBundle\Repository\GameResultRepository")
  */
-class GameResult
+class GameResult implements IdentifiableInterface, TimestampedInterface
 {
-    use Identifiable, Timestampable;
+    use Identifiable, Timestamped;
     /**
      * @ORM\OneToOne(targetEntity="GameBundle\Entity\Game", mappedBy="result")
      * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)

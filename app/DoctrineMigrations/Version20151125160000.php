@@ -40,7 +40,8 @@ class Version20151125160000 extends AbstractMigration
                 ('. CellModel::STATE_WATER_LIVE .', "untouched water"),
                 ('. CellModel::STATE_WATER_DIED .', "shooted water"),
                 ('. CellModel::STATE_SHIP_LIVE .', "live ship"),
-                ('. CellModel::STATE_SHIP_DIED .', "damaged ship");
+                ('. CellModel::STATE_SHIP_DIED .', "damaged ship"),
+                ('. CellModel::STATE_WATER_SKIP .', "water skip");
         ');
     }
 

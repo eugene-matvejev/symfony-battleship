@@ -231,16 +231,16 @@ class GameModel
      *
      * @return bool
      */
-    public function detectVictory(Battlefield $battlefield) : \bool
+    public function detectVictory(Battlefield $battlefield)
     {
+        $game = $battlefield->getGame();
+        if(null !== $game->getResult()) {
+            return true;
+        }
+
         foreach($battlefield->getCells() as $cell) {
             if($cell->getState()->getId() === CellModel::STATE_SHIP_LIVE)
                 return false;
-        }
-
-        $game = $battlefield->getGame();
-        if($game->getResult() !== null) {
-            return true;
         }
 
         $result = (new GameResult())

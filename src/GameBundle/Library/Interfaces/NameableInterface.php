@@ -1,9 +1,10 @@
 <?php
+
 namespace GameBundle\Library\Interfaces;
 
-interface TimestampableInterface
+interface NameableInterface
 {
-    public function setName();
-
     public function getName();
+
+    public function setName($name);
 }

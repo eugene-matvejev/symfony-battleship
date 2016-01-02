@@ -18,7 +18,7 @@ class BattlefieldRepository extends EntityRepository
      *
      * @return Battlefield[]
      */
-    public function findByGameId(\int $gameId) : array
+    public function findByGameId(int $gameId) : array
     {
         return $this
             ->createQueryBuilder('b')
