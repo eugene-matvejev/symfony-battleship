@@ -78,7 +78,7 @@ body>.container {
     clear: both;
 }
 .sidebar-nav>li.selected,
-.sidebar-nav>li:not(.sidebar-brand):hover {
+.sidebar-nav>li:not(.sidebar-brand):not(.no-hover):hover {
     background: #fff;
     color: #000;
 }

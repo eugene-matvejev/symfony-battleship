@@ -30,7 +30,7 @@ class CoordinateStrategy
      * @param int $min
      * @param int $max
      */
-    public function __construct(\int $min, \int $max, Logger $logger)
+    public function __construct(int $min, int $max, Logger $logger)
     {
         $this->minShipSize = $min;
         $this->maxShipSize = $max;
@@ -141,7 +141,7 @@ class CoordinateStrategy
      *
      * @return array
      */
-    private function strategy(Battlefield $battlefield, array $coordinates, \string $axis)
+    private function strategy(Battlefield $battlefield, array $coordinates, string $axis)
     {
         $cells = [];
         $this->logger->addCritical(':::: '. __FUNCTION__ .' :::::::::::: '. print_r($coordinates, true));
@@ -175,42 +175,53 @@ class CoordinateStrategy
     {
         $x = $cell->getX();
         $y = $cell->getY();
-        $cell1 = $cell2 = null;
+        $cell1 = $cell2 = true;
 
         $x1 = $x - 1;
         $x2 = $x + 1;
         $matches = 1;
 
         for($i = 0; $i < $this->maxShipSize; $i++) {
-            if(null === $cell1) {
-                if(null !== $cell1 = $this->verifyCell($cell->getBattlefield(), $x1, $cell->getY()))
-                    $matches++;
+            if(true === $cell1 && true === $cell1 = $this->keepSearch($cell->getBattlefield(), $x1, $cell->getY())) {
+                $matches++;
             }
-            if(null === $cell2) {
-                if(null !== $cell2 = $this->verifyCell($cell->getBattlefield(), $x2, $cell->getY()))
-                    $matches++;
+            if(true === $cell2 && true === $cell2 = $this->keepSearch($cell->getBattlefield(), $x2, $cell->getY())) {
+                $matches++;
             }
+
+            if($matches >= $this->maxShipSize) {
+                return true;
+            }
+
             $x1--; $x2++;
         }
-        if(null !== $cell1 && null !== $cell2) {
+
+        if(false === $cell1 && false === $cell2) {
+            $this->logger->addCritical(__FUNCTION__ .': true');
             return true;
         }
-        $cell1 = $cell2 = null;
+        $cell1 = $cell2 = true;
 
         $y1 = $y - 1;
         $y2 = $y + 1;
 
-        for($i = 0; $i < $this->maxShipSize + 2; $i++) {
-            if(null === $cell1) {
-                $cell1 = $this->verifyCell($cell->getBattlefield(), $cell->getX(), $y1);
+        for($i = 0; $i < $this->maxShipSize; $i++) {
+            if(true === $cell1 && true === $cell1 = $this->keepSearch($cell->getBattlefield(), $cell->getX(), $y1)) {
+                $matches++;
             }
-            if(null === $cell2) {
-                $cell2 = $this->verifyCell($cell->getBattlefield(), $cell->getX(), $y2);
+            if(true === $cell2 && true === $cell2 = $this->keepSearch($cell->getBattlefield(), $cell->getX(), $y2)) {
+                $matches++;
             }
+
+            if($matches >= $this->maxShipSize) {
+                return true;
+            }
+
             $y1--; $y2++;
         }
 
-        return null !== $cell1 && null !== $cell2;
+        $this->logger->addCritical(__FUNCTION__ .': '. (false === $cell1 && false === $cell2 ? 'true' : 'false'));
+        return false === $cell1 && false === $cell2;
     }
 
     /**
@@ -218,19 +229,12 @@ class CoordinateStrategy
      * @param int         $x
      * @param int         $y
      *
-     * @return bool|null
+     * @return bool
      */
-    private function keepSearch(Battlefield $battlefield, \int $x, \int $y)
+    private function keepSearch(Battlefield $battlefield, int $x, int $y)
     {
         $cell = BattlefieldModel::getCellByCoordinates($battlefield, $x, $y);
-        if(null !== $cell) {
-            if($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
-                return $cell->getState()->getId() !== CellModel::STATE_WATER_DIED;
-            }
 
-            return null;
-        }
-
-        return false;
+        return null !== $cell && $cell->getState()->getId() === CellModel::STATE_SHIP_DIED;
     }
 }

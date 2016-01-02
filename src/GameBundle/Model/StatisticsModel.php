@@ -27,7 +27,7 @@ class StatisticsModel
      *
      * @return array
      */
-    public function overallStatistics(\int $page) : array
+    public function overallStatistics(int $page) : array
     {
         $results = $this->gameResultRepository->getResultsInDescendingDate($page, self::RECORDS_PER_PAGE);
         $json = [];

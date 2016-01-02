@@ -2,8 +2,9 @@
 
 namespace GameBundle\Entity;
 
-use GameBundle\Library\Traits\Identifiable;
 use Doctrine\ORM\Mapping as ORM;
+use GameBundle\Library\Interfaces\IdentifiableInterface;
+use GameBundle\Library\Traits\Identifiable;
 
 /**
  * Cell
@@ -19,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity()
  */
-class Cell
+class Cell implements IdentifiableInterface
 {
     use Identifiable;
     /**
@@ -52,7 +53,7 @@ class Cell
     /**
      * @return int
      */
-    public function getX() : \int
+    public function getX() : int
     {
         return $this->x;
     }
@@ -62,7 +63,7 @@ class Cell
      *
      * @return $this
      */
-    public function setX($x)
+    public function setX(int $x)
     {
         $this->x = $x;
 
@@ -72,7 +73,7 @@ class Cell
     /**
      * @return int
      */
-    public function getY() : \int
+    public function getY() : int
     {
         return $this->y;
     }
@@ -82,7 +83,7 @@ class Cell
      *
      * @return $this
      */
-    public function setY($y)
+    public function setY(int $y)
     {
         $this->y = $y;
 

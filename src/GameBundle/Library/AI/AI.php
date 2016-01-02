@@ -44,7 +44,7 @@ class AI
      *
      * @return bool
      */
-    public function isTurnDoneForPlayer(Player $player) : \bool
+    public function isTurnDoneForPlayer(Player $player) : bool
     {
         return isset($this->cpuTurnsPerPlayer[$player->getId()]);
     }

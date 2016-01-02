@@ -19,7 +19,7 @@ class BattlefieldModel
      *
      * @return Cell
      */
-    public static function getCellByCoordinates(Battlefield $battlefield, \int $x, \int $y)
+    public static function getCellByCoordinates(Battlefield $battlefield, int $x, int $y)
     {
 //        foreach($battlefield->getCells() as $cell) {
 //            if($cell->getX() === $x && $cell->getY())
@@ -41,7 +41,7 @@ class BattlefieldModel
     }
 
 
-    public static function getSize(Battlefield $battlefield) : \int
+    public static function getSize(Battlefield $battlefield) : int
     {
         $int = 0;
         foreach($battlefield->getCells() as $cell) {

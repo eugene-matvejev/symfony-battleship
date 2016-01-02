@@ -2,9 +2,10 @@
 
 namespace GameBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+use GameBundle\Library\Interfaces\IdentifiableInterface;
 use GameBundle\Library\Traits\Identifiable;
 use GameBundle\Library\Traits\Nameable;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * PlayerType
@@ -12,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="playerType")
  * @ORM\Entity(repositoryClass="GameBundle\Repository\PlayerTypeRepository")
  */
-class PlayerType
+class PlayerType implements IdentifiableInterface
 {
     use Identifiable, Nameable;
 }
