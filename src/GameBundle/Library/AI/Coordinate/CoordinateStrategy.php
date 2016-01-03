@@ -10,9 +10,6 @@ use Symfony\Bridge\Monolog\Logger;
 
 class CoordinateStrategy
 {
-    const STRATEGY_X = 0;
-    const STRATEGY_Y = 1;
-    const STRATEGY_Z = 2;
     /**
      * @var int
      */
@@ -22,18 +19,25 @@ class CoordinateStrategy
      */
     private $maxShipSize;
     /**
+     * @var CellModel
+     */
+    private $cellModel;
+    /**
      * @var Logger
      */
     private $logger;
 
     /**
-     * @param int $min
-     * @param int $max
+     * @param int       $min
+     * @param int       $max
+     * @param CellModel $model
+     * @param Logger    $logger
      */
-    public function __construct(int $min, int $max, Logger $logger)
+    public function __construct(int $min, int $max, CellModel $model, Logger $logger)
     {
         $this->minShipSize = $min;
         $this->maxShipSize = $max;
+        $this->cellModel = $model;
         $this->logger = $logger;
     }
 
@@ -142,9 +146,9 @@ class CoordinateStrategy
      * @param array       $coordinates
      * @param string|null $axis
      *
-     * @return array
+     * @return Cell[]
      */
-    private function strategy(Battlefield $battlefield, array $coordinates, string $axis)
+    private function strategy(Battlefield $battlefield, array $coordinates, string $axis) : array
     {
         $cells = [];
         $this->logger->addCritical(':::: '. __FUNCTION__ .' :::::::::::: '. print_r($coordinates, true));
@@ -230,15 +234,15 @@ class CoordinateStrategy
     }
 
     /**
-     * @param Battlefield $battlefield
+     * @param Battlefield $bf
      * @param int         $x
      * @param int         $y
      *
      * @return bool
      */
-    private function keepSearch(Battlefield $battlefield, int $x, int $y) : bool
+    private function verifyWay(Battlefield $bf, int $x, int $y) : bool
     {
-        $cell = BattlefieldModel::getCellByCoordinates($battlefield, $x, $y);
+        $cell = BattlefieldModel::getCellByCoordinates($bf, $x, $y);
 
         return null !== $cell && $cell->getState()->getId() === CellModel::STATE_SHIP_DIED;
     }
