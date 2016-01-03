@@ -36,6 +36,7 @@ services:
     arguments:
       - %battleshipt.config.ship.size.min%
       - %battleshipt.config.ship.size.max%
+      - @battleship.game.services.cell.model
       - @logger
 
 #  # Repositories

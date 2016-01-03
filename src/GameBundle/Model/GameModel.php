@@ -1,6 +1,9 @@
 <?php
+
 namespace GameBundle\Model;
 
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityRepository;
 use GameBundle\Entity\Battlefield;
 use GameBundle\Entity\Cell;
 use GameBundle\Entity\Game;
@@ -11,8 +14,6 @@ use GameBundle\Repository\BattlefieldRepository;
 use GameBundle\Repository\CellStateRepository;
 use GameBundle\Repository\GameResultRepository;
 use GameBundle\Repository\PlayerTypeRepository;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityRepository;
 
 class GameModel
 {
@@ -86,7 +87,7 @@ class GameModel
         foreach($json->data as $_player) {
             $player = $this->playerRepository->findOneBy(['name' => $_player->player->name]);
 
-            if(!$player instanceof Player) {
+            if(null === $player) {
                 $player = (new Player())
                     ->setName($_player->player->name)
                     ->setType($playerTypes[PlayerModel::TYPE_HUMAN]);
@@ -102,7 +103,7 @@ class GameModel
                 $cell = (new Cell())
                     ->setX($_cell->x)
                     ->setY($_cell->y)
-                    ->setState($battlefield->getPlayer()->getType()->getId() != PlayerModel::TYPE_CPU
+                    ->setState($battlefield->getPlayer()->getType()->getId() !== PlayerModel::TYPE_CPU
                         ? $this->cellModel->getCellStates()[$_cell->s]
                         : $this->cellModel->getCellStates()[CellModel::STATE_WATER_LIVE]);
                 $battlefield->addCell($cell);
