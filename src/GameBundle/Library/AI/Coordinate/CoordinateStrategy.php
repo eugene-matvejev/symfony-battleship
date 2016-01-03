@@ -180,44 +180,81 @@ class CoordinateStrategy
      */
     private function isShipDead(Cell $cell)
     {
-        $x = $cell->getX();
-        $y = $cell->getY();
-        $cell1 = $cell2 = true;
+        $xCoordinates = [
+            ['x' => $cell->getX() - 1, 'y' => $cell->getY()],
+            ['x' => $cell->getX() + 1, 'y' => $cell->getY()]
+        ];
+        $this->verifyAxis()
 
-        $x1 = $x - 1;
-        $x2 = $x + 1;
-        $matches = 1;
+//        $x = $cell->getX();
+//        $y = $cell->getY();
+//        $cell1 = $cell2 = true;
+//
+//        $x1 = $x - 1;
+//        $x2 = $x + 1;
+//        $matches = 1;
+//
+//        for($i = 0; $i < $this->maxShipSize; $i++) {
+//            if(true === $cell1 && true === $cell1 = $this->verifyWay($cell->getBattlefield(), $x1, $cell->getY())) {
+//                $matches++;
+//            }
+//            if(true === $cell2 && true === $cell2 = $this->verifyWay($cell->getBattlefield(), $x2, $cell->getY())) {
+//                $matches++;
+//            }
+//
+//            if($matches >= $this->maxShipSize) {
+//                $this->logger->addCritical(__FUNCTION__ .': 0true');
+//                return true;
+//            }
+//
+//            $x1--; $x2++;
+//        }
+//
+//        if(true === $cell1 && true === $cell2) {
+//            $this->logger->addCritical(__FUNCTION__ .': 1true');
+//            return true;
+//        }
+//        $cell1 = $cell2 = true;
+//
+//        $y1 = $y - 1;
+//        $y2 = $y + 1;
+//
+//        for($i = 0; $i < $this->maxShipSize; $i++) {
+//            if(true === $cell1 && true === $cell1 = $this->verifyWay($cell->getBattlefield(), $cell->getX(), $y1)) {
+//                $matches++;
+//            }
+//            if(true === $cell2 && true === $cell2 = $this->verifyWay($cell->getBattlefield(), $cell->getX(), $y2)) {
+//                $matches++;
+//            }
+//
+//            if($matches >= $this->maxShipSize) {
+//                $this->logger->addCritical(__FUNCTION__ .': 2true');
+//                return true;
+//            }
+//
+//            $y1--; $y2++;
+//        }
+//
+//        $this->logger->addCritical(__FUNCTION__ .': 3'. (false === $cell1 && false === $cell2 ? 'true' : 'false'));
+//        return true === $cell1 && true === $cell2;
+    }
 
-        for($i = 0; $i < $this->maxShipSize; $i++) {
-            if(true === $cell1 && true === $cell1 = $this->keepSearch($cell->getBattlefield(), $x1, $cell->getY())) {
-                $matches++;
-            }
-            if(true === $cell2 && true === $cell2 = $this->keepSearch($cell->getBattlefield(), $x2, $cell->getY())) {
-                $matches++;
-            }
-
-            if($matches >= $this->maxShipSize) {
-                $this->logger->addCritical(__FUNCTION__ .': 0true');
-                return true;
-            }
-
-            $x1--; $x2++;
-        }
-
-        if(true === $cell1 && true === $cell2) {
-            $this->logger->addCritical(__FUNCTION__ .': 1true');
-            return true;
-        }
+    /**
+     * @param Battlefield $bf
+     */
+    private function verifyAxis(Battlefield $bf, array $coordinates, string $axis)
+    {
+        $this->logger->addCritical(__FUNCTION__ .' ::: '. $axis );
         $cell1 = $cell2 = true;
 
         $y1 = $y - 1;
         $y2 = $y + 1;
 
         for($i = 0; $i < $this->maxShipSize; $i++) {
-            if(true === $cell1 && true === $cell1 = $this->keepSearch($cell->getBattlefield(), $cell->getX(), $y1)) {
+            if(true === $cell1 && true === $cell1 = $this->verifyWay($cell->getBattlefield(), $cell->getX(), $y1)) {
                 $matches++;
             }
-            if(true === $cell2 && true === $cell2 = $this->keepSearch($cell->getBattlefield(), $cell->getX(), $y2)) {
+            if(true === $cell2 && true === $cell2 = $this->verifyWay($cell->getBattlefield(), $cell->getX(), $y2)) {
                 $matches++;
             }
 
@@ -232,7 +269,6 @@ class CoordinateStrategy
         $this->logger->addCritical(__FUNCTION__ .': 3'. (false === $cell1 && false === $cell2 ? 'true' : 'false'));
         return true === $cell1 && true === $cell2;
     }
-
     /**
      * @param Battlefield $bf
      * @param int         $x
