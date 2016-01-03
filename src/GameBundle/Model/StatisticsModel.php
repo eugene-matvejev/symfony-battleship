@@ -2,9 +2,8 @@
 
 namespace GameBundle\Model;
 
-use GameBundle\Repository\GameResultRepository;
-use GameBundle\Entity\GameResult;
 use Doctrine\Common\Persistence\ObjectManager;
+use GameBundle\Repository\GameResultRepository;
 
 class StatisticsModel
 {
@@ -15,17 +14,20 @@ class StatisticsModel
      */
     private $gameResultRepository;
 
+    /**
+     * @param ObjectManager $om
+     */
     function __construct(ObjectManager $om)
     {
         $this->gameResultRepository = $om->getRepository('GameBundle:GameResult');
     }
 
     /**
-     * @param int|null $page
+     * @param int $page
      *
-     * @return mixed[]
+     * @return array
      */
-    public function overallStatistics(\int $page) : array
+    public function overallStatistics(int $page) : array
     {
         $results = $this->gameResultRepository->getResultsInDescendingDate($page, self::RECORDS_PER_PAGE);
         $json = [];

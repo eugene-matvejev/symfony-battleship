@@ -1,10 +1,12 @@
 <?php
+
 namespace GameBundle\Entity;
 
-use GameBundle\Library\Traits\Identifiable;
-use GameBundle\Library\Traits\Timestampable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use GameBundle\Library\Interfaces\IdentifiableInterface;
+use GameBundle\Library\Traits\Identifiable;
+use GameBundle\Library\Traits\Timestamped;
 
 /**
  * Game
@@ -13,9 +15,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\HasLifecycleCallbacks
  * @ORM\Entity()
  */
-class Game
+class Game implements IdentifiableInterface
 {
-    use Identifiable, Timestampable;
+    use Identifiable, Timestamped;
     /**
      * @ORM\OneToMany(targetEntity="GameBundle\Entity\Battlefield", mappedBy="game", cascade={"persist"})
      * @ORM\JoinColumn(name="id", referencedColumnName="game", nullable=false)
@@ -61,7 +63,7 @@ class Game
     }
 
     /**
-     * @return Battlefield[]
+     * @return ArrayCollection|Battlefield[]
      */
     public function getBattlefields()
     {

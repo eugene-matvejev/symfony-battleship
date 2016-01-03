@@ -131,16 +131,16 @@ class GameModel
         $std->data = [];
 
         foreach($game->getBattlefields() as $battlefield) {
-            $_json = new \stdClass();
-            $_json->id = $battlefield->getId();
-            $_json->player = PlayerModel::getJSON($battlefield->getPlayer());
-            $_json->cells = [];
+            $json = new \stdClass();
+            $json->id = $battlefield->getId();
+            $json->player = PlayerModel::getJSON($battlefield->getPlayer());
+            $json->cells = [];
 
             foreach($battlefield->getCells() as $cell) {
-                $_json->cells[] = CellModel::getJSON($cell, true);
+                $json->cells[] = CellModel::getJSON($cell, true);
             }
 
-            $std->data[] = $_json;
+            $std->data[] = $json;
         }
 
         return $std;
@@ -231,16 +231,16 @@ class GameModel
      *
      * @return bool
      */
-    public function detectVictory(Battlefield $battlefield) : \bool
+    public function detectVictory(Battlefield $battlefield)
     {
+        $game = $battlefield->getGame();
+        if(null !== $game->getResult()) {
+            return true;
+        }
+
         foreach($battlefield->getCells() as $cell) {
             if($cell->getState()->getId() === CellModel::STATE_SHIP_LIVE)
                 return false;
-        }
-
-        $game = $battlefield->getGame();
-        if($game->getResult() !== null) {
-            return true;
         }
 
         $result = (new GameResult())

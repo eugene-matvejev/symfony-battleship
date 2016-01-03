@@ -2,21 +2,27 @@
 
 namespace GameBundle\Entity;
 
-use GameBundle\Library\Traits\Identifiable;
 use Doctrine\ORM\Mapping as ORM;
+use GameBundle\Library\Interfaces\IdentifiableInterface;
+use GameBundle\Library\Traits\Identifiable;
 
 /**
  * Cell
  *
- * @ORM\Table(name="cells", uniqueConstraints={
- *      @ORM\UniqueConstraint(name="axisXY", columns={"battlefield", "x", "y"})
- * })
+ * @ORM\Table(
+ *      name="cells",
+ *      uniqueConstraints={
+ *          @ORM\UniqueConstraint(name="axisXY", columns={"battlefield", "x", "y"})
+ *      },
+ *      indexes={
+ *          @ORM\Index(name="INDEX_CELL_BATTLEFIELD", columns={"battlefield"})
+ *      }
+ * )
  * @ORM\Entity()
  */
-class Cell
+class Cell implements IdentifiableInterface
 {
     use Identifiable;
-
     /**
      * @ORM\Column(name="x", type="integer", nullable=false)
      *
@@ -47,7 +53,7 @@ class Cell
     /**
      * @return int
      */
-    public function getX() : \int
+    public function getX() : int
     {
         return $this->x;
     }
@@ -57,7 +63,7 @@ class Cell
      *
      * @return $this
      */
-    public function setX($x)
+    public function setX(int $x)
     {
         $this->x = $x;
 
@@ -67,7 +73,7 @@ class Cell
     /**
      * @return int
      */
-    public function getY() : \int
+    public function getY() : int
     {
         return $this->y;
     }
@@ -77,7 +83,7 @@ class Cell
      *
      * @return $this
      */
-    public function setY($y)
+    public function setY(int $y)
     {
         $this->y = $y;
 

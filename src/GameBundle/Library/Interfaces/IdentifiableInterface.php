@@ -1,4 +1,5 @@
 <?php
+
 namespace GameBundle\Library\Interfaces;
 
 interface IdentifiableInterface
