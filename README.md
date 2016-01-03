@@ -84,7 +84,7 @@ composer install (will create databases as well)
 
 php app/console doctrine:migrations:migrate --env=prod
 
-for launch unit tests you need PHPUnit 
-php app/console doctrine:migrations:migrate --env=test 
+for launch unit tests you need PHPUnit
+php app/console doctrine:migrations:migrate --env=test
 
 phpunit -c app

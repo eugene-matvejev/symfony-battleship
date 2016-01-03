@@ -1,0 +1,36 @@
+{% extends '@Game/blocks/body.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets filter='cssrewrite'
+    'bundles/game/css/game/game.css'
+    'bundles/game/css/game/statistics.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}" type="text/css"/>
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts
+    '@GameBundle/Resources/public/js/prototypes/api/api.mgr.prototype.js'
+    '@GameBundle/Resources/public/js/prototypes/core/statistics/statistics.prototype.js'
+    '@GameBundle/Resources/public/js/prototypes/core/game/cell.prototype.js'
+    '@GameBundle/Resources/public/js/prototypes/core/game/cell.container.prototype.js'
+    '@GameBundle/Resources/public/js/prototypes/core/game/battlefield.prototype.js'
+    '@GameBundle/Resources/public/js/prototypes/core/game/player.prototype.js'
+    '@GameBundle/Resources/public/js/prototypes/core/game/game.prototype.js'
+    '@GameBundle/Resources/public/js/_game.controller.js'
+    '@GameBundle/Resources/public/js/_statistics.controller.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
+{% block content %}
+    <div id="game-area" data-turn-link="{{ path('battleship.game.api.turn') }}"
+                        data-init-link="{{ path('battleship.game.api.init') }}">
+    </div>
+    <div id="modal-area"></div>
+    <div id="stats-area" data-stats-link="{{ path('battleship.game.api.statistics', {'page' : 0})|trim('0') }}"></div>
+{% endblock %}

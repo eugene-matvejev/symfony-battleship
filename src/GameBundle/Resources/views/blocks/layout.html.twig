@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title></title>
+{% block stylesheets %}
+    {% stylesheets filter='cssrewrite'
+    'bundles/game/bootstrap-3.3.5-dist/css/bootstrap.min.css'
+    'bundles/game/css/layout/layout.css'
+    'bundles/game/css/layout/animations.css'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}" type="text/css"/>
+    {% endstylesheets %}
+{% endblock %}
+</head>
+<body>
+{% block body %}
+{% endblock %}
+{% block javascripts %}
+    {% javascripts
+    '@GameBundle/Resources/public/jquery/jquery-2.1.4.min.js'
+    '@GameBundle/Resources/public/bootstrap-3.3.5-dist/js/bootstrap.min.js'
+    '@GameBundle/Resources/public/js/prototypes/gui/page.mgr.protorype.js'
+    '@GameBundle/Resources/public/js/prototypes/gui/alert.mgr.prototype.js'
+    '@GameBundle/Resources/public/js/prototypes/gui/modal.mgr.prototype.js'
+    '@GameBundle/Resources/public/js/prototypes/gui/ui.prototype.js'
+    '@GameBundle/Resources/public/js/_page.controller.js'
+    '@GameBundle/Resources/public/js/_alert.controller.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+</body>
+</html>
