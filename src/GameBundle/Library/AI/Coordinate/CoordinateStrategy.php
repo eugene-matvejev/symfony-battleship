@@ -180,88 +180,57 @@ class CoordinateStrategy
      */
     private function isShipDead(Cell $cell)
     {
-        $xCoordinates = [
-            ['x' => $cell->getX() - 1, 'y' => $cell->getY()],
-            ['x' => $cell->getX() + 1, 'y' => $cell->getY()]
-        ];
-        if(true !== $this->verifyShipByAxis($cell, $xCoordinates, 'x')) {
-            return true;
-        }
-        $yCoordinates = [
-            ['x' => $cell->getX(), 'y' => $cell->getY() - 1],
-            ['x' => $cell->getX(), 'y' => $cell->getY() + 1]
-        ];
+        $x = $cell->getX();
+        $y = $cell->getY();
+        $cell1 = $cell2 = true;
 
-        return $this->verifyShipByAxis($cell, $yCoordinates, 'y');
-    }
-
-    /**
-     * @param Cell    $cell
-     * @param int[][] $coordinates
-     * @param string  $axis
-     *
-     * @return bool
-     */
-    private function verifyShipByAxis(Cell $cell, array $coordinates, string $axis) : bool
-    {
-//        $cells = [];
-        $leftCell = $rightCell = true;
-        $this->logger->addCritical(__FUNCTION__ .'::::'. print_r($coordinates, true));
-
-        //[0] => Array         (             [x] => -1            [y] => 1         )
-        //[1] => Array         (             [x] => 1             [y] => 1         )
+        $x1 = $x - 1;
+        $x2 = $x + 1;
         $matches = 1;
 
         for($i = 0; $i < $this->maxShipSize; $i++) {
-            if(true === $leftCell && true === $leftCell = $this->verifyWay($cell->getBattlefield(), $coordinates[0]['x'], $coordinates[0]['y'])) {
+            if(true === $cell1 && true === $cell1 = $this->keepSearch($cell->getBattlefield(), $x1, $cell->getY())) {
                 $matches++;
             }
-            if(true === $rightCell && true === $rightCell = $this->verifyWay($cell->getBattlefield(), $coordinates[1]['x'], $coordinates[1]['y'])) {
+            if(true === $cell2 && true === $cell2 = $this->keepSearch($cell->getBattlefield(), $x2, $cell->getY())) {
                 $matches++;
             }
-//
-//            if($matches >= $this->maxShipSize) {
-//                $this->logger->addCritical(__FUNCTION__ .': '. $axis .'0true');
-//                return true;
-//            }
 
-            $coordinates[0][$axis]--;
-            $coordinates[1][$axis]++;
+            if($matches >= $this->maxShipSize) {
+                $this->logger->addCritical(__FUNCTION__ .': 0true');
+                return true;
+            }
+
+            $x1--; $x2++;
         }
 
-        if(true === $leftCell && true === $rightCell || $matches >= $this->maxShipSize) {
-            $this->logger->addCritical(__FUNCTION__ .': '. $axis .'1true');
-//            /**
-//             * @var Cell[] $cells
-//             */
-//            foreach($cells as $_cell) {
-//                $coordinates = [
-//                    [
-//                        'x' => $_cell->getX(),
-//                        'y' => $_cell->getY()
-//                    ],
-//                    [
-//                        'x' => $_cell->getX(),
-//                        'y' => $_cell->getY()
-//                    ]
-//                ];
-//
-//                $coordinates[0][$axis]--;
-//                $coordinates[1][$axis]++;
-//
-//                $cell = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $coordinates[0]['x'], $coordinates[0]['y']);
-//                if(null !== $cell) {
-//                    $this->cellModel->markAsSkipped($_cell1);
-//                }
-//                $cell = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $coordinates[1]['x'], $coordinates[1]['y']);
-//                if(null !== $cell) {
-//                    $this->cellModel->markAsSkipped($_cell2);
-//                }
-//            }
+        if(true === $cell1 && true === $cell2) {
+            $this->logger->addCritical(__FUNCTION__ .': 1true');
             return true;
         }
+        $cell1 = $cell2 = true;
 
-        return false;
+        $y1 = $y - 1;
+        $y2 = $y + 1;
+
+        for($i = 0; $i < $this->maxShipSize; $i++) {
+            if(true === $cell1 && true === $cell1 = $this->keepSearch($cell->getBattlefield(), $cell->getX(), $y1)) {
+                $matches++;
+            }
+            if(true === $cell2 && true === $cell2 = $this->keepSearch($cell->getBattlefield(), $cell->getX(), $y2)) {
+                $matches++;
+            }
+
+            if($matches >= $this->maxShipSize) {
+                $this->logger->addCritical(__FUNCTION__ .': 2true');
+                return true;
+            }
+
+            $y1--; $y2++;
+        }
+
+        $this->logger->addCritical(__FUNCTION__ .': 3'. (false === $cell1 && false === $cell2 ? 'true' : 'false'));
+        return true === $cell1 && true === $cell2;
     }
 
     /**
