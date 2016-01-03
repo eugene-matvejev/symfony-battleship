@@ -4,6 +4,7 @@ namespace GameBundle\Library\AI\Coordinate;
 
 use GameBundle\Entity\Battlefield;
 use GameBundle\Entity\Cell;
+use GameBundle\Library\Exception\BattlefieldException;
 use GameBundle\Model\BattlefieldModel;
 use GameBundle\Model\CellModel;
 use Symfony\Bridge\Monolog\Logger;
@@ -42,46 +43,39 @@ class CoordinateStrategy
     }
 
     /**
-     * @param Battlefield $battlefield
+     * @param Battlefield $bf
      *
      * @return Cell[]
+     * @throws BattlefieldException
      */
-    public function chooseStrategy(Battlefield $battlefield) : array
+    public function chooseStrategy(Battlefield $bf) : array
     {
-        $this->logger->addCritical(__FUNCTION__ .': count: '. count($battlefield->getCells()));
-        foreach($battlefield->getCells() as $cell) {
-            if($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
+        foreach($bf->getCells() as $cell) {
+            if($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED || $this->isShipDead($cell)) {
                 continue;
             }
-            if($this->isShipDead($cell)) {
-                continue;
-            }
-
-            $this->logger->addCritical(__FUNCTION__ .': cell: '. $cell->getId());
 
             $this->logger->addCritical('X STRATEGY');
             if($cells = $this->xStrategy($cell)) {
                 $this->logger->addCritical('>>> X');
-                if(!empty($cells))
-                    return $cells;
             }
 
             $this->logger->addCritical('Y STRATEGY');
-            if($cells = $this->yStrategy($cell)) {
+            if(empty($cells) && $cells = $this->yStrategy($cell)) {
                 $this->logger->addCritical('>>> Y');
-                if(!empty($cells))
-                    return $cells;
             }
 
             $this->logger->addCritical('Z STRATEGY');
-            if($cells = $this->zStrategy($cell)) {
+            if(empty($cells) && $cells = $this->zStrategy($cell)) {
                 $this->logger->addCritical('>>> Z');
-                if(!empty($cells))
-                    return $cells;
+            }
+
+            if(!empty($cells)) {
+                return $cells;
             }
         }
 
-        return [];
+        throw new BattlefieldException(__FUNCTION__ .' Battlefield: '. $bf->getId() .' NO CELLS OR ITERATE FINISHED GAME');
     }
 
     /**
@@ -178,21 +172,18 @@ class CoordinateStrategy
      *
      * @return bool
      */
-    private function isShipDead(Cell $cell)
+    private function isShipDead(Cell $cell) : bool
     {
         $xCoordinates = [
             ['x' => $cell->getX() - 1, 'y' => $cell->getY()],
             ['x' => $cell->getX() + 1, 'y' => $cell->getY()]
         ];
-        if(true !== $this->verifyShipByAxis($cell, $xCoordinates, 'x')) {
-            return true;
-        }
         $yCoordinates = [
             ['x' => $cell->getX(), 'y' => $cell->getY() - 1],
             ['x' => $cell->getX(), 'y' => $cell->getY() + 1]
         ];
 
-        return $this->verifyShipByAxis($cell, $yCoordinates, 'y');
+        return $this->verifyShipByAxis($cell, $xCoordinates, 'x') || $this->verifyShipByAxis($cell, $yCoordinates, 'y');
     }
 
     /**
@@ -204,12 +195,9 @@ class CoordinateStrategy
      */
     private function verifyShipByAxis(Cell $cell, array $coordinates, string $axis) : bool
     {
-//        $cells = [];
+        $cells = [];
         $leftCell = $rightCell = true;
-        $this->logger->addCritical(__FUNCTION__ .'::::'. print_r($coordinates, true));
 
-        //[0] => Array         (             [x] => -1            [y] => 1         )
-        //[1] => Array         (             [x] => 1             [y] => 1         )
         $matches = 1;
 
         for($i = 0; $i < $this->maxShipSize; $i++) {

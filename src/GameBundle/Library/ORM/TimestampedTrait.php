@@ -1,8 +1,8 @@
 <?php
 
-namespace GameBundle\Library\Traits;
+namespace GameBundle\Library\ORM;
 
-trait Timestamped
+trait TimestampedTrait
 {
     /**
      * @ORM\Column(name="timestamp", type="datetime", nullable=false)
