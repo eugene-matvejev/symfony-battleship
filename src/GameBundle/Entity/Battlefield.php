@@ -2,17 +2,23 @@
 
 namespace GameBundle\Entity;
 
-use GameBundle\Library\Traits\Identifiable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use GameBundle\Library\Interfaces\IdentifiableInterface;
+use GameBundle\Library\Traits\Identifiable;
 
 /**
  * Battlefield
  *
- * @ORM\Table(name="battlefields")
+ * @ORM\Table(
+ *     name="battlefields",
+ *     indexes={
+ *          @ORM\Index(name="INDEX_BATTLEFIELD_GAME", columns={"game"}),
+ *          @ORM\Index(name="INDEX_BATTLEFIELD_PLAYER", columns={"player"})
+ *     })
  * @ORM\Entity(repositoryClass="GameBundle\Repository\BattlefieldRepository")
  */
-class Battlefield
+class Battlefield implements IdentifiableInterface
 {
     use Identifiable;
     /**
@@ -78,7 +84,7 @@ class Battlefield
     /**
      * @return Game
      */
-    public function getGame()
+    public function getGame() : Game
     {
         return $this->game;
     }
@@ -98,7 +104,7 @@ class Battlefield
     /**
      * @return Player
      */
-    public function getPlayer()
+    public function getPlayer() : Player
     {
         return $this->player;
     }

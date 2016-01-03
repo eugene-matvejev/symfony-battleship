@@ -1,9 +1,11 @@
 <?php
+
 namespace GameBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+use GameBundle\Library\Interfaces\IdentifiableInterface;
 use GameBundle\Library\Traits\Identifiable;
 use GameBundle\Library\Traits\Nameable;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Player
@@ -11,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="cellState")
  * @ORM\Entity(repositoryClass="GameBundle\Repository\CellStateRepository")
  */
-class CellState
+class CellState implements IdentifiableInterface
 {
     use Identifiable, Nameable;
 }

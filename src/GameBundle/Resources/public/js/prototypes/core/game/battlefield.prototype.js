@@ -63,26 +63,20 @@ Battlefield.prototype = {
     mockData: function() {
         var _config = Cell.resources.config;
 
-        //this.getCell(0, 2).setState(_config.state.shipLive);
-        this.getCell(0, 2).setState(_config.state.shipDied);
+        this.getCell(0, 1).setState(_config.state.shipDied);
+        this.getCell(0, 2).setState(_config.state.shipLive);
         this.getCell(0, 3).setState(_config.state.shipLive);
         this.getCell(0, 4).setState(_config.state.shipLive);
-        this.getCell(0, 5).setState(_config.state.shipLive);
 
         this.getCell(2, 2).setState(_config.state.shipLive);
         this.getCell(2, 3).setState(_config.state.shipLive);
         this.getCell(2, 4).setState(_config.state.shipLive);
         this.getCell(2, 5).setState(_config.state.shipLive);
 
+        this.getCell(5, 0).setState(_config.state.shipLive);
+        this.getCell(5, 1).setState(_config.state.shipLive);
         this.getCell(5, 2).setState(_config.state.shipLive);
         this.getCell(5, 3).setState(_config.state.shipLive);
-        this.getCell(5, 4).setState(_config.state.shipLive);
-        this.getCell(5, 5).setState(_config.state.shipLive);
-
-
-        //this.getCell(0, 3).setState(_config.state.shipDied);
-        //this.getCell(0, 4).setState(_config.state.shipDied);
-        //this.getCell(0, 5).setState(_config.state.shipDied);
     }
 };
 

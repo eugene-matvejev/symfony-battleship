@@ -22,6 +22,7 @@ class CellModel
     const STATE_WATER_DIED = 2;
     const STATE_SHIP_LIVE  = 3;
     const STATE_SHIP_DIED  = 4;
+    const STATE_WATER_SKIP = 5;
 
     /**
      * @param ObjectManager $om

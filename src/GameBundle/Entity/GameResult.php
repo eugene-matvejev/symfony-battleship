@@ -2,20 +2,28 @@
 
 namespace GameBundle\Entity;
 
+use GameBundle\Library\Interfaces\IdentifiableInterface;
+use GameBundle\Library\Interfaces\TimestampedInterface;
 use GameBundle\Library\Traits\Identifiable;
-use GameBundle\Library\Traits\Timestampable;
+use GameBundle\Library\Traits\Timestamped;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * GameResult
  *
- * @ORM\Table(name="gamesResults")
+ * @ORM\Table(
+ *     name="gamesResults",
+ *     indexes={
+ *          @ORM\Index(name="INDEX_GAME_RESULT_GAME", columns={"game"}),
+ *          @ORM\Index(name="INDEX_GAME_RESULT_WINNER", columns={"winner"})
+ *     }
+ * )
  * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="GameBundle\Repository\GameResultRepository")
  */
-class GameResult
+class GameResult implements IdentifiableInterface, TimestampedInterface
 {
-    use Identifiable, Timestampable;
+    use Identifiable, Timestamped;
     /**
      * @ORM\OneToOne(targetEntity="GameBundle\Entity\Game", mappedBy="result")
      * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)

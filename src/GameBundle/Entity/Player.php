@@ -2,6 +2,7 @@
 
 namespace GameBundle\Entity;
 
+use GameBundle\Library\Interfaces\IdentifiableInterface;
 use GameBundle\Library\Traits\Identifiable;
 use GameBundle\Library\Traits\Nameable;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,10 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="players")
  * @ORM\Entity()
  */
-class Player
+class Player implements IdentifiableInterface
 {
     use Identifiable, Nameable;
-
     /**
      * @ORM\ManyToOne(targetEntity="GameBundle\Entity\PlayerType")
      * @ORM\JoinColumn(name="type", referencedColumnName="id", nullable=false)

@@ -1,0 +1,4 @@
+# This file is auto-generated during the composer install
+parameters:
+  battleshipt.config.ship.size.min: 1
+  battleshipt.config.ship.size.max: 4

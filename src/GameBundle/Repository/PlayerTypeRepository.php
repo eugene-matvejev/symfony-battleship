@@ -2,9 +2,10 @@
 
 namespace GameBundle\Repository;
 
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr;
 use GameBundle\Entity\PlayerType;
 use GameBundle\Model\PlayerModel;
-use Doctrine\ORM\EntityRepository;
 
 /**
  * PlayerTypeRepository
@@ -14,14 +15,12 @@ class PlayerTypeRepository extends EntityRepository
     /**
      * @return PlayerType[]
      */
-    public function getTypes()
+    public function getTypes() : array
     {
-        $arr = [];
-        foreach($this->findBy(['id' => PlayerModel::getAllTypes()]) as $type) {
-            /** @var PlayerType $type */
-            $arr[$type->getId()] = $type;
-        }
-
-        return $arr;
+        return $this
+            ->createQueryBuilder('q', 'q.id')
+            ->where((new Expr())->in('q.id', PlayerModel::getAllTypes()))
+            ->getQuery()
+            ->getResult();
     }
 }

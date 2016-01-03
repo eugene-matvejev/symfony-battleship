@@ -16,7 +16,7 @@ class GameResultRepository extends EntityRepository
      *
      * @return GameResult[]
      */
-    public function getResultsInDescendingDate(\int $page, \int $perPage) : array
+    public function getResultsInDescendingDate(int $page, int $perPage) : array
     {
         return $this->findBy([], ['timestamp' => 'DESC'], $perPage, ($page < 1 ? 0 : $page - 1) * $perPage);
     }
@@ -24,7 +24,7 @@ class GameResultRepository extends EntityRepository
     /**
      * @return int
      */
-    public function countTotalResults() : \int
+    public function countTotalResults() : int
     {
         return $this
             ->createQueryBuilder('q')
