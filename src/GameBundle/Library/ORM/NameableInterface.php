@@ -1,7 +1,10 @@
 <?php
 
-namespace GameBundle\Library\Interfaces;
+namespace GameBundle\Library\ORM;
 
+/**
+ * @since 3.1
+ */
 interface NameableInterface
 {
     public function getName();

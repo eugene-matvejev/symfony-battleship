@@ -1,8 +1,10 @@
 <?php
 
-namespace GameBundle\Library\Traits;
+namespace GameBundle\Library\ORM;
 
-trait Identifiable
+use Doctrine\ORM\Mapping as ORM;
+
+trait IdentifiableTrait
 {
     /**
      * @ORM\Id

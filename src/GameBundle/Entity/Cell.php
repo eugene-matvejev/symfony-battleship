@@ -3,8 +3,8 @@
 namespace GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use GameBundle\Library\Interfaces\IdentifiableInterface;
-use GameBundle\Library\Traits\Identifiable;
+use GameBundle\Library\ORM\IdentifiableInterface;
+use GameBundle\Library\ORM\IdentifiableTrait;
 
 /**
  * Cell
@@ -22,7 +22,7 @@ use GameBundle\Library\Traits\Identifiable;
  */
 class Cell implements IdentifiableInterface
 {
-    use Identifiable;
+    use IdentifiableTrait;
     /**
      * @ORM\Column(name="x", type="integer", nullable=false)
      *

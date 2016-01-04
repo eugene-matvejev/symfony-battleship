@@ -57,10 +57,21 @@ class CellModel
             case self::STATE_SHIP_LIVE:
                 $cell->setState($this->getCellStates()[self::STATE_SHIP_DIED]);
                 break;
-//            case self::STATE_WATER_DIED:
-//            case self::STATE_SHIP_DIED:
-//            default:
-//                break;
+        }
+
+        return $cell;
+    }
+    /**
+     * @param Cell $cell
+     *
+     * @return Cell
+     */
+    public function markAsSkipped(Cell $cell) : Cell
+    {
+        switch($cell->getState()->getId()) {
+            case self::STATE_WATER_LIVE:
+                $cell->setState($this->getCellStates()[self::STATE_WATER_SKIP]);
+                break;
         }
 
         return $cell;
@@ -105,6 +116,6 @@ class CellModel
      */
     public static function getAllStates() : array
     {
-        return [self::STATE_WATER_LIVE, self::STATE_WATER_DIED, self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED];
+        return [self::STATE_WATER_LIVE, self::STATE_WATER_DIED, self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED, self::STATE_WATER_SKIP];
     }
 }

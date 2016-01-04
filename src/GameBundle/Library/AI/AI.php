@@ -5,8 +5,8 @@ namespace GameBundle\Library\AI;
 use GameBundle\Entity\Battlefield;
 use GameBundle\Entity\Cell;
 use GameBundle\Entity\Player;
-use GameBundle\Library\AI\Coordinate\CoordinateStrategy;
 use GameBundle\Library\Exception\AIException;
+use GameBundle\Library\Exception\BattlefieldException;
 use GameBundle\Model\BattlefieldModel;
 use GameBundle\Model\CellModel;
 use Symfony\Bridge\Monolog\Logger;
@@ -18,7 +18,7 @@ class AI
      */
     private $cellModel;
     /**
-     * @var CoordinateStrategy
+     * @var AIStrategy
      */
     private $strategyService;
     /**
@@ -27,11 +27,11 @@ class AI
     private $cpuTurnsPerPlayer;
 
     /**
-     * @param CellModel          $model
-     * @param CoordinateStrategy $service
-     * @param Logger             $logger
+     * @param CellModel  $model
+     * @param AIStrategy $service
+     * @param Logger     $logger
      */
-    public function __construct(CellModel $model, CoordinateStrategy $service, Logger $logger)
+    public function __construct(CellModel $model, AIStrategy $service, Logger $logger)
     {
         $this->cellModel = $model;
         $this->strategyService = $service;
@@ -91,6 +91,7 @@ class AI
         }
 
         return $cell;
+
     }
 
 
