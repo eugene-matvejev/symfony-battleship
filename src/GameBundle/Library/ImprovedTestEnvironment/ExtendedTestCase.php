@@ -27,80 +27,80 @@ class ExtendedTestCase extends WebTestCase
      */
     private static $client;
 
-    protected static $setUp;
-    protected $consoleApp;
-
-    /**
-     * Initialization
-     */
-    protected function setUp()
-    {
-        if (null === static::$setUp) {
-            static::$setUp = true;
-            $this->runConsole('doctrine:migrations:migrate', ['--no-interaction' => true]);
-            $this->runConsole('babylon:doctrine:fixtures:load');
-        }
-    }
-
-
-    /**
-     * Run $command on Symfony console
-     *
-     * @param string $command
-     * @param array  $options
-     *
-     * @throws \Exception
-     */
-    protected function runConsole($command, array $options = array())
-    {
-        $options['-e'] = 'test';
-        $options['-q'] = null;
-        $options = array_merge($options, ['command' => $command]);
-        try {
-            $this->getConsoleApp()->setCatchExceptions(false);
-            $this->getConsoleApp()->run(new ArrayInput($options));
-            $this->getConsoleApp()->setCatchExceptions(true);
-        } catch (\Exception $ex) {
-            print $ex->getMessage();
-            print $ex->getTraceAsString();
-            throw new \Exception();
-        }
-    }
-
-    /**
-     * Return application for run console command
-     *
-     * @return Application
-     */
-    protected function getConsoleApp()
-    {
-        if (null === $this->consoleApp) {
-            $this->consoleApp = new Application(self::getClient()->getKernel());
-            $this->consoleApp->setAutoExit(false);
-        }
-
-        return $this->consoleApp;
-    }
-
-    /**
-     * Gets the display returned by the last execution of the command.
-     *
-     * @param ContainerAwareCommand $command
-     *
-     * @return string The display of command execution result
-     */
-    protected function executeCommand(ContainerAwareCommand $command)
-    {
-        $console = $this->getConsoleApp();
-        $commandName = $command->getName();
-        if (!$console->has($commandName)) {
-            $this->getConsoleApp()->add($command);
-        }
-        $commandTester = new CommandTester($console->find($commandName));
-        $commandTester->execute(['command' => $commandName]);
-
-        return $commandTester->getDisplay();
-    }
+//    protected static $setUp;
+//    protected $consoleApp;
+//
+//    /**
+//     * Initialization
+//     */
+//    protected function setUp()
+//    {
+//        if (null === static::$setUp) {
+//            static::$setUp = true;
+//            $this->runConsole('doctrine:migrations:migrate', ['--no-interaction' => true]);
+//            $this->runConsole('babylon:doctrine:fixtures:load');
+//        }
+//    }
+//
+//
+//    /**
+//     * Run $command on Symfony console
+//     *
+//     * @param string $command
+//     * @param array  $options
+//     *
+//     * @throws \Exception
+//     */
+//    protected function runConsole($command, array $options = array())
+//    {
+//        $options['-e'] = 'test';
+//        $options['-q'] = null;
+//        $options = array_merge($options, ['command' => $command]);
+//        try {
+//            $this->getConsoleApp()->setCatchExceptions(false);
+//            $this->getConsoleApp()->run(new ArrayInput($options));
+//            $this->getConsoleApp()->setCatchExceptions(true);
+//        } catch (\Exception $ex) {
+//            print $ex->getMessage();
+//            print $ex->getTraceAsString();
+//            throw new \Exception();
+//        }
+//    }
+//
+//    /**
+//     * Return application for run console command
+//     *
+//     * @return Application
+//     */
+//    protected function getConsoleApp()
+//    {
+//        if (null === $this->consoleApp) {
+//            $this->consoleApp = new Application(self::getClient()->getKernel());
+//            $this->consoleApp->setAutoExit(false);
+//        }
+//
+//        return $this->consoleApp;
+//    }
+//
+//    /**
+//     * Gets the display returned by the last execution of the command.
+//     *
+//     * @param ContainerAwareCommand $command
+//     *
+//     * @return string The display of command execution result
+//     */
+//    protected function executeCommand(ContainerAwareCommand $command)
+//    {
+//        $console = $this->getConsoleApp();
+//        $commandName = $command->getName();
+//        if (!$console->has($commandName)) {
+//            $this->getConsoleApp()->add($command);
+//        }
+//        $commandTester = new CommandTester($console->find($commandName));
+//        $commandTester->execute(['command' => $commandName]);
+//
+//        return $commandTester->getDisplay();
+//    }
 
     /**
      * @return Client

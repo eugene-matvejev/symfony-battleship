@@ -10,7 +10,7 @@ use GameBundle\Entity\PlayerType;
 use GameBundle\Model\PlayerModel;
 
 /**
- * Class LoadLanguageData
+ * LoadLanguageData
  */
 class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
 {
