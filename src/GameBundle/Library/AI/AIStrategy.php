@@ -1,15 +1,14 @@
 <?php
 
-namespace GameBundle\Library\AI\Coordinate;
+namespace GameBundle\Library\AI;
 
 use GameBundle\Entity\Battlefield;
 use GameBundle\Entity\Cell;
-use GameBundle\Library\Exception\BattlefieldException;
 use GameBundle\Model\BattlefieldModel;
 use GameBundle\Model\CellModel;
 use Symfony\Bridge\Monolog\Logger;
 
-class CoordinateStrategy
+class AIStrategy
 {
     /**
      * @var int
@@ -43,31 +42,30 @@ class CoordinateStrategy
     }
 
     /**
-     * @param Battlefield $bf
+     * @param Battlefield $battlefield
      *
      * @return Cell[]
-     * @throws BattlefieldException
      */
-    public function chooseStrategy(Battlefield $bf) : array
+    public function chooseStrategy(Battlefield $battlefield) : array
     {
-        foreach($bf->getCells() as $cell) {
+        foreach($battlefield->getCells() as $cell) {
             if($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED || $this->isShipDead($cell)) {
                 continue;
             }
 
-            $this->logger->addCritical('X STRATEGY');
+            $this->logger->addDebug('X STRATEGY');
             if($cells = $this->xStrategy($cell)) {
-                $this->logger->addCritical('>>> X');
+                $this->logger->addDebug('>>> X');
             }
 
-            $this->logger->addCritical('Y STRATEGY');
+            $this->logger->addDebug('Y STRATEGY');
             if(empty($cells) && $cells = $this->yStrategy($cell)) {
-                $this->logger->addCritical('>>> Y');
+                $this->logger->addDebug('>>> Y');
             }
 
-            $this->logger->addCritical('Z STRATEGY');
+            $this->logger->addDebug('Z STRATEGY');
             if(empty($cells) && $cells = $this->zStrategy($cell)) {
-                $this->logger->addCritical('>>> Z');
+                $this->logger->addDebug('>>> Z');
             }
 
             if(!empty($cells)) {
@@ -75,7 +73,7 @@ class CoordinateStrategy
             }
         }
 
-        throw new BattlefieldException(__FUNCTION__ .' Battlefield: '. $bf->getId() .' NO CELLS OR ITERATE FINISHED GAME');
+        return [];
     }
 
     /**
@@ -83,7 +81,7 @@ class CoordinateStrategy
      *
      * @return Cell[]
      */
-    private function xStrategy(Cell $cell)
+    private function xStrategy(Cell $cell) : array
     {
         $coordinates = [
             ['x' => $cell->getX() - 1, 'y' => $cell->getY()],
@@ -98,7 +96,7 @@ class CoordinateStrategy
      *
      * @return Cell[]
      */
-    private function yStrategy(Cell $cell)
+    private function yStrategy(Cell $cell) : array
     {
         $coordinates = [
             ['x' => $cell->getX(), 'y' => $cell->getY() - 1],
@@ -125,8 +123,8 @@ class CoordinateStrategy
 
         foreach($coordinates as $coordinate) {
             if(null !== $_cell = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $coordinate['x'], $coordinate['y'])) {
-                $this->logger->addCritical(__FUNCTION__ .': cell: '. $cell->getId() .' state: '. $cell->getState()->getId());
-                $this->logger->addCritical(__FUNCTION__ .': x'. $cell->getX() .' y:'. $cell->getY());
+                $this->logger->addDebug(__FUNCTION__ .': cell: '. $cell->getId() .' state: '. $cell->getState()->getId());
+                $this->logger->addDebug(__FUNCTION__ .': x'. $cell->getX() .' y:'. $cell->getY());
                 if(in_array($_cell->getState()->getId(), CellModel::getLiveStates()))
                     $cells[] = $_cell;
             }
@@ -138,14 +136,14 @@ class CoordinateStrategy
     /**
      * @param Battlefield $battlefield
      * @param array       $coordinates
-     * @param string|null $axis
+     * @param string      $axis
      *
      * @return Cell[]
      */
     private function strategy(Battlefield $battlefield, array $coordinates, string $axis) : array
     {
         $cells = [];
-        $this->logger->addCritical(':::: '. __FUNCTION__ .' :::::::::::: '. print_r($coordinates, true));
+
         for($i = 0; $i < $this->maxShipSize; $i++) {
             foreach($coordinates as $i => $coordinate) {
                 if(null !== $cell = BattlefieldModel::getCellByCoordinates($battlefield, $coordinate['x'], $coordinate['y'])) {
@@ -202,16 +200,13 @@ class CoordinateStrategy
 
         for($i = 0; $i < $this->maxShipSize; $i++) {
             if(true === $leftCell && true === $leftCell = $this->verifyWay($cell->getBattlefield(), $coordinates[0]['x'], $coordinates[0]['y'])) {
+                $cells[] = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $coordinates[0]['x'], $coordinates[0]['y']);
                 $matches++;
             }
             if(true === $rightCell && true === $rightCell = $this->verifyWay($cell->getBattlefield(), $coordinates[1]['x'], $coordinates[1]['y'])) {
+                $cells[] = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $coordinates[1]['x'], $coordinates[1]['y']);
                 $matches++;
             }
-//
-//            if($matches >= $this->maxShipSize) {
-//                $this->logger->addCritical(__FUNCTION__ .': '. $axis .'0true');
-//                return true;
-//            }
 
             $coordinates[0][$axis]--;
             $coordinates[1][$axis]++;
@@ -219,33 +214,31 @@ class CoordinateStrategy
 
         if(true === $leftCell && true === $rightCell || $matches >= $this->maxShipSize) {
             $this->logger->addCritical(__FUNCTION__ .': '. $axis .'1true');
-//            /**
-//             * @var Cell[] $cells
-//             */
-//            foreach($cells as $_cell) {
-//                $coordinates = [
-//                    [
-//                        'x' => $_cell->getX(),
-//                        'y' => $_cell->getY()
-//                    ],
-//                    [
-//                        'x' => $_cell->getX(),
-//                        'y' => $_cell->getY()
-//                    ]
-//                ];
-//
-//                $coordinates[0][$axis]--;
-//                $coordinates[1][$axis]++;
-//
-//                $cell = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $coordinates[0]['x'], $coordinates[0]['y']);
-//                if(null !== $cell) {
-//                    $this->cellModel->markAsSkipped($_cell1);
-//                }
-//                $cell = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $coordinates[1]['x'], $coordinates[1]['y']);
-//                if(null !== $cell) {
-//                    $this->cellModel->markAsSkipped($_cell2);
-//                }
-//            }
+            /**  @var Cell $_cell */
+            foreach($cells as $_cell) {
+                $coordinates = [
+                    [
+                        'x' => $_cell->getX(),
+                        'y' => $_cell->getY()
+                    ],
+                    [
+                        'x' => $_cell->getX(),
+                        'y' => $_cell->getY()
+                    ]
+                ];
+
+                $coordinates[0][$axis]--;
+                $coordinates[1][$axis]++;
+
+                $_cell = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $coordinates[0]['x'], $coordinates[0]['y']);
+                if(null !== $cell) {
+                    $this->cellModel->markAsSkipped($_cell);
+                }
+                $cell = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $coordinates[1]['x'], $coordinates[1]['y']);
+                if(null !== $cell) {
+                    $this->cellModel->markAsSkipped($_cell);
+                }
+            }
             return true;
         }
 
@@ -253,15 +246,15 @@ class CoordinateStrategy
     }
 
     /**
-     * @param Battlefield $bf
+     * @param Battlefield $battlefield
      * @param int         $x
      * @param int         $y
      *
      * @return bool
      */
-    private function verifyWay(Battlefield $bf, int $x, int $y) : bool
+    private function verifyWay(Battlefield $battlefield, int $x, int $y) : bool
     {
-        $cell = BattlefieldModel::getCellByCoordinates($bf, $x, $y);
+        $cell = BattlefieldModel::getCellByCoordinates($battlefield, $x, $y);
 
         return null !== $cell && $cell->getState()->getId() === CellModel::STATE_SHIP_DIED;
     }

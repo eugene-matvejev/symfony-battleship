@@ -4,8 +4,8 @@ namespace GameBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use GameBundle\Library\Interfaces\IdentifiableInterface;
-use GameBundle\Library\Interfaces\TimestampedInterface;
+use GameBundle\Library\ORM\IdentifiableInterface;
+use GameBundle\Library\ORM\TimestampedInterface;
 use GameBundle\Library\ORM\IdentifiableTrait;
 use GameBundle\Library\ORM\TimestampedTrait;
 
@@ -23,7 +23,7 @@ class Game implements IdentifiableInterface, TimestampedInterface
      * @ORM\OneToMany(targetEntity="GameBundle\Entity\Battlefield", mappedBy="game", cascade={"persist"})
      * @ORM\JoinColumn(name="id", referencedColumnName="game", nullable=false)
      *
-     * @var ArrayCollection|Battlefield[]
+     * @var Battlefield[]
      */
     private $battlefields;
     /**
@@ -64,7 +64,7 @@ class Game implements IdentifiableInterface, TimestampedInterface
     }
 
     /**
-     * @return ArrayCollection|Battlefield[]
+     * @return Battlefield[]
      */
     public function getBattlefields()
     {
