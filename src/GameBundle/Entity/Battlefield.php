@@ -4,8 +4,10 @@ namespace GameBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use GameBundle\Library\Interfaces\IdentifiableInterface;
-use GameBundle\Library\Traits\Identifiable;
+use GameBundle\Library\ORM\IdentifiableInterface;
+use GameBundle\Library\ORM\PlayerInterface;
+use GameBundle\Library\ORM\IdentifiableTrait;
+use GameBundle\Library\ORM\PlayerTrait;
 
 /**
  * Battlefield
@@ -18,16 +20,9 @@ use GameBundle\Library\Traits\Identifiable;
  *     })
  * @ORM\Entity(repositoryClass="GameBundle\Repository\BattlefieldRepository")
  */
-class Battlefield implements IdentifiableInterface
+class Battlefield implements IdentifiableInterface, PlayerInterface
 {
-    use Identifiable;
-    /**
-     * @ORM\OneToMany(targetEntity="GameBundle\Entity\Cell", mappedBy="battlefield", cascade={"persist"})
-     * @ORM\JoinColumn(name="id", referencedColumnName="battlefield", nullable=false)
-     *
-     * @var ArrayCollection|Cell[]
-     */
-    private $cells;
+    use IdentifiableTrait, PlayerTrait;
     /**
      * @ORM\ManyToOne(targetEntity="GameBundle\Entity\Game")
      * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)
@@ -36,16 +31,36 @@ class Battlefield implements IdentifiableInterface
      */
     private $game;
     /**
-     * @ORM\ManyToOne(targetEntity="GameBundle\Entity\Player")
-     * @ORM\JoinColumn(name="player", referencedColumnName="id", nullable=false)
+     * @ORM\OneToMany(targetEntity="GameBundle\Entity\Cell", mappedBy="battlefield", cascade={"persist"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="battlefield", nullable=false)
      *
-     * @var Player
+     * @var Cell[]
      */
-    private $player;
+    private $cells;
 
     public function __construct()
     {
         $this->cells = new ArrayCollection();
+    }
+
+    /**
+     * @return Game
+     */
+    public function getGame() : Game
+    {
+        return $this->game;
+    }
+
+    /**
+     * @param Game $game
+     *
+     * @return $this
+     */
+    public function setGame(Game $game)
+    {
+        $this->game = $game;
+
+        return $this;
     }
 
     /**
@@ -79,45 +94,5 @@ class Battlefield implements IdentifiableInterface
     public function getCells()
     {
         return $this->cells;
-    }
-
-    /**
-     * @return Game
-     */
-    public function getGame() : Game
-    {
-        return $this->game;
-    }
-
-    /**
-     * @param Game $game
-     *
-     * @return $this
-     */
-    public function setGame(Game $game)
-    {
-        $this->game = $game;
-
-        return $this;
-    }
-
-    /**
-     * @return Player
-     */
-    public function getPlayer() : Player
-    {
-        return $this->player;
-    }
-
-    /**
-     * @param Player $player
-     *
-     * @return $this
-     */
-    public function setPlayer(Player $player)
-    {
-        $this->player = $player;
-
-        return $this;
     }
 }

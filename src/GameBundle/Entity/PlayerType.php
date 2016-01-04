@@ -3,9 +3,10 @@
 namespace GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use GameBundle\Library\Interfaces\IdentifiableInterface;
-use GameBundle\Library\Traits\Identifiable;
-use GameBundle\Library\Traits\Nameable;
+use GameBundle\Library\ORM\IdentifiableInterface;
+use GameBundle\Library\ORM\IdentifiableTrait;
+use GameBundle\Library\ORM\NameableInterface;
+use GameBundle\Library\ORM\NameableTrait;
 
 /**
  * PlayerType
@@ -13,7 +14,7 @@ use GameBundle\Library\Traits\Nameable;
  * @ORM\Table(name="playerType")
  * @ORM\Entity(repositoryClass="GameBundle\Repository\PlayerTypeRepository")
  */
-class PlayerType implements IdentifiableInterface
+class PlayerType implements IdentifiableInterface, NameableInterface
 {
-    use Identifiable, Nameable;
+    use IdentifiableTrait, NameableTrait;
 }

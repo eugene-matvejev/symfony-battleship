@@ -1,8 +1,10 @@
 <?php
 
-namespace GameBundle\Library\Traits;
+namespace GameBundle\Library\ORM;
 
-trait Nameable
+use Doctrine\ORM\Mapping as ORM;
+
+trait NameableTrait
 {
     /**
      * @ORM\Column(name="name", type="string", nullable=false, length=200)
