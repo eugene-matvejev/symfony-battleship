@@ -37,8 +37,8 @@ class StatisticsModel
                 'time1'  => $result->getGame()->getTimestamp()->format(self::TIME_FORMAT),
                 'time2'  => $result->getTimestamp()->format(self::TIME_FORMAT),
                 'winner' => [
-                    'name' => $result->getWinner()->getName(),
-                    'type' => $result->getWinner()->getType()->getId()
+                    'name' => $result->getPlayer()->getName(),
+                    'type' => $result->getPlayer()->getType()->getId()
                 ]
             ];
         }
