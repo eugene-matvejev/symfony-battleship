@@ -8,12 +8,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * DoctrineFixturesLoadCommand
+ * @since 3.1
  */
 class DoctrineFixturesLoadCommand extends ContainerAwareCommand
 {
     /**
-     * Config method
+     * Configure command
      */
     protected function configure()
     {
@@ -30,22 +30,22 @@ class DoctrineFixturesLoadCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $doctrine = $this->getContainer()->get('doctrine');
-        $om = $doctrine->getManager();
-
-        $om->beginTransaction();
+//        $doctrine = $this->getContainer()->get('doctrine');
+//        $om = $doctrine->getManager();
+//
+//        $om->beginTransaction();
 //        $conn = $doctrine->getConnection();
 //        $conn->prepare('SET FOREIGN_KEY_CHECKS=0')->execute();
-
-        $options = [
-            'command' => 'doctrine:fixtures:load',
-            '--no-interaction' => true,
-            '--purge-with-truncate' => true,
-            '--env' => 'test'
-        ];
-
-        $this->getApplication()->run(new ArrayInput($options));
+//
+//        $options = [
+//            'command' => 'doctrine:fixtures:load',
+//            '--no-interaction' => true,
+//            '--purge-with-truncate' => true,
+//            '--env' => 'test'
+//        ];
+//
+//        $this->getApplication()->run(new ArrayInput($options));
 //        $conn->prepare('SET FOREIGN_KEY_CHECKS=1')->execute();
-        $om->commit();
+//        $om->commit();
     }
 }
