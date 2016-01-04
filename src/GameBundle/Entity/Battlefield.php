@@ -4,10 +4,8 @@ namespace GameBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use GameBundle\Library\Interfaces\GameInterface;
-use GameBundle\Library\Interfaces\IdentifiableInterface;
-use GameBundle\Library\Interfaces\PlayerInterface;
-use GameBundle\Library\ORM\GameTrait;
+use GameBundle\Library\ORM\IdentifiableInterface;
+use GameBundle\Library\ORM\PlayerInterface;
 use GameBundle\Library\ORM\IdentifiableTrait;
 use GameBundle\Library\ORM\PlayerTrait;
 
@@ -22,20 +20,47 @@ use GameBundle\Library\ORM\PlayerTrait;
  *     })
  * @ORM\Entity(repositoryClass="GameBundle\Repository\BattlefieldRepository")
  */
-class Battlefield implements IdentifiableInterface, PlayerInterface, GameInterface
+class Battlefield implements IdentifiableInterface, PlayerInterface
 {
-    use IdentifiableTrait, PlayerTrait, GameTrait;
+    use IdentifiableTrait, PlayerTrait;
+    /**
+     * @ORM\ManyToOne(targetEntity="GameBundle\Entity\Game")
+     * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)
+     *
+     * @var Game
+     */
+    private $game;
     /**
      * @ORM\OneToMany(targetEntity="GameBundle\Entity\Cell", mappedBy="battlefield", cascade={"persist"})
      * @ORM\JoinColumn(name="id", referencedColumnName="battlefield", nullable=false)
      *
-     * @var ArrayCollection|Cell[]
+     * @var Cell[]
      */
     private $cells;
 
     public function __construct()
     {
         $this->cells = new ArrayCollection();
+    }
+
+    /**
+     * @return Game
+     */
+    public function getGame() : Game
+    {
+        return $this->game;
+    }
+
+    /**
+     * @param Game $game
+     *
+     * @return $this
+     */
+    public function setGame(Game $game)
+    {
+        $this->game = $game;
+
+        return $this;
     }
 
     /**

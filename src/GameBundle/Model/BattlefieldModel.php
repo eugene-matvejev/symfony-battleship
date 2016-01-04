@@ -10,7 +10,7 @@ class BattlefieldModel
     /**
      * @var Cell[][][]
      */
-    static $indexed;
+    private static $cells;
 
     /**
      * @param Battlefield $battlefield
@@ -21,34 +21,17 @@ class BattlefieldModel
      */
     public static function getCellByCoordinates(Battlefield $battlefield, int $x, int $y)
     {
-        if(!isset(self::$indexed[$battlefield->getId()])) {
-            self::$indexed[$battlefield->getId()] = [];
+        if(!isset(self::$cells[$battlefield->getId()])) {
+            self::$cells[$battlefield->getId()] = [];
             foreach($battlefield->getCells() as $cell) {
-                if(!isset(self::$indexed[$battlefield->getId()][$cell->getX()])) {
-                    self::$indexed[$battlefield->getId()][$cell->getX()] = [];
+                if(!isset(self::$cells[$battlefield->getId()][$cell->getX()])) {
+                    self::$cells[$battlefield->getId()][$cell->getX()] = [];
                 }
-                self::$indexed[$battlefield->getId()][$cell->getX()][$cell->getY()] = $cell;
+                self::$cells[$battlefield->getId()][$cell->getX()][$cell->getY()] = $cell;
             }
         }
 
-        return isset(self::$indexed[$battlefield->getId()][$x][$y]) ? self::$indexed[$battlefield->getId()][$x][$y] : null;
-    }
-
-    /**
-     * @param Battlefield $battlefield
-     *
-     * @return int
-     */
-    public static function getSize(Battlefield $battlefield) : int
-    {
-        $int = 0;
-        foreach($battlefield->getCells() as $cell) {
-            if($cell->getX() === 0) {
-                $int++;
-            }
-        }
-
-        return $int;
+        return isset(self::$cells[$battlefield->getId()][$x][$y]) ? self::$cells[$battlefield->getId()][$x][$y] : null;
     }
 
     /**
@@ -58,12 +41,13 @@ class BattlefieldModel
      */
     public static function getLiveCells(Battlefield $battlefield) : array
     {
-        $arr = [];
+        $cells = [];
         foreach($battlefield->getCells() as $cell) {
             if(in_array($cell->getState()->getId(), CellModel::getLiveStates())) {
-                $arr[] = $cell;
+                $cells[] = $cell;
             }
         }
-        return $arr;
+
+        return $cells;
     }
 }

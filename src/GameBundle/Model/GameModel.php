@@ -85,9 +85,7 @@ class GameModel
 
         $playerTypes = $this->playerTypeRepository->getTypes();
         foreach($json->data as $_player) {
-            $player = $this->playerRepository->findOneBy(['name' => $_player->player->name]);
-
-            if(null === $player) {
+            if(null === $player = $this->playerRepository->findOneBy(['name' => $_player->player->name])) {
                 $player = (new Player())
                     ->setName($_player->player->name)
                     ->setType($playerTypes[PlayerModel::TYPE_HUMAN]);
@@ -208,7 +206,6 @@ class GameModel
             case PlayerModel::TYPE_HUMAN:
                 $_cell = $this->ai->turn($battlefield);
                 break;
-            default:
             case PlayerModel::TYPE_CPU:
                 foreach($battlefield->getCells() as $cell) {
                     if($cell->getX() !== $json->cell->x || $cell->getY() !== $json->cell->y)
@@ -219,7 +216,6 @@ class GameModel
                 }
                 break;
         }
-
 
         $this->om->persist($_cell);
         $this->om->flush();
@@ -245,7 +241,7 @@ class GameModel
         }
 
         $result = (new GameResult())
-            ->setWinner($battlefield->getPlayer());
+            ->setPlayer($battlefield->getPlayer());
         $game->setResult($result);
 
         $this->om->persist($game);

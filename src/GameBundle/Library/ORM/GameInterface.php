@@ -1,6 +1,6 @@
 <?php
 
-namespace GameBundle\Library\Interfaces;
+namespace GameBundle\Library\ORM;
 
 use GameBundle\Entity\Game;
 
