@@ -109,6 +109,14 @@ class CellModel
     }
 
     /**
+     * @return Cell[]
+     */
+    public static function getChangedCells() : array
+    {
+        return self::$changedCells;
+    }
+
+    /**
      * @return int[]
      */
     public static function getLiveStates() : array
@@ -130,13 +138,5 @@ class CellModel
     public static function getAllStates() : array
     {
         return [self::STATE_WATER_LIVE, self::STATE_WATER_DIED, self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED, self::STATE_WATER_SKIP];
-    }
-
-    /**
-     * @return Cell[]
-     */
-    public static function getChangedCells() : array
-    {
-        return self::$changedCells;
     }
 }
