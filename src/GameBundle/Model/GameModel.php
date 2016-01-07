@@ -10,6 +10,7 @@ use GameBundle\Entity\Game;
 use GameBundle\Entity\GameResult;
 use GameBundle\Entity\Player;
 use GameBundle\Library\AI\AI;
+use GameBundle\Library\Exception\GameException;
 use GameBundle\Repository\BattlefieldRepository;
 use GameBundle\Repository\CellStateRepository;
 use GameBundle\Repository\GameResultRepository;
@@ -171,16 +172,20 @@ class GameModel
         $json = json_decode($json);
         $std  = new \stdClass();
         $game = $this->gameRepository->find($json->game->id);
+        if(null === $game) {
+            throw new  GameException(__FUNCTION__ .' game: '. $json->game->id);
+        }
+
         if(null !== $game->getResult()) {
             $std->victory = new \stdClass();
-//            $std->victory->pid = $game->getResult()->getWinner()->getId();
 
             return $std;
         }
 
         foreach($game->getBattlefields() as $battlefield) {
             /** @var Battlefield $battlefield */
-            $std->{$battlefield->getPlayer()->getId()} = $this->playerTurn($battlefield, $json);
+//            $std->{$battlefield->getPlayer()->getId()} =
+            $this->playerTurn($battlefield, $json);
 
             if($this->detectVictory($battlefield)) {
                 $std->victory = new \stdClass();
@@ -190,16 +195,18 @@ class GameModel
             }
         }
 
+        foreach(CellModel::getChangedCells() as $cell) {
+            $std->{$cell->getId()} = CellModel::getJSON($cell);
+        }
+
         return $std;
     }
 
     /**
      * @param Battlefield $battlefield
      * @param \stdClass $json
-     *
-     * @return \stdClass
      */
-    public function playerTurn(Battlefield $battlefield, \stdClass $json) : \stdClass
+    public function playerTurn(Battlefield $battlefield, \stdClass $json)
     {
         $_cell = null;
         switch($battlefield->getPlayer()->getType()->getId()) {
@@ -208,11 +215,11 @@ class GameModel
                 break;
             case PlayerModel::TYPE_CPU:
                 foreach($battlefield->getCells() as $cell) {
-                    if($cell->getX() !== $json->cell->x || $cell->getY() !== $json->cell->y)
-                        continue;
-                    $_cell = $cell;
-                    $this->cellModel->switchState($cell);
-                    break;
+                    if($cell->getX() === $json->cell->x && $cell->getY() === $json->cell->y) {
+//                        $_cell = $cell;
+                        $_cell = $this->cellModel->switchState($cell);
+                        break;
+                    }
                 }
                 break;
         }
@@ -220,7 +227,7 @@ class GameModel
         $this->om->persist($_cell);
         $this->om->flush();
 
-        return CellModel::getJSON($_cell);
+//        return CellModel::getJSON($_cell);
     }
 
     /**
@@ -235,9 +242,8 @@ class GameModel
             return true;
         }
 
-        foreach($battlefield->getCells() as $cell) {
-            if($cell->getState()->getId() === CellModel::STATE_SHIP_LIVE)
-                return false;
+        if(true !== BattlefieldModel::isUnfinished($battlefield)) {
+            return false;
         }
 
         $result = (new GameResult())
