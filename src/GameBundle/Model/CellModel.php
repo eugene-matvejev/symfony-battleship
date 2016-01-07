@@ -48,30 +48,27 @@ class CellModel
     }
 
     /**
-     * @param Cell     $cell
-     * @param int|null $state
+     * @param Cell $cell
      *
      * @return Cell
      */
-    public function switchState(Cell $cell, int $state = null) : Cell
+    public function switchState(Cell $cell) : Cell
     {
         $stateBefore = $cell->getState()->getId();
         switch($cell->getState()->getId()) {
             case self::STATE_WATER_LIVE:
-                $cell->setState($this->getCellStates()[(null !== $state ? $state : self::STATE_WATER_DIED)]);
+                $cell->setState($this->getCellStates()[self::STATE_WATER_DIED]);
                 break;
             case self::STATE_SHIP_LIVE:
                 $cell->setState($this->getCellStates()[self::STATE_SHIP_DIED]);
                 break;
         }
-
         if($cell->getState()->getId() !== $stateBefore) {
             self::$changedCells[] = $cell;
         }
 
         return $cell;
     }
-
     /**
      * @param Cell $cell
      *
@@ -79,70 +76,18 @@ class CellModel
      */
     public function markAsSkipped(Cell $cell) : Cell
     {
-        return $this->switchState($cell, self::STATE_SHIP_DIED);
-    }
+        $stateBefore = $cell->getState()->getId();
+        switch($cell->getState()->getId()) {
+            case self::STATE_WATER_LIVE:
+                $cell->setState($this->getCellStates()[self::STATE_WATER_SKIP]);
+                break;
+        }
+        if($cell->getState()->getId() !== $stateBefore) {
+            self::$changedCells[] = $cell;
+        }
 
-//    /**
-//     * @param Cell $cell
-//     *
-//     * @return Cell
-//     */
-//    public function markAsSkipped(Cell $cell) : Cell
-//    {
-//        $stateBefore = $cell->getState()->getId();
-//        switch($cell->getState()->getId()) {
-//            case self::STATE_WATER_LIVE:
-//                $cell->setState($this->getCellStates()[self::STATE_WATER_SKIP]);
-//                break;
-//        }
-//        if($cell->getState()->getId() !== $stateBefore) {
-//            self::$changedCells[] = $cell;
-//        }
-//
-//        return $cell;
-////    }
-//    /**
-//     * @param Cell $cell
-//     * @param int $state
-//     *
-//     * @return Cell
-//     */
-//    public function switchState(Cell $cell, int $state) : Cell
-//    {
-//        $stateBefore = $cell->getState()->getId();
-//        switch($cell->getState()->getId()) {
-//            case self::STATE_WATER_LIVE:
-//                $cell->setState($this->getCellStates()[self::STATE_WATER_DIED]);
-//                break;
-//            case self::STATE_SHIP_LIVE:
-//                $cell->setState($this->getCellStates()[self::STATE_SHIP_DIED]);
-//                break;
-//        }
-//        if($cell->getState()->getId() !== $stateBefore) {
-//            self::$changedCells[] = $cell;
-//        }
-//
-//        return $cell;
-//    }
-//    /**
-//     * @param Cell $cell
-//     *
-//     * @return Cell
-//     */
-//    public function markAsSkipped(Cell $cell) : Cell
-//    {
-//        $stateBefore = $cell->getState()->getId();
-//        switch($cell->getState()->getId()) {
-//            case self::STATE_WATER_LIVE:
-//                $cell->setState($this->getCellStates()[self::STATE_WATER_SKIP]);
-//                break;
-//        }
-//        if($cell->getState()->getId() !== $stateBefore) {
-//            self::$changedCells[] = $cell;
-//        }
-//
-//        return $cell;
-//    }
+        return $cell;
+    }
 
     /**
      * @param Cell       $cell
@@ -156,7 +101,7 @@ class CellModel
         $std->x = $cell->getX();
         $std->y = $cell->getY();
         $std->s = $cell->getState()->getId();
-        if(false === $ignorePlayer) {
+        if(true !== $ignorePlayer) {
             $std->pid = $cell->getBattlefield()->getPlayer()->getId();
         }
 
