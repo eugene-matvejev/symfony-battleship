@@ -50,4 +50,20 @@ class BattlefieldModel
 
         return $cells;
     }
+
+    /**
+     * @param Battlefield $battlefield
+     *
+     * @return bool
+     */
+    public static function isUnfinished(Battlefield $battlefield) : bool
+    {
+        foreach($battlefield->getCells() as $cell) {
+            if($cell->getState()->getId() === CellModel::STATE_SHIP_LIVE) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
