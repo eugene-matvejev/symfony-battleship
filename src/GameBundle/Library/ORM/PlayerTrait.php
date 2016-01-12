@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use GameBundle\Entity\Player;
 
 /**
- * @since 3.1
+ * @since 2.0
  */
 trait PlayerTrait
 {

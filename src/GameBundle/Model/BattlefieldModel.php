@@ -54,11 +54,6 @@ class BattlefieldModel
         return $cells;
     }
 
-    /**
-     * @param Battlefield $battlefield
-     *
-     * @return bool
-     */
     public static function isUnfinished(Battlefield $battlefield) : bool
     {
         foreach($battlefield->getCells() as $cell) {

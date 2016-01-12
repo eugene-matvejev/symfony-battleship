@@ -3,7 +3,7 @@
 namespace GameBundle\Library\ORM;
 
 /**
- * @since 3.1
+ * @since 1.0
  */
 trait TimestampedTrait
 {
@@ -22,9 +22,6 @@ trait TimestampedTrait
         $this->timestamp = new \DateTime();
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getTimestamp() : \DateTime
     {
         return $this->timestamp;

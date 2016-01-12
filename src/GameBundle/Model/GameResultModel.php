@@ -11,11 +11,6 @@ class GameResultModel
 {
     const TIME_FORMAT = 'd - m - Y / H:i';
 
-    /**
-     * @param GameResult $result
-     *
-     * @return \stdClass
-     */
     public static function getJSON(GameResult $result) : \stdClass
     {
         $std = new \stdClass();

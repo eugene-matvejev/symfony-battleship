@@ -2,8 +2,8 @@
 
 namespace GameBundle\Repository;
 
-use GameBundle\Entity\GameResult;
 use Doctrine\ORM\EntityRepository;
+use GameBundle\Entity\GameResult;
 
 /**
  * @since 1.0
@@ -21,9 +21,6 @@ class GameResultRepository extends EntityRepository
         return $this->findBy([], ['timestamp' => 'DESC'], $perPage, ($page < 1 ? 0 : $page - 1) * $perPage);
     }
 
-    /**
-     * @return int
-     */
     public function countTotalResults() : int
     {
         return $this

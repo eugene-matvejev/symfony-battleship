@@ -30,12 +30,6 @@ class AIStrategy
      */
     private $logger;
 
-    /**
-     * @param int       $min
-     * @param int       $max
-     * @param CellModel $model
-     * @param Logger    $logger
-     */
     public function __construct(int $min, int $max, CellModel $model, Logger $logger)
     {
         $this->minShipSize = $min;
@@ -182,13 +176,6 @@ class AIStrategy
         return $this->verifyShipByAxis($cell, $xCoordinates, 'x') || $this->verifyShipByAxis($cell, $yCoordinates, 'y');
     }
 
-    /**
-     * @param Cell    $cell
-     * @param int[][] $coordinates
-     * @param string  $axis
-     *
-     * @return bool
-     */
     private function verifyShipByAxis(Cell $cell, array $coordinates, string $axis) : bool
     {
         $cells = [];
@@ -243,13 +230,6 @@ class AIStrategy
         return false;
     }
 
-    /**
-     * @param Battlefield $battlefield
-     * @param int         $x
-     * @param int         $y
-     *
-     * @return bool
-     */
     private function verifyWay(Battlefield $battlefield, int $x, int $y) : bool
     {
         $cell = BattlefieldModel::getCellByCoordinates($battlefield, $x, $y);

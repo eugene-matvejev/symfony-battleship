@@ -11,6 +11,8 @@ class ExtendedAssertTestCase extends ExtendedTestCase
 {
     /**
      * @param Response $response
+     *
+     * @return void
      */
     public function assertCorrectResponse(Response $response)
     {
