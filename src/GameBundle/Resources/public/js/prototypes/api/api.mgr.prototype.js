@@ -3,12 +3,17 @@ function APIMgr() {
 }
 
 APIMgr.prototype = {
-    request: function(requestMethod, requestURL, requestData, onSuccess, onError) {
+    request: function(requestMethod, requestURL, requestData, onSuccess, onError, onComplete) {
         console.log(requestMethod, requestURL, requestData);
         var self = this;
         if(onError === undefined) {
-            onError = function(json) {
+            onError = function() {
                 self.pageMgr.loadingMode(false);
+            };
+        }
+        if(onComplete === undefined) {
+            onComplete = function(json) {
+                console.log(' >>> ' + requestMethod, requestURL, json, json.responseText);
             };
         }
 
@@ -19,9 +24,7 @@ APIMgr.prototype = {
             url: requestURL,
             data: requestData,
             success: onSuccess,
-            complete: function(json) {
-                console.log(' >>> ' + requestMethod, requestURL, json, json.responseText);
-            },
+            complete: onComplete,
             error: onError
         });
     }

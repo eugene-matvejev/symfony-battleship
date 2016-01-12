@@ -121,9 +121,8 @@ class GameModel
     public function initCPUBattlefield(Battlefield $battlefield)
     {
         foreach($battlefield->getCells() as $cell) {
-            if($cell->getX() === 1 && $cell->getY() === 1) {
+            if(($cell->getX() === 1 && $cell->getY() === 1) || ($cell->getX() === 5 && $cell->getY() === 5)) {
                 $cell->setState($this->cellModel->getCellStates()[CellModel::STATE_SHIP_LIVE]);
-                break;
             }
         }
     }
@@ -148,7 +147,6 @@ class GameModel
         }
 
         foreach($game->getBattlefields() as $battlefield) {
-            /** @var Battlefield $battlefield */
             $this->playerTurn($battlefield, $json);
 
             if($this->detectVictory($battlefield)) {
@@ -158,13 +156,14 @@ class GameModel
             }
         }
 
-        $log = [];
         foreach(CellModel::getChangedCells() as $cell) {
             $log[] = CellModel::getJSON($cell);
-            $std->{$cell->getBattlefield()->getId()} = CellModel::getJSON($cell);
+            if(!isset($std->{$cell->getBattlefield()->getId()})) {
+                $std->{$cell->getBattlefield()->getId()} = [];
+            }
+            $std->{$cell->getBattlefield()->getId()}[] = CellModel::getJSON($cell);
+            $this->logger->addEmergency(__CLASS__ .':'. __FUNCTION__ . ' :: cell: '. print_r(CellModel::getJSON($cell), true));
         }
-        $this->logger->addDebug(__CLASS__ .':'. __FUNCTION__ . ' :: cells: '. print_r($log, true));
-
 
         return $std;
     }
