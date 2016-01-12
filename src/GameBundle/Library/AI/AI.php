@@ -28,11 +28,6 @@ class AI
      */
     private $cpuTurnsPerPlayer;
 
-    /**
-     * @param CellModel  $model
-     * @param AIStrategy $service
-     * @param Logger     $logger
-     */
     public function __construct(CellModel $model, AIStrategy $service, Logger $logger)
     {
         $this->cellModel = $model;

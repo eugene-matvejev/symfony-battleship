@@ -34,9 +34,9 @@ Statistics.prototype = {
     htmlRow: function(json) {
         return '<tr>' +
                     '<td>' + json.id + '</td>' +
-                    '<td>' + json.time1 + '</td>' +
-                    '<td>' + json.time2 + '</td>' +
-                    '<td>' + json.winner.name + '</td>' +
+                    '<td>' + json.time.s + '</td>' +
+                    '<td>' + json.time.f + '</td>' +
+                    '<td>' + json.player.name + '</td>' +
                 '</tr>';
     },
     htmlTable: function() {

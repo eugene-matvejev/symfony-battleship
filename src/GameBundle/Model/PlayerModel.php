@@ -23,9 +23,6 @@ class PlayerModel
      */
     private static $playerTypes;
 
-    /**
-     * @param ObjectManager $om
-     */
     function __construct(ObjectManager $om)
     {
         $this->playerTypeRepository = $om->getRepository('GameBundle:PlayerType');
@@ -51,11 +48,6 @@ class PlayerModel
         return [self::TYPE_CPU, self::TYPE_HUMAN];
     }
 
-    /**
-     * @param Player $player
-     *
-     * @return \stdClass
-     */
     public static function getJSON(Player $player) : \stdClass
     {
         $std = new \stdClass();

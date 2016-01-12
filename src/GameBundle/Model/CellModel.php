@@ -40,11 +40,6 @@ class CellModel
         return self::$cellStates;
     }
 
-    /**
-     * @param Cell $cell
-     *
-     * @return Cell
-     */
     public function switchState(Cell $cell) : Cell
     {
         $stateBefore = $cell->getState()->getId();

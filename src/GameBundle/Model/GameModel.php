@@ -90,12 +90,7 @@ class GameModel
         return self::getJSON($game);
     }
 
-    /**
-     * @param Game $game
-     *
-     * @return \stdClass
-     */
-    public static function getJSON(Game $game)
+    public static function getJSON(Game $game) : \stdClass
     {
         $std = new \stdClass();
 
@@ -120,6 +115,8 @@ class GameModel
 
     /**
      * @param Battlefield $battlefield
+     *
+     * @return void
      */
     public function initCPUBattlefield(Battlefield $battlefield)
     {
@@ -132,17 +129,17 @@ class GameModel
     }
 
     /**
-     * @param $json
+     * @param string $json
      *
      * @return \stdClass
      * @throws GameException
      */
-    public function nextTurn($json) : \stdClass
+    public function nextTurn(string $json) : \stdClass
     {
         $json = json_decode($json);
         $std  = new \stdClass();
-        $game = $this->gameRepository->find($json->game->id);
-        if(null === $game) {
+
+        if(null === $game = $this->gameRepository->find($json->game->id)) {
             throw new GameException(__FUNCTION__ .' game: '. $json->game->id .' doesn\'t exists.');
         }
 
@@ -175,6 +172,8 @@ class GameModel
     /**
      * @param Battlefield $battlefield
      * @param \stdClass $json
+     *
+     * @return void
      */
     public function playerTurn(Battlefield $battlefield, \stdClass $json)
     {
@@ -197,11 +196,6 @@ class GameModel
         $this->om->flush();
     }
 
-    /**
-     * @param Battlefield $battlefield
-     *
-     * @return bool
-     */
     public function detectVictory(Battlefield $battlefield) : bool
     {
         $game = $battlefield->getGame();
@@ -213,8 +207,16 @@ class GameModel
             return false;
         }
 
+        $winner = null;
+        foreach($game->getBattlefields() as $_battlefield) {
+            if($_battlefield->getId() !== $battlefield->getId()) {
+                $winner = $_battlefield->getPlayer();
+                break;
+            }
+        }
+
         $result = (new GameResult())
-            ->setPlayer($battlefield->getPlayer());
+            ->setPlayer($winner);
         $game->setResult($result);
 
         $this->om->persist($game);

@@ -106,9 +106,7 @@ class ExtendedTestCase extends WebTestCase
 //    }
 
     /**
-     * @since 2.0
-     *
-     * @return Client
+     * @since 1.0
      */
     public function getClient() : Client
     {
@@ -120,9 +118,7 @@ class ExtendedTestCase extends WebTestCase
     }
 
     /**
-     * @since 2.0
-     *
-     * @return ContainerInterface
+     * @since 1.0
      */
     public function getContainer() : ContainerInterface
     {
@@ -136,8 +132,6 @@ class ExtendedTestCase extends WebTestCase
 
     /**
      * @since 2.0
-     *
-     * @return Router
      */
     public function getRouter() : Router
     {
@@ -149,9 +143,7 @@ class ExtendedTestCase extends WebTestCase
     }
 
     /**
-     * @since 2.0
-     *
-     * @param Response $response
+     * @since 1.0
      */
     public function assertCorrectResponse(Response $response)
     {
@@ -159,6 +151,8 @@ class ExtendedTestCase extends WebTestCase
     }
 
     /**
+     * @since 1.0
+     *
      * @param Response $response
      *
      * @return array

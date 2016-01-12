@@ -16,24 +16,15 @@ class StatisticsModel
      */
     private $gameResultRepository;
 
-    /**
-     * @param ObjectManager $om
-     */
     function __construct(ObjectManager $om)
     {
         $this->gameResultRepository = $om->getRepository('GameBundle:GameResult');
     }
 
-    /**
-     * @param int $page
-     *
-     * @return array
-     */
     public function overallStatistics(int $page) : array
     {
-        $results = $this->gameResultRepository->getAllOrderByDate($page, self::RECORDS_PER_PAGE);
         $json = [];
-        foreach ($results as $result) {
+        foreach ($this->gameResultRepository->getAllOrderByDate($page, self::RECORDS_PER_PAGE) as $result) {
             $json[] = GameResultModel::getJSON($result);
         }
 
