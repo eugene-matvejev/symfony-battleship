@@ -5,6 +5,7 @@ namespace GameBundle\Model;
 use Doctrine\Common\Persistence\ObjectManager;
 use GameBundle\Entity\Cell;
 use GameBundle\Entity\CellState;
+use Symfony\Bridge\Monolog\Logger;
 
 /**
  * @since 2.0
@@ -24,12 +25,17 @@ class CellModel
      * @var CellState[]
      */
     private static $cellStates;
+    /**
+     * @var Logger
+     */
+    private $logger;
 
-    function __construct(ObjectManager $om)
+    function __construct(ObjectManager $om, Logger $logger)
     {
         if(null === self::$cellStates) {
             self::$cellStates = $om->getRepository('GameBundle:CellState')->getStates();
         }
+        $this->logger = $logger;
     }
 
     /**
@@ -62,6 +68,8 @@ class CellModel
     public function markAsSkipped(Cell $cell) : Cell
     {
         $stateBefore = $cell->getState()->getId();
+
+        $this->logger->addDebug(__FUNCTION__ .' cell:'. $cell->getId() .' state:'. $cell->getState()->getName());
         switch($cell->getState()->getId()) {
             case self::STATE_WATER_LIVE:
                 $cell->setState(self::$cellStates[self::STATE_WATER_SKIP]);

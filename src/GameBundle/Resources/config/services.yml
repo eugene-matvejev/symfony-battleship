@@ -4,6 +4,7 @@ services:
     class: GameBundle\Model\CellModel
     arguments:
       - @doctrine.orm.entity_manager
+      - @logger
   battleship.game.services.player.model:
     class: GameBundle\Model\PlayerModel
     arguments:

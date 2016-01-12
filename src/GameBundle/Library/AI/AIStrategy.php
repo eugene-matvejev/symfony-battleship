@@ -196,32 +196,35 @@ class AIStrategy
             $coordinates[0][$axis]--;
             $coordinates[1][$axis]++;
         }
-
+        $checked = [];
         if(true === $leftCell && true === $rightCell || $matches >= $this->maxShipSize) {
-            $this->logger->addCritical(__FUNCTION__ .': '. $axis .'1true');
-            /**  @var Cell $_cell */
+            $this->logger->addDebug(__FUNCTION__ .': MARK AS SKIPPED axis: '. $axis .' cells: '. count($cells));
+            /** @var Cell $_cell
+             *  x-1; y-1 | x ; y-1 | x+1; y-1
+             *  x-1;   y | x ; y   | x+1; y
+             *  x-1; y+1 | x ; y+1 | x+1; y+1
+             */
             foreach($cells as $_cell) {
-                $coordinates = [
-                    [
-                        'x' => $_cell->getX(),
-                        'y' => $_cell->getY()
-                    ],
-                    [
-                        'x' => $_cell->getX(),
-                        'y' => $_cell->getY()
-                    ]
-                ];
-
-                $coordinates[0][$axis]--;
-                $coordinates[1][$axis]++;
-
-                $_cell = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $coordinates[0]['x'], $coordinates[0]['y']);
-                if(null !== $cell) {
-                    $this->cellModel->markAsSkipped($_cell);
+                $coordinates = [];
+                for($x = -1, $y = 1, $i = 0; $i < 3; $x++, $y--, $i++) {
+                    if($_cell->getX() + $x !== -1 && $_cell->getY() + $y !== -1) {
+                        $coordinates[] = [
+                            'x' => $_cell->getX() + $x,
+                            'y' => $_cell->getY() + $y
+                        ];
+                    }
                 }
-                $cell = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $coordinates[1]['x'], $coordinates[1]['y']);
-                if(null !== $cell) {
-                    $this->cellModel->markAsSkipped($_cell);
+
+                $this->logger->addDebug(__FUNCTION__ .': MAR AS SKIPPED: '. print_r($coordinates, true));
+
+                foreach($coordinates as $coordinate) {
+                    if(!isset($checked['x'. $coordinate['x'] .'y'. $coordinate['y']])) {
+                        $cell = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $coordinate['x'], $coordinate['y']);
+                        if(null !== $cell) {
+                            $checked['x'. $_cell->getX() .'y'. $_cell->getY()] = $_cell;
+                            $this->cellModel->markAsSkipped($_cell);
+                        }
+                    }
                 }
             }
             return true;
