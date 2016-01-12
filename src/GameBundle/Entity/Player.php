@@ -25,20 +25,12 @@ class Player implements IdentifiableInterface, NameableInterface
      */
     private $type;
 
-    /**
-     * @return PlayerType
-     */
-    public function getType()
+    public function getType() : PlayerType
     {
         return $this->type;
     }
 
-    /**
-     * @param PlayerType $type
-     *
-     * @return $this
-     */
-    public function setType(PlayerType $type)
+    public function setType(PlayerType $type) : self
     {
         $this->type = $type;
 

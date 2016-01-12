@@ -10,7 +10,6 @@ use GameBundle\Repository\GameResultRepository;
  */
 class StatisticsModel
 {
-    const TIME_FORMAT       = 'd - m - Y / H:i';
     const RECORDS_PER_PAGE  = 10;
     /**
      * @var GameResultRepository
@@ -35,15 +34,7 @@ class StatisticsModel
         $results = $this->gameResultRepository->getAllOrderByDate($page, self::RECORDS_PER_PAGE);
         $json = [];
         foreach ($results as $result) {
-            $json[] = [
-                'id'     => $result->getGame()->getId(),
-                'time1'  => $result->getGame()->getTimestamp()->format(self::TIME_FORMAT),
-                'time2'  => $result->getTimestamp()->format(self::TIME_FORMAT),
-                'winner' => [
-                    'name' => $result->getPlayer()->getName(),
-                    'type' => $result->getPlayer()->getType()->getId()
-                ]
-            ];
+            $json[] = GameResultModel::getJSON($result);
         }
 
         return [

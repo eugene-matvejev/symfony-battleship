@@ -9,7 +9,7 @@ use GameBundle\Entity\CellState;
 use GameBundle\Model\CellModel;
 
 /**
- * LoadLanguageData
+ * @since 2.0
  */
 class LoadCellData extends AbstractFixture implements OrderedFixtureInterface
 {

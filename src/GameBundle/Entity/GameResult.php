@@ -34,20 +34,12 @@ class GameResult implements IdentifiableInterface, PlayerInterface, TimestampedI
      */
     private $game;
 
-    /**
-     * @return Game
-     */
     public function getGame() : Game
     {
         return $this->game;
     }
 
-    /**
-     * @param Game $game
-     *
-     * @return $this
-     */
-    public function setGame(Game $game)
+    public function setGame(Game $game) : self
     {
         $this->game = $game;
 
