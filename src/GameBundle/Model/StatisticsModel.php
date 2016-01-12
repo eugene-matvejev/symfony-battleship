@@ -5,6 +5,9 @@ namespace GameBundle\Model;
 use Doctrine\Common\Persistence\ObjectManager;
 use GameBundle\Repository\GameResultRepository;
 
+/**
+ * @since 2.0
+ */
 class StatisticsModel
 {
     const TIME_FORMAT       = 'd - m - Y / H:i';
@@ -29,7 +32,7 @@ class StatisticsModel
      */
     public function overallStatistics(int $page) : array
     {
-        $results = $this->gameResultRepository->getResultsInDescendingDate($page, self::RECORDS_PER_PAGE);
+        $results = $this->gameResultRepository->getAllOrderByDate($page, self::RECORDS_PER_PAGE);
         $json = [];
         foreach ($results as $result) {
             $json[] = [

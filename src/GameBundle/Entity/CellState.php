@@ -9,10 +9,10 @@ use GameBundle\Library\ORM\NameableInterface;
 use GameBundle\Library\ORM\NameableTrait;
 
 /**
- * Player
+ * @since 1.0
  *
- * @ORM\Table(name="cellState")
  * @ORM\Entity(repositoryClass="GameBundle\Repository\CellStateRepository")
+ * @ORM\Table(name="cellState")
  */
 class CellState implements IdentifiableInterface, NameableInterface
 {

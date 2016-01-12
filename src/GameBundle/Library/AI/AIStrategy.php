@@ -8,6 +8,9 @@ use GameBundle\Model\BattlefieldModel;
 use GameBundle\Model\CellModel;
 use Symfony\Bridge\Monolog\Logger;
 
+/**
+ * @since 3.0
+ */
 class AIStrategy
 {
     /**

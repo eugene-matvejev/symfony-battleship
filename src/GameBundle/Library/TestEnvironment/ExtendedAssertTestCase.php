@@ -1,9 +1,12 @@
 <?php
 
-namespace GameBundle\Library\ImprovedTestEnvironment;
+namespace GameBundle\Library\TestEnvironment;
 
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @since 1.0
+ */
 class ExtendedAssertTestCase extends ExtendedTestCase
 {
     /**

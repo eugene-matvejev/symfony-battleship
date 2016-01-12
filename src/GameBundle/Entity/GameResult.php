@@ -11,8 +11,9 @@ use GameBundle\Library\ORM\PlayerTrait;
 use GameBundle\Library\ORM\TimestampedTrait;
 
 /**
- * GameResult
+ * @since 1.0
  *
+ * @ORM\Entity(repositoryClass="GameBundle\Repository\GameResultRepository")
  * @ORM\Table(
  *     name="gamesResults",
  *     indexes={
@@ -21,7 +22,6 @@ use GameBundle\Library\ORM\TimestampedTrait;
  *     }
  * )
  * @ORM\HasLifecycleCallbacks
- * @ORM\Entity(repositoryClass="GameBundle\Repository\GameResultRepository")
  */
 class GameResult implements IdentifiableInterface, PlayerInterface, TimestampedInterface
 {

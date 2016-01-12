@@ -7,8 +7,9 @@ use GameBundle\Library\ORM\IdentifiableInterface;
 use GameBundle\Library\ORM\IdentifiableTrait;
 
 /**
- * Cell
+ * @since 1.0
  *
+ * @ORM\Entity()
  * @ORM\Table(
  *      name="cells",
  *      uniqueConstraints={
@@ -18,7 +19,6 @@ use GameBundle\Library\ORM\IdentifiableTrait;
  *          @ORM\Index(name="INDEX_CELL_BATTLEFIELD", columns={"battlefield"})
  *      }
  * )
- * @ORM\Entity()
  */
 class Cell implements IdentifiableInterface
 {

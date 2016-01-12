@@ -10,15 +10,15 @@ use GameBundle\Library\ORM\IdentifiableTrait;
 use GameBundle\Library\ORM\PlayerTrait;
 
 /**
- * Battlefield
+ * @since 1.0
  *
+ * @ORM\Entity(repositoryClass="GameBundle\Repository\BattlefieldRepository")
  * @ORM\Table(
  *     name="battlefields",
  *     indexes={
  *          @ORM\Index(name="INDEX_BATTLEFIELD_GAME", columns={"game"}),
  *          @ORM\Index(name="INDEX_BATTLEFIELD_PLAYER", columns={"player"})
  *     })
- * @ORM\Entity(repositoryClass="GameBundle\Repository\BattlefieldRepository")
  */
 class Battlefield implements IdentifiableInterface, PlayerInterface
 {

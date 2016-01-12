@@ -2,6 +2,9 @@
 
 namespace GameBundle\Library\ORM;
 
+/**
+ * @since 3.1
+ */
 trait TimestampedTrait
 {
     /**

@@ -9,10 +9,10 @@ use GameBundle\Library\ORM\IdentifiableTrait;
 use GameBundle\Library\ORM\NameableTrait;
 
 /**
- * Player
+ * @since 1.0
  *
- * @ORM\Table(name="players")
  * @ORM\Entity()
+ * @ORM\Table(name="players")
  */
 class Player implements IdentifiableInterface, NameableInterface
 {

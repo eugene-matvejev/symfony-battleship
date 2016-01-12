@@ -10,11 +10,11 @@ use GameBundle\Library\ORM\IdentifiableTrait;
 use GameBundle\Library\ORM\TimestampedTrait;
 
 /**
- * Game
+ * @since 1.0
  *
+ * @ORM\Entity()
  * @ORM\Table(name="games")
  * @ORM\HasLifecycleCallbacks
- * @ORM\Entity()
  */
 class Game implements IdentifiableInterface, TimestampedInterface
 {
