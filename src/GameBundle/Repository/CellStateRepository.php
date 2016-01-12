@@ -8,7 +8,7 @@ use GameBundle\Entity\CellState;
 use GameBundle\Model\CellModel;
 
 /**
- * CellStateRepository
+ * @since 1.0
  */
 class CellStateRepository extends EntityRepository
 {

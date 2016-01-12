@@ -4,6 +4,9 @@ namespace GameBundle\Model;
 
 use GameBundle\Entity\Player;
 
+/**
+ * @since 2.0
+ */
 class PlayerModel
 {
     const TYPE_CPU   = 1;
