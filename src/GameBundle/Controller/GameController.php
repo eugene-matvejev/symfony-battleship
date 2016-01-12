@@ -7,22 +7,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @since 1.0
+ */
 class GameController extends Controller
 {
-    /**
-     * @return Response
-     */
-    public function indexAction()
+    public function indexAction() : Response
     {
         return $this->render('@Game/index.html.twig');
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return JsonResponse
-     */
-    public function initAction(Request $request)
+    public function initAction(Request $request) : JsonResponse
     {
         $model = $this->get('battleship.game.services.game.model');
         $json  = $model->init($request->getContent());
@@ -30,12 +25,7 @@ class GameController extends Controller
         return new JsonResponse($json);
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return JsonResponse
-     */
-    public function turnAction(Request $request)
+    public function turnAction(Request $request) : JsonResponse
     {
         $model = $this->get('battleship.game.services.game.model');
         $json  = $model->nextTurn($request->getContent());

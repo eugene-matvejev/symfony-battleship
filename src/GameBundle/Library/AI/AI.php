@@ -41,21 +41,11 @@ class AI
         $this->logger = $logger;
     }
 
-    /**
-     * @param Player $player
-     *
-     * @return bool
-     */
     public function isTurnDoneForPlayer(Player $player) : bool
     {
         return isset($this->cpuTurnsPerPlayer[$player->getId()]);
     }
 
-    /**
-     * @param Player $player
-     *
-     * @return $this
-     */
     public function setTurnDoneForPlayer(Player $player)
     {
         $this->cpuTurnsPerPlayer[$player->getId()] = true;

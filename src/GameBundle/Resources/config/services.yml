@@ -21,6 +21,7 @@ services:
 #      - @battleship.game.services.player.type.repository
 #      - @doctrine.orm.entity_manager
       - @doctrine.orm.entity_manager
+      - @logger
       - @battleship.game.services.cell.model
       - @battleship.game.services.player.model
       - @battleship.game.services.ai.core

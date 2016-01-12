@@ -43,32 +43,19 @@ class Battlefield implements IdentifiableInterface, PlayerInterface
         $this->cells = new ArrayCollection();
     }
 
-    /**
-     * @return Game
-     */
     public function getGame() : Game
     {
         return $this->game;
     }
 
-    /**
-     * @param Game $game
-     *
-     * @return $this
-     */
-    public function setGame(Game $game)
+    public function setGame(Game $game) : self
     {
         $this->game = $game;
 
         return $this;
     }
 
-    /**
-     * @param Cell $cell
-     *
-     * @return $this
-     */
-    public function addCell(Cell $cell)
+    public function addCell(Cell $cell) : self
     {
         $cell->setBattlefield($this);
         $this->cells->add($cell);
@@ -76,12 +63,7 @@ class Battlefield implements IdentifiableInterface, PlayerInterface
         return $this;
     }
 
-    /**
-     * @param Cell $cell
-     *
-     * @return $this
-     */
-    public function removeCell(Cell $cell)
+    public function removeCell(Cell $cell) : self
     {
         $this->cells->removeElement($cell);
 

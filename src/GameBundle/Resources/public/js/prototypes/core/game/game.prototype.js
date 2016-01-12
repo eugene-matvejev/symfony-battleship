@@ -77,6 +77,7 @@ Game.prototype = {
         //}
     },
     updateGame: function(el) {
+
         var _config = Player.resources.config,
             player  = this.findPlayerById(el.parentElement.parentElement.parentElement.getAttribute(_config.trigger.id));
         if(player instanceof Player && player.type !== _config.type.human) {
@@ -120,12 +121,12 @@ Game.prototype = {
     cellUpdate: function(json) {
         var _config = Game.resources.config;
         for(var i in json) {
-            if(i ==  _config.json.victory) {
+            if(i ===  _config.json.victory) {
                 json[i].pid != this.findHumanPlayer().id
                     ? this.alertMgr.show(_config.text.win, AlertMgr.resources.config.type.success)
                     : this.alertMgr.show(_config.text.loss, AlertMgr.resources.config.type.error);
             } else {
-                var cell = this.cellGet(json[i].pid, json[i].x, json[i].y);
+                var cell = this.cellGet(json[i].player.id, json[i].x, json[i].y);
                 if(cell instanceof Cell) {
                     cell.setState(json[i].s)
                 }

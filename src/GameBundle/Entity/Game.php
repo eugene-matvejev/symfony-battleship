@@ -38,12 +38,7 @@ class Game implements IdentifiableInterface, TimestampedInterface
         $this->battlefields = new ArrayCollection();
     }
 
-    /**
-     * @param Battlefield $battlefield
-     *
-     * @return $this
-     */
-    public function addBattlefield(Battlefield $battlefield)
+    public function addBattlefield(Battlefield $battlefield) : self
     {
         $battlefield->setGame($this);
         $this->battlefields->add($battlefield);
@@ -51,12 +46,7 @@ class Game implements IdentifiableInterface, TimestampedInterface
         return $this;
     }
 
-    /**
-     * @param Battlefield $battlefield
-     *
-     * @return $this
-     */
-    public function removeBattlefield(Battlefield $battlefield)
+    public function removeBattlefield(Battlefield $battlefield) : self
     {
         $this->battlefields->removeElement($battlefield);
 
@@ -79,12 +69,7 @@ class Game implements IdentifiableInterface, TimestampedInterface
         return $this->result;
     }
 
-    /**
-     * @param GameResult $result
-     *
-     * @return $this
-     */
-    public function setResult(GameResult $result)
+    public function setResult(GameResult $result) : self
     {
         $result->setGame($this);
         $this->result = $result;

@@ -168,11 +168,6 @@ class AIStrategy
         return $cells;
     }
 
-    /**
-     * @param Cell $cell
-     *
-     * @return bool
-     */
     private function isShipDead(Cell $cell) : bool
     {
         $xCoordinates = [
