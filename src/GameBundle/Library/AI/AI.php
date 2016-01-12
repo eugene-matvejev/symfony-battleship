@@ -4,7 +4,6 @@ namespace GameBundle\Library\AI;
 
 use GameBundle\Entity\Battlefield;
 use GameBundle\Entity\Cell;
-use GameBundle\Entity\Player;
 use GameBundle\Library\Exception\AIException;
 use GameBundle\Model\BattlefieldModel;
 use GameBundle\Model\CellModel;
@@ -23,29 +22,12 @@ class AI
      * @var AIStrategy
      */
     private $strategyService;
-    /**
-     * @var bool[]
-     */
-    private $cpuTurnsPerPlayer;
 
     public function __construct(CellModel $model, AIStrategy $service, Logger $logger)
     {
         $this->cellModel = $model;
         $this->strategyService = $service;
-        $this->cpuTurnsPerPlayer = [];
         $this->logger = $logger;
-    }
-
-    public function isTurnDoneForPlayer(Player $player) : bool
-    {
-        return isset($this->cpuTurnsPerPlayer[$player->getId()]);
-    }
-
-    public function setTurnDoneForPlayer(Player $player)
-    {
-        $this->cpuTurnsPerPlayer[$player->getId()] = true;
-
-        return $this;
     }
 
     /**
@@ -56,25 +38,15 @@ class AI
      */
     public function turn(Battlefield $battlefield) : Cell
     {
-        $this->logger->addDebug('---------------------------------------------- BF: '. $battlefield->getId());
-
         $cells = $this->strategyService->chooseStrategy($battlefield);
-        $log = [];
-
-        foreach($cells as $cell) {
-            $log[] = CellModel::getJSON($cell);
-        }
-
-        $this->logger->addDebug(__CLASS__ .':'. __FUNCTION__ . ' :: cells: '. print_r($log, true));
 
         try {
-            $cell = $this->bombardInRange($cells);
-            if(null === $cell) {
+            if(null === $cell = $cell = $this->bombardInRange($cells)) {
                 $cells = BattlefieldModel::getLiveCells($battlefield);
                 return $this->bombardInRange($cells);
             }
         } catch(AIException $e) {
-            $this->logger->addDebug(__CLASS__ .':'. __FUNCTION__ . $e);
+            $this->logger->addCritical(__CLASS__ .':'. __FUNCTION__ .':'. $e);
         }
 
         return $cell;
@@ -109,7 +81,6 @@ class AI
     {
         if(in_array($cell->getState()->getId(), CellModel::getLiveStates())) {
             $this->cellModel->switchState($cell);
-            $this->setTurnDoneForPlayer($cell->getBattlefield()->getPlayer());
 
             return $cell;
         }

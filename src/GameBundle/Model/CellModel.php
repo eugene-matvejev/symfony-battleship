@@ -48,36 +48,28 @@ class CellModel
 
     public function switchState(Cell $cell) : Cell
     {
-        $stateBefore = $cell->getState()->getId();
         switch($cell->getState()->getId()) {
             case self::STATE_WATER_LIVE:
                 $cell->setState(self::$cellStates[self::STATE_WATER_DIED]);
+                self::$changedCells[] = $cell;
                 break;
             case self::STATE_SHIP_LIVE:
                 $cell->setState(self::$cellStates[self::STATE_SHIP_DIED]);
+                self::$changedCells[] = $cell;
                 break;
-        }
-
-        if($cell->getState()->getId() !== $stateBefore) {
-            self::$changedCells[] = $cell;
         }
 
         return $cell;
     }
 
-    public function markAsSkipped(Cell $cell) : Cell
+    public function markSkipped(Cell $cell) : Cell
     {
-        $stateBefore = $cell->getState()->getId();
-
-        $this->logger->addDebug(__FUNCTION__ .' cell:'. $cell->getId() .' state:'. $cell->getState()->getName());
+        $this->logger->addEmergency(__FUNCTION__ .' cell:'. $cell->getId() .' state:'. $cell->getState()->getName());
         switch($cell->getState()->getId()) {
             case self::STATE_WATER_LIVE:
                 $cell->setState(self::$cellStates[self::STATE_WATER_SKIP]);
+                self::$changedCells[] = $cell;
                 break;
-        }
-
-        if($cell->getState()->getId() !== $stateBefore) {
-            self::$changedCells[] = $cell;
         }
 
         return $cell;
