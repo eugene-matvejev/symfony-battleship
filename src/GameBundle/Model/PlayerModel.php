@@ -2,12 +2,43 @@
 
 namespace GameBundle\Model;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use GameBundle\Entity\Player;
+use GameBundle\Entity\PlayerType;
+use GameBundle\Repository\PlayerTypeRepository;
 
+/**
+ * @since 2.0
+ */
 class PlayerModel
 {
     const TYPE_CPU   = 1;
     const TYPE_HUMAN = 2;
+    /**
+     * @var PlayerTypeRepository
+     */
+    private $playerTypeRepository;
+    /**
+     * @var PlayerType[]
+     */
+    private static $playerTypes;
+
+    function __construct(ObjectManager $om)
+    {
+        $this->playerTypeRepository = $om->getRepository('GameBundle:PlayerType');
+    }
+
+    /**
+     * @return PlayerType[]
+     */
+    public function getTypes() : array
+    {
+        if(null === self::$playerTypes) {
+            self::$playerTypes = $this->playerTypeRepository->getTypes();
+        }
+
+        return self::$playerTypes;
+    }
 
     /**
      * @return int[]
@@ -17,11 +48,6 @@ class PlayerModel
         return [self::TYPE_CPU, self::TYPE_HUMAN];
     }
 
-    /**
-     * @param Player $player
-     *
-     * @return \stdClass
-     */
     public static function getJSON(Player $player) : \stdClass
     {
         $std = new \stdClass();

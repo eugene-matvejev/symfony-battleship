@@ -2,7 +2,7 @@
 
 namespace GameBundle\Tests\Controller;
 
-use GameBundle\Library\ImprovedTestEnvironment\ExtendedAssertTestCase;
+use GameBundle\Library\TestEnvironment\ExtendedAssertTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Tests\Controller;
 

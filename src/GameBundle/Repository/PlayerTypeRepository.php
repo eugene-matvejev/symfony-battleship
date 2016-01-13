@@ -8,7 +8,7 @@ use GameBundle\Entity\PlayerType;
 use GameBundle\Model\PlayerModel;
 
 /**
- * PlayerTypeRepository
+ * @since 1.0
  */
 class PlayerTypeRepository extends EntityRepository
 {

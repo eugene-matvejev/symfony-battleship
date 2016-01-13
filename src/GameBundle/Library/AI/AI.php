@@ -6,11 +6,13 @@ use GameBundle\Entity\Battlefield;
 use GameBundle\Entity\Cell;
 use GameBundle\Entity\Player;
 use GameBundle\Library\Exception\AIException;
-use GameBundle\Library\Exception\BattlefieldException;
 use GameBundle\Model\BattlefieldModel;
 use GameBundle\Model\CellModel;
 use Symfony\Bridge\Monolog\Logger;
 
+/**
+ * @since 3.0
+ */
 class AI
 {
     /**
@@ -26,11 +28,6 @@ class AI
      */
     private $cpuTurnsPerPlayer;
 
-    /**
-     * @param CellModel  $model
-     * @param AIStrategy $service
-     * @param Logger     $logger
-     */
     public function __construct(CellModel $model, AIStrategy $service, Logger $logger)
     {
         $this->cellModel = $model;
@@ -39,21 +36,11 @@ class AI
         $this->logger = $logger;
     }
 
-    /**
-     * @param Player $player
-     *
-     * @return bool
-     */
     public function isTurnDoneForPlayer(Player $player) : bool
     {
         return isset($this->cpuTurnsPerPlayer[$player->getId()]);
     }
 
-    /**
-     * @param Player $player
-     *
-     * @return $this
-     */
     public function setTurnDoneForPlayer(Player $player)
     {
         $this->cpuTurnsPerPlayer[$player->getId()] = true;

@@ -5,6 +5,9 @@ namespace GameBundle\Library\ORM;
 use Doctrine\ORM\Mapping as ORM;
 use GameBundle\Entity\Player;
 
+/**
+ * @since 2.0
+ */
 trait PlayerTrait
 {
     /**

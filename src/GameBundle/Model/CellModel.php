@@ -2,11 +2,13 @@
 
 namespace GameBundle\Model;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use GameBundle\Entity\Cell;
 use GameBundle\Entity\CellState;
-use GameBundle\Repository\CellStateRepository;
-use Doctrine\Common\Persistence\ObjectManager;
 
+/**
+ * @since 2.0
+ */
 class CellModel
 {
     const STATE_WATER_LIVE = 1;
@@ -15,24 +17,19 @@ class CellModel
     const STATE_SHIP_DIED  = 4;
     const STATE_WATER_SKIP = 5;
     /**
-     * @var CellStateRepository
+     * @var Cell[]
      */
-    private $cellStateRepository;
+    private static $changedCells = [];
     /**
      * @var CellState[]
      */
     private static $cellStates;
-    /**
-     * @var Cell[]
-     */
-    private static $changedCells = [];
 
-    /**
-     * @param ObjectManager $om
-     */
     function __construct(ObjectManager $om)
     {
-        $this->cellStateRepository = $om->getRepository('GameBundle:CellState');
+        if(null === self::$cellStates) {
+            self::$cellStates = $om->getRepository('GameBundle:CellState')->getStates();
+        }
     }
 
     /**
@@ -40,48 +37,37 @@ class CellModel
      */
     public function getCellStates() : array
     {
-        if(null === self::$cellStates) {
-            self::$cellStates = $this->cellStateRepository->getStates();
-        }
-
         return self::$cellStates;
     }
 
-    /**
-     * @param Cell $cell
-     *
-     * @return Cell
-     */
     public function switchState(Cell $cell) : Cell
     {
         $stateBefore = $cell->getState()->getId();
         switch($cell->getState()->getId()) {
             case self::STATE_WATER_LIVE:
-                $cell->setState($this->getCellStates()[self::STATE_WATER_DIED]);
+                $cell->setState(self::$cellStates[self::STATE_WATER_DIED]);
                 break;
             case self::STATE_SHIP_LIVE:
-                $cell->setState($this->getCellStates()[self::STATE_SHIP_DIED]);
+                $cell->setState(self::$cellStates[self::STATE_SHIP_DIED]);
                 break;
         }
+
         if($cell->getState()->getId() !== $stateBefore) {
             self::$changedCells[] = $cell;
         }
 
         return $cell;
     }
-    /**
-     * @param Cell $cell
-     *
-     * @return Cell
-     */
+
     public function markAsSkipped(Cell $cell) : Cell
     {
         $stateBefore = $cell->getState()->getId();
         switch($cell->getState()->getId()) {
             case self::STATE_WATER_LIVE:
-                $cell->setState($this->getCellStates()[self::STATE_WATER_SKIP]);
+                $cell->setState(self::$cellStates[self::STATE_WATER_SKIP]);
                 break;
         }
+
         if($cell->getState()->getId() !== $stateBefore) {
             self::$changedCells[] = $cell;
         }
@@ -89,23 +75,23 @@ class CellModel
         return $cell;
     }
 
-    /**
-     * @param Cell       $cell
-     * @param bool|false $ignorePlayer
-     *
-     * @return \stdClass
-     */
-    public static function getJSON(Cell $cell, $ignorePlayer = false) : \stdClass
+    public static function getJSON(Cell $cell) : \stdClass
     {
         $std = new \stdClass();
         $std->x = $cell->getX();
         $std->y = $cell->getY();
         $std->s = $cell->getState()->getId();
-        if(true !== $ignorePlayer) {
-            $std->pid = $cell->getBattlefield()->getPlayer()->getId();
-        }
+        $std->player = PlayerModel::getJSON($cell->getBattlefield()->getPlayer());
 
         return $std;
+    }
+
+    /**
+     * @return Cell[]
+     */
+    public static function getChangedCells() : array
+    {
+        return self::$changedCells;
     }
 
     /**
@@ -130,13 +116,5 @@ class CellModel
     public static function getAllStates() : array
     {
         return [self::STATE_WATER_LIVE, self::STATE_WATER_DIED, self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED, self::STATE_WATER_SKIP];
-    }
-
-    /**
-     * @return Cell[]
-     */
-    public static function getChangedCells() : array
-    {
-        return self::$changedCells;
     }
 }

@@ -9,10 +9,10 @@ use GameBundle\Library\ORM\NameableInterface;
 use GameBundle\Library\ORM\NameableTrait;
 
 /**
- * PlayerType
+ * @since 1.0
  *
- * @ORM\Table(name="playerType")
  * @ORM\Entity(repositoryClass="GameBundle\Repository\PlayerTypeRepository")
+ * @ORM\Table(name="playerType")
  */
 class PlayerType implements IdentifiableInterface, NameableInterface
 {

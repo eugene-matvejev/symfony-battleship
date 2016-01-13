@@ -4,6 +4,9 @@ namespace GameBundle\Library\ORM;
 
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @since 1.0
+ */
 trait IdentifiableTrait
 {
     /**

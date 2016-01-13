@@ -1,6 +1,6 @@
 <?php
 
-namespace GameBundle\Library\ImprovedTestEnvironment;
+namespace GameBundle\Library\TestEnvironment;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -12,6 +12,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @since 1.0
+ */
 class ExtendedTestCase extends WebTestCase
 {
     /**
@@ -103,9 +106,9 @@ class ExtendedTestCase extends WebTestCase
 //    }
 
     /**
-     * @return Client
+     * @since 1.0
      */
-    public function getClient()
+    public function getClient() : Client
     {
         if(null === self::$client) {
             self::$client = static::createClient();
@@ -115,9 +118,9 @@ class ExtendedTestCase extends WebTestCase
     }
 
     /**
-     * @return ContainerInterface
+     * @since 1.0
      */
-    public function getContainer()
+    public function getContainer() : ContainerInterface
     {
         if(null === self::$container) {
             self::$container = $this->getClient()->getContainer();
@@ -128,9 +131,9 @@ class ExtendedTestCase extends WebTestCase
     }
 
     /**
-     * @return Router
+     * @since 2.0
      */
-    public function getRouter()
+    public function getRouter() : Router
     {
         if(null === self::$router) {
             self::$router = $this->getContainer()->get('router');
@@ -140,7 +143,7 @@ class ExtendedTestCase extends WebTestCase
     }
 
     /**
-     * @param Response $response
+     * @since 1.0
      */
     public function assertCorrectResponse(Response $response)
     {
@@ -148,6 +151,8 @@ class ExtendedTestCase extends WebTestCase
     }
 
     /**
+     * @since 1.0
+     *
      * @param Response $response
      *
      * @return array

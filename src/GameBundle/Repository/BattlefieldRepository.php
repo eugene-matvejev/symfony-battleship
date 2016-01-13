@@ -9,7 +9,7 @@ use GameBundle\Entity\Game;
 use GameBundle\Model\PlayerModel;
 
 /**
- * BattlefieldRepository
+ * @since 1.0
  */
 class BattlefieldRepository extends EntityRepository
 {

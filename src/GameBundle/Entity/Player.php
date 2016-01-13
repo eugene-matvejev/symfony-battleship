@@ -9,10 +9,10 @@ use GameBundle\Library\ORM\IdentifiableTrait;
 use GameBundle\Library\ORM\NameableTrait;
 
 /**
- * Player
+ * @since 1.0
  *
- * @ORM\Table(name="players")
  * @ORM\Entity()
+ * @ORM\Table(name="players")
  */
 class Player implements IdentifiableInterface, NameableInterface
 {
@@ -25,20 +25,12 @@ class Player implements IdentifiableInterface, NameableInterface
      */
     private $type;
 
-    /**
-     * @return PlayerType
-     */
-    public function getType()
+    public function getType() : PlayerType
     {
         return $this->type;
     }
 
-    /**
-     * @param PlayerType $type
-     *
-     * @return $this
-     */
-    public function setType(PlayerType $type)
+    public function setType(PlayerType $type) : self
     {
         $this->type = $type;
 

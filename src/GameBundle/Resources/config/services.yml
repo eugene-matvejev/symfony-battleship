@@ -4,6 +4,10 @@ services:
     class: GameBundle\Model\CellModel
     arguments:
       - @doctrine.orm.entity_manager
+  battleship.game.services.player.model:
+    class: GameBundle\Model\PlayerModel
+    arguments:
+      - @doctrine.orm.entity_manager
 #      - @battleship.game.services.cell.state.repository
   battleship.game.services.game.model:
     class: GameBundle\Model\GameModel
@@ -17,7 +21,9 @@ services:
 #      - @battleship.game.services.player.type.repository
 #      - @doctrine.orm.entity_manager
       - @doctrine.orm.entity_manager
+      - @logger
       - @battleship.game.services.cell.model
+      - @battleship.game.services.player.model
       - @battleship.game.services.ai.core
   battleship.game.services.statistics.model:
     class: GameBundle\Model\StatisticsModel
