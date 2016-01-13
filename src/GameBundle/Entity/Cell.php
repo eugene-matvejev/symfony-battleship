@@ -7,8 +7,9 @@ use GameBundle\Library\ORM\IdentifiableInterface;
 use GameBundle\Library\ORM\IdentifiableTrait;
 
 /**
- * Cell
+ * @since 1.0
  *
+ * @ORM\Entity()
  * @ORM\Table(
  *      name="cells",
  *      uniqueConstraints={
@@ -18,11 +19,24 @@ use GameBundle\Library\ORM\IdentifiableTrait;
  *          @ORM\Index(name="INDEX_CELL_BATTLEFIELD", columns={"battlefield"})
  *      }
  * )
- * @ORM\Entity()
  */
 class Cell implements IdentifiableInterface
 {
     use IdentifiableTrait;
+    /**
+     * @ORM\ManyToOne(targetEntity="GameBundle\Entity\Battlefield", inversedBy="id")
+     * @ORM\JoinColumn(name="battlefield", referencedColumnName="id", nullable=false)
+     *
+     * @var Battlefield
+     */
+    private $battlefield;
+    /**
+     * @ORM\ManyToOne(targetEntity="GameBundle\Entity\CellState")
+     * @ORM\JoinColumn(name="state", referencedColumnName="id", nullable=false)
+     *
+     * @var CellState
+     */
+    private $state;
     /**
      * @ORM\Column(name="x", type="integer", nullable=false)
      *
@@ -35,97 +49,51 @@ class Cell implements IdentifiableInterface
      * @var int
      */
     private $y;
-    /**
-     * @ORM\ManyToOne(targetEntity="GameBundle\Entity\CellState")
-     * @ORM\JoinColumn(name="state", referencedColumnName="id", nullable=false)
-     *
-     * @var CellState
-     */
-    private $state;
-    /**
-     * @ORM\ManyToOne(targetEntity="GameBundle\Entity\Battlefield", inversedBy="id")
-     * @ORM\JoinColumn(name="battlefield", referencedColumnName="id", nullable=false)
-     *
-     * @var Battlefield
-     */
-    private $battlefield;
 
-    /**
-     * @return int
-     */
-    public function getX() : int
+    public function getBattlefield() : Battlefield
     {
-        return $this->x;
+        return $this->battlefield;
     }
 
-    /**
-     * @param int $x
-     *
-     * @return $this
-     */
-    public function setX(int $x)
+    public function setBattlefield(Battlefield $battlefield) : self
     {
-        $this->x = $x;
+        $this->battlefield = $battlefield;
 
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getY() : int
-    {
-        return $this->y;
-    }
-
-    /**
-     * @param int $y
-     *
-     * @return $this
-     */
-    public function setY(int $y)
-    {
-        $this->y = $y;
-
-        return $this;
-    }
-
-    /**
-     * @return CellState
-     */
     public function getState() : CellState
     {
         return $this->state;
     }
 
-    /**
-     * @param CellState $state
-     *
-     * @return $this
-     */
-    public function setState(CellState $state)
+    public function setState(CellState $state) : self
     {
         $this->state = $state;
 
         return $this;
     }
 
-    /**
-     * @return Battlefield
-     */
-    public function getBattlefield() : Battlefield
+    public function getX() : int
     {
-        return $this->battlefield;
+        return $this->x;
     }
 
-    /**
-     * @param Battlefield $battlefield
-     *
-     * @return $this
-     */
-    public function setBattlefield(Battlefield $battlefield)
+    public function setX(int $x) : self
     {
-        $this->battlefield = $battlefield;
+        $this->x = $x;
+
+        return $this;
+    }
+
+    public function getY() : int
+    {
+        return $this->y;
+    }
+
+    public function setY(int $y) : self
+    {
+        $this->y = $y;
 
         return $this;
     }

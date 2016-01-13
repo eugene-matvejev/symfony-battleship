@@ -6,13 +6,10 @@ use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler;
 use Composer\Script\CommandEvent;
 
 /**
- * ProvisionCommand
+ * @since 2.0
  */
 class ComposerCommand extends ScriptHandler
 {
-    /**
-     * @param CommandEvent $event
-     */
     static public function initProductionDatabase(CommandEvent $event)
     {
         $consoleDir = static::getConsoleDir($event, 'install assets');

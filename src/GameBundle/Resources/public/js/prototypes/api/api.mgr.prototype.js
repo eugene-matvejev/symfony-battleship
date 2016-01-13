@@ -19,6 +19,9 @@ APIMgr.prototype = {
             url: requestURL,
             data: requestData,
             success: onSuccess,
+            complete: function(json) {
+                console.log(' >>> ' + requestMethod, requestURL, json, json.responseText);
+            },
             error: onError
         });
     }

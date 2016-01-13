@@ -5,6 +5,9 @@ namespace GameBundle\Model;
 use GameBundle\Entity\Battlefield;
 use GameBundle\Entity\Cell;
 
+/**
+ * @since 2.0
+ */
 class BattlefieldModel
 {
     /**
@@ -49,5 +52,16 @@ class BattlefieldModel
         }
 
         return $cells;
+    }
+
+    public static function isUnfinished(Battlefield $battlefield) : bool
+    {
+        foreach($battlefield->getCells() as $cell) {
+            if($cell->getState()->getId() === CellModel::STATE_SHIP_LIVE) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
