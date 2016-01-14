@@ -1,12 +1,12 @@
 <?php
 
-namespace GameBundle\DataFixtures\ORM;
+namespace EM\GameBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-//use GameBundle\Entity\CellState;
-//use GameBundle\Model\CellModel;
+//use EM\GameBundle\Entity\CellState;
+//use EM\GameBundle\Model\CellModel;
 
 /**
  * @since 2.0

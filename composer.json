@@ -4,28 +4,31 @@
     "type": "project",
     "description": "The \"Symfony Standard Edition\" distribution",
     "autoload": {
-        "psr-4": { "": "src/" }
+        "psr-4": { "EM\\": "src/" }
     },
+    "authors": [
+        { "name": "Eugene Matvejev", "email": "eugene.matvejev@gmail.com" }
+    ],
     "require": {
         "php": ">=7.0.2",
         "doctrine/orm": "^2.4.8",
         "doctrine/doctrine-bundle": "~1.4",
         "doctrine/doctrine-migrations-bundle": "^1.0",
-        "symfony/symfony": "^2.8.1",
+        "symfony/symfony": "^2.8.2",
         "symfony/assetic-bundle": "~2.3",
         "symfony/monolog-bundle": "~2.4",
         "sensio/distribution-bundle": "~4.0",
-        "sensio/framework-extra-bundle": "^3.0.2",
-        "phpunit/phpunit": "^5.1"
+        "sensio/framework-extra-bundle": "^3.0.2"
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^2.3",
         "sensio/generator-bundle": "~2.3",
-        "doctrine/doctrine-fixtures-bundle": "^2.3"
+        "phpunit/phpunit": "^5.1"
     },
     "scripts": {
         "post-install-cmd": [
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "GameBundle\\Command\\ComposerCommand::initProductionDatabase",
+            "EM\\GameBundle\\Command\\ComposerCommand::initProductionDatabase",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
@@ -33,7 +36,7 @@
         ],
         "post-update-cmd": [
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "GameBundle\\Command\\ComposerCommand::initProductionDatabase",
+            "EM\\GameBundle\\Command\\ComposerCommand::initProductionDatabase",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",

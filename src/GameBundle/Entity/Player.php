@@ -1,12 +1,12 @@
 <?php
 
-namespace GameBundle\Entity;
+namespace EM\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use GameBundle\Library\ORM\IdentifiableInterface;
-use GameBundle\Library\ORM\NameableInterface;
-use GameBundle\Library\ORM\IdentifiableTrait;
-use GameBundle\Library\ORM\NameableTrait;
+use EM\GameBundle\ORM\IdentifiableInterface;
+use EM\GameBundle\ORM\NameableInterface;
+use EM\GameBundle\ORM\IdentifiableTrait;
+use EM\GameBundle\ORM\NameableTrait;
 
 /**
  * @since 1.0
@@ -18,7 +18,7 @@ class Player implements IdentifiableInterface, NameableInterface
 {
     use IdentifiableTrait, NameableTrait;
     /**
-     * @ORM\ManyToOne(targetEntity="GameBundle\Entity\PlayerType")
+     * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\PlayerType")
      * @ORM\JoinColumn(name="type", referencedColumnName="id", nullable=false)
      *
      * @var PlayerType

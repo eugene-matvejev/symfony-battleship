@@ -1,16 +1,17 @@
 <?php
 
-namespace GameBundle\Model;
+namespace EM\GameBundle\Model;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityRepository;
-use GameBundle\Entity\Battlefield;
-use GameBundle\Entity\Cell;
-use GameBundle\Entity\Game;
-use GameBundle\Entity\GameResult;
-use GameBundle\Entity\Player;
-use GameBundle\Library\AI\AI;
-use GameBundle\Library\Exception\GameException;
+use EM\GameBundle\Entity\Battlefield;
+use EM\GameBundle\Entity\Cell;
+use EM\GameBundle\Entity\Game;
+use EM\GameBundle\Entity\GameResult;
+use EM\GameBundle\Entity\Player;
+use EM\GameBundle\AI\AI;
+use EM\GameBundle\AI\AIStrategy;
+use EM\GameBundle\Exception\GameException;
 use Symfony\Bridge\Monolog\Logger;
 
 /**
@@ -18,6 +19,10 @@ use Symfony\Bridge\Monolog\Logger;
  */
 class GameModel
 {
+    /**
+     * @var ObjectManager
+     */
+    private $om;
     /**
      * @var EntityRepository
      */
@@ -27,29 +32,44 @@ class GameModel
      */
     private $playerRepository;
     /**
-     * @var ObjectManager
+     * @var AI
      */
-    private $om;
+    private $ai;
     /**
-     * @var Logger
+     * @var AIStrategy
      */
-    private $logger;
+    private $strategyService;
     /**
      * @var CellModel
      */
     private $cellModel;
+    /**
+     * @var PlayerModel
+     */
+    private $playerModel;
+    /**
+     * @var Logger
+     */
+    private $logger;
 
-    function __construct(ObjectManager $om, Logger $logger, CellModel $cellModel, PlayerModel $playerModel, AI $ai)
+    function __construct(ObjectManager $om, Logger $logger, CellModel $cellModel, PlayerModel $playerModel, AI $ai, AIStrategy $strategy)
     {
         $this->om               = $om;
-        $this->logger           = $logger;
         $this->gameRepository   = $om->getRepository('GameBundle:Game');
         $this->playerRepository = $om->getRepository('GameBundle:Player');
         $this->ai               = $ai;
+        $this->strategyService  = $strategy;
         $this->cellModel        = $cellModel;
         $this->playerModel      = $playerModel;
+        $this->logger           = $logger;
     }
 
+    /**
+     * verify, init and save game
+     *
+     * @param string $json
+     * @return \stdClass
+     */
     public function init(string $json) : \stdClass
     {
         $json = json_decode($json);
@@ -121,7 +141,7 @@ class GameModel
     public function initCPUBattlefield(Battlefield $battlefield)
     {
         foreach($battlefield->getCells() as $cell) {
-            if(($cell->getX() === 1 && $cell->getY() === 1) || ($cell->getX() === 5 && $cell->getY() === 5)) {
+            if(($cell->getX() === 1 && $cell->getY() === 1) || ($cell->getX() === 1 && $cell->getY() === 5)) {
                 $cell->setState($this->cellModel->getCellStates()[CellModel::STATE_SHIP_LIVE]);
             }
         }
@@ -150,6 +170,7 @@ class GameModel
             $this->playerTurn($battlefield, $json);
 
             if($this->detectVictory($battlefield)) {
+                /** @var Battlefield $battlefield */
                 $std->victory = GameResultModel::getJSON($battlefield->getGame()->getResult());
 
                 break;
@@ -157,10 +178,10 @@ class GameModel
         }
 
         foreach(CellModel::getChangedCells() as $cell) {
-            $log[] = CellModel::getJSON($cell);
             if(!isset($std->{$cell->getBattlefield()->getId()})) {
                 $std->{$cell->getBattlefield()->getId()} = [];
             }
+
             $std->{$cell->getBattlefield()->getId()}[] = CellModel::getJSON($cell);
             $this->logger->addEmergency(__CLASS__ .':'. __FUNCTION__ . ' :: cell: '. print_r(CellModel::getJSON($cell), true));
         }
@@ -191,6 +212,7 @@ class GameModel
                 break;
         }
 
+        $this->strategyService->isShipDead($_cell);
         $this->om->persist($_cell);
         $this->om->flush();
     }

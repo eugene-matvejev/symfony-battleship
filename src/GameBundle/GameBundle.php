@@ -1,6 +1,6 @@
 <?php
 
-namespace GameBundle;
+namespace EM\GameBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

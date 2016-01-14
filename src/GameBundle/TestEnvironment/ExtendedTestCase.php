@@ -1,6 +1,6 @@
 <?php
 
-namespace GameBundle\Library\TestEnvironment;
+namespace EM\GameBundle\TestEnvironment;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -66,6 +66,7 @@ class ExtendedTestCase extends WebTestCase
         $options['--env'] = 'test';
         $options['--quiet'] = true;
         $options['--no-interaction'] = true;
+        $options['--show-output'] = false;
         $options = array_merge($options, ['command' => $command]);
         try {
 //            self::$consoleApp->setCatchExceptions(false);
@@ -150,7 +151,8 @@ class ExtendedTestCase extends WebTestCase
      */
     public function assertCorrectResponse(Response $response)
     {
-        $this->assertLessThan($response->getStatusCode(), Response::HTTP_MULTIPLE_CHOICES);
+        $this->assertGreaterThanOrEqual(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertLessThan(Response::HTTP_MULTIPLE_CHOICES, $response->getStatusCode());
     }
 
     /**

@@ -1,11 +1,11 @@
 <?php
 
-namespace GameBundle\Model;
+namespace EM\GameBundle\Model;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use GameBundle\Entity\Player;
-use GameBundle\Entity\PlayerType;
-use GameBundle\Repository\PlayerTypeRepository;
+use EM\GameBundle\Entity\Player;
+use EM\GameBundle\Entity\PlayerType;
+use EM\GameBundle\Repository\PlayerTypeRepository;
 
 /**
  * @since 2.0

@@ -1,12 +1,12 @@
 <?php
 
-namespace GameBundle\Library\AI;
+namespace EM\GameBundle\AI;
 
-use GameBundle\Entity\Battlefield;
-use GameBundle\Entity\Cell;
-use GameBundle\Library\Exception\AIException;
-use GameBundle\Model\BattlefieldModel;
-use GameBundle\Model\CellModel;
+use EM\GameBundle\Entity\Battlefield;
+use EM\GameBundle\Entity\Cell;
+use EM\GameBundle\Exception\AIException;
+use EM\GameBundle\Model\BattlefieldModel;
+use EM\GameBundle\Model\CellModel;
 use Symfony\Bridge\Monolog\Logger;
 
 /**
@@ -43,14 +43,13 @@ class AI
         try {
             if(null === $cell = $cell = $this->bombardInRange($cells)) {
                 $cells = BattlefieldModel::getLiveCells($battlefield);
-                return $this->bombardInRange($cells);
+                $cell = $this->bombardInRange($cells);
             }
         } catch(AIException $e) {
             $this->logger->addCritical(__CLASS__ .':'. __FUNCTION__ .':'. $e);
         }
 
         return $cell;
-
     }
 
 
