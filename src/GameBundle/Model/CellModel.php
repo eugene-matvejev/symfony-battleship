@@ -5,6 +5,7 @@ namespace GameBundle\Model;
 use Doctrine\Common\Persistence\ObjectManager;
 use GameBundle\Entity\Cell;
 use GameBundle\Entity\CellState;
+use Symfony\Bridge\Monolog\Logger;
 
 /**
  * @since 2.0
@@ -24,12 +25,17 @@ class CellModel
      * @var CellState[]
      */
     private static $cellStates;
+    /**
+     * @var Logger
+     */
+    private $logger;
 
-    function __construct(ObjectManager $om)
+    function __construct(ObjectManager $om, Logger $logger)
     {
         if(null === self::$cellStates) {
             self::$cellStates = $om->getRepository('GameBundle:CellState')->getStates();
         }
+        $this->logger = $logger;
     }
 
     /**
@@ -42,34 +48,28 @@ class CellModel
 
     public function switchState(Cell $cell) : Cell
     {
-        $stateBefore = $cell->getState()->getId();
         switch($cell->getState()->getId()) {
             case self::STATE_WATER_LIVE:
                 $cell->setState(self::$cellStates[self::STATE_WATER_DIED]);
+                self::$changedCells[] = $cell;
                 break;
             case self::STATE_SHIP_LIVE:
                 $cell->setState(self::$cellStates[self::STATE_SHIP_DIED]);
+                self::$changedCells[] = $cell;
                 break;
-        }
-
-        if($cell->getState()->getId() !== $stateBefore) {
-            self::$changedCells[] = $cell;
         }
 
         return $cell;
     }
 
-    public function markAsSkipped(Cell $cell) : Cell
+    public function markSkipped(Cell $cell) : Cell
     {
-        $stateBefore = $cell->getState()->getId();
+        $this->logger->addEmergency(__FUNCTION__ .' cell:'. $cell->getId() .' state:'. $cell->getState()->getName());
         switch($cell->getState()->getId()) {
             case self::STATE_WATER_LIVE:
                 $cell->setState(self::$cellStates[self::STATE_WATER_SKIP]);
+                self::$changedCells[] = $cell;
                 break;
-        }
-
-        if($cell->getState()->getId() !== $stateBefore) {
-            self::$changedCells[] = $cell;
         }
 
         return $cell;
