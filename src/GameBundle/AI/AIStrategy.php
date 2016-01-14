@@ -1,11 +1,11 @@
 <?php
 
-namespace GameBundle\Library\AI;
+namespace EM\GameBundle\AI;
 
-use GameBundle\Entity\Battlefield;
-use GameBundle\Entity\Cell;
-use GameBundle\Model\BattlefieldModel;
-use GameBundle\Model\CellModel;
+use EM\GameBundle\Entity\Battlefield;
+use EM\GameBundle\Entity\Cell;
+use EM\GameBundle\Model\BattlefieldModel;
+use EM\GameBundle\Model\CellModel;
 use Symfony\Bridge\Monolog\Logger;
 
 /**
@@ -161,7 +161,7 @@ class AIStrategy
         return $cells;
     }
 
-    private function isShipDead(Cell $cell) : bool
+    public function isShipDead(Cell $cell) : bool
     {
         $xCoordinates = [
             ['x' => $cell->getX() - 1, 'y' => $cell->getY()],
@@ -177,9 +177,8 @@ class AIStrategy
 
     private function verifyShipByAxis(Cell $cell, array $coordinates, string $axis) : bool
     {
-        $cells = [];
         $leftCell = $rightCell = true;
-
+        $cells = [];
         $matches = 1;
 
         for($i = 0; $i < $this->maxShipSize; $i++) {
@@ -195,7 +194,7 @@ class AIStrategy
             $coordinates[0][$axis]--;
             $coordinates[1][$axis]++;
         }
-        $checked = [];
+
         if(true === $leftCell && true === $rightCell || $matches >= $this->maxShipSize) {
             $this->logger->addEmergency(__FUNCTION__ .': MARK_AS_SKIPPED axis: '. $axis .' cells: '. count($cells));
             /** @var Cell $_cell
@@ -209,24 +208,19 @@ class AIStrategy
 
                 for($x = 0; $x < 3; $x++) {
                     for($y = 0; $y < 3; $y++) {
-//                        if($_cell->getX() + $steps[$x] !== -1 && $_cell->getY() + $steps[$y] !== -1) {
-                            $coordinates[] = [
-                                'x' => $_cell->getX() + $steps[$x],
-                                'y' => $_cell->getY() + $steps[$y]
-                            ];
-//                        }
+                        $coordinates[] = [
+                            'x' => $_cell->getX() + $steps[$x],
+                            'y' => $_cell->getY() + $steps[$y]
+                        ];
                     }
                 }
 
                 $this->logger->addEmergency(__FUNCTION__ .': ##MARK_AS_SKIPPED_: '. print_r($coordinates, true));
 
                 foreach($coordinates as $coordinate) {
-//                    if(!isset($checked['x'. $coordinate['x'] .'y'. $coordinate['y']])) {
-                        if(null !== $_cell = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $coordinate['x'], $coordinate['y'])) {
-//                            $checked['x'. $_cell->getX() .'y'. $_cell->getY()] = $_cell;
-                            $this->cellModel->markSkipped($_cell);
-                        }
-//                    }
+                    if(null !== $_cell = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $coordinate['x'], $coordinate['y'])) {
+                        $this->cellModel->markSkipped($_cell);
+                    }
                 }
             }
             return true;

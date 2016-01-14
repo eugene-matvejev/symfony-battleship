@@ -1,9 +1,9 @@
 <?php
 
-namespace GameBundle\Library\ORM;
+namespace EM\GameBundle\ORM;
 
 use Doctrine\ORM\Mapping as ORM;
-use GameBundle\Entity\Player;
+use EM\GameBundle\Entity\Player;
 
 /**
  * @since 2.0
@@ -11,7 +11,7 @@ use GameBundle\Entity\Player;
 trait PlayerTrait
 {
     /**
-     * @ORM\ManyToOne(targetEntity="GameBundle\Entity\Player")
+     * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\Player")
      * @ORM\JoinColumn(name="player", referencedColumnName="id", nullable=false)
      *
      * @var Player

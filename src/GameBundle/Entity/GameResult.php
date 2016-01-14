@@ -1,19 +1,19 @@
 <?php
 
-namespace GameBundle\Entity;
+namespace EM\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use GameBundle\Library\ORM\IdentifiableInterface;
-use GameBundle\Library\ORM\PlayerInterface;
-use GameBundle\Library\ORM\TimestampedInterface;
-use GameBundle\Library\ORM\IdentifiableTrait;
-use GameBundle\Library\ORM\PlayerTrait;
-use GameBundle\Library\ORM\TimestampedTrait;
+use EM\GameBundle\ORM\IdentifiableInterface;
+use EM\GameBundle\ORM\PlayerInterface;
+use EM\GameBundle\ORM\TimestampedInterface;
+use EM\GameBundle\ORM\IdentifiableTrait;
+use EM\GameBundle\ORM\PlayerTrait;
+use EM\GameBundle\ORM\TimestampedTrait;
 
 /**
  * @since 1.0
  *
- * @ORM\Entity(repositoryClass="GameBundle\Repository\GameResultRepository")
+ * @ORM\Entity(repositoryClass="EM\GameBundle\Repository\GameResultRepository")
  * @ORM\Table(
  *     name="gamesResults",
  *     indexes={
@@ -27,7 +27,7 @@ class GameResult implements IdentifiableInterface, PlayerInterface, TimestampedI
 {
     use IdentifiableTrait, PlayerTrait, TimestampedTrait;
     /**
-     * @ORM\OneToOne(targetEntity="GameBundle\Entity\Game", mappedBy="result")
+     * @ORM\OneToOne(targetEntity="EM\GameBundle\Entity\Game", mappedBy="result")
      * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)
      *
      * @var Game

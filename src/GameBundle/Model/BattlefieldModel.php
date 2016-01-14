@@ -1,9 +1,9 @@
 <?php
 
-namespace GameBundle\Model;
+namespace EM\GameBundle\Model;
 
-use GameBundle\Entity\Battlefield;
-use GameBundle\Entity\Cell;
+use EM\GameBundle\Entity\Battlefield;
+use EM\GameBundle\Entity\Cell;
 
 /**
  * @since 2.0

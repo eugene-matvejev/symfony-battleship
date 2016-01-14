@@ -1,6 +1,6 @@
 <?php
 
-namespace GameBundle\Command;
+namespace EM\GameBundle\Command;
 
 use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler;
 use Composer\Script\CommandEvent;

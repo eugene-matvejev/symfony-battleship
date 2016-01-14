@@ -1,6 +1,6 @@
 <?php
 
-namespace GameBundle\Library\Exception;
+namespace EM\GameBundle\Exception;
 
 /**
  * @since 3.1

@@ -1,6 +1,6 @@
 <?php
 
-namespace GameBundle\Library\ORM;
+namespace EM\GameBundle\ORM;
 
 use Doctrine\ORM\Mapping as ORM;
 

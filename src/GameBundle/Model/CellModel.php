@@ -1,10 +1,10 @@
 <?php
 
-namespace GameBundle\Model;
+namespace EM\GameBundle\Model;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use GameBundle\Entity\Cell;
-use GameBundle\Entity\CellState;
+use EM\GameBundle\Entity\Cell;
+use EM\GameBundle\Entity\CellState;
 use Symfony\Bridge\Monolog\Logger;
 
 /**

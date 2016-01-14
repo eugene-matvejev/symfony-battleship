@@ -1,6 +1,6 @@
 <?php
 
-namespace GameBundle\Command;
+namespace EM\GameBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -14,12 +14,14 @@ class DatabaseSeedCommand extends ContainerAwareCommand
 {
     /**
      * configure command
+     *
+     * @return void
      */
     protected function configure()
     {
         $this
             ->setName('battleship:database:seed')
-            ->setDescription('Improved load doctrine fixtures with ignoring foreign keys');
+            ->setDescription('seeds the database with initial data');
     }
 
     /**
@@ -32,49 +34,40 @@ class DatabaseSeedCommand extends ContainerAwareCommand
     {
         $this->getApplication()->setAutoExit(false);
         /** drop database */
-//        $cmd = $this->getApplication()->find('doctrine:database:drop');
         $opt = [
             'command' => 'doctrine:database:drop',
-//            '--env' => 'test',
-            '--force' => true,
             '--if-exists' => true,
-            '--verbose' => true,
-            '--no-interaction' => true
+            '--no-interaction' => true,
+            '--force' => true,
+            ($input->getOption('quiet') ? '--quiet' : '--verbose') => true
         ];
-//        $cmd->run(new ArrayInput($opt), $output);
         $this->getApplication()->run(new ArrayInput($opt));
 
         /** init fresh database */
-//        $cmd = $this->getApplication()->find('doctrine:database:create');
         $opt = [
             'command' => 'doctrine:database:create',
-//            '--env' => 'test',
-            '--verbose' => true,
-            '--no-interaction' => true
+            '--if-not-exists' => true,
+            '--no-interaction' => true,
+            ($input->getOption('quiet') ? '--quiet' : '--verbose') => true
         ];
-//        $cmd->run(new ArrayInput($opt), $output);
         $this->getApplication()->run(new ArrayInput($opt));
 
         /** populate database with mandatory data */
-        $cmd = $this->getApplication()->find('doctrine:migrations:migrate');
         $opt = [
             'command' => 'doctrine:migrations:migrate',
-//            '--env' => 'test',
-            '--verbose' => true,
-            '--no-interaction' => true
+            '--no-interaction' => true,
+            ($input->getOption('quiet') ? '--quiet' : '--verbose') => true
+
         ];
-//        $cmd->execute(new ArrayInput($opt), $output);
         $this->getApplication()->run(new ArrayInput($opt));
+
         /** seed database with optional data */
-//        $cmd = $this->getApplication()->find('doctrine:fixtures:load');
         $opt = [
             'command' => 'doctrine:fixtures:load',
-//            '--env' => 'test',
             '--append' => true,
-            '--verbose' => true,
-            '--no-interaction' => true
+            '--no-interaction' => true,
+            ($input->getOption('quiet') ? '--quiet' : '--verbose') => true
         ];
-//        $cmd->execute(new ArrayInput($opt), $output);
         $this->getApplication()->run(new ArrayInput($opt));
 
 //        /** not sure what is better, for now */

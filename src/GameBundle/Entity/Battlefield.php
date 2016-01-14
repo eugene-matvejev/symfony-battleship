@@ -1,18 +1,18 @@
 <?php
 
-namespace GameBundle\Entity;
+namespace EM\GameBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use GameBundle\Library\ORM\IdentifiableInterface;
-use GameBundle\Library\ORM\PlayerInterface;
-use GameBundle\Library\ORM\IdentifiableTrait;
-use GameBundle\Library\ORM\PlayerTrait;
+use EM\GameBundle\ORM\IdentifiableInterface;
+use EM\GameBundle\ORM\PlayerInterface;
+use EM\GameBundle\ORM\IdentifiableTrait;
+use EM\GameBundle\ORM\PlayerTrait;
 
 /**
  * @since 1.0
  *
- * @ORM\Entity(repositoryClass="GameBundle\Repository\BattlefieldRepository")
+ * @ORM\Entity(repositoryClass="EM\GameBundle\Repository\BattlefieldRepository")
  * @ORM\Table(
  *     name="battlefields",
  *     indexes={
@@ -24,14 +24,14 @@ class Battlefield implements IdentifiableInterface, PlayerInterface
 {
     use IdentifiableTrait, PlayerTrait;
     /**
-     * @ORM\ManyToOne(targetEntity="GameBundle\Entity\Game")
+     * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\Game")
      * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)
      *
      * @var Game
      */
     private $game;
     /**
-     * @ORM\OneToMany(targetEntity="GameBundle\Entity\Cell", mappedBy="battlefield", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="EM\GameBundle\Entity\Cell", mappedBy="battlefield", cascade={"persist"})
      * @ORM\JoinColumn(name="id", referencedColumnName="battlefield", nullable=false)
      *
      * @var Cell[]

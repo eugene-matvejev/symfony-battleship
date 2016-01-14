@@ -1,9 +1,9 @@
 <?php
 
-namespace GameBundle\Repository;
+namespace EM\GameBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use GameBundle\Entity\GameResult;
+use EM\GameBundle\Entity\GameResult;
 
 /**
  * @since 1.0

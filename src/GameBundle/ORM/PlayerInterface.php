@@ -1,9 +1,9 @@
 <?php
 
-namespace GameBundle\Library\ORM;
+namespace EM\GameBundle\ORM;
 
 use Doctrine\ORM\Mapping as ORM;
-use GameBundle\Entity\Player;
+use EM\GameBundle\Entity\Player;
 
 /**
  * @since 3.1

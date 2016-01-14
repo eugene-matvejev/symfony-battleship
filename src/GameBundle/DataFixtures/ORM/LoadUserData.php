@@ -1,13 +1,13 @@
 <?php
 
-namespace GameBundle\DataFixtures\ORM;
+namespace EM\GameBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-//use GameBundle\Entity\Player;
-//use GameBundle\Entity\PlayerType;
-//use GameBundle\Model\PlayerModel;
+//use EM\GameBundle\Entity\Player;
+//use EM\GameBundle\Entity\PlayerType;
+//use EM\GameBundle\Model\PlayerModel;
 
 /**
  * @since 2.0

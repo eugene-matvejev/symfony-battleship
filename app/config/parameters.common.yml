@@ -1,4 +1,5 @@
-# This file is auto-generated during the composer install
+# common parameters for each envrioment.
+# specify in parameter_{ENV} different config, if you want overwrite it
 parameters:
   battleshipt.config.ship.size.min: 1
   battleshipt.config.ship.size.max: 4
