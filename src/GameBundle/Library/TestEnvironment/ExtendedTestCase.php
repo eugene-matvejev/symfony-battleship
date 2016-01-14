@@ -18,92 +18,95 @@ use Symfony\Component\HttpFoundation\Response;
 class ExtendedTestCase extends WebTestCase
 {
     /**
+     * @var bool
+     */
+    protected static $setUp;
+    /**
+     * @var Application
+     */
+    protected static $consoleApp;
+    /**
      * @var Client
      */
-    private static $container;
+    private static $client;
     /**
      * @var ContainerInterface
      */
-    private static $router;
+    private static $container;
     /**
      * @var Router
      */
-    private static $client;
+    private static $router;
 
-//    protected static $setUp;
-//    protected $consoleApp;
-//
-//    /**
-//     * Initialization
-//     */
-//    protected function setUp()
-//    {
-//        if (null === static::$setUp) {
-//            static::$setUp = true;
-//            $this->runConsole('doctrine:migrations:migrate', ['--no-interaction' => true]);
-//            $this->runConsole('babylon:doctrine:fixtures:load');
-//        }
-//    }
-//
-//
-//    /**
-//     * Run $command on Symfony console
-//     *
-//     * @param string $command
-//     * @param array  $options
-//     *
-//     * @throws \Exception
-//     */
-//    protected function runConsole($command, array $options = array())
-//    {
-//        $options['-e'] = 'test';
-//        $options['-q'] = null;
-//        $options = array_merge($options, ['command' => $command]);
-//        try {
-//            $this->getConsoleApp()->setCatchExceptions(false);
-//            $this->getConsoleApp()->run(new ArrayInput($options));
-//            $this->getConsoleApp()->setCatchExceptions(true);
-//        } catch (\Exception $ex) {
-//            print $ex->getMessage();
-//            print $ex->getTraceAsString();
-//            throw new \Exception();
-//        }
-//    }
-//
-//    /**
-//     * Return application for run console command
-//     *
-//     * @return Application
-//     */
-//    protected function getConsoleApp()
-//    {
-//        if (null === $this->consoleApp) {
-//            $this->consoleApp = new Application(self::getClient()->getKernel());
-//            $this->consoleApp->setAutoExit(false);
-//        }
-//
-//        return $this->consoleApp;
-//    }
-//
-//    /**
-//     * Gets the display returned by the last execution of the command.
-//     *
-//     * @param ContainerAwareCommand $command
-//     *
-//     * @return string The display of command execution result
-//     */
-//    protected function executeCommand(ContainerAwareCommand $command)
-//    {
-//        $console = $this->getConsoleApp();
-//        $commandName = $command->getName();
-//        if (!$console->has($commandName)) {
-//            $this->getConsoleApp()->add($command);
-//        }
-//        $commandTester = new CommandTester($console->find($commandName));
-//        $commandTester->execute(['command' => $commandName]);
-//
-//        return $commandTester->getDisplay();
-//    }
+    /**
+     * initialization
+     */
+    protected function setUp()
+    {
+        if(null === static::$setUp) {
+            static::$setUp = true;
+
+            self::$consoleApp = new Application(self::getClient()->getKernel());
+            self::$consoleApp->setAutoExit(false);
+
+            $this->runConsole('battleship:database:seed');
+        }
+    }
+
+    /**
+     * Run $command on Symfony console
+     *
+     * @param string $command
+     * @param array  $options
+     *
+     * @throws \Exception
+     */
+    protected function runConsole($command, array $options = [])
+    {
+        $options['--env'] = 'test';
+        $options['--quiet'] = true;
+        $options['--no-interaction'] = true;
+        $options = array_merge($options, ['command' => $command]);
+        try {
+//            self::$consoleApp->setCatchExceptions(false);
+            self::$consoleApp->run(new ArrayInput($options));
+//            self::$consoleApp->setCatchExceptions(true);
+        } catch(\Exception $ex) {
+            print $ex->getMessage();
+            print $ex->getTraceAsString();
+            throw new \Exception();
+        }
+    }
+
+    /**
+     * Return application for run console command
+     *
+     * @return Application
+     */
+    protected function getConsoleApp() : Application
+    {
+        return self::$consoleApp;
+    }
+
+    /**
+     * Gets the display returned by the last execution of the command.
+     *
+     * @param ContainerAwareCommand $command
+     *
+     * @return string The display of command execution result
+     */
+    protected function executeCommand(ContainerAwareCommand $command)
+    {
+        $console = $this->getConsoleApp();
+        $commandName = $command->getName();
+        if (!$console->has($commandName)) {
+            $this->getConsoleApp()->add($command);
+        }
+        $commandTester = new CommandTester($console->find($commandName));
+        $commandTester->execute(['command' => $commandName]);
+
+        return $commandTester->getDisplay();
+    }
 
     /**
      * @since 1.0

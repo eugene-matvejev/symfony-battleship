@@ -16,7 +16,7 @@ class ExtendedAssertTestCase extends ExtendedTestCase
      */
     public function assertCorrectResponse(Response $response)
     {
-        $this->assertLessThan(Response::HTTP_MULTIPLE_CHOICES, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
     }
 
     /**

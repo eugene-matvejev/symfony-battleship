@@ -12,9 +12,7 @@ class ComposerCommand extends ScriptHandler
 {
     static public function initProductionDatabase(CommandEvent $event)
     {
-        $consoleDir = static::getConsoleDir($event, 'install assets');
-
-        if (null !== $consoleDir) {
+        if (null !== $consoleDir = static::getConsoleDir($event, 'install assets')) {
             static::executeCommand($event, $consoleDir, 'doctrine:database:create --env=prod --if-not-exists');
 
             if($event->isDevMode()) {
