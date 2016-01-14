@@ -9,18 +9,30 @@ function Battlefield(size, $el) {
 
 Battlefield.prototype = {
     initData: function() {
-        for(var x = 0; x < this.size; x++) {
+        for(var y = 0; y < this.size; y++) {
             var cells = [];
 
-            this.cells.navX.push(x);
-            this.cells.navY.push(x);
+            this.cells.navX.push(y);
+            this.cells.navY.push(y);
 
-            for(var y = 0; y < this.size; y++) {
+            for(var x = 0; x < this.size; x++) {
                 cells.push(new Cell(x, y, undefined));
             }
 
             this.cells.data.push(cells);
         }
+        //for(var x = 0; x < this.size; x++) {
+        //    var cells = [];
+        //
+        //    this.cells.navX.push(x);
+        //    this.cells.navY.push(x);
+        //
+        //    for(var y = 0; y < this.size; y++) {
+        //        cells.push(new Cell(x, y, undefined));
+        //    }
+        //
+        //    this.cells.data.push(cells);
+        //}
 
         return this;
     },
@@ -32,29 +44,29 @@ Battlefield.prototype = {
 
         this.$html.html($top);
 
-        for(var x in this.cells.navX) {
+        for(var y in this.cells.navY) {
             var $row = _$row.clone();
 
-            $top.append(_layout(undefined, undefined, undefined, _format.xAxis(this.cells.navX[x])));
-            $row.append(_layout(undefined, undefined, undefined, _format.yAxis(this.cells.navY[x])));
+            $top.append(_layout(undefined, undefined, undefined, _format.xAxis(this.cells.navX[y])));
+            $row.append(_layout(undefined, undefined, undefined, _format.yAxis(this.cells.navY[y])));
 
-            for(var y in this.cells.data[x]) {
-                $row.append(this.cells.data[x][y].$html);
+            for(var x in this.cells.data[y]) {
+                $row.append(this.cells.data[y][x].$html);
             }
 
-            $row.append(_layout(undefined, undefined, undefined, _format.yAxis(this.cells.navY[x])));
+            $row.append(_layout(undefined, undefined, undefined, _format.yAxis(this.cells.navY[y])));
             this.$html.append($row);
         }
 
         this.$html.append($top.clone());
     },
     getCell: function(x, y) {
-        for(var _x in this.cells.data) {
-            if(x != _x)
+        for(var _y in this.cells.data) {
+            if(y != _y)
                 continue;
-            for(var _y in this.cells.data[_x]) {
-                if(y == _y) {
-                    return this.cells.data[_x][_y];
+            for(var _x in this.cells.data[_y]) {
+                if(x == _x) {
+                    return this.cells.data[_y][_x];
                 }
             }
         }
@@ -84,10 +96,10 @@ Battlefield.resources = {
     config: {
         format: {
             xAxis: function (i) {
-                return i + 1;
+                return String.fromCharCode(i + 97);
             },
             yAxis: function (i) {
-                return String.fromCharCode(i + 97);
+                return i + 1;
             }
         }
     }

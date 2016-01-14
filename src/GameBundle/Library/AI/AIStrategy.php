@@ -120,8 +120,7 @@ class AIStrategy
 
         foreach($coordinates as $coordinate) {
             if(null !== $_cell = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $coordinate['x'], $coordinate['y'])) {
-                $this->logger->addDebug(__FUNCTION__ .': cell: '. $cell->getId() .' state: '. $cell->getState()->getId());
-                $this->logger->addDebug(__FUNCTION__ .': x'. $cell->getX() .' y:'. $cell->getY());
+                $this->logger->addDebug(__FUNCTION__ .': cell: '. $cell->getId() .' state: '. $cell->getState()->getName() .' x'. $cell->getX() .' y:'. $cell->getY());
                 if(in_array($_cell->getState()->getId(), CellModel::getLiveStates()))
                     $cells[] = $_cell;
             }
@@ -196,32 +195,38 @@ class AIStrategy
             $coordinates[0][$axis]--;
             $coordinates[1][$axis]++;
         }
-
+        $checked = [];
         if(true === $leftCell && true === $rightCell || $matches >= $this->maxShipSize) {
-            $this->logger->addCritical(__FUNCTION__ .': '. $axis .'1true');
-            /**  @var Cell $_cell */
+            $this->logger->addEmergency(__FUNCTION__ .': MARK_AS_SKIPPED axis: '. $axis .' cells: '. count($cells));
+            /** @var Cell $_cell
+             *  x-1; y-1 | x ; y-1 | x+1; y-1
+             *  x-1;   y | x ; y   | x+1; y
+             *  x-1; y+1 | x ; y+1 | x+1; y+1
+             */
+            $steps = [-1, 0, 1];
             foreach($cells as $_cell) {
-                $coordinates = [
-                    [
-                        'x' => $_cell->getX(),
-                        'y' => $_cell->getY()
-                    ],
-                    [
-                        'x' => $_cell->getX(),
-                        'y' => $_cell->getY()
-                    ]
-                ];
+                $coordinates = [];
 
-                $coordinates[0][$axis]--;
-                $coordinates[1][$axis]++;
-
-                $_cell = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $coordinates[0]['x'], $coordinates[0]['y']);
-                if(null !== $cell) {
-                    $this->cellModel->markAsSkipped($_cell);
+                for($x = 0; $x < 3; $x++) {
+                    for($y = 0; $y < 3; $y++) {
+//                        if($_cell->getX() + $steps[$x] !== -1 && $_cell->getY() + $steps[$y] !== -1) {
+                            $coordinates[] = [
+                                'x' => $_cell->getX() + $steps[$x],
+                                'y' => $_cell->getY() + $steps[$y]
+                            ];
+//                        }
+                    }
                 }
-                $cell = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $coordinates[1]['x'], $coordinates[1]['y']);
-                if(null !== $cell) {
-                    $this->cellModel->markAsSkipped($_cell);
+
+                $this->logger->addEmergency(__FUNCTION__ .': ##MARK_AS_SKIPPED_: '. print_r($coordinates, true));
+
+                foreach($coordinates as $coordinate) {
+//                    if(!isset($checked['x'. $coordinate['x'] .'y'. $coordinate['y']])) {
+                        if(null !== $_cell = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $coordinate['x'], $coordinate['y'])) {
+//                            $checked['x'. $_cell->getX() .'y'. $_cell->getY()] = $_cell;
+                            $this->cellModel->markSkipped($_cell);
+                        }
+//                    }
                 }
             }
             return true;

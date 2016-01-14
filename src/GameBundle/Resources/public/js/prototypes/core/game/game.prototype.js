@@ -120,15 +120,18 @@ Game.prototype = {
     },
     cellUpdate: function(json) {
         var _config = Game.resources.config;
-        for(var i in json) {
-            if(i ===  _config.json.victory) {
-                json[i].pid != this.findHumanPlayer().id
+        for(var index in json) {
+            if(index ===  _config.json.victory) {
+                json[index].player.id != this.findHumanPlayer().id
                     ? this.alertMgr.show(_config.text.win, AlertMgr.resources.config.type.success)
                     : this.alertMgr.show(_config.text.loss, AlertMgr.resources.config.type.error);
             } else {
-                var cell = this.cellGet(json[i].player.id, json[i].x, json[i].y);
-                if(cell instanceof Cell) {
-                    cell.setState(json[i].s)
+                var battlefield = json[index];
+                for(var subIndex in battlefield) {
+                    var cell = this.cellGet(battlefield[subIndex].player.id, battlefield[subIndex].x, battlefield[subIndex].y);
+                    if(cell instanceof Cell) {
+                        cell.setState(battlefield[subIndex].s);
+                    }
                 }
             }
 
@@ -151,7 +154,6 @@ Game.prototype = {
     },
     modalValidateInput: function(el) {
         var _config = Game.resources.config;
-        //debugger;
 
         switch(el.id) {
             case _config.trigger.player:
