@@ -21,18 +21,6 @@ Battlefield.prototype = {
 
             this.cells.data.push(cells);
         }
-        //for(var x = 0; x < this.size; x++) {
-        //    var cells = [];
-        //
-        //    this.cells.navX.push(x);
-        //    this.cells.navY.push(x);
-        //
-        //    for(var y = 0; y < this.size; y++) {
-        //        cells.push(new Cell(x, y, undefined));
-        //    }
-        //
-        //    this.cells.data.push(cells);
-        //}
 
         return this;
     },
