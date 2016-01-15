@@ -48,7 +48,9 @@ class AIStrategy
             if($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED || $this->isShipDead($cell)) {
                 continue;
             }
-
+            switch(true) {
+                case 1 === 1:
+            }
             $this->logger->addDebug('X STRATEGY');
             if($cells = $this->xStrategy($cell)) {
                 $this->logger->addDebug('>>> X');
@@ -142,7 +144,7 @@ class AIStrategy
         for($i = 0; $i < $this->maxShipSize; $i++) {
             foreach($coordinates as $i => $coordinate) {
                 if(null !== $cell = CellModel::getByCoordinates($battlefield, $coordinate['x'], $coordinate['y'])) {
-                    $this->logger->addCritical(':::: :::: '. __FUNCTION__ .' x: '. $cell->getX() .' y: '. $cell->getY());
+
                     if(in_array($cell->getState()->getId(), CellModel::getLiveStates())) {
                         $cells[$i] = $cell;
                         unset($coordinates[$i]);

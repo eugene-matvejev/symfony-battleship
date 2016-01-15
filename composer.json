@@ -1,28 +1,40 @@
 {
-    "name": "symfony/framework-standard-edition",
+    "name": "eugenematvejev/battleship-game-api",
     "license": "MIT",
     "type": "project",
-    "description": "The \"Symfony Standard Edition\" distribution",
     "autoload": {
-        "psr-4": { "EM\\": "src/" }
+        "psr-4": {
+            "EM\\": "src/"
+        },
+        "classmap": [
+            "app/AppKernel.php",
+            "app/AppCache.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "EM\\Tests\\": "tests/"
+        }
     },
     "authors": [
         { "name": "Eugene Matvejev", "email": "eugene.matvejev@gmail.com" }
     ],
     "require": {
         "php": ">=7.0.2",
-        "doctrine/orm": "^2.4.8",
-        "doctrine/doctrine-bundle": "~1.4",
-        "doctrine/doctrine-migrations-bundle": "^1.0",
-        "symfony/symfony": "^2.8.2",
-        "symfony/assetic-bundle": "~2.3",
-        "symfony/monolog-bundle": "~2.4",
-        "sensio/distribution-bundle": "~4.0",
+        "doctrine/orm": "^2.5",
+        "doctrine/doctrine-bundle": "^1.6",
+        "doctrine/doctrine-cache-bundle": "^1.2",
+        "doctrine/doctrine-migrations-bundle": "~1.1.1",
+        "symfony/symfony": "3.0.1",
+        "symfony/monolog-bundle": "^2.8",
+        "symfony/assetic-bundle": "^2.7",
+        "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0.2"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^2.3",
-        "sensio/generator-bundle": "~2.3",
+        "sensio/generator-bundle": "^3.0",
+        "symfony/phpunit-bridge": "^2.7",
         "phpunit/phpunit": "^5.1"
     },
     "scripts": {
@@ -44,10 +56,14 @@
         ]
     },
     "config": {
-        "bin-dir": "bin"
+        "platform": {
+            "php": "7.0.2"
+        }
     },
     "extra": {
         "symfony-app-dir": "app",
+        "symfony-bin-dir": "bin",
+        "symfony-var-dir": "var",
         "symfony-web-dir": "web",
         "symfony-assets-install": "symlink"
     }
