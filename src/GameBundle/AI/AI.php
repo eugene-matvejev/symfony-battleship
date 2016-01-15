@@ -61,13 +61,7 @@ class AI
      */
     private function bombardInRange(array $cells)
     {
-        $count = count($cells);
-        $arr = [];
-        foreach($cells as $el) {
-            $arr[] = $el;
-        }
-
-        return 0 !== $count ? $this->bombard($arr[rand(0, $count - 1)]) : null;
+        return !empty($cells) ? $this->bombard($cells[array_rand($cells, 1)]) : null;
     }
 
     /**

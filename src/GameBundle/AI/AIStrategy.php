@@ -4,7 +4,6 @@ namespace EM\GameBundle\AI;
 
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
-use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
 use Symfony\Bridge\Monolog\Logger;
 
@@ -119,7 +118,7 @@ class AIStrategy
         ];
 
         foreach($coordinates as $coordinate) {
-            if(null !== $_cell = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $coordinate['x'], $coordinate['y'])) {
+            if(null !== $_cell = CellModel::getByCoordinates($cell->getBattlefield(), $coordinate['x'], $coordinate['y'])) {
                 $this->logger->addDebug(__FUNCTION__ .': cell: '. $cell->getId() .' state: '. $cell->getState()->getName() .' x'. $cell->getX() .' y:'. $cell->getY());
                 if(in_array($_cell->getState()->getId(), CellModel::getLiveStates()))
                     $cells[] = $_cell;
@@ -142,7 +141,7 @@ class AIStrategy
 
         for($i = 0; $i < $this->maxShipSize; $i++) {
             foreach($coordinates as $i => $coordinate) {
-                if(null !== $cell = BattlefieldModel::getCellByCoordinates($battlefield, $coordinate['x'], $coordinate['y'])) {
+                if(null !== $cell = CellModel::getByCoordinates($battlefield, $coordinate['x'], $coordinate['y'])) {
                     $this->logger->addCritical(':::: :::: '. __FUNCTION__ .' x: '. $cell->getX() .' y: '. $cell->getY());
                     if(in_array($cell->getState()->getId(), CellModel::getLiveStates())) {
                         $cells[$i] = $cell;
@@ -183,16 +182,15 @@ class AIStrategy
 
         for($i = 0; $i < $this->maxShipSize; $i++) {
             if(true === $leftCell && true === $leftCell = $this->verifyWay($cell->getBattlefield(), $coordinates[0]['x'], $coordinates[0]['y'])) {
-                $cells[] = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $coordinates[0]['x'], $coordinates[0]['y']);
+                $cells[] = CellModel::getByCoordinates($cell->getBattlefield(), $coordinates[0]['x'], $coordinates[0]['y']);
+                $coordinates[0][$axis]--;
                 $matches++;
             }
             if(true === $rightCell && true === $rightCell = $this->verifyWay($cell->getBattlefield(), $coordinates[1]['x'], $coordinates[1]['y'])) {
-                $cells[] = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $coordinates[1]['x'], $coordinates[1]['y']);
+                $cells[] = CellModel::getByCoordinates($cell->getBattlefield(), $coordinates[1]['x'], $coordinates[1]['y']);
+                $coordinates[1][$axis]++;
                 $matches++;
             }
-
-            $coordinates[0][$axis]--;
-            $coordinates[1][$axis]++;
         }
 
         if(true === $leftCell && true === $rightCell || $matches >= $this->maxShipSize) {
@@ -216,10 +214,9 @@ class AIStrategy
                 }
 
                 $this->logger->addEmergency(__FUNCTION__ .': ##MARK_AS_SKIPPED_: '. print_r($coordinates, true));
-
                 foreach($coordinates as $coordinate) {
-                    if(null !== $_cell = BattlefieldModel::getCellByCoordinates($cell->getBattlefield(), $coordinate['x'], $coordinate['y'])) {
-                        $this->cellModel->markSkipped($_cell);
+                    if(null !== $_cell = CellModel::getByCoordinates($cell->getBattlefield(), $coordinate['x'], $coordinate['y'])) {
+                        $this->cellModel->switchStateToSkipped($_cell);
                     }
                 }
             }
@@ -231,7 +228,7 @@ class AIStrategy
 
     private function verifyWay(Battlefield $battlefield, int $x, int $y) : bool
     {
-        $cell = BattlefieldModel::getCellByCoordinates($battlefield, $x, $y);
+        $cell = CellModel::getByCoordinates($battlefield, $x, $y);
 
         return null !== $cell && $cell->getState()->getId() === CellModel::STATE_SHIP_DIED;
     }

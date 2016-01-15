@@ -64,9 +64,8 @@ class ExtendedTestCase extends WebTestCase
     protected function runConsole($command, array $options = [])
     {
         $options['--env'] = 'test';
-        $options['--quiet'] = true;
         $options['--no-interaction'] = true;
-        $options['--show-output'] = false;
+        $options['--quiet'] = true;
         $options = array_merge($options, ['command' => $command]);
         try {
 //            self::$consoleApp->setCatchExceptions(false);
