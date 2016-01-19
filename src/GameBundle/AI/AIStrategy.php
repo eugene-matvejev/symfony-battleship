@@ -163,22 +163,19 @@ class AIStrategy
 
     public function isShipDead(Cell $cell) : bool
     {
-//        if($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
-//            return false;
-//        }
         return $this->verifyShipByAxis($cell, 'x') || $this->verifyShipByAxis($cell, 'y');
     }
 
     private function verifyShipByAxis(Cell $cell, string $axis) : bool
     {
         $coordinates = [
-            ['x' => $cell->getX() + ($axis !== 'x' ?: -1), 'y' => $cell->getY() + ($axis !== 'y' ?: -1)],
-            ['x' => $cell->getX() + ($axis !== 'x' ?: 1), 'y' => $cell->getY() + ($axis !== 'y' ?: 1)]
+            ['x' => $cell->getX() - ('x' === $axis ? 1 : 0), 'y' => $cell->getY() - ('y' === $axis ? 1 : 0)],
+            ['x' => $cell->getX() + ('x' === $axis ? 1 : 0), 'y' => $cell->getY() + ('y' === $axis ? 1 : 0)]
         ];
 
         $leftCell = $rightCell = true;
-        $matches = 1;
         $cells = [$cell];
+        $matches = 1;
 
         for($i = 0; $i < $this->maxShipSize; $i++) {
             if(true === $leftCell && true === $leftCell = $this->verifyWay($cell->getBattlefield(), $coordinates[0]['x'], $coordinates[0]['y'])) {
@@ -213,8 +210,8 @@ class AIStrategy
                     }
                 }
 
-//                $this->logger->addEmergency(__FUNCTION__ .': ##MARK_AS_SKIPPED_: '. print_r($coordinates, true));
                 foreach($coordinates as $coordinate) {
+                    $this->logger->addEmergency(__FUNCTION__ .': ###MARK_AS_SKIPPED_: '. print_r($coordinates, true));
                     if(null !== $_cell = CellModel::getByCoordinates($cell->getBattlefield(), $coordinate['x'], $coordinate['y'])) {
                         $this->cellModel->switchStateToSkipped($_cell);
                     }
