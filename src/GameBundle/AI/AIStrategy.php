@@ -141,18 +141,19 @@ class AIStrategy
         $cells = [];
 
         for($i = 0; $i < $this->maxShipSize; $i++) {
-            foreach($coordinates as $j => $coordinate) {
+            foreach($coordinates as $i => $coordinate) {
                 if(null !== $cell = CellModel::getByCoordinates($battlefield, $coordinate['x'], $coordinate['y'])) {
+
                     if(in_array($cell->getState()->getId(), CellModel::getLiveStates())) {
-                        $cells[] = $cell;
-                        unset($coordinates[$j]);
-                    } elseif(0 === $j) {
-                        $coordinates[$j][$axis]++;
-                    } elseif(1 === $j) {
-                        $coordinates[$j][$axis]--;
+                        $cells[$i] = $cell;
+                        unset($coordinates[$i]);
+                    } elseif(0 === $i) {
+                        $coordinates[$i][$axis]++;
+                    } elseif(1 === $i) {
+                        $coordinates[$i][$axis]--;
                     }
                 } else {
-                    unset($coordinates[$j]);
+                    unset($coordinates[$i]);
                 }
             }
         }
