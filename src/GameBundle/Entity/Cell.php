@@ -1,10 +1,10 @@
 <?php
 
-namespace GameBundle\Entity;
+namespace EM\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use GameBundle\Library\ORM\IdentifiableInterface;
-use GameBundle\Library\ORM\IdentifiableTrait;
+use EM\GameBundle\ORM\IdentifiableInterface;
+use EM\GameBundle\ORM\IdentifiableTrait;
 
 /**
  * @since 1.0
@@ -24,14 +24,14 @@ class Cell implements IdentifiableInterface
 {
     use IdentifiableTrait;
     /**
-     * @ORM\ManyToOne(targetEntity="GameBundle\Entity\Battlefield", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\Battlefield", inversedBy="id")
      * @ORM\JoinColumn(name="battlefield", referencedColumnName="id", nullable=false)
      *
      * @var Battlefield
      */
     private $battlefield;
     /**
-     * @ORM\ManyToOne(targetEntity="GameBundle\Entity\CellState")
+     * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\CellState")
      * @ORM\JoinColumn(name="state", referencedColumnName="id", nullable=false)
      *
      * @var CellState

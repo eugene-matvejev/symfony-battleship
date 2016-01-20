@@ -110,7 +110,7 @@ Game.prototype = {
         var self = this;
 
         this.pageMgr.loadingMode(true);
-        this.apiMgr.request('POST', this.$area.attr(Game.resources.config.route.turn), JSON.stringify(cell),
+        this.apiMgr.request('PATCH', this.$area.attr(Game.resources.config.route.turn), JSON.stringify(cell),
             function(json) {
                 self.pageMgr.loadingMode(false);
                 self.cellUpdate(json);

@@ -16,6 +16,6 @@ battleship.game.api.init:
 battleship.game.api.turn:
   path:     /turn
   defaults: { _controller: GameBundle:Game:turn }
-  methods:  [POST]
+  methods:  [PATCH]
 #  requirements:
 #    _format: json

@@ -1,16 +1,17 @@
 <?php
 
-namespace GameBundle\Model;
+namespace EM\GameBundle\Model;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityRepository;
-use GameBundle\Entity\Battlefield;
-use GameBundle\Entity\Cell;
-use GameBundle\Entity\Game;
-use GameBundle\Entity\GameResult;
-use GameBundle\Entity\Player;
-use GameBundle\Library\AI\AI;
-use GameBundle\Library\Exception\GameException;
+use EM\GameBundle\Entity\Battlefield;
+use EM\GameBundle\Entity\Cell;
+use EM\GameBundle\Entity\Game;
+use EM\GameBundle\Entity\GameResult;
+use EM\GameBundle\Entity\Player;
+use EM\GameBundle\AI\AI;
+use EM\GameBundle\AI\AIStrategy;
+use EM\GameBundle\Exception\GameException;
 use Symfony\Bridge\Monolog\Logger;
 
 /**
@@ -18,6 +19,10 @@ use Symfony\Bridge\Monolog\Logger;
  */
 class GameModel
 {
+    /**
+     * @var ObjectManager
+     */
+    private $om;
     /**
      * @var EntityRepository
      */
@@ -27,29 +32,44 @@ class GameModel
      */
     private $playerRepository;
     /**
-     * @var ObjectManager
+     * @var AI
      */
-    private $om;
+    private $ai;
     /**
-     * @var Logger
+     * @var AIStrategy
      */
-    private $logger;
+    private $strategyService;
     /**
      * @var CellModel
      */
     private $cellModel;
+    /**
+     * @var PlayerModel
+     */
+    private $playerModel;
+    /**
+     * @var Logger
+     */
+    private $logger;
 
-    function __construct(ObjectManager $om, Logger $logger, CellModel $cellModel, PlayerModel $playerModel, AI $ai)
+    function __construct(ObjectManager $om, Logger $logger, CellModel $cellModel, PlayerModel $playerModel, AI $ai, AIStrategy $strategy)
     {
         $this->om               = $om;
-        $this->logger           = $logger;
         $this->gameRepository   = $om->getRepository('GameBundle:Game');
         $this->playerRepository = $om->getRepository('GameBundle:Player');
         $this->ai               = $ai;
+        $this->strategyService  = $strategy;
         $this->cellModel        = $cellModel;
         $this->playerModel      = $playerModel;
+        $this->logger           = $logger;
     }
 
+    /**
+     * verify, init and save game
+     *
+     * @param string $json
+     * @return \stdClass
+     */
     public function init(string $json) : \stdClass
     {
         $json = json_decode($json);
@@ -80,37 +100,13 @@ class GameModel
                 $battlefield->addCell($cell);
             }
 
-            if($battlefield->getPlayer()->getType()->getId() == PlayerModel::TYPE_CPU) {
-                $this->initCPUBattlefield($battlefield);
+            if($battlefield->getPlayer()->getType()->getId() === PlayerModel::TYPE_CPU) {
+                $this->initCPUShips($battlefield);
             }
-
         }
         $this->om->flush();
 
         return self::getJSON($game);
-    }
-
-    public static function getJSON(Game $game) : \stdClass
-    {
-        $std = new \stdClass();
-
-        $std->id = $game->getId();
-        $std->data = [];
-
-        foreach($game->getBattlefields() as $battlefield) {
-            $json = new \stdClass();
-            $json->id = $battlefield->getId();
-            $json->player = PlayerModel::getJSON($battlefield->getPlayer());
-            $json->cells = [];
-
-            foreach($battlefield->getCells() as $cell) {
-                $json->cells[] = CellModel::getJSON($cell);
-            }
-
-            $std->data[] = $json;
-        }
-
-        return $std;
     }
 
     /**
@@ -118,10 +114,10 @@ class GameModel
      *
      * @return void
      */
-    public function initCPUBattlefield(Battlefield $battlefield)
+    public function initCPUShips(Battlefield $battlefield)
     {
         foreach($battlefield->getCells() as $cell) {
-            if(($cell->getX() === 1 && $cell->getY() === 1) || ($cell->getX() === 5 && $cell->getY() === 5)) {
+            if(($cell->getX() === 1 && $cell->getY() === 1) || ($cell->getX() === 1 && $cell->getY() === 5)) {
                 $cell->setState($this->cellModel->getCellStates()[CellModel::STATE_SHIP_LIVE]);
             }
         }
@@ -135,11 +131,11 @@ class GameModel
      */
     public function nextTurn(string $json) : \stdClass
     {
-        $json = json_decode($json);
-        $std  = new \stdClass();
+        $arr = json_decode($json);
+        $std = new \stdClass();
 
-        if(null === $game = $this->gameRepository->find($json->game->id)) {
-            throw new GameException(__FUNCTION__ .' game: '. $json->game->id .' doesn\'t exists.');
+        if(null === $game = $this->gameRepository->find($arr->game->id)) {
+            throw new GameException(__FUNCTION__ .' game: '. $arr->game->id .' doesn\'t exists.');
         }
 
         if(null !== $game->getResult()) {
@@ -147,23 +143,24 @@ class GameModel
         }
 
         foreach($game->getBattlefields() as $battlefield) {
-            $this->playerTurn($battlefield, $json);
+            $this->playerTurn($battlefield, $arr);
 
-            if($this->detectVictory($battlefield)) {
-                $std->victory = GameResultModel::getJSON($battlefield->getGame()->getResult());
+            if(null !== $game->getResult() || $this->detectVictory($battlefield)) {
+                $std->victory = GameResultModel::getJSON($game->getResult());
 
                 break;
             }
         }
 
         foreach(CellModel::getChangedCells() as $cell) {
-            $log[] = CellModel::getJSON($cell);
             if(!isset($std->{$cell->getBattlefield()->getId()})) {
                 $std->{$cell->getBattlefield()->getId()} = [];
             }
+
             $std->{$cell->getBattlefield()->getId()}[] = CellModel::getJSON($cell);
             $this->logger->addEmergency(__CLASS__ .':'. __FUNCTION__ . ' :: cell: '. print_r(CellModel::getJSON($cell), true));
         }
+        $this->om->flush();
 
         return $std;
     }
@@ -191,36 +188,49 @@ class GameModel
                 break;
         }
 
+        $this->strategyService->isShipDead($_cell);
         $this->om->persist($_cell);
-        $this->om->flush();
     }
 
     public function detectVictory(Battlefield $battlefield) : bool
     {
-        $game = $battlefield->getGame();
-        if(null !== $game->getResult()) {
-            return true;
-        }
-
         if(true !== BattlefieldModel::isUnfinished($battlefield)) {
             return false;
         }
 
-        $winner = null;
+        $game = $battlefield->getGame();
         foreach($game->getBattlefields() as $_battlefield) {
             if($_battlefield->getId() !== $battlefield->getId()) {
-                $winner = $_battlefield->getPlayer();
-                break;
+                $result = (new GameResult())
+                    ->setPlayer($_battlefield->getPlayer());
+                $game->setResult($result);
+
+                $this->om->persist($game);
+                return true;
             }
         }
 
-        $result = (new GameResult())
-            ->setPlayer($winner);
-        $game->setResult($result);
+        return false;
+    }
 
-        $this->om->persist($game);
-        $this->om->flush();
+    public static function getJSON(Game $game) : \stdClass
+    {
+        $std = new \stdClass();
+        $std->id = $game->getId();
+        $std->data = [];
 
-        return true;
+        foreach($game->getBattlefields() as $battlefield) {
+            $json = new \stdClass();
+            $json->id = $battlefield->getId();
+            $json->player = PlayerModel::getJSON($battlefield->getPlayer());
+            $json->cells = [];
+
+            foreach($battlefield->getCells() as $cell) {
+                $json->cells[] = CellModel::getJSON($cell);
+            }
+            $std->data[] = $json;
+        }
+
+        return $std;
     }
 }

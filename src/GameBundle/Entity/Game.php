@@ -1,13 +1,13 @@
 <?php
 
-namespace GameBundle\Entity;
+namespace EM\GameBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use GameBundle\Library\ORM\IdentifiableInterface;
-use GameBundle\Library\ORM\TimestampedInterface;
-use GameBundle\Library\ORM\IdentifiableTrait;
-use GameBundle\Library\ORM\TimestampedTrait;
+use EM\GameBundle\ORM\IdentifiableInterface;
+use EM\GameBundle\ORM\TimestampedInterface;
+use EM\GameBundle\ORM\IdentifiableTrait;
+use EM\GameBundle\ORM\TimestampedTrait;
 
 /**
  * @since 1.0
@@ -20,14 +20,14 @@ class Game implements IdentifiableInterface, TimestampedInterface
 {
     use IdentifiableTrait, TimestampedTrait;
     /**
-     * @ORM\OneToMany(targetEntity="GameBundle\Entity\Battlefield", mappedBy="game", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="EM\GameBundle\Entity\Battlefield", mappedBy="game", cascade={"persist"})
      * @ORM\JoinColumn(name="id", referencedColumnName="game", nullable=false)
      *
      * @var Battlefield[]
      */
     private $battlefields;
     /**
-     * @ORM\OneToOne(targetEntity="GameBundle\Entity\GameResult", mappedBy="game", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="EM\GameBundle\Entity\GameResult", mappedBy="game", cascade={"persist"})
      *
      * @var GameResult
      */

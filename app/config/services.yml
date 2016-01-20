@@ -5,8 +5,8 @@ parameters:
 
 services:
 #    service_name:
-#        class: GameBundle\Directory\ClassName
+#        class: EM\GameBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
-
-imports:
-  - { resource: @GameBundle/Resources/config/services.yml }
+#
+#imports:
+#  - { resource: @GameBundle/Resources/config/services.yml }
