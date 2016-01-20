@@ -1,12 +1,12 @@
 <?php
 
-namespace GameBundle\Repository;
+namespace EM\GameBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
-use GameBundle\Entity\Battlefield;
-use GameBundle\Entity\Game;
-use GameBundle\Model\PlayerModel;
+use EM\GameBundle\Entity\Battlefield;
+use EM\GameBundle\Entity\Game;
+use EM\GameBundle\Model\PlayerModel;
 
 /**
  * @since 1.0

@@ -1,6 +1,6 @@
 <?php
 
-namespace GameBundle\Controller;
+namespace EM\GameBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;

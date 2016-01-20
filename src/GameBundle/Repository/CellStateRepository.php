@@ -1,11 +1,11 @@
 <?php
 
-namespace GameBundle\Repository;
+namespace EM\GameBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
-use GameBundle\Entity\CellState;
-use GameBundle\Model\CellModel;
+use EM\GameBundle\Entity\CellState;
+use EM\GameBundle\Model\CellModel;
 
 /**
  * @since 1.0

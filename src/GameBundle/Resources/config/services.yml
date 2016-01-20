@@ -1,17 +1,17 @@
 services:
   # Models
   battleship.game.services.cell.model:
-    class: GameBundle\Model\CellModel
+    class: EM\GameBundle\Model\CellModel
     arguments:
-      - @doctrine.orm.entity_manager
-      - @logger
+      - "@doctrine.orm.entity_manager"
+      - "@logger"
   battleship.game.services.player.model:
-    class: GameBundle\Model\PlayerModel
+    class: EM\GameBundle\Model\PlayerModel
     arguments:
-      - @doctrine.orm.entity_manager
+      - "@doctrine.orm.entity_manager"
 #      - @battleship.game.services.cell.state.repository
   battleship.game.services.game.model:
-    class: GameBundle\Model\GameModel
+    class: EM\GameBundle\Model\GameModel
     arguments:
 #      - @battleship.game.services.battlefield.repository
 #      - @battleship.game.services.cell.repository
@@ -21,63 +21,64 @@ services:
 #      - @battleship.game.services.player.repository
 #      - @battleship.game.services.player.type.repository
 #      - @doctrine.orm.entity_manager
-      - @doctrine.orm.entity_manager
-      - @logger
-      - @battleship.game.services.cell.model
-      - @battleship.game.services.player.model
-      - @battleship.game.services.ai.core
+      - "@doctrine.orm.entity_manager"
+      - "@logger"
+      - "@battleship.game.services.cell.model"
+      - "@battleship.game.services.player.model"
+      - "@battleship.game.services.ai.core"
+      - "@battleship.game.services.ai.strategy.service"
   battleship.game.services.statistics.model:
-    class: GameBundle\Model\StatisticsModel
+    class: EM\GameBundle\Model\StatisticsModel
     arguments:
-      - @doctrine.orm.entity_manager
+      - "@doctrine.orm.entity_manager"
 #      - @battleship.game.services.game.result.repository
   # AI
   battleship.game.services.ai.core:
-    class: GameBundle\Library\AI\AI
+    class: EM\GameBundle\AI\AI
     arguments:
-      - @battleship.game.services.cell.model
-      - @battleship.game.services.ai.strategy.service
-      - @logger
+      - "@battleship.game.services.cell.model"
+      - "@battleship.game.services.ai.strategy.service"
+      - "@logger"
   battleship.game.services.ai.strategy.service:
-    class: GameBundle\Library\AI\AIStrategy
+    class: EM\GameBundle\AI\AIStrategy
     arguments:
       - %battleshipt.config.ship.size.min%
       - %battleshipt.config.ship.size.max%
-      - @battleship.game.services.cell.model
-      - @logger
+      - "@battleship.game.services.cell.model"
+      - "@logger"
 #  # Repositories
 #  battleship.game.services.battlefield.repository:
 #    class: Doctrine\ORM\EntityRepository
 #    factory: [@doctrine.orm.entity_manager, getRepository]
 #    arguments:
-#      - AppBundle\Entity\Battlefield
+#      - GameBundle\Entity\Battlefield
 #  battleship.game.services.cell.repository:
 #    class: Doctrine\ORM\EntityRepository
 #    factory: [@doctrine.orm.entity_manager, getRepository]
 #    arguments:
-#      - AppBundle\Entity\Cell
+#      - GameBundle\Entity\Cell
 #  battleship.game.services.cell.state.repository:
 #    class: Doctrine\ORM\EntityRepository
 #    factory: [@doctrine.orm.entity_manager, getRepository]
 #    arguments:
-#      - AppBundle\Entity\CellState
+#      - GameBundle\Entity\CellState
 #  battleship.game.services.game.repository:
 #    class: Doctrine\ORM\EntityRepository
 #    factory: [@doctrine.orm.entity_manager, getRepository]
 #    arguments:
-#      - AppBundle\Entity\Game
+#      - GameBundle\Entity\Game
 #  battleship.game.services.game.result.repository:
 #    class: Doctrine\ORM\EntityRepository
 #    factory: [@doctrine.orm.entity_manager, getRepository]
 #    arguments:
-#      - AppBundle\Entity\GameResult
+#      - GameBundle\Entity\GameResult
 #  battleship.game.services.player.repository:
 #    class: Doctrine\ORM\EntityRepository
 #    factory: [@doctrine.orm.entity_manager, getRepository]
 #    arguments:
-#      - AppBundle\Entity\Player
+#      - GameBundle\Entity\Player
 #  battleship.game.services.player.type.repository:
 #    class: Doctrine\ORM\EntityRepository
 #    factory: [@doctrine.orm.entity_manager, getRepository]
 #    arguments:
-#      - AppBundle\Entity\PlayerType
+#      - GameBundle\Entity\PlayerType

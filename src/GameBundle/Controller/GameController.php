@@ -1,6 +1,6 @@
 <?php
 
-namespace GameBundle\Controller;
+namespace EM\GameBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,7 +22,7 @@ class GameController extends Controller
         $model = $this->get('battleship.game.services.game.model');
         $json  = $model->init($request->getContent());
 
-        return new JsonResponse($json);
+        return new JsonResponse($json, Response::HTTP_CREATED);
     }
 
     public function turnAction(Request $request) : JsonResponse

@@ -21,18 +21,6 @@ Battlefield.prototype = {
 
             this.cells.data.push(cells);
         }
-        //for(var x = 0; x < this.size; x++) {
-        //    var cells = [];
-        //
-        //    this.cells.navX.push(x);
-        //    this.cells.navY.push(x);
-        //
-        //    for(var y = 0; y < this.size; y++) {
-        //        cells.push(new Cell(x, y, undefined));
-        //    }
-        //
-        //    this.cells.data.push(cells);
-        //}
 
         return this;
     },
@@ -78,17 +66,21 @@ Battlefield.prototype = {
         this.getCell(0, 1).setState(_config.state.shipDied);
         this.getCell(0, 2).setState(_config.state.shipLive);
         this.getCell(0, 3).setState(_config.state.shipLive);
-        this.getCell(0, 4).setState(_config.state.shipLive);
 
         this.getCell(2, 2).setState(_config.state.shipLive);
         this.getCell(2, 3).setState(_config.state.shipLive);
-        this.getCell(2, 4).setState(_config.state.shipLive);
+
         this.getCell(2, 5).setState(_config.state.shipLive);
 
+        this.getCell(2, 0).setState(_config.state.shipLive);
+        this.getCell(3, 0).setState(_config.state.shipLive);
+        this.getCell(4, 0).setState(_config.state.shipLive);
         this.getCell(5, 0).setState(_config.state.shipLive);
-        this.getCell(5, 1).setState(_config.state.shipLive);
-        this.getCell(5, 2).setState(_config.state.shipLive);
-        this.getCell(5, 3).setState(_config.state.shipLive);
+
+        this.getCell(5, 4).setState(_config.state.shipLive);
+        this.getCell(5, 5).setState(_config.state.shipLive);
+
+        this.getCell(4, 2).setState(_config.state.shipLive);
     }
 };
 

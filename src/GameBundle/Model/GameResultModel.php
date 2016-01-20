@@ -1,8 +1,8 @@
 <?php
 
-namespace GameBundle\Model;
+namespace EM\GameBundle\Model;
 
-use GameBundle\Entity\GameResult;
+use EM\GameBundle\Entity\GameResult;
 
 /**
  * @since 3.0

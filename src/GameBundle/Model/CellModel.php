@@ -1,10 +1,11 @@
 <?php
 
-namespace GameBundle\Model;
+namespace EM\GameBundle\Model;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use GameBundle\Entity\Cell;
-use GameBundle\Entity\CellState;
+use EM\GameBundle\Entity\Battlefield;
+use EM\GameBundle\Entity\Cell;
+use EM\GameBundle\Entity\CellState;
 use Symfony\Bridge\Monolog\Logger;
 
 /**
@@ -17,6 +18,10 @@ class CellModel
     const STATE_SHIP_LIVE  = 3;
     const STATE_SHIP_DIED  = 4;
     const STATE_WATER_SKIP = 5;
+    /**
+     * @var Cell[][][]
+     */
+    private static $cachedCells;
     /**
      * @var Cell[]
      */
@@ -62,9 +67,8 @@ class CellModel
         return $cell;
     }
 
-    public function markSkipped(Cell $cell) : Cell
+    public function switchStateToSkipped(Cell $cell) : Cell
     {
-        $this->logger->addEmergency(__FUNCTION__ .' cell:'. $cell->getId() .' state:'. $cell->getState()->getName());
         switch($cell->getState()->getId()) {
             case self::STATE_WATER_LIVE:
                 $cell->setState(self::$cellStates[self::STATE_WATER_SKIP]);
@@ -73,6 +77,30 @@ class CellModel
         }
 
         return $cell;
+    }
+
+    /**
+     * @param Battlefield $battlefield
+     * @param int         $x
+     * @param int         $y
+     *
+     * @return Cell|null
+     */
+    public static function getByCoordinates(Battlefield $battlefield, int $x, int $y)
+    {
+        if(!isset(self::$cachedCells[$battlefield->getId()])) {
+            self::$cachedCells[$battlefield->getId()] = [];
+
+            foreach($battlefield->getCells() as $cell) {
+                if(!isset(self::$cachedCells[$battlefield->getId()][$cell->getX()])) {
+                    self::$cachedCells[$battlefield->getId()][$cell->getX()] = [];
+                }
+
+                self::$cachedCells[$battlefield->getId()][$cell->getX()][$cell->getY()] = $cell;
+            }
+        }
+
+        return self::$cachedCells[$battlefield->getId()][$x][$y] ?? null;
     }
 
     public static function getJSON(Cell $cell) : \stdClass
