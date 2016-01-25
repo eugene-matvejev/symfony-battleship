@@ -163,7 +163,7 @@ class AIStrategy
 
     public function isShipDead(Cell $cell) : bool
     {
-        return $this->isShipIsDead($cell, 'x') || $this->isShipIsDead($cell, 'y');
+//        return $this->isShipIsDead($cell, 'x') || $this->isShipIsDead($cell, 'y');
         return $this->verifyShipByAxis($cell, 'x') || $this->verifyShipByAxis($cell, 'y');
     }
 
