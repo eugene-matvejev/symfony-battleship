@@ -4,31 +4,23 @@
     <meta charset="UTF-8" />
     <title></title>
 {% block stylesheets %}
-    {% stylesheets filter='cssrewrite'
-    'bundles/game/bootstrap-3.3.5-dist/css/bootstrap.min.css'
-    'bundles/game/css/layout/layout.css'
-    'bundles/game/css/layout/animations.css'
-    %}
-    <link rel="stylesheet" href="{{ asset_url }}" type="text/css"/>
-    {% endstylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/game/bootstrap-3.3.5-dist/css/bootstrap.min.css') }}" type="text/css"/>
+    <link rel="stylesheet" href="{{ asset('bundles/game/css/layout/layout.css') }}" type="text/css"/>
+    <link rel="stylesheet" href="{{ asset('bundles/game/css/layout/animations.css') }}" type="text/css"/>
 {% endblock %}
 </head>
 <body>
 {% block body %}
 {% endblock %}
 {% block javascripts %}
-    {% javascripts
-    '@GameBundle/Resources/public/jquery/jquery-2.1.4.min.js'
-    '@GameBundle/Resources/public/bootstrap-3.3.5-dist/js/bootstrap.min.js'
-    '@GameBundle/Resources/public/js/prototypes/gui/page.mgr.protorype.js'
-    '@GameBundle/Resources/public/js/prototypes/gui/alert.mgr.prototype.js'
-    '@GameBundle/Resources/public/js/prototypes/gui/modal.mgr.prototype.js'
-    '@GameBundle/Resources/public/js/prototypes/gui/ui.prototype.js'
-    '@GameBundle/Resources/public/js/_page.controller.js'
-    '@GameBundle/Resources/public/js/_alert.controller.js'
-    %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+    <script type="text/javascript" src="{{ asset('bundles/game/jquery/jquery-2.1.4.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/bootstrap-3.3.5-dist/js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/prototypes/gui/page.mgr.prototype.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/prototypes/gui/alert.mgr.prototype.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/prototypes/gui/modal.mgr.prototype.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/prototypes/gui/ui.prototype.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/_page.controller.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/_alert.controller.js') }}"></script>
 {% endblock %}
 </body>
 </html>
