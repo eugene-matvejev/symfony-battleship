@@ -48,20 +48,18 @@ class AIStrategy
             if($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED || $this->isShipDead($cell)) {
                 continue;
             }
-            switch(true) {
-                case 1 === 1:
-            }
-            $this->logger->addDebug('X STRATEGY');
+
+            $this->logger->addDebug(__FUNCTION__ .':: X STRATEGY');
             if($cells = $this->xStrategy($cell)) {
                 $this->logger->addDebug('>>> X');
             }
 
-            $this->logger->addDebug('Y STRATEGY');
+            $this->logger->addDebug(__FUNCTION__ .':: Y STRATEGY');
             if(empty($cells) && $cells = $this->yStrategy($cell)) {
                 $this->logger->addDebug('>>> Y');
             }
 
-            $this->logger->addDebug('Z STRATEGY');
+            $this->logger->addDebug(__FUNCTION__ .':: Z STRATEGY');
             if(empty($cells) && $cells = $this->zStrategy($cell)) {
                 $this->logger->addDebug('>>> Z');
             }
@@ -121,9 +119,10 @@ class AIStrategy
 
         foreach($coordinates as $coordinate) {
             if(null !== $_cell = CellModel::getByCoordinates($cell->getBattlefield(), $coordinate['x'], $coordinate['y'])) {
-                $this->logger->addDebug(__FUNCTION__ .': cell: '. $cell->getId() .' state: '. $cell->getState()->getName() .' x'. $cell->getX() .' y:'. $cell->getY());
-                if(in_array($_cell->getState()->getId(), CellModel::getLiveStates()))
+
+                if(in_array($_cell->getState()->getId(), CellModel::getLiveStates())) {
                     $cells[] = $_cell;
+                }
             }
         }
 
@@ -164,22 +163,18 @@ class AIStrategy
 
     public function isShipDead(Cell $cell) : bool
     {
-        $xCoordinates = [
-            ['x' => $cell->getX() - 1, 'y' => $cell->getY()],
-            ['x' => $cell->getX() + 1, 'y' => $cell->getY()]
-        ];
-        $yCoordinates = [
-            ['x' => $cell->getX(), 'y' => $cell->getY() - 1],
-            ['x' => $cell->getX(), 'y' => $cell->getY() + 1]
-        ];
-
-        return $this->verifyShipByAxis($cell, $xCoordinates, 'x') || $this->verifyShipByAxis($cell, $yCoordinates, 'y');
+        return $this->verifyShipByAxis($cell, 'x') || $this->verifyShipByAxis($cell, 'y');
     }
 
-    private function verifyShipByAxis(Cell $cell, array $coordinates, string $axis) : bool
+    private function verifyShipByAxis(Cell $cell, string $axis) : bool
     {
+        $coordinates = [
+            ['x' => $cell->getX() - ('x' === $axis ? 1 : 0), 'y' => $cell->getY() - ('y' === $axis ? 1 : 0)],
+            ['x' => $cell->getX() + ('x' === $axis ? 1 : 0), 'y' => $cell->getY() + ('y' === $axis ? 1 : 0)]
+        ];
+
         $leftCell = $rightCell = true;
-        $cells = [];
+        $cells = [$cell];
         $matches = 1;
 
         for($i = 0; $i < $this->maxShipSize; $i++) {
@@ -215,13 +210,14 @@ class AIStrategy
                     }
                 }
 
-                $this->logger->addEmergency(__FUNCTION__ .': ##MARK_AS_SKIPPED_: '. print_r($coordinates, true));
                 foreach($coordinates as $coordinate) {
+                    $this->logger->addEmergency(__FUNCTION__ .': ###MARK_AS_SKIPPED_: '. print_r($coordinates, true));
                     if(null !== $_cell = CellModel::getByCoordinates($cell->getBattlefield(), $coordinate['x'], $coordinate['y'])) {
                         $this->cellModel->switchStateToSkipped($_cell);
                     }
                 }
             }
+
             return true;
         }
 
