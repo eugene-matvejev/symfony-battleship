@@ -62,11 +62,11 @@ doctrine:
     auto_mapping: true
 
 # Assetic Configuration
-assetic:
-    debug:          '%kernel.debug%'
-    use_controller: '%kernel.debug%'
-    filters:
-        cssrewrite: ~
+#assetic:
+#    debug:          '%kernel.debug%'
+#    use_controller: '%kernel.debug%'
+#    filters:
+#        cssrewrite: ~
 
 # Doctrine Migrations Configuration
 #doctrine_migrations:

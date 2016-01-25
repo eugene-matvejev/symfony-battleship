@@ -182,6 +182,7 @@ class GameModel
                 foreach($battlefield->getCells() as $cell) {
                     if($cell->getX() === $json->cell->x && $cell->getY() === $json->cell->y) {
                         $_cell = $this->cellModel->switchState($cell);
+                        $this->strategyService->isShipDead($_cell);
                         break;
                     }
                 }
