@@ -22,6 +22,10 @@ class AI
      * @var AIStrategy
      */
     private $strategyService;
+    /**
+     * @var Logger
+     */
+    private $logger;
 
     public function __construct(CellModel $model, AIStrategy $service, Logger $logger)
     {
@@ -61,7 +65,7 @@ class AI
      */
     private function bombardInRange(array $cells)
     {
-        return !empty($cells) ? $this->bombard($cells[array_rand($cells, 1)]) : null;
+        return empty($cells) ? null : $this->bombard($cells[array_rand($cells, 1)]);
     }
 
     /**
