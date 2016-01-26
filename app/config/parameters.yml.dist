@@ -1,19 +1,21 @@
-# This file is a "template" of what your parameters.yml file should look like
-# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
-# http://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
 parameters:
-  database_host:     127.0.0.1
-  database_port:     ~
-  database_name:     symfony
-  database_user:     root
-  database_password: ~
-  # You should uncomment this if you want use pdo_sqlite
-  # database_path: "%kernel.root_dir%/data.db3"
+# production DB
+  database_host: 127.0.0.1
+  database_port: 3306
+  database_name: symfony_game_live
+  database_user: root
+  database_encoding: UTF8
+  database_password: null
+# test DB
+  database_host_test: 127.0.0.1
+  database_port_test: 3306
+  database_name_test: symfony_game_test
+  database_user_test: root
+  database_password_test: null
 
-  mailer_transport:  smtp
-  mailer_host:       127.0.0.1
-  mailer_user:       ~
-  mailer_password:   ~
+#  mailer_transport: smtp
+#  mailer_host: 127.0.0.1
+#  mailer_user: null
+#  mailer_password: null
 
-  # A secret key that's used to generate certain security-related tokens
-  secret:            ThisTokenIsNotSoSecretChangeIt
+  secret: df9407f9746333d83748c24bcc65255304069b6d

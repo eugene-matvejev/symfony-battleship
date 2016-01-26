@@ -1,6 +1,6 @@
 <?php
 
-namespace EM\GameBundle\TestEnvironment;
+namespace EM\Tests\Environment;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
