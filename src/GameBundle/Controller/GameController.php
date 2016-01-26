@@ -19,6 +19,10 @@ class GameController extends Controller
 
     public function initAction(Request $request) : JsonResponse
     {
+        if(empty($request->getContent())) {
+            return new JsonResponse([]);
+        }
+
         $model = $this->get('battleship.game.services.game.model');
         $json  = $model->init($request->getContent());
 
@@ -27,6 +31,10 @@ class GameController extends Controller
 
     public function turnAction(Request $request) : JsonResponse
     {
+        if(empty($request->getContent())) {
+            return new JsonResponse([]);
+        }
+
         $model = $this->get('battleship.game.services.game.model');
         $json  = $model->nextTurn($request->getContent());
 

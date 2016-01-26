@@ -1,8 +1,8 @@
 <?php
 
-namespace EM\GameBundle\Tests\Controller;
+namespace EM\Tests\GameBundle\Controller;
 
-use EM\GameBundle\TestEnvironment\ExtendedTestCase;
+use EM\Tests\Environment\ExtendedTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 class GameControllerTest extends ExtendedTestCase
@@ -38,7 +38,7 @@ class GameControllerTest extends ExtendedTestCase
     public function turn()
     {
         $client = $this->getClient();
-        $client->request(Request::METHOD_POST, $this->getRouter()->generate('battleship.game.api.turn'));
+        $client->request(Request::METHOD_PATCH, $this->getRouter()->generate('battleship.game.api.turn'));
 
         $this->assertJsonCorrectResponse($client->getResponse());
     }

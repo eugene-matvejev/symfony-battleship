@@ -1,8 +1,8 @@
 <?php
 
-namespace EM\GameBundle\Tests\Controller;
+namespace EM\Tests\GameBundle\Controller;
 
-use EM\GameBundle\TestEnvironment\ExtendedTestCase;
+use EM\Tests\Environment\ExtendedTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Tests\Controller;
 

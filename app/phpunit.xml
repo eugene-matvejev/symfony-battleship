@@ -9,13 +9,16 @@
          convertNoticesToExceptions  = "true"
          convertWarningsToExceptions = "true"
          processIsolation            = "false"
-         stopOnFailure               = "true"
+         stopOnFailure               = "false"
          syntaxCheck                 = "false"
-         bootstrap                   = "bootstrap.php.cache"
+         bootstrap                   = "autoload.php"
 >
+
     <testsuites>
         <testsuite name="Project Test Suite">
-            <directory>../tests/*Bundle/Tests</directory>
+            <!--<directory>../tests/*Bundle/AI</directory>-->
+            <directory>../tests/*Bundle/Controller</directory>
+            <!--<directory>../tests/*Bundle/Model</directory>-->
         </testsuite>
     </testsuites>
 
@@ -27,8 +30,8 @@
                 <directory>../src/*Bundle/DependencyInjection</directory>
                 <directory>../src/*Bundle/Resources</directory>
                 <directory>../src/*Bundle/TestEnvironment</directory>
-                <directory>../src/*Bundle/Tests</directory>
             </exclude>
         </whitelist>
     </filter>
 </phpunit>
+
