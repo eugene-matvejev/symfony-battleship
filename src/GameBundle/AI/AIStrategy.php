@@ -163,8 +163,8 @@ class AIStrategy
 
     public function isShipDead(Cell $cell) : bool
     {
-//        return $this->isShipIsDead($cell, 'x') || $this->isShipIsDead($cell, 'y');
-        return $this->verifyShipByAxis($cell, 'x') || $this->verifyShipByAxis($cell, 'y');
+        return $this->isShipIsDead($cell, 'x') || $this->isShipIsDead($cell, 'y');
+//        return $this->verifyShipByAxis($cell, 'x') || $this->verifyShipByAxis($cell, 'y');
     }
 
     public function isShipIsDead(Cell $cell, string $axis) : bool
@@ -180,20 +180,27 @@ class AIStrategy
 
         $cells = [$cell];
         $down = $up = true;
+        /** @var Cell $_cell
+         *  x-1; y-1 | x ; y-1 | x+1; y-1
+         *  x-1;   y | x ; y   | x+1; y
+         *  x-1; y+1 | x ; y+1 | x+1; y+1
+         */
         for($i = 0; $i < $this->maxShipSize; $i++) {
             if(true === $down && null !== $_cell = CellModel::getByCoordinates($cell->getBattlefield(), $coordinates[0]['x'], $coordinates[0]['y'])) {
                 if(in_array($_cell->getState()->getId(), [CellModel::STATE_SHIP_DIED, CellModel::STATE_SHIP_LIVE])) {
                     if($_cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
                         return false;
                     }
+                    $coordinates[1][$axis]--;
                     $cells[] = $_cell;
                 } else $down = false;
             }
-            if(true === $up && null !== $_cell = CellModel::getByCoordinates($cell->getBattlefield(), $coordinates[0]['x'], $coordinates[0]['y'])) {
+            if(true === $up && null !== $_cell = CellModel::getByCoordinates($cell->getBattlefield(), $coordinates[1]['x'], $coordinates[1]['y'])) {
                 if(in_array($_cell->getState()->getId(), [CellModel::STATE_SHIP_DIED, CellModel::STATE_SHIP_LIVE])) {
                     if($_cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
                         return false;
                     }
+                    $coordinates[1][$axis]++;
                     $cells[] = $_cell;
                 } else $up = false;
             }
@@ -233,68 +240,68 @@ class AIStrategy
         return false;
     }
 
-    private function verifyShipByAxis(Cell $cell, string $axis) : bool
-    {
-        $coordinates = [
-            ['x' => $cell->getX() - ('x' === $axis ? 1 : 0), 'y' => $cell->getY() - ('y' === $axis ? 1 : 0)],
-            ['x' => $cell->getX() + ('x' === $axis ? 1 : 0), 'y' => $cell->getY() + ('y' === $axis ? 1 : 0)]
-        ];
-
-        $leftCell = $rightCell = true;
-        $cells = [$cell];
-        $matches = 1;
-
-        for($i = 0; $i < $this->maxShipSize; $i++) {
-            if(true === $leftCell && true === $leftCell = $this->verifyWay($cell->getBattlefield(), $coordinates[0]['x'], $coordinates[0]['y'])) {
-                $cells[] = CellModel::getByCoordinates($cell->getBattlefield(), $coordinates[0]['x'], $coordinates[0]['y']);
-                $coordinates[0][$axis]--;
-                $matches++;
-            }
-            if(true === $rightCell && true === $rightCell = $this->verifyWay($cell->getBattlefield(), $coordinates[1]['x'], $coordinates[1]['y'])) {
-                $cells[] = CellModel::getByCoordinates($cell->getBattlefield(), $coordinates[1]['x'], $coordinates[1]['y']);
-                $coordinates[1][$axis]++;
-                $matches++;
-            }
-        }
-
-        if(true === $leftCell && true === $rightCell || $matches >= $this->maxShipSize) {
-            $this->logger->addEmergency(__FUNCTION__ .': MARK_AS_SKIPPED axis: '. $axis .' cells: '. count($cells));
-            /** @var Cell $_cell
-             *  x-1; y-1 | x ; y-1 | x+1; y-1
-             *  x-1;   y | x ; y   | x+1; y
-             *  x-1; y+1 | x ; y+1 | x+1; y+1
-             */
-            $steps = [-1, 0, 1];
-            foreach($cells as $_cell) {
-                $coordinates = [];
-
-                for($x = 0; $x < 3; $x++) {
-                    for($y = 0; $y < 3; $y++) {
-                        $coordinates[] = [
-                            'x' => $_cell->getX() + $steps[$x],
-                            'y' => $_cell->getY() + $steps[$y]
-                        ];
-                    }
-                }
-
-                foreach($coordinates as $coordinate) {
-                    $this->logger->addEmergency(__FUNCTION__ .': ###MARK_AS_SKIPPED_: '. print_r($coordinates, true));
-                    if(null !== $_cell = CellModel::getByCoordinates($cell->getBattlefield(), $coordinate['x'], $coordinate['y'])) {
-                        $this->cellModel->switchStateToSkipped($_cell);
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    private function verifyWay(Battlefield $battlefield, int $x, int $y) : bool
-    {
-        $cell = CellModel::getByCoordinates($battlefield, $x, $y);
-
-        return null !== $cell && $cell->getState()->getId() === CellModel::STATE_SHIP_DIED;
-    }
+//    private function verifyShipByAxis(Cell $cell, string $axis) : bool
+//    {
+//        $coordinates = [
+//            ['x' => $cell->getX() - ('x' === $axis ? 1 : 0), 'y' => $cell->getY() - ('y' === $axis ? 1 : 0)],
+//            ['x' => $cell->getX() + ('x' === $axis ? 1 : 0), 'y' => $cell->getY() + ('y' === $axis ? 1 : 0)]
+//        ];
+//
+//        $leftCell = $rightCell = true;
+//        $cells = [$cell];
+//        $matches = 1;
+//
+//        for($i = 0; $i < $this->maxShipSize; $i++) {
+//            if(true === $leftCell && true === $leftCell = $this->verifyWay($cell->getBattlefield(), $coordinates[0]['x'], $coordinates[0]['y'])) {
+//                $cells[] = CellModel::getByCoordinates($cell->getBattlefield(), $coordinates[0]['x'], $coordinates[0]['y']);
+//                $coordinates[0][$axis]--;
+//                $matches++;
+//            }
+//            if(true === $rightCell && true === $rightCell = $this->verifyWay($cell->getBattlefield(), $coordinates[1]['x'], $coordinates[1]['y'])) {
+//                $cells[] = CellModel::getByCoordinates($cell->getBattlefield(), $coordinates[1]['x'], $coordinates[1]['y']);
+//                $coordinates[1][$axis]++;
+//                $matches++;
+//            }
+//        }
+//
+//        if(true === $leftCell && true === $rightCell || $matches >= $this->maxShipSize) {
+//            $this->logger->addEmergency(__FUNCTION__ .': MARK_AS_SKIPPED axis: '. $axis .' cells: '. count($cells));
+//            /** @var Cell $_cell
+//             *  x-1; y-1 | x ; y-1 | x+1; y-1
+//             *  x-1;   y | x ; y   | x+1; y
+//             *  x-1; y+1 | x ; y+1 | x+1; y+1
+//             */
+//            $steps = [-1, 0, 1];
+//            foreach($cells as $_cell) {
+//                $coordinates = [];
+//
+//                for($x = 0; $x < 3; $x++) {
+//                    for($y = 0; $y < 3; $y++) {
+//                        $coordinates[] = [
+//                            'x' => $_cell->getX() + $steps[$x],
+//                            'y' => $_cell->getY() + $steps[$y]
+//                        ];
+//                    }
+//                }
+//
+//                foreach($coordinates as $coordinate) {
+//                    $this->logger->addEmergency(__FUNCTION__ .': ###MARK_AS_SKIPPED_: '. print_r($coordinates, true));
+//                    if(null !== $_cell = CellModel::getByCoordinates($cell->getBattlefield(), $coordinate['x'], $coordinate['y'])) {
+//                        $this->cellModel->switchStateToSkipped($_cell);
+//                    }
+//                }
+//            }
+//
+//            return true;
+//        }
+//
+//        return false;
+//    }
+//
+//    private function verifyWay(Battlefield $battlefield, int $x, int $y) : bool
+//    {
+//        $cell = CellModel::getByCoordinates($battlefield, $x, $y);
+//
+//        return null !== $cell && $cell->getState()->getId() === CellModel::STATE_SHIP_DIED;
+//    }
 }
