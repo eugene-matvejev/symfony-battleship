@@ -49,13 +49,12 @@ class AI
                 $cells = BattlefieldModel::getLiveCells($battlefield);
                 $cell = $this->bombardInRange($cells);
             }
+
+            return $cell;
         } catch(AIException $e) {
             $this->logger->addCritical(__CLASS__ .':'. __FUNCTION__ .':'. $e);
         }
-
-        return $cell;
     }
-
 
     /**
      * @param Cell[] $cells
