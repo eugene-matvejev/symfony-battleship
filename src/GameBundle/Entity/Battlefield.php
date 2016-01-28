@@ -12,7 +12,7 @@ use EM\GameBundle\ORM\PlayerTrait;
 /**
  * @since 1.0
  *
- * @ORM\Entity(repositoryClass="EM\GameBundle\Repository\BattlefieldRepository")
+ * @ORM\Entity(repositoryClass="EM\GameBundle\Repository\BattlefieldRepository", readOnly=true)
  * @ORM\Table(
  *     name="battlefields",
  *     indexes={
@@ -24,7 +24,7 @@ class Battlefield implements IdentifiableInterface, PlayerInterface
 {
     use IdentifiableTrait, PlayerTrait;
     /**
-     * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\Game")
+     * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\Game", inversedBy="battlefields")
      * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)
      *
      * @var Game
@@ -32,7 +32,6 @@ class Battlefield implements IdentifiableInterface, PlayerInterface
     private $game;
     /**
      * @ORM\OneToMany(targetEntity="EM\GameBundle\Entity\Cell", mappedBy="battlefield", cascade={"persist"})
-     * @ORM\JoinColumn(name="id", referencedColumnName="battlefield", nullable=false)
      *
      * @var Cell[]
      */

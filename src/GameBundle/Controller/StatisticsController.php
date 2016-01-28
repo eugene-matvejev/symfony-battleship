@@ -13,6 +13,8 @@ class StatisticsController extends Controller
 {
     public function overallAction(Request $request) : JsonResponse
     {
-        return new JsonResponse($this->get('battleship.game.services.statistics.model')->overallStatistics($request->get('page', $request->get('page'))));
+        $json = $this->get('battleship.game.services.statistics.model')->overallStatistics($request->get('page', $request->get('page')));
+
+        return new JsonResponse($json);
     }
 }

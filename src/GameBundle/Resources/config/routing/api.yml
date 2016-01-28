@@ -5,13 +5,13 @@ battleship.game.api.statistics:
   requirements:
     page: \d+
 battleship.game.api.init:
-  path:     /init
+  path:     game/init
   defaults: { _controller: GameBundle:Game:init }
   methods:  [POST]
   requirements:
     _format: json
 battleship.game.api.turn:
-  path:     /turn
+  path:     game/turn
   defaults: { _controller: GameBundle:Game:turn }
   methods:  [PATCH]
   requirements:

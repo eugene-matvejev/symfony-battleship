@@ -62,11 +62,11 @@ doctrine:
     auto_mapping: true
 
 # Doctrine Migrations Configuration
-#doctrine_migrations:
-#    dir_name: "%kernel.root_dir%/DoctrineMigrations"
-#    namespace: Application\Migrations
-#    table_name: migration_versions
-#    name: Application Migrations
+doctrine_migrations:
+  dir_name: "%kernel.root_dir%/DoctrineMigrations"
+  namespace: Application\Migrations
+  table_name: __doctrine_migrations
+  name: Application Migrations
 
 ## Swiftmailer Configuration
 #swiftmailer:

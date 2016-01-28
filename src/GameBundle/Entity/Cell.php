@@ -24,7 +24,7 @@ class Cell implements IdentifiableInterface
 {
     use IdentifiableTrait;
     /**
-     * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\Battlefield", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\Battlefield", inversedBy="cells")
      * @ORM\JoinColumn(name="battlefield", referencedColumnName="id", nullable=false)
      *
      * @var Battlefield
