@@ -6,7 +6,6 @@ use Doctrine\Common\Persistence\ObjectManager;
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Entity\CellState;
-use Symfony\Bridge\Monolog\Logger;
 
 /**
  * @since 2.0
@@ -30,17 +29,12 @@ class CellModel
      * @var CellState[]
      */
     private static $cellStates;
-    /**
-     * @var Logger
-     */
-    private $logger;
 
-    function __construct(ObjectManager $om, Logger $logger)
+    function __construct(ObjectManager $om)
     {
         if(null === self::$cellStates) {
             self::$cellStates = $om->getRepository('GameBundle:CellState')->getStates();
         }
-        $this->logger = $logger;
     }
 
     /**

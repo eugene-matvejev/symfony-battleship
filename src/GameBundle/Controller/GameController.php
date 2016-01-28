@@ -23,8 +23,7 @@ class GameController extends Controller
             return new JsonResponse([]);
         }
 
-        $model = $this->get('battleship.game.services.game.model');
-        $json  = $model->init($request->getContent());
+        $json  = $this->get('battleship.game.services.game.model')->init($request->getContent());
 
         return new JsonResponse($json, Response::HTTP_CREATED);
     }
@@ -35,8 +34,7 @@ class GameController extends Controller
             return new JsonResponse([]);
         }
 
-        $model = $this->get('battleship.game.services.game.model');
-        $json  = $model->nextTurn($request->getContent());
+        $json = $this->get('battleship.game.services.game.model')->nextTurn($request->getContent());
 
         return new JsonResponse($json);
     }

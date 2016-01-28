@@ -10,33 +10,37 @@ use EM\GameBundle\Repository\GameResultRepository;
  */
 class StatisticsModel
 {
-    const RECORDS_PER_PAGE  = 10;
     /**
      * @var GameResultRepository
      */
     private $gameResultRepository;
+    /**
+     * @var int
+     */
+    private $gameResultsPerPage;
 
-    function __construct(ObjectManager $om)
+    function __construct(ObjectManager $om, int $perPage)
     {
         $this->gameResultRepository = $om->getRepository('GameBundle:GameResult');
+        $this->gameResultsPerPage = $perPage;
     }
 
-    public function overallStatistics(int $page) : array
+    public function overallStatistics(int $currentPage) : array
     {
-        $json = [];
-        foreach ($this->gameResultRepository->getAllOrderByDate($page, self::RECORDS_PER_PAGE) as $result) {
-            $json[] = GameResultModel::getJSON($result);
+        $data = [];
+        foreach ($this->gameResultRepository->getAllOrderByDate($currentPage, $this->gameResultsPerPage) as $result) {
+            $data[] = GameResultModel::getJSON($result);
         }
 
         return [
-            'data' => $json,
+            'data' => $data,
             'meta' => [
                 'config' => [
-                    'perPage' => self::RECORDS_PER_PAGE
+                    'perPage' => $this->gameResultsPerPage
                 ],
                 'page' => [
-                    'curr' => $page,
-                    'total' => ceil($this->gameResultRepository->countTotalResults() / self::RECORDS_PER_PAGE)
+                    'curr' => $currentPage,
+                    'total' => ceil($this->gameResultRepository->countTotalResults() / $this->gameResultsPerPage)
                 ]
             ]
         ];

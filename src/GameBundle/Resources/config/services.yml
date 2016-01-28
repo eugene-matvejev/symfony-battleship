@@ -4,34 +4,24 @@ services:
     class: EM\GameBundle\Model\CellModel
     arguments:
       - "@doctrine.orm.entity_manager"
-      - "@logger"
   battleship.game.services.player.model:
     class: EM\GameBundle\Model\PlayerModel
     arguments:
       - "@doctrine.orm.entity_manager"
-#      - @battleship.game.services.cell.state.repository
   battleship.game.services.game.model:
     class: EM\GameBundle\Model\GameModel
     arguments:
-#      - @battleship.game.services.battlefield.repository
-#      - @battleship.game.services.cell.repository
-#      - @battleship.game.services.cell.state.repository
-#      - @battleship.game.services.game.repository
-#      - @battleship.game.services.game.result.repository
-#      - @battleship.game.services.player.repository
-#      - @battleship.game.services.player.type.repository
-#      - @doctrine.orm.entity_manager
       - "@doctrine.orm.entity_manager"
-      - "@logger"
       - "@battleship.game.services.cell.model"
       - "@battleship.game.services.player.model"
       - "@battleship.game.services.ai.core"
       - "@battleship.game.services.ai.strategy.service"
+      - "@logger"
   battleship.game.services.statistics.model:
     class: EM\GameBundle\Model\StatisticsModel
     arguments:
       - "@doctrine.orm.entity_manager"
-#      - @battleship.game.services.game.result.repository
+      - %battleship.config.statistics.results.per.page%
   # AI
   battleship.game.services.ai.core:
     class: EM\GameBundle\AI\AI
@@ -42,14 +32,14 @@ services:
   battleship.game.services.ai.strategy.service:
     class: EM\GameBundle\AI\AIStrategy
     arguments:
-      - %battleshipt.config.ship.size.min%
-      - %battleshipt.config.ship.size.max%
+      - %battleship.config.ship.size.min%
+      - %battleship.config.ship.size.max%
       - "@battleship.game.services.cell.model"
       - "@logger"
 #  # Repositories
 #  battleship.game.services.battlefield.repository:
-#    class: Doctrine\ORM\EntityRepository
-#    factory: [@doctrine.orm.entity_manager, getRepository]
+#    class: EM\GameBundle\Repository\BattlefieldRepository
+#    factory: ["@doctrine.orm.entity_manager", getRepository]
 #    arguments:
 #      - GameBundle\Entity\Battlefield
 #  battleship.game.services.cell.repository:
@@ -68,10 +58,10 @@ services:
 #    arguments:
 #      - GameBundle\Entity\Game
 #  battleship.game.services.game.result.repository:
-#    class: Doctrine\ORM\EntityRepository
-#    factory: [@doctrine.orm.entity_manager, getRepository]
+#    class: EM\GameBundle\Repository\GameResultRepository
+#    factory: ["@doctrine.orm.entity_manager", getRepository]
 #    arguments:
-#      - GameBundle\Entity\GameResult
+#      - EM\GameBundle\Entity\GameResult
 #  battleship.game.services.player.repository:
 #    class: Doctrine\ORM\EntityRepository
 #    factory: [@doctrine.orm.entity_manager, getRepository]

@@ -10,16 +10,12 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20160103150000 extends AbstractMigration
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
-        // this up() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on "mysql".');
 
         $this->addSql('CREATE TABLE battlefields (id INT AUTO_INCREMENT NOT NULL, game INT NOT NULL, player INT NOT NULL, INDEX INDEX_BATTLEFIELD_GAME (game), INDEX INDEX_BATTLEFIELD_PLAYER (player), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE cells (id INT AUTO_INCREMENT NOT NULL, state INT NOT NULL, battlefield INT NOT NULL, x INT NOT NULL, y INT NOT NULL, INDEX IDX_55C1CBD8A393D2FB (state), INDEX INDEX_CELL_BATTLEFIELD (battlefield), UNIQUE INDEX axisXY (battlefield, x, y), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE cells (id INT AUTO_INCREMENT NOT NULL, battlefield INT NOT NULL, state INT NOT NULL, x INT NOT NULL, y INT NOT NULL, INDEX IDX_55C1CBD8A393D2FB (state), INDEX INDEX_CELL_BATTLEFIELD (battlefield), UNIQUE INDEX axisXY (battlefield, x, y), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE cellState (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(200) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE games (id INT AUTO_INCREMENT NOT NULL, timestamp DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE gamesResults (id INT AUTO_INCREMENT NOT NULL, game INT NOT NULL, player INT NOT NULL, timestamp DATETIME NOT NULL, UNIQUE INDEX UNIQ_6B05D5BE232B318C (game), INDEX INDEX_GAME_RESULT_GAME (game), INDEX INDEX_GAME_RESULT_WINNER (player), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
@@ -27,20 +23,16 @@ class Version20160103150000 extends AbstractMigration
         $this->addSql('CREATE TABLE playerType (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(200) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('ALTER TABLE battlefields ADD CONSTRAINT FK_EDE65EA6232B318C FOREIGN KEY (game) REFERENCES games (id)');
         $this->addSql('ALTER TABLE battlefields ADD CONSTRAINT FK_EDE65EA698197A65 FOREIGN KEY (player) REFERENCES players (id)');
-        $this->addSql('ALTER TABLE cells ADD CONSTRAINT FK_55C1CBD8A393D2FB FOREIGN KEY (state) REFERENCES cellState (id)');
         $this->addSql('ALTER TABLE cells ADD CONSTRAINT FK_55C1CBD851B7F6D5 FOREIGN KEY (battlefield) REFERENCES battlefields (id)');
+        $this->addSql('ALTER TABLE cells ADD CONSTRAINT FK_55C1CBD8A393D2FB FOREIGN KEY (state) REFERENCES cellState (id)');
         $this->addSql('ALTER TABLE gamesResults ADD CONSTRAINT FK_6B05D5BE232B318C FOREIGN KEY (game) REFERENCES games (id)');
         $this->addSql('ALTER TABLE gamesResults ADD CONSTRAINT FK_6B05D5BE98197A65 FOREIGN KEY (player) REFERENCES players (id)');
         $this->addSql('ALTER TABLE players ADD CONSTRAINT FK_264E43A68CDE5729 FOREIGN KEY (type) REFERENCES playerType (id)');
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
-        // this down() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on "mysql".');
 
         $this->addSql('ALTER TABLE cells DROP FOREIGN KEY FK_55C1CBD851B7F6D5');
         $this->addSql('ALTER TABLE cells DROP FOREIGN KEY FK_55C1CBD8A393D2FB');

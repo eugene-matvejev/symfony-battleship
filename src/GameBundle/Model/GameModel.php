@@ -52,7 +52,7 @@ class GameModel
      */
     private $logger;
 
-    function __construct(ObjectManager $om, Logger $logger, CellModel $cellModel, PlayerModel $playerModel, AI $ai, AIStrategy $strategy)
+    function __construct(ObjectManager $om, CellModel $cellModel, PlayerModel $playerModel, AI $ai, AIStrategy $strategy, Logger $logger)
     {
         $this->om               = $om;
         $this->gameRepository   = $om->getRepository('GameBundle:Game');
@@ -82,7 +82,6 @@ class GameModel
                 $player = (new Player())
                     ->setName($_player->player->name)
                     ->setType($this->playerModel->getTypes()[PlayerModel::TYPE_HUMAN]);
-                $this->om->persist($player);
             }
 
             $battlefield = (new Battlefield())
@@ -182,7 +181,6 @@ class GameModel
                 foreach($battlefield->getCells() as $cell) {
                     if($cell->getX() === $json->cell->x && $cell->getY() === $json->cell->y) {
                         $_cell = $this->cellModel->switchState($cell);
-                        $this->strategyService->isShipDead($_cell);
                         break;
                     }
                 }
@@ -221,15 +219,7 @@ class GameModel
         $std->data = [];
 
         foreach($game->getBattlefields() as $battlefield) {
-            $json = new \stdClass();
-            $json->id = $battlefield->getId();
-            $json->player = PlayerModel::getJSON($battlefield->getPlayer());
-            $json->cells = [];
-
-            foreach($battlefield->getCells() as $cell) {
-                $json->cells[] = CellModel::getJSON($cell);
-            }
-            $std->data[] = $json;
+            $std->data[] = BattlefieldModel::getJSON($battlefield);
         }
 
         return $std;

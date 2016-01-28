@@ -12,7 +12,7 @@ use EM\GameBundle\ORM\TimestampedTrait;
 /**
  * @since 1.0
  *
- * @ORM\Entity()
+ * @ORM\Entity(readOnly=true)
  * @ORM\Table(name="games")
  * @ORM\HasLifecycleCallbacks
  */
