@@ -108,11 +108,6 @@ class GameModel
         return self::getJSON($game);
     }
 
-    /**
-     * @param Battlefield $battlefield
-     *
-     * @return void
-     */
     public function initCPUShips(Battlefield $battlefield)
     {
         foreach($battlefield->getCells() as $cell) {
@@ -142,35 +137,28 @@ class GameModel
         }
 
         foreach($game->getBattlefields() as $battlefield) {
-            $this->playerTurn($battlefield, $arr);
+            $this->playerTurn($battlefield, $arr->cell);
 
             if(null !== $game->getResult() || $this->detectVictory($battlefield)) {
                 $std->victory = GameResultModel::getJSON($game->getResult());
-
                 break;
             }
         }
 
-        foreach(CellModel::getChangedCells() as $cell) {
-            if(!isset($std->{$cell->getBattlefield()->getId()})) {
-                $std->{$cell->getBattlefield()->getId()} = [];
-            }
-
-            $std->{$cell->getBattlefield()->getId()}[] = CellModel::getJSON($cell);
-            $this->logger->addEmergency(__CLASS__ .':'. __FUNCTION__ . ' :: cell: '. print_r(CellModel::getJSON($cell), true));
-        }
         $this->om->flush();
+
+        foreach(CellModel::getChangedCells() as $cell) {
+            if(empty($std->{$cell->getBattlefield()->getId()})) {
+                $std->{$cell->getBattlefield()->getId()} = [CellModel::getJSON($cell)];
+            } else {
+                $std->{$cell->getBattlefield()->getId()}[] = CellModel::getJSON($cell);
+            }
+        }
 
         return $std;
     }
 
-    /**
-     * @param Battlefield $battlefield
-     * @param \stdClass $json
-     *
-     * @return void
-     */
-    public function playerTurn(Battlefield $battlefield, \stdClass $json)
+    public function playerTurn(Battlefield $battlefield, \stdClass $cellData)
     {
         $_cell = null;
         switch($battlefield->getPlayer()->getType()->getId()) {
@@ -179,7 +167,7 @@ class GameModel
                 break;
             case PlayerModel::TYPE_CPU:
                 foreach($battlefield->getCells() as $cell) {
-                    if($cell->getX() === $json->cell->x && $cell->getY() === $json->cell->y) {
+                    if($cell->getX() === $cellData->x && $cell->getY() === $cellData->y) {
                         $_cell = $this->cellModel->switchState($cell);
                         break;
                     }
@@ -193,19 +181,17 @@ class GameModel
 
     public function detectVictory(Battlefield $battlefield) : bool
     {
-        if(true !== BattlefieldModel::isUnfinished($battlefield)) {
-            return false;
-        }
-
         $game = $battlefield->getGame();
-        foreach($game->getBattlefields() as $_battlefield) {
-            if($_battlefield->getId() !== $battlefield->getId()) {
-                $result = (new GameResult())
-                    ->setPlayer($_battlefield->getPlayer());
-                $game->setResult($result);
+        if(BattlefieldModel::isUnfinished($battlefield)) {
+            foreach($game->getBattlefields() as $_battlefield) {
+                if($battlefield->getId() !== $_battlefield->getId()) {
+                    $result = (new GameResult())
+                        ->setPlayer($_battlefield->getPlayer());
+                    $game->setResult($result);
+                    $this->om->persist($result);
 
-                $this->om->persist($game);
-                return true;
+                    return true;
+                }
             }
         }
 
