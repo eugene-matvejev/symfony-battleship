@@ -30,7 +30,7 @@ Game.prototype = {
         };
 
         for(var i in players) {
-            var player = (new Player(this.$area, players[i].name, players[i].name == 'CPU' ? true : undefined, battlefieldSize)),
+            var player = (new Player(this.$area, players[i].name, players[i].name === 'CPU' ? true : undefined, battlefieldSize)),
                 cells  = player.battlefield.cells.data,
                 _json  = {
                     player: {id: player.id, name: player.name, type: player.type},
@@ -123,8 +123,8 @@ Game.prototype = {
         for(var index in json) {
             if(index ===  _config.json.victory) {
                 json[index].player.id != this.findHumanPlayer().id
-                    ? this.alertMgr.show(_config.text.win, AlertMgr.resources.config.type.success)
-                    : this.alertMgr.show(_config.text.loss, AlertMgr.resources.config.type.error);
+                    ? this.alertMgr.show(_config.text.loss, AlertMgr.resources.config.type.error)
+                    : this.alertMgr.show(_config.text.win, AlertMgr.resources.config.type.success);
             } else {
                 var battlefield = json[index];
                 for(var subIndex in battlefield) {

@@ -36,9 +36,9 @@ class AI
      */
     public function turn(Battlefield $battlefield) : Cell
     {
-        $cells = $this->strategyService->chooseStrategy($battlefield);
-
         try {
+            $cells = $this->strategyService->chooseStrategy($battlefield);
+
             if(null === $cell = $this->bombardInRange($cells)) {
                 $cells = BattlefieldModel::getLiveCells($battlefield);
                 $cell = $this->bombardInRange($cells);
