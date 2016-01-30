@@ -16,7 +16,7 @@ services:
       - "@battleship.game.services.player.model"
       - "@battleship.game.services.ai.core"
       - "@battleship.game.services.ai.strategy.service"
-      - "@logger"
+#      - "@logger"
   battleship.game.services.statistics.model:
     class: EM\GameBundle\Model\StatisticsModel
     arguments:
@@ -35,7 +35,7 @@ services:
       - %battleship.config.ship.size.min%
       - %battleship.config.ship.size.max%
       - "@battleship.game.services.cell.model"
-      - "@logger"
+#      - "@logger"
 #  # Repositories
 #  battleship.game.services.battlefield.repository:
 #    class: EM\GameBundle\Repository\BattlefieldRepository

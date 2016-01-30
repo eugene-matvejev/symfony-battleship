@@ -94,7 +94,8 @@ class CellModel
             }
         }
 
-        return self::$cachedCells[$battlefield->getId()][$x][$y] ?? null;
+        return empty(self::$cachedCells[$battlefield->getId()][$x][$y]) ? null : self::$cachedCells[$battlefield->getId()][$x][$y];
+//        return self::$cachedCells[$battlefield->getId()][$x][$y] ?? null;
     }
 
     public static function getJSON(Cell $cell) : \stdClass
@@ -114,6 +115,14 @@ class CellModel
     public static function getChangedCells() : array
     {
         return self::$changedCells;
+    }
+
+    /**
+     * @return int[]
+     */
+    public static function getShipStates() : array
+    {
+        return [self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED];
     }
 
     /**
