@@ -12,7 +12,7 @@ use EM\GameBundle\Entity\Player;
 use EM\GameBundle\AI\AI;
 use EM\GameBundle\AI\AIStrategy;
 use EM\GameBundle\Exception\GameException;
-use Symfony\Bridge\Monolog\Logger;
+//use Symfony\Bridge\Monolog\Logger;
 
 /**
  * @since 2.0
@@ -52,7 +52,8 @@ class GameModel
      */
     private $logger;
 
-    function __construct(ObjectManager $om, CellModel $cellModel, PlayerModel $playerModel, AI $ai, AIStrategy $strategy, Logger $logger)
+//    function __construct(ObjectManager $om, CellModel $cellModel, PlayerModel $playerModel, AI $ai, AIStrategy $strategy, Logger $logger)
+    function __construct(ObjectManager $om, CellModel $cellModel, PlayerModel $playerModel, AI $ai, AIStrategy $strategy)
     {
         $this->om               = $om;
         $this->gameRepository   = $om->getRepository('GameBundle:Game');
@@ -61,7 +62,7 @@ class GameModel
         $this->strategyService  = $strategy;
         $this->cellModel        = $cellModel;
         $this->playerModel      = $playerModel;
-        $this->logger           = $logger;
+//        $this->logger           = $logger;
     }
 
     /**

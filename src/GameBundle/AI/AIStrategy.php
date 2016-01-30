@@ -5,7 +5,7 @@ namespace EM\GameBundle\AI;
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
-use Symfony\Bridge\Monolog\Logger;
+//use Symfony\Bridge\Monolog\Logger;
 
 /**
  * @since 3.0
@@ -24,17 +24,18 @@ class AIStrategy
      * @var CellModel
      */
     private $cellModel;
-    /**
-     * @var Logger
-     */
-    private $logger;
+//    /**
+//     * @var Logger
+//     */
+//    private $logger;
 
-    public function __construct(int $min, int $max, CellModel $model, Logger $logger)
+//    public function __construct(int $min, int $max, CellModel $model, Logger $logger)
+    public function __construct(int $min, int $max, CellModel $model)
     {
         $this->minShipSize = $min;
         $this->maxShipSize = $max;
         $this->cellModel = $model;
-        $this->logger = $logger;
+//        $this->logger = $logger;
     }
 
     /**
@@ -44,32 +45,26 @@ class AIStrategy
      */
     public function chooseStrategy(Battlefield $battlefield) : array
     {
+        $cells = [];
+
         foreach ($battlefield->getCells() as $cell) {
-            if ($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED || $this->isShipDead($cell)) {
-                continue;
-            }
+            if (!$this->isShipDead($cell)) {
+                if ($cells = $this->xStrategy($cell) && !empty($cells)) {
+                }
 
-            $this->logger->addDebug(__FUNCTION__ . ':: X STRATEGY');
-            if ($cells = $this->xStrategy($cell)) {
-                $this->logger->addDebug('>>> X');
-            }
+                if (empty($cells) && $cells = $this->yStrategy($cell)) {
+                }
 
-            $this->logger->addDebug(__FUNCTION__ . ':: Y STRATEGY');
-            if (empty($cells) && $cells = $this->yStrategy($cell)) {
-                $this->logger->addDebug('>>> Y');
-            }
+                if (empty($cells) && $cells = $this->zStrategy($cell)) {
+                }
 
-            $this->logger->addDebug(__FUNCTION__ . ':: Z STRATEGY');
-            if (empty($cells) && $cells = $this->zStrategy($cell)) {
-                $this->logger->addDebug('>>> Z');
-            }
-
-            if (!empty($cells)) {
-                return $cells;
+                if (!empty($cells)) {
+                    break;
+                }
             }
         }
 
-        return [];
+        return $cells;
     }
 
     /**
@@ -163,73 +158,61 @@ class AIStrategy
 
     public function isShipDead(Cell $cell) : bool
     {
-        return $this->isShipIsDead($cell, 'x') || $this->isShipIsDead($cell, 'y');
-//        return $this->verifyShipByAxis($cell, 'x') || $this->verifyShipByAxis($cell, 'y');
-    }
-
-    public function isShipIsDead(Cell $cell, string $axis) : bool
-    {
-        if($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
+        if ($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
             return false;
         }
 
-        $coordinates = [
-            ['x' => $cell->getX() - ('x' === $axis ? 1 : 0), 'y' => $cell->getY() - ('y' === $axis ? 1 : 0)],
-            ['x' => $cell->getX() + ('x' === $axis ? 1 : 0), 'y' => $cell->getY() + ('y' === $axis ? 1 : 0)]
+        $coords = (object)[
+            'left'  => (object)['x' => $cell->getX() - 1, 'y' => $cell->getY()], // -- left
+            'right' => (object)['x' => $cell->getX() + 1, 'y' => $cell->getY()], // ++ right
+            'up'    => (object)['x' => $cell->getX(), 'y' => $cell->getY() - 1], // -- up
+            'down'  => (object)['x' => $cell->getX(), 'y' => $cell->getY() + 1]  // ++ down
         ];
 
-        $cells = [$cell];
-        $down = $up = true;
-        /** @var Cell $_cell
-         *  x-1; y-1 | x ; y-1 | x+1; y-1
-         *  x-1;   y | x ; y   | x+1; y
-         *  x-1; y+1 | x ; y+1 | x+1; y+1
-         */
-        for($i = 0; $i < $this->maxShipSize; $i++) {
-            if(true === $down && null !== $_cell = CellModel::getByCoordinates($cell->getBattlefield(), $coordinates[0]['x'], $coordinates[0]['y'])) {
-                if(in_array($_cell->getState()->getId(), [CellModel::STATE_SHIP_DIED, CellModel::STATE_SHIP_LIVE])) {
-                    if($_cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
-                        return false;
+        foreach ($coords as $side => $coord) {
+            for ($i = 0; $i < $this->maxShipSize; $i++) {
+                if (null !== $_cell = CellModel::getByCoordinates($cell->getBattlefield(), $coord->x, $coord->y)) {
+                    if (in_array($_cell->getState()->getId(), CellModel::getShipStates())) {
+                        if ($_cell->getState()->getId() === CellModel::STATE_SHIP_DIED) {
+                            switch ($side) {
+                                case 'left':  $coord->x--; break;
+                                case 'right': $coord->x++; break;
+                                case 'up':    $coord->y--; break;
+                                case 'down':  $coord->y++; break;
+                            }
+                            $cells[] = $_cell;
+                        } else {
+                            $cells = [];
+                            break;
+                        }
+                    } else {
+                        break;
                     }
-                    $coordinates[1][$axis]--;
-                    $cells[] = $_cell;
-                } else $down = false;
-            }
-            if(true === $up && null !== $_cell = CellModel::getByCoordinates($cell->getBattlefield(), $coordinates[1]['x'], $coordinates[1]['y'])) {
-                if(in_array($_cell->getState()->getId(), [CellModel::STATE_SHIP_DIED, CellModel::STATE_SHIP_LIVE])) {
-                    if($_cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
-                        return false;
-                    }
-                    $coordinates[1][$axis]++;
-                    $cells[] = $_cell;
-                } else $up = false;
+                } else {
+                    break;
+                }
             }
         }
 
-        if(false === $down && false === $up) {
-            $this->logger->addEmergency(__FUNCTION__ .': MARK_AS_SKIPPED axis: '. $axis .' cells: '. count($cells));
+        if (!empty($cells)) {
             /** @var Cell $_cell
+             *
              *  x-1; y-1 | x ; y-1 | x+1; y-1
              *  x-1;   y | x ; y   | x+1; y
              *  x-1; y+1 | x ; y+1 | x+1; y+1
              */
+            $cells[] = $cell;
             $steps = [-1, 0, 1];
-            foreach($cells as $_cell) {
-                $coordinates = [];
 
-                for($x = 0; $x < 3; $x++) {
-                    for($y = 0; $y < 3; $y++) {
-                        $coordinates[] = [
-                            'x' => $_cell->getX() + $steps[$x],
-                            'y' => $_cell->getY() + $steps[$y]
-                        ];
-                    }
-                }
+            foreach ($cells as $_cell) {
+                for ($x = 0; $x < 3; $x++) {
+                    for ($y = 0; $y < 3; $y++) {
+                        $x = $_cell->getX() + $steps[$x];
+                        $y = $_cell->getY() + $steps[$y];
 
-                foreach($coordinates as $coordinate) {
-                    $this->logger->addEmergency(__FUNCTION__ .': ###MARK_AS_SKIPPED_: '. print_r($coordinates, true));
-                    if(null !== $_cell = CellModel::getByCoordinates($cell->getBattlefield(), $coordinate['x'], $coordinate['y'])) {
-                        $this->cellModel->switchStateToSkipped($_cell);
+                        if (null !== $__cell = CellModel::getByCoordinates($cell->getBattlefield(), $x, $y)) {
+                            $this->cellModel->switchStateToSkipped($__cell);
+                        }
                     }
                 }
             }
@@ -239,6 +222,113 @@ class AIStrategy
 
         return false;
     }
+
+    private function verifyWay(Battlefield $battlefield, int $x, int $y, array &$cells) : bool
+    {
+        if(null !== $cell = CellModel::getByCoordinates($battlefield, $x, $y)) {
+            if(in_array($cell->getState()->getId(), CellModel::getShipStates())) {
+
+                if($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+//
+//    public function isShipDead(Cell $cell) : bool
+//    {
+//        if ($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
+//            return false;
+//        }
+//
+//        return $this->isShipIsDead($cell, 'x') || $this->isShipIsDead($cell, 'y');
+////        return $this->verifyShipByAxis($cell, 'x') || $this->verifyShipByAxis($cell, 'y');
+//    }
+//
+//    private function isShipIsDead(Cell $cell, string $axis) : bool
+//    {
+//        $coordinates = [
+//            ['x' => $cell->getX() - ('x' === $axis ? 1 : 0), 'y' => $cell->getY() - ('y' === $axis ? 1 : 0)],
+//            ['x' => $cell->getX() + ('x' === $axis ? 1 : 0), 'y' => $cell->getY() + ('y' === $axis ? 1 : 0)]
+//        ];
+//
+//        $cells = [$cell];
+//        $down = $up = true;
+//        /** @var Cell $_cell
+//         *  x-1; y-1 | x ; y-1 | x+1; y-1
+//         *  x-1;   y | x ; y   | x+1; y
+//         *  x-1; y+1 | x ; y+1 | x+1; y+1
+//         */
+//        for ($i = 0; $i < $this->maxShipSize; $i++) {
+//            if ($up && $up = $this->verifyWay($cell->getBattlefield(), $coordinates[0]['x'], $coordinates[0]['y'], $cells)) {
+//                $coordinates[0][$axis]--;
+//            }
+//            if ($down && $down = $this->verifyWay($cell->getBattlefield(), $coordinates[1]['x'], $coordinates[1]['y'], $cells)) {
+//                $coordinates[1][$axis]--;
+//            }
+////            $down = true === $down && === if(true === $down)
+////            if (true === $down) {
+////                if (null !== $_cell = CellModel::getByCoordinates($cell->getBattlefield(), )) {
+////                    if (in_array($_cell->getState()->getId(), [CellModel::STATE_SHIP_DIED, CellModel::STATE_SHIP_LIVE])) {
+////                        if ($_cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
+////                            return false;
+////                        }
+////                        $cells[] = $_cell;
+////                    } else $down = false;
+////                    $__cell = $_cell;
+////                } else $down = false;
+////            }
+////            if (true === $up && null !== $_cell = CellModel::getByCoordinates($cell->getBattlefield(), $coordinates[1]['x'], $coordinates[1]['y'])) {
+////                if (in_array($_cell->getState()->getId(), [CellModel::STATE_SHIP_DIED, CellModel::STATE_SHIP_LIVE])) {
+////                    if ($_cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
+////                        return false;
+////                    }
+////                    $coordinates[1][$axis]++;
+////                    $cells[] = $_cell;
+////                } else $up = false;
+////                $__cell = $_cell;
+////            }
+//        }
+//
+//        if (!$up && !$down) {
+////            $this->logger->addEmergency(__FUNCTION__ . ': MARK_AS_SKIPPED axis: ' . $axis . ' cells: ' . count($cells));
+//            /** @var Cell $_cell
+//             *
+//             *  x-1; y-1 | x ; y-1 | x+1; y-1
+//             *  x-1;   y | x ; y   | x+1; y
+//             *  x-1; y+1 | x ; y+1 | x+1; y+1
+//             */
+//            $steps = [-1, 0, 1];
+//            foreach ($cells as $_cell) {
+//                $coordinates = [];
+//
+//                for ($x = 0; $x < 3; $x++) {
+//                    for ($y = 0; $y < 3; $y++) {
+//                        $coordinates[] = [
+//                            'x' => $_cell->getX() + $steps[$x],
+//                            'y' => $_cell->getY() + $steps[$y]
+//                        ];
+//                    }
+//                }
+//
+//                foreach ($coordinates as $coordinate) {
+////                    $this->logger->addEmergency(__FUNCTION__ . ': ###MARK_AS_SKIPPED_: ' . print_r($coordinates, true));
+//                    if (null !== $_cell = CellModel::getByCoordinates($cell->getBattlefield(), $coordinate['x'], $coordinate['y'])) {
+//                        $this->cellModel->switchStateToSkipped($_cell);
+//                    }
+//                }
+//            }
+//
+//            return true;
+//        }
+//
+//        return false;
+//    }
+
 
 //    private function verifyShipByAxis(Cell $cell, string $axis) : bool
 //    {
