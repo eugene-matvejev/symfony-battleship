@@ -2,8 +2,8 @@ My spare time project.
 Higly expremental.
 
 Used:
- * PHP 7.0.1
- * Symfony Framework 3
+ * PHP 7.0.1 (because 7.0.0 has bugged primitive types)
+ * Symfony Framework 3 (Symfony3, SF3)
  * Doctrine2
  * Twig
  * Twitter Bootstrap 3
@@ -18,7 +18,8 @@ php bin/console doctrine:migrations:migrate --env=prod
 for launch unit tests you need PHPUnit
  * phpunit -c app (fixtures will wipe and populate database)
 
-
+----------
+details:
 patterns:
  * FrontController
  * MVC
