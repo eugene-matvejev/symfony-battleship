@@ -17,3 +17,39 @@ php bin/console doctrine:migrations:migrate --env=prod
 
 for launch unit tests you need PHPUnit
  * phpunit -c app (fixtures will wipe and populate database)
+
+
+patterns:
+ * FrontController
+ * MVC
+ * ORM
+ * Strategy
+ * Factory
+ * Singleton
+ * Services
+ * Container
+ * EventDispatcher
+ * DependencyInjection
+
+frameworks/bundles:
+ * Symfony3
+ * ../console
+ * ../yams
+ * Doctrine2
+ * ../fixtures
+ * ../migrations
+ * Twig
+ * Monolog
+ * Composer
+ * PHPUnit
+
+github:
+ * pull-requests
+
+
+PHP:
+ * 7.0.1
+ * PHP-FIG:
+ * ../PSR-2
+ * ../PSR-4
+ * ../PSR-7
