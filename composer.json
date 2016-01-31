@@ -20,7 +20,7 @@
         { "name": "Eugene Matvejev", "email": "eugene.matvejev@gmail.com" }
     ],
     "require": {
-        "php": ">=7.0.2",
+        "php": ">=7.0.1",
         "doctrine/doctrine-bundle": "~1.6.1",
         "doctrine/doctrine-migrations-bundle": "~1.1.1",
         "doctrine/orm": "~2.5.4",
