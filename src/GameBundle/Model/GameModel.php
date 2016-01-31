@@ -12,7 +12,6 @@ use EM\GameBundle\Entity\Player;
 use EM\GameBundle\AI\AI;
 use EM\GameBundle\AI\AIStrategy;
 use EM\GameBundle\Exception\GameException;
-//use Symfony\Bridge\Monolog\Logger;
 
 /**
  * @since 2.0
@@ -47,22 +46,16 @@ class GameModel
      * @var PlayerModel
      */
     private $playerModel;
-    /**
-     * @var Logger
-     */
-    private $logger;
 
-//    function __construct(ObjectManager $om, CellModel $cellModel, PlayerModel $playerModel, AI $ai, AIStrategy $strategy, Logger $logger)
-    function __construct(ObjectManager $om, CellModel $cellModel, PlayerModel $playerModel, AI $ai, AIStrategy $strategy)
+    function __construct(ObjectManager $om, CellModel $cellModel, PlayerModel $playerModel, AI $aiService, AIStrategy $aiStrategy)
     {
-        $this->om               = $om;
-        $this->gameRepository   = $om->getRepository('GameBundle:Game');
+        $this->om = $om;
+        $this->gameRepository = $om->getRepository('GameBundle:Game');
         $this->playerRepository = $om->getRepository('GameBundle:Player');
-        $this->ai               = $ai;
-        $this->strategyService  = $strategy;
-        $this->cellModel        = $cellModel;
-        $this->playerModel      = $playerModel;
-//        $this->logger           = $logger;
+        $this->cellModel = $cellModel;
+        $this->playerModel = $playerModel;
+        $this->ai = $aiService;
+        $this->strategyService = $aiStrategy;
     }
 
     /**
@@ -73,13 +66,11 @@ class GameModel
      */
     public function init(string $json) : \stdClass
     {
-        $json = json_decode($json);
-
         $game = new Game();
         $this->om->persist($game);
 
-        foreach($json->data as $_player) {
-            if(null === $player = $this->playerRepository->findOneBy(['name' => $_player->player->name])) {
+        foreach (json_decode($json)->data as $_player) {
+            if (null === $player = $this->playerRepository->findOneBy(['name' => $_player->player->name])) {
                 $player = (new Player())
                     ->setName($_player->player->name)
                     ->setType($this->playerModel->getTypes()[PlayerModel::TYPE_HUMAN]);
@@ -90,7 +81,7 @@ class GameModel
                 ->setPlayer($player);
             $game->addBattlefield($battlefield);
 
-            foreach($_player->cells as $_cell) {
+            foreach ($_player->cells as $_cell) {
                 $cell = (new Cell())
                     ->setX($_cell->x)
                     ->setY($_cell->y)
@@ -100,7 +91,7 @@ class GameModel
                 $battlefield->addCell($cell);
             }
 
-            if($battlefield->getPlayer()->getType()->getId() === PlayerModel::TYPE_CPU) {
+            if ($battlefield->getPlayer()->getType()->getId() === PlayerModel::TYPE_CPU) {
                 $this->initCPUShips($battlefield);
             }
         }
@@ -111,8 +102,8 @@ class GameModel
 
     public function initCPUShips(Battlefield $battlefield)
     {
-        foreach($battlefield->getCells() as $cell) {
-            if(($cell->getX() === 1 && $cell->getY() === 1) || ($cell->getX() === 1 && $cell->getY() === 5)) {
+        foreach ($battlefield->getCells() as $cell) {
+            if ($cell->getX() === 1 && $cell->getY() === 1) {
                 $cell->setState($this->cellModel->getCellStates()[CellModel::STATE_SHIP_LIVE]);
             }
         }
@@ -129,18 +120,18 @@ class GameModel
         $arr = json_decode($json);
         $std = new \stdClass();
 
-        if(null === $game = $this->gameRepository->find($arr->game->id)) {
+        if (null === $game = $this->gameRepository->find($arr->game->id)) {
             throw new GameException(__FUNCTION__ .' game: '. $arr->game->id .' doesn\'t exists.');
         }
 
-        if(null !== $game->getResult()) {
+        if (null !== $game->getResult()) {
             return $std->victory = GameResultModel::getJSON($game->getResult());
         }
 
-        foreach($game->getBattlefields() as $battlefield) {
+        foreach ($game->getBattlefields() as $battlefield) {
             $this->playerTurn($battlefield, $arr->cell);
 
-            if(null !== $game->getResult() || $this->detectVictory($battlefield)) {
+            if (null !== $game->getResult() || $this->detectVictory($battlefield)) {
                 $std->victory = GameResultModel::getJSON($game->getResult());
                 break;
             }
@@ -148,12 +139,12 @@ class GameModel
 
         $this->om->flush();
 
-        foreach(CellModel::getChangedCells() as $cell) {
-            if(empty($std->{$cell->getBattlefield()->getId()})) {
-                $std->{$cell->getBattlefield()->getId()} = [CellModel::getJSON($cell)];
-            } else {
-                $std->{$cell->getBattlefield()->getId()}[] = CellModel::getJSON($cell);
+        foreach (CellModel::getChangedCells() as $cell) {
+            if (!isset($std->{$cell->getBattlefield()->getId()})) {
+                $std->{$cell->getBattlefield()->getId()} = [];
             }
+
+            $std->{$cell->getBattlefield()->getId()}[] = CellModel::getJSON($cell);
         }
 
         return $std;
@@ -162,7 +153,7 @@ class GameModel
     public function playerTurn(Battlefield $battlefield, \stdClass $cellData)
     {
         $_cell = null;
-        switch($battlefield->getPlayer()->getType()->getId()) {
+        switch ($battlefield->getPlayer()->getType()->getId()) {
             case PlayerModel::TYPE_HUMAN:
                 $_cell = $this->ai->turn($battlefield);
                 break;
@@ -183,9 +174,9 @@ class GameModel
     public function detectVictory(Battlefield $battlefield) : bool
     {
         $game = $battlefield->getGame();
-        if(BattlefieldModel::isUnfinished($battlefield)) {
-            foreach($game->getBattlefields() as $_battlefield) {
-                if($battlefield->getId() !== $_battlefield->getId()) {
+        if (BattlefieldModel::isUnfinished($battlefield)) {
+            foreach ($game->getBattlefields() as $_battlefield) {
+                if ($battlefield->getId() !== $_battlefield->getId()) {
                     $result = (new GameResult())
                         ->setPlayer($_battlefield->getPlayer());
                     $game->setResult($result);
@@ -205,7 +196,7 @@ class GameModel
         $std->id = $game->getId();
         $std->data = [];
 
-        foreach($game->getBattlefields() as $battlefield) {
+        foreach ($game->getBattlefields() as $battlefield) {
             $std->data[] = BattlefieldModel::getJSON($battlefield);
         }
 

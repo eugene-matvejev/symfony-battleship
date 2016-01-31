@@ -18,17 +18,17 @@ class CellModel
     const STATE_SHIP_DIED  = 4;
     const STATE_WATER_SKIP = 5;
     /**
-     * @var Cell[][][]
+     * @var CellState[]
      */
-    private static $cachedCells;
+    private static $cellStates;
     /**
      * @var Cell[]
      */
     private static $changedCells = [];
     /**
-     * @var CellState[]
+     * @var Cell[][][]
      */
-    private static $cellStates;
+    private static $cachedCells;
 
     function __construct(ObjectManager $om)
     {
@@ -43,6 +43,14 @@ class CellModel
     public function getCellStates() : array
     {
         return self::$cellStates;
+    }
+
+    /**
+     * @return Cell[]
+     */
+    public static function getChangedCells() : array
+    {
+        return self::$changedCells;
     }
 
     public function switchState(Cell $cell) : Cell
@@ -82,11 +90,11 @@ class CellModel
      */
     public static function getByCoordinates(Battlefield $battlefield, int $x, int $y)
     {
-        if(!isset(self::$cachedCells[$battlefield->getId()])) {
+        if (!isset(self::$cachedCells[$battlefield->getId()])) {
             self::$cachedCells[$battlefield->getId()] = [];
 
-            foreach($battlefield->getCells() as $cell) {
-                if(!isset(self::$cachedCells[$battlefield->getId()][$cell->getX()])) {
+            foreach ($battlefield->getCells() as $cell) {
+                if (!isset(self::$cachedCells[$battlefield->getId()][$cell->getX()])) {
                     self::$cachedCells[$battlefield->getId()][$cell->getX()] = [];
                 }
 
@@ -94,27 +102,17 @@ class CellModel
             }
         }
 
-        return empty(self::$cachedCells[$battlefield->getId()][$x][$y]) ? null : self::$cachedCells[$battlefield->getId()][$x][$y];
-//        return self::$cachedCells[$battlefield->getId()][$x][$y] ?? null;
+        return self::$cachedCells[$battlefield->getId()][$x][$y] ?? null;
     }
 
     public static function getJSON(Cell $cell) : \stdClass
     {
-        $std = new \stdClass();
-        $std->x = $cell->getX();
-        $std->y = $cell->getY();
-        $std->s = $cell->getState()->getId();
-        $std->player = PlayerModel::getJSON($cell->getBattlefield()->getPlayer());
-
-        return $std;
-    }
-
-    /**
-     * @return Cell[]
-     */
-    public static function getChangedCells() : array
-    {
-        return self::$changedCells;
+        return (object)[
+            'x' => $cell->getX(),
+            'y' => $cell->getY(),
+            's' => $cell->getState()->getId(),
+            'player' => PlayerModel::getJSON($cell->getBattlefield()->getPlayer())
+        ];
     }
 
     /**
