@@ -197,10 +197,10 @@ class AIStrategy
             foreach ($cells as $_cell) {
                 for ($x = 0; $x < 3; $x++) {
                     for ($y = 0; $y < 3; $y++) {
-                        $x = $_cell->getX() + self::COORDINATES_STEPS[$x];
-                        $y = $_cell->getY() + self::COORDINATES_STEPS[$y];
+                        $_x = $_cell->getX() + self::COORDINATES_STEPS[$x];
+                        $_y = $_cell->getY() + self::COORDINATES_STEPS[$y];
 
-                        if (null !== $__cell = CellModel::getByCoordinates($cell->getBattlefield(), $x, $y)) {
+                        if (null !== $__cell = CellModel::getByCoordinates($cell->getBattlefield(), $_x, $_y)) {
                             $this->cellModel->switchStateToSkipped($__cell);
                         }
                     }
