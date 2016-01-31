@@ -7,7 +7,6 @@ use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Exception\AIException;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
-use Symfony\Bridge\Monolog\Logger;
 
 /**
  * @since 3.0
@@ -22,16 +21,11 @@ class AI
      * @var AIStrategy
      */
     private $strategyService;
-    /**
-     * @var Logger
-     */
-    private $logger;
 
-    public function __construct(CellModel $model, AIStrategy $service, Logger $logger)
+    public function __construct(CellModel $model, AIStrategy $service)
     {
         $this->cellModel = $model;
         $this->strategyService = $service;
-        $this->logger = $logger;
     }
 
     /**
@@ -42,20 +36,18 @@ class AI
      */
     public function turn(Battlefield $battlefield) : Cell
     {
-        $cells = $this->strategyService->chooseStrategy($battlefield);
-
         try {
-            if(null === $cell = $cell = $this->bombardInRange($cells)) {
+            $cells = $this->strategyService->chooseStrategy($battlefield);
+
+            if(null === $cell = $this->bombardInRange($cells)) {
                 $cells = BattlefieldModel::getLiveCells($battlefield);
                 $cell = $this->bombardInRange($cells);
             }
+
+            return $cell;
         } catch(AIException $e) {
-            $this->logger->addCritical(__CLASS__ .':'. __FUNCTION__ .':'. $e);
         }
-
-        return $cell;
     }
-
 
     /**
      * @param Cell[] $cells

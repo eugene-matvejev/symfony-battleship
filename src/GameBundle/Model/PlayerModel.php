@@ -27,12 +27,11 @@ class PlayerModel
 
     public static function getJSON(Player $player) : \stdClass
     {
-        $std = new \stdClass();
-        $std->id = $player->getId();
-        $std->name = $player->getName();
-        $std->type = $player->getType()->getId();
-
-        return $std;
+        return (object)[
+            'id' => $player->getId(),
+            'name' => $player->getName(),
+            'type' => $player->getType()->getId()
+        ];
     }
 
     /**

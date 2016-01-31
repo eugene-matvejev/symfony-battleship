@@ -6,7 +6,6 @@ use Doctrine\Common\Persistence\ObjectManager;
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Entity\CellState;
-use Symfony\Bridge\Monolog\Logger;
 
 /**
  * @since 2.0
@@ -19,28 +18,23 @@ class CellModel
     const STATE_SHIP_DIED  = 4;
     const STATE_WATER_SKIP = 5;
     /**
-     * @var Cell[][][]
+     * @var CellState[]
      */
-    private static $cachedCells;
+    private static $cellStates;
     /**
      * @var Cell[]
      */
     private static $changedCells = [];
     /**
-     * @var CellState[]
+     * @var Cell[][][]
      */
-    private static $cellStates;
-    /**
-     * @var Logger
-     */
-    private $logger;
+    private static $cachedCells;
 
-    function __construct(ObjectManager $om, Logger $logger)
+    function __construct(ObjectManager $om)
     {
         if(null === self::$cellStates) {
             self::$cellStates = $om->getRepository('GameBundle:CellState')->getStates();
         }
-        $this->logger = $logger;
     }
 
     /**
@@ -49,6 +43,14 @@ class CellModel
     public function getCellStates() : array
     {
         return self::$cellStates;
+    }
+
+    /**
+     * @return Cell[]
+     */
+    public static function getChangedCells() : array
+    {
+        return self::$changedCells;
     }
 
     public function switchState(Cell $cell) : Cell
@@ -88,11 +90,11 @@ class CellModel
      */
     public static function getByCoordinates(Battlefield $battlefield, int $x, int $y)
     {
-        if(!isset(self::$cachedCells[$battlefield->getId()])) {
+        if (!isset(self::$cachedCells[$battlefield->getId()])) {
             self::$cachedCells[$battlefield->getId()] = [];
 
-            foreach($battlefield->getCells() as $cell) {
-                if(!isset(self::$cachedCells[$battlefield->getId()][$cell->getX()])) {
+            foreach ($battlefield->getCells() as $cell) {
+                if (!isset(self::$cachedCells[$battlefield->getId()][$cell->getX()])) {
                     self::$cachedCells[$battlefield->getId()][$cell->getX()] = [];
                 }
 
@@ -105,21 +107,20 @@ class CellModel
 
     public static function getJSON(Cell $cell) : \stdClass
     {
-        $std = new \stdClass();
-        $std->x = $cell->getX();
-        $std->y = $cell->getY();
-        $std->s = $cell->getState()->getId();
-        $std->player = PlayerModel::getJSON($cell->getBattlefield()->getPlayer());
-
-        return $std;
+        return (object)[
+            'x' => $cell->getX(),
+            'y' => $cell->getY(),
+            's' => $cell->getState()->getId(),
+            'player' => PlayerModel::getJSON($cell->getBattlefield()->getPlayer())
+        ];
     }
 
     /**
-     * @return Cell[]
+     * @return int[]
      */
-    public static function getChangedCells() : array
+    public static function getShipStates() : array
     {
-        return self::$changedCells;
+        return [self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED];
     }
 
     /**

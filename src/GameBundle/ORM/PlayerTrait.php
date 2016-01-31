@@ -11,7 +11,7 @@ use EM\GameBundle\Entity\Player;
 trait PlayerTrait
 {
     /**
-     * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\Player")
+     * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\Player", cascade={"persist"})
      * @ORM\JoinColumn(name="player", referencedColumnName="id", nullable=false)
      *
      * @var Player

@@ -13,7 +13,7 @@ use EM\GameBundle\ORM\TimestampedTrait;
 /**
  * @since 1.0
  *
- * @ORM\Entity(repositoryClass="EM\GameBundle\Repository\GameResultRepository")
+ * @ORM\Entity(repositoryClass="EM\GameBundle\Repository\GameResultRepository", readOnly=true)
  * @ORM\Table(
  *     name="gamesResults",
  *     indexes={
@@ -27,7 +27,7 @@ class GameResult implements IdentifiableInterface, PlayerInterface, TimestampedI
 {
     use IdentifiableTrait, PlayerTrait, TimestampedTrait;
     /**
-     * @ORM\OneToOne(targetEntity="EM\GameBundle\Entity\Game", mappedBy="result")
+     * @ORM\OneToOne(targetEntity="EM\GameBundle\Entity\Game", inversedBy="result")
      * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)
      *
      * @var Game

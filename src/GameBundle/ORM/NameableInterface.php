@@ -7,7 +7,7 @@ namespace EM\GameBundle\ORM;
  */
 interface NameableInterface
 {
-    public function getName();
+    public function getName() : string;
 
     public function setName($name);
 }

@@ -1,5 +1,4 @@
-# common parameters for each envrioment.
-# specify in parameter_{ENV} different config, if you want overwrite it
 parameters:
-  battleshipt.config.ship.size.min: 1
-  battleshipt.config.ship.size.max: 4
+  battleship.config.ship.size.min: 1
+  battleship.config.ship.size.max: 4
+  battleship.config.statistics.results.per.page: 10

@@ -10,6 +10,20 @@ use EM\GameBundle\Entity\Cell;
  */
 class BattlefieldModel
 {
+    public static function getJSON(Battlefield $battlefield) : \stdClass
+    {
+        $std = new \stdClass();
+        $std->id = $battlefield->getId();
+        $std->player = PlayerModel::getJSON($battlefield->getPlayer());
+        $std->cells = [];
+
+        foreach ($battlefield->getCells() as $cell) {
+            $std->cells[] = CellModel::getJSON($cell);
+        }
+
+        return $std;
+    }
+
     /**
      * @param Battlefield $battlefield
      *
@@ -18,8 +32,8 @@ class BattlefieldModel
     public static function getLiveCells(Battlefield $battlefield) : array
     {
         $cells = [];
-        foreach($battlefield->getCells() as $cell) {
-            if(in_array($cell->getState()->getId(), CellModel::getLiveStates())) {
+        foreach ($battlefield->getCells() as $cell) {
+            if (in_array($cell->getState()->getId(), CellModel::getLiveStates())) {
                 $cells[] = $cell;
             }
         }
@@ -29,8 +43,8 @@ class BattlefieldModel
 
     public static function isUnfinished(Battlefield $battlefield) : bool
     {
-        foreach($battlefield->getCells() as $cell) {
-            if($cell->getState()->getId() === CellModel::STATE_SHIP_LIVE) {
+        foreach ($battlefield->getCells() as $cell) {
+            if ($cell->getState()->getId() === CellModel::STATE_SHIP_LIVE) {
                 return false;
             }
         }

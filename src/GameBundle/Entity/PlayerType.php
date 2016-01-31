@@ -11,7 +11,7 @@ use EM\GameBundle\ORM\NameableTrait;
 /**
  * @since 1.0
  *
- * @ORM\Entity(repositoryClass="EM\GameBundle\Repository\PlayerTypeRepository")
+ * @ORM\Entity(repositoryClass="EM\GameBundle\Repository\PlayerTypeRepository", readOnly=true)
  * @ORM\Table(name="playerType")
  */
 class PlayerType implements IdentifiableInterface, NameableInterface
