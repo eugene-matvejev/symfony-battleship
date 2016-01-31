@@ -19,8 +19,9 @@ for launch unit tests you need PHPUnit
  * phpunit -c app (fixtures will wipe and populate database)
 
 ----------
-details:
-patterns:
+more details:
+
+used patterns:
  * FrontController
  * MVC
  * ORM
@@ -32,7 +33,7 @@ patterns:
  * EventDispatcher
  * DependencyInjection
 
-frameworks/bundles:
+used frameworks/bundles:
  * Symfony3
  * ../console
  * ../yams
@@ -44,11 +45,10 @@ frameworks/bundles:
  * Composer
  * PHPUnit
 
-github:
- * pull-requests
+github usage:
+ * pull-requests to the master
 
-
-PHP:
+used PHP and PHP standarts:
  * 7.0.1
  * PHP-FIG:
  * ../PSR-2
