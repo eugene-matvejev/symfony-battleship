@@ -11,13 +11,13 @@ use EM\GameBundle\Repository\GameResultRepository;
 class StatisticsModel
 {
     /**
-     * @var GameResultRepository
-     */
-    private $gameResultRepository;
-    /**
      * @var int
      */
     private $gameResultsPerPage;
+    /**
+     * @var GameResultRepository
+     */
+    private $gameResultRepository;
 
     function __construct(ObjectManager $om, int $perPage)
     {
