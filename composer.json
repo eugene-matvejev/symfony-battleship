@@ -20,7 +20,7 @@
         { "name": "Eugene Matvejev", "email": "eugene.matvejev@gmail.com" }
     ],
     "require": {
-        "php": ">=7.0.2",
+        "php": ">=7.0.1",
         "doctrine/doctrine-bundle": "~1.6.1",
         "doctrine/doctrine-migrations-bundle": "~1.1.1",
         "doctrine/orm": "~2.5.4",
@@ -38,7 +38,7 @@
     "scripts": {
         "post-install-cmd": [
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "EM\\GameBundle\\Command\\ComposerCommand::initProductionDatabase",
+            "EM\\GameBundle\\Command\\DatabaseProvisionCommand::initDatabases",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
@@ -46,7 +46,7 @@
         ],
         "post-update-cmd": [
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "EM\\GameBundle\\Command\\ComposerCommand::initProductionDatabase",
+            "EM\\GameBundle\\Command\\DatabaseProvisionCommand::initDatabases",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
@@ -55,7 +55,7 @@
     },
     "config": {
         "platform": {
-            "php": "7.0.2"
+            "php": "7.0.1"
         },
         "bin-dir": "bin/"
     },
