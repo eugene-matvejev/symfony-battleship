@@ -8,14 +8,14 @@ use Composer\Script\CommandEvent;
 /**
  * @since 2.0
  */
-class ComposerCommand extends ScriptHandler
+class DatabaseProvisionCommand extends ScriptHandler
 {
-    static public function initProductionDatabase(CommandEvent $event)
+    static public function initDatabases(CommandEvent $event)
     {
         if (null !== $consoleDir = static::getConsoleDir($event, 'install assets')) {
             static::executeCommand($event, $consoleDir, 'doctrine:database:create --env=prod --if-not-exists');
 
-            if($event->isDevMode()) {
+            if ($event->isDevMode()) {
                 static::executeCommand($event, $consoleDir, 'doctrine:database:create --env=test --if-not-exists');
             }
         }
