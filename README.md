@@ -25,6 +25,7 @@ used patterns:
  * FrontController
  * MVC
  * ORM
+ * Builder
  * Strategy
  * Factory
  * Singleton
