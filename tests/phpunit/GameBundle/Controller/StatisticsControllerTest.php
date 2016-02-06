@@ -1,11 +1,14 @@
 <?php
 
-namespace EM\Tests\GameBundle\Controller;
+namespace EM\Tests\PHPUnit\GameBundle\Controller;
 
-use EM\Tests\Environment\ExtendedTestCase;
+use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Tests\Controller;
 
+/**
+ * @see GameBundle\Controller\StatisticsController
+ */
 class StatisticsControllerTest extends ExtendedTestCase
 {
     /**

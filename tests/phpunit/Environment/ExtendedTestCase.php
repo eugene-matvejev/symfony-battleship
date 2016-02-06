@@ -1,6 +1,6 @@
 <?php
 
-namespace EM\Tests\Environment;
+namespace EM\Tests\PHPUnit\Environment;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -11,6 +11,8 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @since 1.0
@@ -28,15 +30,19 @@ class ExtendedTestCase extends WebTestCase
     /**
      * @var Client
      */
-    private static $client;
+    protected static $client;
     /**
      * @var ContainerInterface
      */
-    private static $container;
+    protected static $container;
     /**
-     * @var Router
+     * @var RouterInterface
      */
-    private static $router;
+    protected static $router;
+//    /**
+//     * @var KernelInterface
+//     */
+//    private static $kernel;
 
     /**
      * initialization
@@ -44,12 +50,21 @@ class ExtendedTestCase extends WebTestCase
     protected function setUp()
     {
         if(null === static::$setUp) {
+            self::$client = static::createClient();
+
+            self::$kernel = static::createKernel();
+            self::$kernel->boot();
+
+            self::$container = static::$kernel->getContainer();
+
+            self::$router = static::$container->get('router');
+//            $this->em = static::$kernel->getContainer()
+//                ->get('doctrine')
+//                ->getManager();
+
             static::$setUp = true;
 
-            self::$consoleApp = new Application(self::getClient()->getKernel());
-            self::$consoleApp->setAutoExit(false);
-
-            $this->runConsole('battleship:database:seed');
+//            $this->runConsole('battleship:database:seed');
         }
     }
 
@@ -85,37 +100,42 @@ class ExtendedTestCase extends WebTestCase
      */
     protected function getConsoleApp() : Application
     {
+//        if (null === static::$consoleApp) {
+//            self::$consoleApp = new Application(self::getClient()->getKernel());
+//            self::$consoleApp->setAutoExit(false);
+//        }
+
         return self::$consoleApp;
     }
 
-    /**
-     * Gets the display returned by the last execution of the command.
-     *
-     * @param ContainerAwareCommand $command
-     *
-     * @return string The display of command execution result
-     */
-    protected function executeCommand(ContainerAwareCommand $command)
-    {
-        $console = $this->getConsoleApp();
-        $commandName = $command->getName();
-        if (!$console->has($commandName)) {
-            $this->getConsoleApp()->add($command);
-        }
-        $commandTester = new CommandTester($console->find($commandName));
-        $commandTester->execute(['command' => $commandName]);
-
-        return $commandTester->getDisplay();
-    }
+//    /**
+//     * Gets the display returned by the last execution of the command.
+//     *
+//     * @param ContainerAwareCommand $command
+//     *
+//     * @return string The display of command execution result
+//     */
+//    protected function executeCommand(ContainerAwareCommand $command)
+//    {
+//        $console = $this->getConsoleApp();
+//        $commandName = $command->getName();
+//        if (!$console->has($commandName)) {
+//            $this->getConsoleApp()->add($command);
+//        }
+//        $commandTester = new CommandTester($console->find($commandName));
+//        $commandTester->execute(['command' => $commandName]);
+//
+//        return $commandTester->getDisplay();
+//    }
 
     /**
      * @since 1.0
      */
     public function getClient() : Client
     {
-        if(null === self::$client) {
-            self::$client = static::createClient();
-        }
+//        if(null === self::$client) {
+//            self::$client = static::createClient();
+//        }
 
         return self::$client;
     }
@@ -125,10 +145,9 @@ class ExtendedTestCase extends WebTestCase
      */
     public function getContainer() : ContainerInterface
     {
-        if(null === self::$container) {
-            self::$container = $this->getClient()->getContainer();
-
-        }
+//        if(null === self::$container) {
+//            self::$container = $this->getClient()->getContainer();
+//        }
 
         return self::$container;
     }
@@ -138,9 +157,9 @@ class ExtendedTestCase extends WebTestCase
      */
     public function getRouter() : Router
     {
-        if(null === self::$router) {
-            self::$router = $this->getContainer()->get('router');
-        }
+//        if(null === self::$router) {
+//            self::$router = $this->getContainer()->get('router');
+//        }
 
         return self::$router;
     }
@@ -166,5 +185,10 @@ class ExtendedTestCase extends WebTestCase
         $this->assertCorrectResponse($response);
 
         return json_decode($response->getContent(), true);
+    }
+
+    protected function callPrivateOrProtectedMethod()
+    {
+        
     }
 }
