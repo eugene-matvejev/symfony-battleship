@@ -2,16 +2,13 @@
 
 namespace EM\Tests\PHPUnit\Environment;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -187,8 +184,21 @@ class ExtendedTestCase extends WebTestCase
         return json_decode($response->getContent(), true);
     }
 
-    protected function callPrivateOrProtectedMethod()
+    /**
+     * @param string $className
+     * @param mixed  $classInstance
+     * @param string $methodName
+     * @param array  $methodArguments
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    protected function invokePrivateMethod(string $className, $classInstance, string $methodName, array $methodArguments = [])
     {
-        
+        $reflected = new \ReflectionClass($className);
+        $method = $reflected->getMethod($methodName);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($classInstance, $methodArguments);
     }
 }
