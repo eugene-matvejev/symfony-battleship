@@ -12,7 +12,7 @@ use EM\GameBundle\ORM\NameableTrait;
  * @since 1.0
  *
  * @ORM\Entity(repositoryClass="EM\GameBundle\Repository\PlayerTypeRepository", readOnly=true)
- * @ORM\Table(name="playerType")
+ * @ORM\Table(name="player_types")
  */
 class PlayerType implements IdentifiableInterface, NameableInterface
 {

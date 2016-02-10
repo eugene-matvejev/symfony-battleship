@@ -10,6 +10,20 @@ use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
  */
 class CellModelTest extends ExtendedTestCase
 {
+    /**
+     * @see EM\GameBundle\Model\CellModel::getCellStates()
+     * @test
+     */
+    public function getCellStates()
+    {
+
+        $statesFromDatabase = (new CellModel($this->getObjectManager()))->getCellStates();
+        foreach ($statesFromDatabase as $state) {
+            $this->assertContains($state->getId(), CellModel::getAllStates());
+        }
+
+        $this->assertEquals(count($statesFromDatabase), count(CellModel::getAllStates()));
+    }
 
     /**
      * @see EM\GameBundle\Model\CellModel::getShipStates()
@@ -17,7 +31,7 @@ class CellModelTest extends ExtendedTestCase
      */
     public function getShipStates()
     {
-        foreach(CellModel::getShipStates() as $state) {
+        foreach (CellModel::getShipStates() as $state) {
             $this->assertContains($state, CellModel::getAllStates());
         }
     }
@@ -28,7 +42,7 @@ class CellModelTest extends ExtendedTestCase
      */
     public function getLiveStates()
     {
-        foreach(CellModel::getLiveStates() as $state) {
+        foreach (CellModel::getLiveStates() as $state) {
             $this->assertContains($state, CellModel::getAllStates());
             $this->assertNotContains($state, CellModel::getDiedStates());
         }
@@ -38,21 +52,26 @@ class CellModelTest extends ExtendedTestCase
      * @see EM\GameBundle\Model\CellModel::getDiedStates()
      * @test
      */
-    public function getDiedStates() : array
+    public function getDiedStates()
     {
-        foreach(CellModel::getLiveStates() as $state) {
+        foreach (CellModel::getDiedStates() as $state) {
             $this->assertContains($state, CellModel::getAllStates());
             $this->assertNotContains($state, CellModel::getLiveStates());
         }
     }
-//
-//    /**
-//     * @return int[]
-//     */
-//    public static function getAllStates() : array
-//    {
-//        return [self::STATE_WATER_LIVE, self::STATE_WATER_DIED, self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED, self::STATE_WATER_SKIP];
-//    }
+
+    /**
+     * @see EM\GameBundle\Model\CellModel::getAllStates()
+     * @test
+     */
+    public function getAllStates()
+    {
+        $diedStates = count(CellModel::getDiedStates());
+        $liveStates = count(CellModel::getLiveStates());
+        $totalStates = count(CellModel::getAllStates());
+
+        $this->assertGreaterThanOrEqual($diedStates + $liveStates, $totalStates);
+    }
 }
 
 //class CellModel

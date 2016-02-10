@@ -15,7 +15,7 @@ use EM\GameBundle\ORM\TimestampedTrait;
  *
  * @ORM\Entity(repositoryClass="EM\GameBundle\Repository\GameResultRepository", readOnly=true)
  * @ORM\Table(
- *     name="gamesResults",
+ *     name="game_results",
  *     indexes={
  *          @ORM\Index(name="INDEX_GAME_RESULT_GAME", columns={"game"}),
  *          @ORM\Index(name="INDEX_GAME_RESULT_WINNER", columns={"player"})

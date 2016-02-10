@@ -2,6 +2,8 @@
 
 namespace EM\Tests\PHPUnit\Environment;
 
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Client;
@@ -17,9 +19,21 @@ use Symfony\Component\Routing\RouterInterface;
 class ExtendedTestCase extends WebTestCase
 {
     /**
-     * @var bool
+     * @var ContainerInterface
      */
-    protected static $setUp;
+    protected static $container;
+    /**
+     * @var RegistryInterface
+     */
+    protected static $doctrine;
+    /**
+     * @var ObjectManager
+     */
+    protected static $om;
+    /**
+     * @var RouterInterface
+     */
+    protected static $router;
     /**
      * @var Application
      */
@@ -29,13 +43,9 @@ class ExtendedTestCase extends WebTestCase
      */
     protected static $client;
     /**
-     * @var ContainerInterface
+     * @var bool
      */
-    protected static $container;
-    /**
-     * @var RouterInterface
-     */
-    protected static $router;
+    protected static $setUp;
 //    /**
 //     * @var KernelInterface
 //     */
@@ -55,9 +65,8 @@ class ExtendedTestCase extends WebTestCase
             self::$container = static::$kernel->getContainer();
 
             self::$router = static::$container->get('router');
-//            $this->em = static::$kernel->getContainer()
-//                ->get('doctrine')
-//                ->getManager();
+            self::$doctrine = static::$kernel->getContainer()->get('doctrine');
+            self::$om = self::$doctrine->getManager();
 
             static::$setUp = true;
 
@@ -130,10 +139,6 @@ class ExtendedTestCase extends WebTestCase
      */
     public function getClient() : Client
     {
-//        if(null === self::$client) {
-//            self::$client = static::createClient();
-//        }
-
         return self::$client;
     }
 
@@ -142,10 +147,6 @@ class ExtendedTestCase extends WebTestCase
      */
     public function getContainer() : ContainerInterface
     {
-//        if(null === self::$container) {
-//            self::$container = $this->getClient()->getContainer();
-//        }
-
         return self::$container;
     }
 
@@ -154,11 +155,23 @@ class ExtendedTestCase extends WebTestCase
      */
     public function getRouter() : Router
     {
-//        if(null === self::$router) {
-//            self::$router = $this->getContainer()->get('router');
-//        }
-
         return self::$router;
+    }
+
+    /**
+     * @since 3.4
+     */
+    public function getDoctrine() : RegistryInterface
+    {
+        return self::$doctrine;
+    }
+
+    /**
+     * @since 3.4
+     */
+    public function getObjectManager() : ObjectManager
+    {
+        return self::$om;
     }
 
     /**
