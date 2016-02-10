@@ -2,6 +2,8 @@
 
 namespace EM\Tests\PHPUnit\GameBundle\Model;
 
+use EM\GameBundle\Entity\Cell;
+use EM\GameBundle\Entity\CellState;
 use EM\GameBundle\Model\CellModel;
 use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
 
@@ -11,18 +13,27 @@ use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
 class CellModelTest extends ExtendedTestCase
 {
     /**
+     * @var CellModel
+     */
+    private $cellModel;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->cellModel = $this->getContainer()->get('battleship.game.services.cell.model');
+    }
+
+    /**
      * @see EM\GameBundle\Model\CellModel::getCellStates()
      * @test
      */
     public function getCellStates()
     {
-
-        $statesFromDatabase = (new CellModel($this->getObjectManager()))->getCellStates();
-        foreach ($statesFromDatabase as $state) {
+        foreach ($this->cellModel->getCellStates() as $state) {
             $this->assertContains($state->getId(), CellModel::getAllStates());
         }
 
-        $this->assertEquals(count($statesFromDatabase), count(CellModel::getAllStates()));
+        $this->assertEquals(count($this->cellModel->getCellStates()), count(CellModel::getAllStates()));
     }
 
     /**
@@ -33,6 +44,19 @@ class CellModelTest extends ExtendedTestCase
     {
         foreach (CellModel::getShipStates() as $state) {
             $this->assertContains($state, CellModel::getAllStates());
+            $this->assertNotContains($state, CellModel::getWaterStates());
+        }
+    }
+
+    /**
+     * @see EM\GameBundle\Model\CellModel::getWaterStates()
+     * @test
+     */
+    public function getWaterStates()
+    {
+        foreach (CellModel::getWaterStates() as $state) {
+            $this->assertContains($state, CellModel::getAllStates());
+            $this->assertNotContains($state, CellModel::getShipStates());
         }
     }
 
@@ -72,142 +96,51 @@ class CellModelTest extends ExtendedTestCase
 
         $this->assertGreaterThanOrEqual($diedStates + $liveStates, $totalStates);
     }
-}
 
-//class CellModel
-//{
-//    const STATE_WATER_LIVE = 1;
-//    const STATE_WATER_DIED = 2;
-//    const STATE_SHIP_LIVE  = 3;
-//    const STATE_SHIP_DIED  = 4;
-//    const STATE_WATER_SKIP = 5;
-//    /**
-//     * @var CellState[]
-//     */
-//    private static $cellStates;
-//    /**
-//     * @var Cell[]
-//     */
-//    private static $changedCells = [];
-//    /**
-//     * @var Cell[][][]
-//     */
-//    private static $cachedCells;
-//
-//    function __construct(ObjectManager $om)
-//    {
-//        if(null === self::$cellStates) {
-//            self::$cellStates = $om->getRepository('GameBundle:CellState')->getStates();
-//        }
-//    }
-//
-//    /**
-//     * @return CellState[]
-//     */
-//    public function getCellStates() : array
-//    {
-//        return self::$cellStates;
-//    }
-//
-//    /**
-//     * @return Cell[]
-//     */
-//    public static function getChangedCells() : array
-//    {
-//        return self::$changedCells;
-//    }
-//
-//    public function switchState(Cell $cell) : Cell
-//    {
-//        switch($cell->getState()->getId()) {
-//            case self::STATE_WATER_LIVE:
-//                $cell->setState(self::$cellStates[self::STATE_WATER_DIED]);
-//                self::$changedCells[] = $cell;
-//                break;
-//            case self::STATE_SHIP_LIVE:
-//                $cell->setState(self::$cellStates[self::STATE_SHIP_DIED]);
-//                self::$changedCells[] = $cell;
-//                break;
-//        }
-//
-//        return $cell;
-//    }
-//
-//    public function switchStateToSkipped(Cell $cell) : Cell
-//    {
-//        switch($cell->getState()->getId()) {
-//            case self::STATE_WATER_LIVE:
-//                $cell->setState(self::$cellStates[self::STATE_WATER_SKIP]);
-//                self::$changedCells[] = $cell;
-//                break;
-//        }
-//
-//        return $cell;
-//    }
-//
-//    /**
-//     * @param Battlefield $battlefield
-//     * @param int         $x
-//     * @param int         $y
-//     *
-//     * @return Cell|null
-//     */
-//    public static function getByCoordinates(Battlefield $battlefield, int $x, int $y)
-//    {
-//        if (!isset(self::$cachedCells[$battlefield->getId()])) {
-//            self::$cachedCells[$battlefield->getId()] = [];
-//
-//            foreach ($battlefield->getCells() as $cell) {
-//                if (!isset(self::$cachedCells[$battlefield->getId()][$cell->getX()])) {
-//                    self::$cachedCells[$battlefield->getId()][$cell->getX()] = [];
-//                }
-//
-//                self::$cachedCells[$battlefield->getId()][$cell->getX()][$cell->getY()] = $cell;
-//            }
-//        }
-//
-//        return self::$cachedCells[$battlefield->getId()][$x][$y] ?? null;
-//    }
-//
-//    public static function getJSON(Cell $cell) : \stdClass
-//    {
-//        return (object)[
-//            'x' => $cell->getX(),
-//            'y' => $cell->getY(),
-//            's' => $cell->getState()->getId(),
-//            'player' => PlayerModel::getJSON($cell->getBattlefield()->getPlayer())
-//        ];
-//    }
-//
-//    /**
-//     * @return int[]
-//     */
-//    public static function getShipStates() : array
-//    {
-//        return [self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED];
-//    }
-//
-//    /**
-//     * @return int[]
-//     */
-//    public static function getLiveStates() : array
-//    {
-//        return [self::STATE_WATER_LIVE, self::STATE_SHIP_LIVE];
-//    }
-//
-//    /**
-//     * @return int[]
-//     */
-//    public static function getDiedStates() : array
-//    {
-//        return [self::STATE_WATER_DIED, self::STATE_SHIP_DIED];
-//    }
-//
-//    /**
-//     * @return int[]
-//     */
-//    public static function getAllStates() : array
-//    {
-//        return [self::STATE_WATER_LIVE, self::STATE_WATER_DIED, self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED, self::STATE_WATER_SKIP];
-//    }
-//}
+
+    /**
+     * @see EM\GameBundle\Model\CellModel::switchState()
+     * @test
+     */
+    public function switchState()
+    {
+        foreach ($this->cellModel->getCellStates() as $cellState) {
+            $stateBefore = $cellState->getId();
+            $cell = $this->getMockedCell($cellState);
+            $this->cellModel->switchState($cell);
+
+            if (in_array($stateBefore, CellModel::getLiveStates())) {
+                $this->assertContains($cell->getState()->getId(), CellModel::getDiedStates());
+            } else {
+                $this->assertEquals($stateBefore, $cell->getState()->getId());
+            }
+        }
+    }
+
+    /**
+     * @see EM\GameBundle\Model\CellModel::switchStateToSkipped()
+     * @test
+     */
+    public function switchStateToSkipped()
+    {
+        foreach ($this->cellModel->getCellStates() as $cellState) {
+            $stateBefore = $cellState->getId();
+            $cell = $this->getMockedCell($cellState);
+            $this->cellModel->switchStateToSkipped($cell);
+
+            if ($stateBefore === CellModel::STATE_WATER_LIVE) {
+                $this->assertEquals(CellModel::STATE_WATER_SKIP, $cell->getState()->getId());
+            } else {
+                $this->assertEquals($stateBefore, $cell->getState()->getId());
+            }
+        }
+    }
+
+    private function getMockedCell(CellState $state) : Cell
+    {
+        $cell = (new Cell())
+            ->setState($state);
+
+        return $cell;
+    }
+}

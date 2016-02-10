@@ -126,6 +126,14 @@ class CellModel
     /**
      * @return int[]
      */
+    public static function getWaterStates() : array
+    {
+        return [self::STATE_WATER_LIVE, self::STATE_WATER_DIED];
+    }
+
+    /**
+     * @return int[]
+     */
     public static function getLiveStates() : array
     {
         return [self::STATE_WATER_LIVE, self::STATE_SHIP_LIVE];
