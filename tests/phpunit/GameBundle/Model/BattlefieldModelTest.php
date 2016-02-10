@@ -9,59 +9,38 @@ use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
 use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
 
+/**
+ * @see EM\GameBundle\Model\BattlefieldModel
+ */
 class BattlefieldModelTest extends ExtendedTestCase
 {
-//    /**
-//     * @var BattlefieldModel
-//     */
-//    protected $battlefieldModel;
-//
-//    protected function setUp()
-//    {
-//        parent::setUp();
-//        $this->battlefieldModel = $this->getContainer()->get('battleship.mo');
-//    }
-//    public static function getJSON(Battlefield $battlefield) : \stdClass
-//    {
-//        $std = new \stdClass();
-//        $std->id = $battlefield->getId();
-//        $std->player = PlayerModel::getJSON($battlefield->getPlayer());
-//        $std->cells = [];
-//
-//        foreach ($battlefield->getCells() as $cell) {
-//            $std->cells[] = CellModel::getJSON($cell);
-//        }
-//
-//        return $std;
-//    }
-//
-//    /**
-//     * @param Battlefield $battlefield
-//     *
-//     * @return Cell[]
-//     */
-//    public static function getLiveCells(Battlefield $battlefield) : array
-//    {
-//        $cells = [];
-//        foreach ($battlefield->getCells() as $cell) {
-//            if (in_array($cell->getState()->getId(), CellModel::getLiveStates())) {
-//                $cells[] = $cell;
-//            }
-//        }
-//
-//        return $cells;
-//    }
-//
-
     /**
-     * @see
+     * @see EM\GameBundle\Model\BattlefieldModel::getLiveCells
      * @test
      */
     public function getLiveCells()
     {
+        $battlefield = $this->getMockedBattlefield();
+        $cells =  BattlefieldModel::getLiveCells($battlefield);
+        $this->assertCount(100, $cells);
 
+
+        $cellState = (new CellState())
+            ->setName('test cell state')
+            ->setId(CellModel::STATE_SHIP_DIED);
+        foreach ($battlefield->getCells() as $cell) {
+            if ($cell->getX() === 0) {
+                $cell->setState($cellState);
+            }
+        }
+        $cells =  BattlefieldModel::getLiveCells($battlefield);
+        $this->assertCount(90, $cells);
     }
 
+    /**
+     * @see EM\GameBundle\Model\BattlefieldModel::isUnfinished
+     * @test
+     */
     public function isUnfinished()
     {
         $battlefield = $this->getMockedBattlefield();
@@ -79,12 +58,16 @@ class BattlefieldModelTest extends ExtendedTestCase
     private function getMockedBattlefield()
     {
         $battlefield = new Battlefield();
-        for ($x = 0; $x < 9; $x++) {
-            for ($y = 0; $y < 9; $y++) {
+        $cellState = (new CellState())
+            ->setName('test cell state')
+            ->setId(CellModel::STATE_SHIP_LIVE);
+        for ($x = 0; $x < 10; $x++) {
+            for ($y = 0; $y < 10; $y++) {
                 $cell = (new Cell())
                     ->setX($x)
-                    ->setY($y);
-                $cell->setBattlefield($battlefield);
+                    ->setY($y)
+                    ->setState($cellState);
+                $battlefield->addCell($cell);
             }
         }
 
