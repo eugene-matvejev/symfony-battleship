@@ -11,9 +11,8 @@ Used:
 
 How to install. (to setup you need use composer, execute all commands from project root directory)
  * composer install (will create databases as well)
+  (it will setup database and run migrations automatically)
  * php bin/console assets:install
-
-php bin/console doctrine:migrations:migrate --env=prod
 
 for launch unit tests you need PHPUnit
  * phpunit -c app (fixtures will wipe and populate database)
