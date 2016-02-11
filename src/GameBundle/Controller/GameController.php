@@ -19,18 +19,18 @@ class GameController extends Controller
 
     public function initAction(Request $request) : JsonResponse
     {
-        if(empty($request->getContent())) {
+        if (empty($request->getContent())) {
             return new JsonResponse([]);
         }
 
-        $json  = $this->get('battleship.game.services.game.model')->init($request->getContent());
+        $json = $this->get('battleship.game.services.game.model')->init($request->getContent());
 
         return new JsonResponse($json, Response::HTTP_CREATED);
     }
 
     public function turnAction(Request $request) : JsonResponse
     {
-        if(empty($request->getContent())) {
+        if (empty($request->getContent())) {
             return new JsonResponse([]);
         }
 

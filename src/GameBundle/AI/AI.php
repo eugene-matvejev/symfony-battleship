@@ -39,13 +39,13 @@ class AI
         try {
             $cells = $this->strategyService->chooseStrategy($battlefield);
 
-            if(null === $cell = $this->chooseCellToAttack($cells)) {
+            if (null === $cell = $this->chooseCellToAttack($cells)) {
                 $cells = BattlefieldModel::getLiveCells($battlefield);
                 $cell = $this->chooseCellToAttack($cells);
             }
 
             return $cell;
-        } catch(AIException $e) {
+        } catch (AIException $e) {
         }
     }
 
@@ -68,12 +68,12 @@ class AI
      */
     private function attackCell(Cell $cell) : Cell
     {
-        if(in_array($cell->getState()->getId(), CellModel::getLiveStates())) {
+        if (in_array($cell->getState()->getId(), CellModel::getLiveStates())) {
             $this->cellModel->switchState($cell);
 
             return $cell;
         }
 
-        throw new AIException(__CLASS__ .':'. __FUNCTION__ .' cell: '. $cell->getId() .' have wrong state: '. $cell->getState()->getName());
+        throw new AIException(__CLASS__ . ':' . __FUNCTION__ . ' cell: ' . $cell->getId() . ' have wrong state: ' . $cell->getState()->getName());
     }
 }

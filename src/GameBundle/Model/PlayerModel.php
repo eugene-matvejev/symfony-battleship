@@ -11,7 +11,7 @@ use EM\GameBundle\Entity\PlayerType;
  */
 class PlayerModel
 {
-    const TYPE_CPU   = 1;
+    const TYPE_CPU = 1;
     const TYPE_HUMAN = 2;
     /**
      * @var PlayerType[]
@@ -20,7 +20,7 @@ class PlayerModel
 
     function __construct(ObjectManager $om)
     {
-        if(null === self::$playerTypes) {
+        if (null === self::$playerTypes) {
             self::$playerTypes = $om->getRepository('GameBundle:PlayerType')->getTypes();
         }
     }

@@ -2,14 +2,19 @@
 
 namespace EM\GameBundle\Command;
 
-use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler;
 use Composer\Script\CommandEvent;
+use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler;
 
 /**
  * @since 2.0
  */
 class DatabaseProvisionCommand extends ScriptHandler
 {
+    /**
+     * @param CommandEvent $event
+     *
+     * @return void
+     */
     static public function initDatabases(CommandEvent $event)
     {
         if (null !== $consoleDir = static::getConsoleDir($event, 'install assets')) {

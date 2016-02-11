@@ -14,8 +14,8 @@ class CellModel
 {
     const STATE_WATER_LIVE = 1;
     const STATE_WATER_DIED = 2;
-    const STATE_SHIP_LIVE  = 3;
-    const STATE_SHIP_DIED  = 4;
+    const STATE_SHIP_LIVE = 3;
+    const STATE_SHIP_DIED = 4;
     const STATE_WATER_SKIP = 5;
     /**
      * @var CellState[]
@@ -32,7 +32,7 @@ class CellModel
 
     function __construct(ObjectManager $om)
     {
-        if(null === self::$cellStates) {
+        if (null === self::$cellStates) {
             self::$cellStates = $om->getRepository('GameBundle:CellState')->getStates();
         }
     }
@@ -55,7 +55,7 @@ class CellModel
 
     public function switchState(Cell $cell) : Cell
     {
-        switch($cell->getState()->getId()) {
+        switch ($cell->getState()->getId()) {
             case self::STATE_WATER_LIVE:
                 $cell->setState(self::$cellStates[self::STATE_WATER_DIED]);
                 self::$changedCells[] = $cell;
@@ -71,7 +71,7 @@ class CellModel
 
     public function switchStateToSkipped(Cell $cell) : Cell
     {
-        switch($cell->getState()->getId()) {
+        switch ($cell->getState()->getId()) {
             case self::STATE_WATER_LIVE:
                 $cell->setState(self::$cellStates[self::STATE_WATER_SKIP]);
                 self::$changedCells[] = $cell;

@@ -5,8 +5,8 @@ namespace EM\GameBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use EM\GameBundle\ORM\IdentifiableInterface;
-use EM\GameBundle\ORM\TimestampedInterface;
 use EM\GameBundle\ORM\IdentifiableTrait;
+use EM\GameBundle\ORM\TimestampedInterface;
 use EM\GameBundle\ORM\TimestampedTrait;
 
 /**
