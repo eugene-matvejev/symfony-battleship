@@ -13,7 +13,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "EM\\Tests\\": "tests/"
+            "EM\\Tests\\PHPUnit\\": "tests/phpunit"
         }
     },
     "authors": [
@@ -30,6 +30,7 @@
         "symfony/monolog-bundle": "~2.8.2"
     },
     "require-dev": {
+        "behat/behat": "dev-master",
         "composer/composer": "1.0.0-alpha11",
         "doctrine/doctrine-fixtures-bundle": "^2.3",
         "sensio/generator-bundle": "^3.0",

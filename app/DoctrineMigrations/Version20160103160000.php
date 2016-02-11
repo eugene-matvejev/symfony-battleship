@@ -15,7 +15,7 @@ class Version20160103160000 extends AbstractMigration
 
         $this->addSql('
             INSERT INTO
-                playerType
+                player_types
             VALUES
                 ('. PlayerModel::TYPE_CPU .', "Player controlled by computer"),
                 ('. PlayerModel::TYPE_HUMAN .', "Player controlled by human");
@@ -28,7 +28,7 @@ class Version20160103160000 extends AbstractMigration
         ');
         $this->addSql('
             INSERT INTO
-                cellState
+                cell_states
             VALUES
                 ('. CellModel::STATE_WATER_LIVE .', "untouched water"),
                 ('. CellModel::STATE_WATER_DIED .', "shooted water"),
@@ -50,13 +50,13 @@ class Version20160103160000 extends AbstractMigration
         ');
         $this->addSql('
             DELETE FROM
-                playerType
+                player_types
             WHERE
                 type IN ('. PlayerModel::TYPE_CPU .', '. PlayerModel::TYPE_HUMAN .');
         ');
         $this->addSql('
             DELETE FROM
-                cellState
+                cell_states
             WHERE
                 id IN ('. join(',', CellModel::getAllStates()) .');
         ');

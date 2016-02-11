@@ -39,9 +39,9 @@ class AI
         try {
             $cells = $this->strategyService->chooseStrategy($battlefield);
 
-            if(null === $cell = $this->bombardInRange($cells)) {
+            if(null === $cell = $this->chooseCellToAttack($cells)) {
                 $cells = BattlefieldModel::getLiveCells($battlefield);
-                $cell = $this->bombardInRange($cells);
+                $cell = $this->chooseCellToAttack($cells);
             }
 
             return $cell;
@@ -55,9 +55,9 @@ class AI
      * @return Cell|null
      * @throws AIException
      */
-    private function bombardInRange(array $cells)
+    private function chooseCellToAttack(array $cells)
     {
-        return empty($cells) ? null : $this->bombard($cells[array_rand($cells, 1)]);
+        return empty($cells) ? null : $this->attackCell($cells[array_rand($cells, 1)]);
     }
 
     /**
@@ -66,7 +66,7 @@ class AI
      * @return Cell
      * @throws AIException
      */
-    private function bombard(Cell $cell) : Cell
+    private function attackCell(Cell $cell) : Cell
     {
         if(in_array($cell->getState()->getId(), CellModel::getLiveStates())) {
             $this->cellModel->switchState($cell);

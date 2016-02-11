@@ -16,9 +16,9 @@
 
     <testsuites>
         <testsuite name="Project Test Suite">
-            <!--<directory>../tests/*Bundle/AI</directory>-->
-            <directory>../tests/*Bundle/Controller</directory>
-            <!--<directory>../tests/*Bundle/Model</directory>-->
+            <directory>../tests/phpunit/*Bundle/AI</directory>
+            <directory>../tests/phpunit/*Bundle/Controller</directory>
+            <directory>../tests/phpunit/*Bundle/Model</directory>
         </testsuite>
     </testsuites>
 

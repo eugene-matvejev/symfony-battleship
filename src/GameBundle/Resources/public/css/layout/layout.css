@@ -4,7 +4,12 @@ body {
     font-family: 'Lato', sans-serif;
     font-size: 16px;
     line-height: 1.42857;
-    background: linear-gradient(135deg,  #99aaa0 0%,#d197b3 33%,#e5c2c4 65%,#76588c 100%) center center / cover fixed; /* W3C */
+    /*background: linear-gradient(135deg,  #99aaa0 0%,#d197b3 33%,#e5c2c4 65%,#76588c 100%) center center / cover fixed; !* W3C *!*/
+    /*background: linear-gradient(135deg,  rgba(15,11,11,1) 0%,rgba(234,132,7,1) 100%) center center / cover fixed; !* W3C *!*/
+    /*background: linear-gradient(135deg, rgba(173,28,52,1) 0%, rgba(237,211,220,1) 100%) center center / cover fixed; !* W3C *! */
+    /*background: linear-gradient(to bottom, rgba(135,224,253,1) 0%,rgba(83,203,241,1) 40%,rgba(5,171,224,1) 100%) center center / cover fixed;*/
+
+    background: linear-gradient(to bottom, rgb(32, 23, 99) 0%,rgb(31, 19, 95) 40%,#a94442 100%) center center / cover fixed;
 }
 body>.container {
     width: 100%;
@@ -12,7 +17,6 @@ body>.container {
     padding: 0;
     margin: 0;
 }
-
 
 
 .page-sidebar,
@@ -26,7 +30,9 @@ body>.container {
     left: 0;
     z-index: 1000;
     overflow-y: auto;
-    background: linear-gradient(to bottom,  #b26cab 0%,#765c8b 100%); /* W3C */
+    /*background: linear-gradient(to bottom,  #b26cab 0%,#765c8b 100%); !* W3C *!*/
+    background: linear-gradient(to bottom, rgba(0,0,0,1) 0%,rgba(0,0,0,0.5) 50%,rgba(255,255,255,0) 100%);
+    border-right: 1px solid #fff;
 }
 .page-sidebar,
 .sidebar-nav>li {
@@ -104,7 +110,6 @@ body>.container {
 .no-scroll-mode {
     position: fixed;
 }
-
 
 
 #notification-area {
