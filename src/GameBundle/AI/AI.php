@@ -68,7 +68,7 @@ class AI
      */
     private function attackCell(Cell $cell) : Cell
     {
-        if (in_array($cell->getState()->getId(), CellModel::getLiveStates())) {
+        if (in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
             $this->cellModel->switchState($cell);
 
             return $cell;

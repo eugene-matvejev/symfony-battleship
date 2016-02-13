@@ -19,7 +19,7 @@ class PlayerTypeRepository extends EntityRepository
     {
         return $this
             ->createQueryBuilder('q', 'q.id')
-            ->where((new Expr())->in('q.id', PlayerModel::getAllTypes()))
+            ->where((new Expr())->in('q.id', PlayerModel::TYPES_ALL))
             ->getQuery()
             ->getResult();
     }
