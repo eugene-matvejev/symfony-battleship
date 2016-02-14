@@ -21,7 +21,7 @@ class BattlefieldModelTest extends ExtendedTestCase
     public function getLiveCells()
     {
         $battlefield = $this->getMockedBattlefield();
-        $cells =  BattlefieldModel::getLiveCells($battlefield);
+        $cells = BattlefieldModel::getLiveCells($battlefield);
         $this->assertCount(100, $cells);
 
 
@@ -33,7 +33,7 @@ class BattlefieldModelTest extends ExtendedTestCase
                 $cell->setState($cellState);
             }
         }
-        $cells =  BattlefieldModel::getLiveCells($battlefield);
+        $cells = BattlefieldModel::getLiveCells($battlefield);
         $this->assertCount(90, $cells);
     }
 

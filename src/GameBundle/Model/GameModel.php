@@ -4,13 +4,13 @@ namespace EM\GameBundle\Model;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityRepository;
+use EM\GameBundle\AI\AI;
+use EM\GameBundle\AI\AIStrategy;
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Entity\Game;
 use EM\GameBundle\Entity\GameResult;
 use EM\GameBundle\Entity\Player;
-use EM\GameBundle\AI\AI;
-use EM\GameBundle\AI\AIStrategy;
 use EM\GameBundle\Exception\GameException;
 
 /**
@@ -62,6 +62,7 @@ class GameModel
      * verify, init and save game
      *
      * @param string $json
+     *
      * @return \stdClass
      */
     public function init(string $json) : \stdClass
@@ -121,7 +122,7 @@ class GameModel
         $std = new \stdClass();
 
         if (null === $game = $this->gameRepository->find($arr->game->id)) {
-            throw new GameException(__FUNCTION__ .' game: '. $arr->game->id .' doesn\'t exists.');
+            throw new GameException(__FUNCTION__ . ' game: ' . $arr->game->id . ' doesn\'t exists.');
         }
 
         if (null !== $game->getResult()) {
@@ -158,8 +159,8 @@ class GameModel
                 $_cell = $this->ai->turn($battlefield);
                 break;
             case PlayerModel::TYPE_CPU:
-                foreach($battlefield->getCells() as $cell) {
-                    if($cell->getX() === $cellData->x && $cell->getY() === $cellData->y) {
+                foreach ($battlefield->getCells() as $cell) {
+                    if ($cell->getX() === $cellData->x && $cell->getY() === $cellData->y) {
                         $_cell = $this->cellModel->switchState($cell);
                         break;
                     }

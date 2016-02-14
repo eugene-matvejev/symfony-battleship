@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @see GameBundle\Controller\GameController
-*/
+ */
 class GameControllerTest extends ExtendedTestCase
 {
     /**

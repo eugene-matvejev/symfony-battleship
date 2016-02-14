@@ -33,7 +33,7 @@ class BattlefieldModel
     {
         $cells = [];
         foreach ($battlefield->getCells() as $cell) {
-            if (in_array($cell->getState()->getId(), CellModel::getLiveStates())) {
+            if (in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
                 $cells[] = $cell;
             }
         }

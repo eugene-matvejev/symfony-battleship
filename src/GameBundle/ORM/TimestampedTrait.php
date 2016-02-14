@@ -14,16 +14,16 @@ trait TimestampedTrait
      */
     private $timestamp;
 
+    public function getTimestamp() : \DateTime
+    {
+        return $this->timestamp;
+    }
+
     /**
      * @ORM\PrePersist
      */
     public function setTimestamp()
     {
         $this->timestamp = new \DateTime();
-    }
-
-    public function getTimestamp() : \DateTime
-    {
-        return $this->timestamp;
     }
 }

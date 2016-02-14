@@ -17,6 +17,13 @@ class CellModel
     const STATE_SHIP_LIVE  = 3;
     const STATE_SHIP_DIED  = 4;
     const STATE_WATER_SKIP = 5;
+
+    const STATES_WATER = [self::STATE_WATER_LIVE, self::STATE_WATER_DIED];
+    const STATES_SHIP  = [self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED];
+    const STATES_LIVE  = [self::STATE_WATER_LIVE, self::STATE_SHIP_LIVE];
+    const STATES_DIED  = [self::STATE_WATER_DIED, self::STATE_SHIP_DIED];
+    const STATES_ALL   = [self::STATE_WATER_LIVE, self::STATE_WATER_DIED, self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED, self::STATE_WATER_SKIP];
+
     /**
      * @var CellState[]
      */
@@ -26,13 +33,13 @@ class CellModel
      */
     private static $changedCells = [];
     /**
-     * @var Cell[][][]
+     * @var Cell[][]
      */
-    private static $cachedCells;
+    private $cachedCells;
 
     function __construct(ObjectManager $om)
     {
-        if(null === self::$cellStates) {
+        if (null === self::$cellStates) {
             self::$cellStates = $om->getRepository('GameBundle:CellState')->getStates();
         }
     }
@@ -55,7 +62,7 @@ class CellModel
 
     public function switchState(Cell $cell) : Cell
     {
-        switch($cell->getState()->getId()) {
+        switch ($cell->getState()->getId()) {
             case self::STATE_WATER_LIVE:
                 $cell->setState(self::$cellStates[self::STATE_WATER_DIED]);
                 self::$changedCells[] = $cell;
@@ -71,7 +78,7 @@ class CellModel
 
     public function switchStateToSkipped(Cell $cell) : Cell
     {
-        switch($cell->getState()->getId()) {
+        switch ($cell->getState()->getId()) {
             case self::STATE_WATER_LIVE:
                 $cell->setState(self::$cellStates[self::STATE_WATER_SKIP]);
                 self::$changedCells[] = $cell;
@@ -82,27 +89,27 @@ class CellModel
     }
 
     /**
-     * @param Battlefield $battlefield
-     * @param int         $x
-     * @param int         $y
+     * @param int $x
+     * @param int $y
      *
      * @return Cell|null
      */
-    public static function getByCoordinates(Battlefield $battlefield, int $x, int $y)
+    public function getByCoordinates(int $x, int $y)
     {
-        if (!isset(self::$cachedCells[$battlefield->getId()])) {
-            self::$cachedCells[$battlefield->getId()] = [];
+        return $this->cachedCells[$x][$y] ?? null;
+    }
 
-            foreach ($battlefield->getCells() as $cell) {
-                if (!isset(self::$cachedCells[$battlefield->getId()][$cell->getX()])) {
-                    self::$cachedCells[$battlefield->getId()][$cell->getX()] = [];
-                }
+    public function indexCells(Battlefield $battlefield)
+    {
+        $this->cachedCells = [];
 
-                self::$cachedCells[$battlefield->getId()][$cell->getX()][$cell->getY()] = $cell;
+        foreach ($battlefield->getCells() as $cell) {
+            if (!isset($this->cachedCells[$cell->getX()])) {
+                $this->cachedCells[$cell->getX()] = [];
             }
-        }
 
-        return self::$cachedCells[$battlefield->getId()][$x][$y] ?? null;
+            $this->cachedCells[$cell->getX()][$cell->getY()] = $cell;
+        }
     }
 
     public static function getJSON(Cell $cell) : \stdClass
@@ -113,45 +120,5 @@ class CellModel
             's' => $cell->getState()->getId(),
             'player' => PlayerModel::getJSON($cell->getBattlefield()->getPlayer())
         ];
-    }
-
-    /**
-     * @return int[]
-     */
-    public static function getShipStates() : array
-    {
-        return [self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED];
-    }
-
-    /**
-     * @return int[]
-     */
-    public static function getWaterStates() : array
-    {
-        return [self::STATE_WATER_LIVE, self::STATE_WATER_DIED];
-    }
-
-    /**
-     * @return int[]
-     */
-    public static function getLiveStates() : array
-    {
-        return [self::STATE_WATER_LIVE, self::STATE_SHIP_LIVE];
-    }
-
-    /**
-     * @return int[]
-     */
-    public static function getDiedStates() : array
-    {
-        return [self::STATE_WATER_DIED, self::STATE_SHIP_DIED];
-    }
-
-    /**
-     * @return int[]
-     */
-    public static function getAllStates() : array
-    {
-        return [self::STATE_WATER_LIVE, self::STATE_WATER_DIED, self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED, self::STATE_WATER_SKIP];
     }
 }

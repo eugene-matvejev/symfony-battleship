@@ -30,69 +30,69 @@ class CellModelTest extends ExtendedTestCase
     public function getCellStates()
     {
         foreach ($this->cellModel->getCellStates() as $state) {
-            $this->assertContains($state->getId(), CellModel::getAllStates());
+            $this->assertContains($state->getId(), CellModel::STATES_ALL);
         }
 
-        $this->assertEquals(count($this->cellModel->getCellStates()), count(CellModel::getAllStates()));
+        $this->assertEquals(count($this->cellModel->getCellStates()), count(CellModel::STATES_ALL));
     }
 
     /**
-     * @see EM\GameBundle\Model\CellModel::getShipStates()
-     * @test
-     */
-    public function getShipStates()
-    {
-        foreach (CellModel::getShipStates() as $state) {
-            $this->assertContains($state, CellModel::getAllStates());
-            $this->assertNotContains($state, CellModel::getWaterStates());
-        }
-    }
-
-    /**
-     * @see EM\GameBundle\Model\CellModel::getWaterStates()
+     * @see EM\GameBundle\Model\CellModel::STATES_WATER
      * @test
      */
     public function getWaterStates()
     {
-        foreach (CellModel::getWaterStates() as $state) {
-            $this->assertContains($state, CellModel::getAllStates());
-            $this->assertNotContains($state, CellModel::getShipStates());
+        foreach (CellModel::STATES_WATER as $state) {
+            $this->assertContains($state, CellModel::STATES_ALL);
+            $this->assertNotContains($state, CellModel::STATES_SHIP);
         }
     }
 
     /**
-     * @see EM\GameBundle\Model\CellModel::getLiveStates()
+     * @see EM\GameBundle\Model\CellModel::STATES_SHIP
+     * @test
+     */
+    public function getShipStates()
+    {
+        foreach (CellModel::STATES_SHIP as $state) {
+            $this->assertContains($state, CellModel::STATES_ALL);
+            $this->assertNotContains($state, CellModel::STATES_WATER);
+        }
+    }
+
+    /**
+     * @see EM\GameBundle\Model\CellModel::STATES_LIVE
      * @test
      */
     public function getLiveStates()
     {
-        foreach (CellModel::getLiveStates() as $state) {
-            $this->assertContains($state, CellModel::getAllStates());
-            $this->assertNotContains($state, CellModel::getDiedStates());
+        foreach (CellModel::STATES_LIVE as $state) {
+            $this->assertContains($state, CellModel::STATES_ALL);
+            $this->assertNotContains($state, CellModel::STATES_DIED);
         }
     }
 
     /**
-     * @see EM\GameBundle\Model\CellModel::getDiedStates()
+     * @see EM\GameBundle\Model\CellModel::STATES_DIED
      * @test
      */
     public function getDiedStates()
     {
-        foreach (CellModel::getDiedStates() as $state) {
-            $this->assertContains($state, CellModel::getAllStates());
-            $this->assertNotContains($state, CellModel::getLiveStates());
+        foreach (CellModel::STATES_DIED as $state) {
+            $this->assertContains($state, CellModel::STATES_ALL);
+            $this->assertNotContains($state, CellModel::STATES_LIVE);
         }
     }
 
     /**
-     * @see EM\GameBundle\Model\CellModel::getAllStates()
+     * @see EM\GameBundle\Model\CellModel::STATES_ALL
      * @test
      */
     public function getAllStates()
     {
-        $diedStates = count(CellModel::getDiedStates());
-        $liveStates = count(CellModel::getLiveStates());
-        $totalStates = count(CellModel::getAllStates());
+        $diedStates = count(CellModel::STATES_DIED);
+        $liveStates = count(CellModel::STATES_LIVE);
+        $totalStates = count(CellModel::STATES_ALL);
 
         $this->assertGreaterThanOrEqual($diedStates + $liveStates, $totalStates);
     }
@@ -109,8 +109,8 @@ class CellModelTest extends ExtendedTestCase
             $cell = $this->getMockedCell($cellState);
             $this->cellModel->switchState($cell);
 
-            if (in_array($stateBefore, CellModel::getLiveStates())) {
-                $this->assertContains($cell->getState()->getId(), CellModel::getDiedStates());
+            if (in_array($stateBefore, CellModel::STATES_LIVE)) {
+                $this->assertContains($cell->getState()->getId(), CellModel::STATES_DIED);
             } else {
                 $this->assertEquals($stateBefore, $cell->getState()->getId());
             }

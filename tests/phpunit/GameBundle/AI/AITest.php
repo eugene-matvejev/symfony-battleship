@@ -41,13 +41,13 @@ class AITest extends ExtendedTestCase
      */
     public function attackCell()
     {
-        $cellToException = array_merge(CellModel::getDiedStates(), [CellModel::STATE_WATER_SKIP]);
+        $cellToException = array_merge(CellModel::STATES_DIED, [CellModel::STATE_WATER_SKIP]);
 
-        foreach (CellModel::getAllStates() as $cellStateId) {
+        foreach (CellModel::STATES_ALL as $cellStateId) {
             try {
                 $cell = $this->getMockedCell($cellStateId);
                 $this->invokePrivateMethod(AI::class, $this->ai, 'attackCell', [$cell]);
-                $this->assertContains($cell->getState()->getId(), CellModel::getDiedStates());
+                $this->assertContains($cell->getState()->getId(), CellModel::STATES_DIED);
             } catch (AIException $e) {
                 $this->assertContains($cell->getState()->getId(), $cellToException);
             }

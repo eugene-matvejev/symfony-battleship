@@ -13,6 +13,7 @@ class PlayerModel
 {
     const TYPE_CPU   = 1;
     const TYPE_HUMAN = 2;
+    const TYPES_ALL  = [self::TYPE_CPU, self::TYPE_HUMAN];
     /**
      * @var PlayerType[]
      */
@@ -20,7 +21,7 @@ class PlayerModel
 
     function __construct(ObjectManager $om)
     {
-        if(null === self::$playerTypes) {
+        if (null === self::$playerTypes) {
             self::$playerTypes = $om->getRepository('GameBundle:PlayerType')->getTypes();
         }
     }
@@ -41,12 +42,12 @@ class PlayerModel
     {
         return self::$playerTypes;
     }
-
-    /**
-     * @return int[]
-     */
-    public static function getAllTypes() : array
-    {
-        return [self::TYPE_CPU, self::TYPE_HUMAN];
-    }
+//
+//    /**
+//     * @return int[]
+//     */
+//    public static function getAllTypes() : array
+//    {
+//        return [self::TYPE_CPU, self::TYPE_HUMAN];
+//    }
 }

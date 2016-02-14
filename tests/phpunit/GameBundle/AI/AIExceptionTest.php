@@ -55,6 +55,7 @@ class AIExceptionTest extends AITest
     {
         $this->simulateAttackCell(CellModel::STATE_SHIP_DIED, CellModel::STATE_SHIP_DIED);
     }
+
     /**
      * @see EM\GameBundle\AI\AI::chooseCellToAttack
      * @expectedException \EM\GameBundle\Exception\AIException

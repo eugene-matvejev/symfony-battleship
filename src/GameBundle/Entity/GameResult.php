@@ -4,10 +4,10 @@ namespace EM\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use EM\GameBundle\ORM\IdentifiableInterface;
-use EM\GameBundle\ORM\PlayerInterface;
-use EM\GameBundle\ORM\TimestampedInterface;
 use EM\GameBundle\ORM\IdentifiableTrait;
+use EM\GameBundle\ORM\PlayerInterface;
 use EM\GameBundle\ORM\PlayerTrait;
+use EM\GameBundle\ORM\TimestampedInterface;
 use EM\GameBundle\ORM\TimestampedTrait;
 
 /**

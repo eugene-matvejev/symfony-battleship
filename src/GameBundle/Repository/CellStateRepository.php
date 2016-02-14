@@ -19,7 +19,7 @@ class CellStateRepository extends EntityRepository
     {
         return $this
             ->createQueryBuilder('q', 'q.id')
-            ->where((new Expr())->in('q.id', CellModel::getAllStates()))
+            ->where((new Expr())->in('q.id', CellModel::STATES_ALL))
             ->getQuery()
             ->getResult();
     }

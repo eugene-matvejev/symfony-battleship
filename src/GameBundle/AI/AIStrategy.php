@@ -39,6 +39,8 @@ class AIStrategy
      */
     public function chooseStrategy(Battlefield $battlefield) : array
     {
+        $this->cellModel->indexCells($battlefield);
+
         foreach ($battlefield->getCells() as $cell) {
             if ($cell->getState()->getId() === CellModel::STATE_SHIP_DIED && !$this->isShipDead($cell)) {
                 // x Strategy
@@ -65,11 +67,11 @@ class AIStrategy
     private function xStrategy(Cell $cell) : array
     {
         $coordinates = [
-            ['x' => $cell->getX() - 1, 'y' => $cell->getY()],
-            ['x' => $cell->getX() + 1, 'y' => $cell->getY()]
+            (object)['x' => $cell->getX() - 1, 'y' => $cell->getY()],
+            (object)['x' => $cell->getX() + 1, 'y' => $cell->getY()]
         ];
 
-        return $this->strategy($cell->getBattlefield(), $coordinates, 'x');
+        return $this->strategy($coordinates, 'x');
     }
 
     /**
@@ -80,11 +82,11 @@ class AIStrategy
     private function yStrategy(Cell $cell) : array
     {
         $coordinates = [
-            ['x' => $cell->getX(), 'y' => $cell->getY() - 1],
-            ['x' => $cell->getX(), 'y' => $cell->getY() + 1]
+            (object)['x' => $cell->getX(), 'y' => $cell->getY() - 1],
+            (object)['x' => $cell->getX(), 'y' => $cell->getY() + 1]
         ];
 
-        return $this->strategy($cell->getBattlefield(), $coordinates, 'y');
+        return $this->strategy($coordinates, 'y');
     }
 
     /**
@@ -103,7 +105,7 @@ class AIStrategy
         ];
 
         foreach ($coordinates as $coordinate) {
-            if (null !== $_cell = CellModel::getByCoordinates($cell->getBattlefield(), $coordinate['x'], $coordinate['y'])) {
+            if (null !== $_cell = $this->cellModel->getByCoordinates($coordinate['x'], $coordinate['y'])) {
 
                 if (in_array($_cell->getState()->getId(), CellModel::getLiveStates())) {
                     $cells[] = $_cell;
@@ -115,27 +117,26 @@ class AIStrategy
     }
 
     /**
-     * @param Battlefield $battlefield
-     * @param array       $coordinates
-     * @param string      $axis
+     * @param int[][] $coordinates
+     * @param string  $axis
      *
      * @return Cell[]
      */
-    private function strategy(Battlefield $battlefield, array $coordinates, string $axis) : array
+    private function strategy(array $coordinates, string $axis) : array
     {
         $cells = [];
 
         for ($i = 0; $i < $this->maxShipSize; $i++) {
             foreach ($coordinates as $i => $coordinate) {
-                if (null !== $cell = CellModel::getByCoordinates($battlefield, $coordinate['x'], $coordinate['y'])) {
+                if (null !== $cell = $this->cellModel->getByCoordinates($coordinate->x, $coordinate->y)) {
 
-                    if (in_array($cell->getState()->getId(), CellModel::getLiveStates())) {
+                    if (in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
                         $cells[$i] = $cell;
                         unset($coordinates[$i]);
                     } elseif (0 === $i) {
-                        $coordinates[$i][$axis]++;
+                        $coordinates[$i]->$axis++;
                     } elseif (1 === $i) {
-                        $coordinates[$i][$axis]--;
+                        $coordinates[$i]->$axis--;
                     }
                 } else {
                     unset($coordinates[$i]);
@@ -161,8 +162,8 @@ class AIStrategy
 
         foreach ($coordinates as $side => $coordinate) {
             for ($i = 0; $i < $this->maxShipSize; $i++) {
-                if (null !== $_cell = CellModel::getByCoordinates($cell->getBattlefield(), $coordinate->x, $coordinate->y)) {
-                    if (in_array($_cell->getState()->getId(), CellModel::getShipStates())) {
+                if (null !== $_cell = $this->cellModel->getByCoordinates($coordinate->x, $coordinate->y)) {
+                    if (in_array($_cell->getState()->getId(), CellModel::STATES_SHIP)) {
                         if ($_cell->getState()->getId() === CellModel::STATE_SHIP_DIED) {
                             switch ($side) {
                                 case 'left':  $coordinate->x--; break;
@@ -200,7 +201,7 @@ class AIStrategy
                         $_x = $_cell->getX() + self::COORDINATES_STEPS[$x];
                         $_y = $_cell->getY() + self::COORDINATES_STEPS[$y];
 
-                        if (null !== $__cell = CellModel::getByCoordinates($cell->getBattlefield(), $_x, $_y)) {
+                        if (null !== $__cell = $this->cellModel->getByCoordinates($_x, $_y)) {
                             $this->cellModel->switchStateToSkipped($__cell);
                         }
                     }

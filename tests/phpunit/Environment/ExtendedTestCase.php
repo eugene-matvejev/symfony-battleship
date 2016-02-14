@@ -4,12 +4,12 @@ namespace EM\Tests\PHPUnit\Environment;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -56,7 +56,7 @@ class ExtendedTestCase extends WebTestCase
      */
     protected function setUp()
     {
-        if(null === static::$setUp) {
+        if (null === static::$setUp) {
             self::$client = static::createClient();
 
             self::$kernel = static::createKernel();
@@ -92,7 +92,7 @@ class ExtendedTestCase extends WebTestCase
 //            self::$consoleApp->setCatchExceptions(false);
             self::$consoleApp->run(new ArrayInput($options));
 //            self::$consoleApp->setCatchExceptions(true);
-        } catch(\Exception $ex) {
+        } catch (\Exception $ex) {
             print $ex->getMessage();
             print $ex->getTraceAsString();
             throw new \Exception();
