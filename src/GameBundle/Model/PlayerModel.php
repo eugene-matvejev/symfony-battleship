@@ -11,7 +11,7 @@ use EM\GameBundle\Entity\PlayerType;
  */
 class PlayerModel
 {
-    const TYPE_CPU 	 = 1;
+    const TYPE_CPU   = 1;
     const TYPE_HUMAN = 2;
     const TYPES_ALL  = [self::TYPE_CPU, self::TYPE_HUMAN];
     /**

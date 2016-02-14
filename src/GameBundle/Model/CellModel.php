@@ -18,13 +18,16 @@ class CellModel
     const STATE_SHIP_LIVE  = 3;
     const STATE_SHIP_DIED  = 4;
     const STATE_WATER_SKIP = 5;
-
+    /** instead of functions, as const array is faster */
     const STATES_WATER = [self::STATE_WATER_LIVE, self::STATE_WATER_DIED];
     const STATES_SHIP  = [self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED];
     const STATES_LIVE  = [self::STATE_WATER_LIVE, self::STATE_SHIP_LIVE];
     const STATES_DIED  = [self::STATE_WATER_DIED, self::STATE_SHIP_DIED];
     const STATES_ALL   = [self::STATE_WATER_LIVE, self::STATE_WATER_DIED, self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED, self::STATE_WATER_SKIP];
-
+    /**
+     * @var Cell[][]
+     */
+    private $cachedCells;
     /**
      * @var CellState[]
      */
@@ -33,10 +36,6 @@ class CellModel
      * @var Cell[]
      */
     private static $changedCells = [];
-    /**
-     * @var Cell[][]
-     */
-    private $cachedCells;
 
     function __construct(ObjectManager $om)
     {

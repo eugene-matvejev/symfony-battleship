@@ -18,18 +18,6 @@ use EM\GameBundle\Service\AI\AIService;
 class GameModel
 {
     /**
-     * @var ObjectManager
-     */
-    private $om;
-    /**
-     * @var EntityRepository
-     */
-    private $gameRepository;
-    /**
-     * @var EntityRepository
-     */
-    private $playerRepository;
-    /**
      * @var AIService
      */
     private $ai;
@@ -41,6 +29,18 @@ class GameModel
      * @var PlayerModel
      */
     private $playerModel;
+    /**
+     * @var ObjectManager
+     */
+    private $om;
+    /**
+     * @var EntityRepository
+     */
+    private $gameRepository;
+    /**
+     * @var EntityRepository
+     */
+    private $playerRepository;
 
     function __construct(AIService $ai, CellModel $cellModel, PlayerModel $playerModel, ObjectManager $om)
     {
