@@ -11,7 +11,7 @@ use EM\GameBundle\Entity\PlayerType;
  */
 class PlayerModel
 {
-    const TYPE_CPU   = 1;
+    const TYPE_CPU 	 = 1;
     const TYPE_HUMAN = 2;
     const TYPES_ALL  = [self::TYPE_CPU, self::TYPE_HUMAN];
     /**
@@ -29,7 +29,7 @@ class PlayerModel
     public static function getJSON(Player $player) : \stdClass
     {
         return (object)[
-            'id' => $player->getId(),
+            'id'   => $player->getId(),
             'name' => $player->getName(),
             'type' => $player->getType()->getId()
         ];
@@ -42,12 +42,4 @@ class PlayerModel
     {
         return self::$playerTypes;
     }
-//
-//    /**
-//     * @return int[]
-//     */
-//    public static function getAllTypes() : array
-//    {
-//        return [self::TYPE_CPU, self::TYPE_HUMAN];
-//    }
 }

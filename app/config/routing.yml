@@ -1,3 +1,6 @@
+#foundation:
+#  resource: "@FoundationBundle/Resources/config/routing.yml"
+#  prefix:   /
 game:
   resource: "@GameBundle/Resources/config/routing.yml"
   prefix:   /

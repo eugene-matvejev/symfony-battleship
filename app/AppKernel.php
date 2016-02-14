@@ -15,7 +15,8 @@ class AppKernel extends Kernel
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
-            new EM\GameBundle\GameBundle()
+            new EM\GameBundle\GameBundle(),
+            new EM\FoundationBundle\FoundationBundle()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

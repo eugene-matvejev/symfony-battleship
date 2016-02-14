@@ -1,25 +1,19 @@
 <?php
 
-namespace EM\Tests\PHPUnit\GameBundle\AI;
+namespace EM\Tests\PHPUnit\GameBundle\Service\AI;
 
-use EM\GameBundle\AI\AI;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Exception\AIException;
 use EM\GameBundle\Model\CellModel;
-
+use EM\GameBundle\Service\AI\AIService;
 
 /**
- * @see EM\GameBundle\AI\AI
+ * @see AIService
  */
-class AIExceptionTest extends AITest
+class AIExceptionTest extends AIServiceTest
 {
-    protected function setUp()
-    {
-        parent::setUp();
-    }
-
     /**
-     * @see EM\GameBundle\AI\AI::chooseCellToAttack
+     * @see AIService::chooseCellToAttack
      * @test
      */
     public function attackCellWithCellState_1()
@@ -28,9 +22,9 @@ class AIExceptionTest extends AITest
     }
 
     /**
-     * @see EM\GameBundle\AI\AI::chooseCellToAttack
-     * @expectedException \EM\GameBundle\Exception\AIException
+     * @see AIService::chooseCellToAttack
      * @test
+     * @expectedException \EM\GameBundle\Exception\AIException
      */
     public function attackCellwithCellState_2()
     {
@@ -38,7 +32,7 @@ class AIExceptionTest extends AITest
     }
 
     /**
-     * @see EM\GameBundle\AI\AI::chooseCellToAttack
+     * @see AIService::chooseCellToAttack
      * @test
      */
     public function attackCellWithCellState_3()
@@ -47,9 +41,9 @@ class AIExceptionTest extends AITest
     }
 
     /**
-     * @see EM\GameBundle\AI\AI::chooseCellToAttack
-     * @expectedException \EM\GameBundle\Exception\AIException
+     * @see AIService::chooseCellToAttack
      * @test
+     * @expectedException \EM\GameBundle\Exception\AIException
      */
     public function attackCellwithCellState_4()
     {
@@ -57,9 +51,9 @@ class AIExceptionTest extends AITest
     }
 
     /**
-     * @see EM\GameBundle\AI\AI::chooseCellToAttack
-     * @expectedException \EM\GameBundle\Exception\AIException
+     * @see AIService::chooseCellToAttack
      * @test
+     * @expectedException \EM\GameBundle\Exception\AIException
      */
     public function attackCellwithCellState_5()
     {
@@ -75,7 +69,7 @@ class AIExceptionTest extends AITest
     private function simulateAttackCell(int $origCellStateId, int $expectedCellStateId)
     {
         $cell = $this->getMockedCell($origCellStateId);
-        $returnedCell = $this->invokePrivateMethod(AI::class, $this->ai, 'chooseCellToAttack', ['cells' => [$cell]]);
+        $returnedCell = $this->invokePrivateMethod(AIService::class, $this->ai, 'chooseCellToAttack', ['cells' => [$cell]]);
 
         $this->assertInstanceOf(Cell::class, $returnedCell);
         $this->assertEquals($expectedCellStateId, $cell->getState()->getId());

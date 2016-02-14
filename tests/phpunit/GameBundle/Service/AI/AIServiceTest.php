@@ -1,42 +1,42 @@
 <?php
 
-namespace EM\Tests\PHPUnit\GameBundle\AI;
+namespace EM\Tests\PHPUnit\GameBundle\Service\AI;
 
-use EM\GameBundle\AI\AI;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Entity\CellState;
 use EM\GameBundle\Exception\AIException;
 use EM\GameBundle\Model\CellModel;
+use EM\GameBundle\Service\AI\AIService;
 use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
 
 /**
- * @see EM\GameBundle\AI\AI
+ * @see AIService
  */
-class AITest extends ExtendedTestCase
+class AIServiceTest extends ExtendedTestCase
 {
     /**
-     * @var AI
+     * @var AIService
      */
     protected $ai;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->ai = $this->getContainer()->get('battleship.game.services.ai.core');
+        $this->ai = $this->getContainer()->get('battleship.game.services.ai.core.service');
     }
 
     /**
-     * @see EM\GameBundle\AI\AI::chooseCellToAttack
+     * @see AIService::chooseCellToAttack
      * @test
      */
     public function chooseCellToAttack()
     {
-        $this->assertNull($this->invokePrivateMethod(AI::class, $this->ai, 'chooseCellToAttack', ['cells' => []]));
+        $this->assertNull($this->invokePrivateMethod(AIService::class, $this->ai, 'chooseCellToAttack', ['cells' => []]));
     }
 
 
     /**
-     * @see EM\GameBundle\AI\AI::attackCell
+     * @see AIService::attackCell
      * @test
      */
     public function attackCell()
@@ -46,7 +46,7 @@ class AITest extends ExtendedTestCase
         foreach (CellModel::STATES_ALL as $cellStateId) {
             try {
                 $cell = $this->getMockedCell($cellStateId);
-                $this->invokePrivateMethod(AI::class, $this->ai, 'attackCell', [$cell]);
+                $this->invokePrivateMethod(AIService::class, $this->ai, 'attackCell', [$cell]);
                 $this->assertContains($cell->getState()->getId(), CellModel::STATES_DIED);
             } catch (AIException $e) {
                 $this->assertContains($cell->getState()->getId(), $cellToException);
@@ -54,6 +54,9 @@ class AITest extends ExtendedTestCase
         }
     }
 
+    /**
+     * @coversNothing
+     */
     protected function getMockedCell(int $cellStateId) : Cell
     {
         $cellState = (new CellState())

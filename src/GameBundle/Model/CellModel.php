@@ -6,6 +6,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Entity\CellState;
+use EM\GameBundle\Service\CoordinateSystem\CoordinatesPair;
 
 /**
  * @since 2.0
@@ -97,6 +98,16 @@ class CellModel
     public function getByCoordinates(int $x, int $y)
     {
         return $this->cachedCells[$x][$y] ?? null;
+    }
+
+    /**
+     * @param CoordinatesPair $pair
+     *
+     * @return Cell|null
+     */
+    public function getByCoordinatesPair(CoordinatesPair $pair)
+    {
+        return $this->cachedCells[$pair->getX()][$pair->getY()] ?? null;
     }
 
     public function indexCells(Battlefield $battlefield)
