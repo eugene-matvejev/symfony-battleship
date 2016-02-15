@@ -5,6 +5,9 @@ namespace EM\GameBundle\Service\AI;
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
+use EM\GameBundle\Service\AI\Strategy\RandomStrategy;
+use EM\GameBundle\Service\AI\Strategy\XStrategy;
+use EM\GameBundle\Service\AI\Strategy\YStrategy;
 use EM\GameBundle\Service\CoordinateSystem\CoordinatesPair;
 
 /**
@@ -12,15 +15,21 @@ use EM\GameBundle\Service\CoordinateSystem\CoordinatesPair;
  */
 class AIStrategyService
 {
+    const STRATEGY_X        = 0;
+    const STRATEGY_Y        = 1;
+    const STRATEGY_RAND     = 2;
     const COORDINATES_STEPS = [-1, 0, 1];
     /**
      * @var CellModel
      */
     private $cellModel;
 
-    public function __construct(CellModel $model)
+    public function __construct(CellModel $model, XStrategy $xStrategy, YStrategy $yStrategy, RandomStrategy $randomStrategy)
     {
         $this->cellModel = $model;
+        $this->xStrategy = $xStrategy;
+        $this->yStrategy = $yStrategy;
+        $this->randStrategy = $randomStrategy;
     }
 
     /**
@@ -28,95 +37,55 @@ class AIStrategyService
      *
      * @return Cell[]
      */
-    public function chooseStrategy(Battlefield $battlefield) : array
+    public function attack(Battlefield $battlefield) : array
     {
         $this->cellModel->indexCells($battlefield);
 
         foreach ($battlefield->getCells() as $cell) {
-            if ($cell->getState()->getId() === CellModel::STATE_SHIP_DIED && !$this->isShipDead($cell)) {
-                // x Strategy
-                $cells = $this->xStrategy($cell);
-                // y Strategy
-                $cells = empty($cells) ? $this->yStrategy($cell) : $cells;
-                // z Strategy
-                $cells = empty($cells) ? $this->zStrategy($cell) : $cells;
+            if ($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED || $this->isShipDead($cell)) {
+                continue;
+            }
 
-                if (!empty($cells)) {
-                    return $cells;
-                }
+            switch ($this->decideStrategy($cell)) {
+                case self::STRATEGY_X:
+                    return $this->xStrategy->verify($cell);
+                case self::STRATEGY_Y:
+                    return $this->yStrategy->verify($cell);
+                default:
+                    return $this->randStrategy->verify($cell);
             }
         }
 
         return [];
     }
 
-    /**
-     * @param Cell $cell
-     *
-     * @return Cell[]
-     */
-    private function xStrategy(Cell $cell) : array
+    private function decideStrategy(Cell $cell) : int
     {
-        return $this->strategy([
-            new CoordinatesPair(CoordinatesPair::WAY_LEFT, $cell->getX() + 1, $cell->getY()), // -- left
-            new CoordinatesPair(CoordinatesPair::WAY_RIGHT, $cell->getX() - 1, $cell->getY()) // ++ right
-        ]);
-    }
-
-    /**
-     * @param Cell $cell
-     *
-     * @return Cell[]
-     */
-    private function yStrategy(Cell $cell) : array
-    {
-        return $this->strategy([
-            new CoordinatesPair(CoordinatesPair::WAY_UP, $cell->getX(), $cell->getY() + 1),   // -- up
-            new CoordinatesPair(CoordinatesPair::WAY_DOWN, $cell->getX(), $cell->getY() - 1)  // ++ down
-        ]);
-    }
-
-    /**
-     * @param Cell $cell
-     *
-     * @return Cell[]
-     */
-    private function zStrategy(Cell $cell) : array
-    {
-        return $this->strategy([
+        $coordinates = [
             new CoordinatesPair(CoordinatesPair::WAY_LEFT, $cell->getX() + 1, $cell->getY()), // -- left
             new CoordinatesPair(CoordinatesPair::WAY_RIGHT, $cell->getX() - 1, $cell->getY()),// ++ right
-            new CoordinatesPair(CoordinatesPair::WAY_UP, $cell->getX(), $cell->getY() + 1),   // -- up
-            new CoordinatesPair(CoordinatesPair::WAY_DOWN, $cell->getX(), $cell->getY() - 1)  // ++ down
-        ], true);
-    }
-
-    /**
-     * @param CoordinatesPair[] $coordinates
-     * @param bool|false       $closestOnly
-     *
-     * @return Cell[]
-     */
-    private function strategy(array $coordinates, bool $closestOnly = false) : array
-    {
-        $cells = [];
-
-        foreach ($coordinates as $CoordinatesPair) {
-            while (null !== $cell = $this->cellModel->getByCoordinatesPair($CoordinatesPair)) {
-                if (in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
-                    $cells[] = $cell;
-                    if ($closestOnly) {
-                        break;
-                    } else {
-                        $CoordinatesPair->prepareForNextStep();
-                    }
-                } else {
-                    break;
+        ];
+        foreach ($coordinates as $coordinatePair) {
+            if (null !== $_cell = $this->cellModel->getByCoordinatesPair($coordinatePair)) {
+                if ($_cell->getState()->getId() === CellModel::STATE_SHIP_DIED) {
+                    return self::STRATEGY_X;
                 }
             }
         }
 
-        return $cells;
+        $coordinates = [
+            new CoordinatesPair(CoordinatesPair::WAY_UP, $cell->getX(), $cell->getY() + 1),   // -- up
+            new CoordinatesPair(CoordinatesPair::WAY_DOWN, $cell->getX(), $cell->getY() - 1)  // ++ down
+        ];
+        foreach ($coordinates as $coordinatePair) {
+            if (null !== $_cell = $this->cellModel->getByCoordinatesPair($coordinatePair)) {
+                if ($_cell->getState()->getId() === CellModel::STATE_SHIP_DIED) {
+                    return self::STRATEGY_Y;
+                }
+            }
+        }
+
+        return self::STRATEGY_RAND;
     }
 
     public function isShipDead(Cell $cell) : bool
@@ -137,17 +106,16 @@ class AIStrategyService
          * @var CoordinatesPair[] $coordinates
          */
         foreach ($coordinates as $coordinate) {
-            while (null !== $_cell = $this->cellModel->getByCoordinatesPair($coordinate)) {
-                if (in_array($_cell->getState()->getId(), CellModel::STATES_SHIP)) {
-                    if ($_cell->getState()->getId() === CellModel::STATE_SHIP_DIED) {
-                        $coordinate->prepareForNextStep();
-                        $cells[] = $_cell;
-                    } else {
-                        return false;
-                    }
-                } else {
+            while (null !== $cell = $this->cellModel->getByCoordinatesPair($coordinate)) {
+                if (!in_array($cell->getState()->getId(), CellModel::STATES_SHIP)) {
                     break;
                 }
+                if ($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
+                    return false;
+                }
+
+                $coordinate->prepareForNextStep();
+                $cells[] = $cell;
             }
         }
 
