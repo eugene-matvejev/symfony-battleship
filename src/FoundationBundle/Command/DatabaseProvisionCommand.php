@@ -1,12 +1,12 @@
 <?php
 
-namespace EM\GameBundle\Command;
+namespace EM\FoundationBundle\Command;
 
 use Composer\Script\CommandEvent;
 use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler;
 
 /**
- * @since 2.0
+ * @since 3.5
  */
 class DatabaseProvisionCommand extends ScriptHandler
 {

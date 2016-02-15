@@ -1,6 +1,6 @@
 <?php
 
-namespace EM\GameBundle\AI;
+namespace EM\GameBundle\Service\AI;
 
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
@@ -11,21 +11,26 @@ use EM\GameBundle\Model\CellModel;
 /**
  * @since 3.0
  */
-class AI
+class AIService
 {
     /**
      * @var CellModel
      */
     private $cellModel;
     /**
-     * @var AIStrategy
+     * @var AIStrategyService
      */
     private $strategyService;
 
-    public function __construct(CellModel $model, AIStrategy $service)
+    public function __construct(CellModel $model, AIStrategyService $service)
     {
         $this->cellModel = $model;
         $this->strategyService = $service;
+    }
+
+    public function getStrategyService() : AIStrategyService
+    {
+        return $this->strategyService;
     }
 
     /**

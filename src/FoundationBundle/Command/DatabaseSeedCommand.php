@@ -1,6 +1,6 @@
 <?php
 
-namespace EM\GameBundle\Command;
+namespace EM\FoundationBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @since 3.1
+ * @since 3.5
  */
 class DatabaseSeedCommand extends ContainerAwareCommand
 {
@@ -20,7 +20,7 @@ class DatabaseSeedCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('battleship:database:seed')
+            ->setName('game:database:seed')
             ->setDescription('seeds the database with initial data');
     }
 

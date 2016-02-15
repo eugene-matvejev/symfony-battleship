@@ -10,12 +10,12 @@ use EM\GameBundle\Model\CellModel;
 use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
 
 /**
- * @see EM\GameBundle\Model\BattlefieldModel
+ * @see BattlefieldModel
  */
 class BattlefieldModelTest extends ExtendedTestCase
 {
     /**
-     * @see EM\GameBundle\Model\BattlefieldModel::getLiveCells
+     * @see BattlefieldModel::getLiveCells
      * @test
      */
     public function getLiveCells()
@@ -38,7 +38,7 @@ class BattlefieldModelTest extends ExtendedTestCase
     }
 
     /**
-     * @see EM\GameBundle\Model\BattlefieldModel::isUnfinished
+     * @see BattlefieldModel::isUnfinished
      * @test
      */
     public function isUnfinished()
@@ -55,6 +55,9 @@ class BattlefieldModelTest extends ExtendedTestCase
         $this->assertTrue(BattlefieldModel::isUnfinished($battlefield));
     }
 
+    /**
+     * @coversNothing
+     */
     private function getMockedBattlefield()
     {
         $battlefield = new Battlefield();

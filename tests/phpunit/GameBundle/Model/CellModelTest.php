@@ -8,7 +8,7 @@ use EM\GameBundle\Model\CellModel;
 use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
 
 /**
- * @see EM\GameBundle\Model\CellModel
+ * @see CellModel
  */
 class CellModelTest extends ExtendedTestCase
 {
@@ -24,7 +24,7 @@ class CellModelTest extends ExtendedTestCase
     }
 
     /**
-     * @see EM\GameBundle\Model\CellModel::getCellStates()
+     * @see CellModel::getCellStates()
      * @test
      */
     public function getCellStates()
@@ -37,7 +37,7 @@ class CellModelTest extends ExtendedTestCase
     }
 
     /**
-     * @see EM\GameBundle\Model\CellModel::STATES_WATER
+     * @see CellModel::STATES_WATER
      * @test
      */
     public function getWaterStates()
@@ -49,7 +49,7 @@ class CellModelTest extends ExtendedTestCase
     }
 
     /**
-     * @see EM\GameBundle\Model\CellModel::STATES_SHIP
+     * @see CellModel::STATES_SHIP
      * @test
      */
     public function getShipStates()
@@ -61,7 +61,7 @@ class CellModelTest extends ExtendedTestCase
     }
 
     /**
-     * @see EM\GameBundle\Model\CellModel::STATES_LIVE
+     * @see CellModel::STATES_LIVE
      * @test
      */
     public function getLiveStates()
@@ -73,7 +73,7 @@ class CellModelTest extends ExtendedTestCase
     }
 
     /**
-     * @see EM\GameBundle\Model\CellModel::STATES_DIED
+     * @see CellModel::STATES_DIED
      * @test
      */
     public function getDiedStates()
@@ -85,7 +85,7 @@ class CellModelTest extends ExtendedTestCase
     }
 
     /**
-     * @see EM\GameBundle\Model\CellModel::STATES_ALL
+     * @see CellModel::STATES_ALL
      * @test
      */
     public function getAllStates()
@@ -99,7 +99,7 @@ class CellModelTest extends ExtendedTestCase
 
 
     /**
-     * @see EM\GameBundle\Model\CellModel::switchState()
+     * @see CellModel::switchState()
      * @test
      */
     public function switchState()
@@ -118,7 +118,7 @@ class CellModelTest extends ExtendedTestCase
     }
 
     /**
-     * @see EM\GameBundle\Model\CellModel::switchStateToSkipped()
+     * @see CellModel::switchStateToSkipped()
      * @test
      */
     public function switchStateToSkipped()
@@ -136,6 +136,13 @@ class CellModelTest extends ExtendedTestCase
         }
     }
 
+    /**
+     * @param CellState $state
+     *
+     * @return Cell
+     *
+     * @coversNothing
+     */
     private function getMockedCell(CellState $state) : Cell
     {
         $cell = (new Cell())

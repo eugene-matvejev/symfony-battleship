@@ -18,7 +18,7 @@ $(document).ready(function() {
             {id:  1, name: 'CPU'},
             {id: '', name: 'Human'}
         ],
-        10
+        7
     );
 
     $('#game-area')

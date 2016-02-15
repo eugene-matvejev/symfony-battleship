@@ -2,6 +2,6 @@
 
 namespace GameBundle\AI\Strategy;
 
-class AbstractStrategy
+class AIStrategyY extends AbstractAIStrategy
 {
 }

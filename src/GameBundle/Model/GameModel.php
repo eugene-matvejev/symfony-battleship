@@ -4,20 +4,31 @@ namespace EM\GameBundle\Model;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityRepository;
-use EM\GameBundle\AI\AI;
-use EM\GameBundle\AI\AIStrategy;
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Entity\Game;
 use EM\GameBundle\Entity\GameResult;
 use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Exception\GameException;
+use EM\GameBundle\Service\AI\AIService;
 
 /**
  * @since 2.0
  */
 class GameModel
 {
+    /**
+     * @var AIService
+     */
+    private $ai;
+    /**
+     * @var CellModel
+     */
+    private $cellModel;
+    /**
+     * @var PlayerModel
+     */
+    private $playerModel;
     /**
      * @var ObjectManager
      */
@@ -30,32 +41,15 @@ class GameModel
      * @var EntityRepository
      */
     private $playerRepository;
-    /**
-     * @var AI
-     */
-    private $ai;
-    /**
-     * @var AIStrategy
-     */
-    private $strategyService;
-    /**
-     * @var CellModel
-     */
-    private $cellModel;
-    /**
-     * @var PlayerModel
-     */
-    private $playerModel;
 
-    function __construct(ObjectManager $om, CellModel $cellModel, PlayerModel $playerModel, AI $aiService, AIStrategy $aiStrategy)
+    function __construct(AIService $ai, CellModel $cellModel, PlayerModel $playerModel, ObjectManager $om)
     {
+        $this->ai = $ai;
+        $this->cellModel = $cellModel;
+        $this->playerModel = $playerModel;
         $this->om = $om;
         $this->gameRepository = $om->getRepository('GameBundle:Game');
         $this->playerRepository = $om->getRepository('GameBundle:Player');
-        $this->cellModel = $cellModel;
-        $this->playerModel = $playerModel;
-        $this->ai = $aiService;
-        $this->strategyService = $aiStrategy;
     }
 
     /**
@@ -132,7 +126,7 @@ class GameModel
         foreach ($game->getBattlefields() as $battlefield) {
             $this->playerTurn($battlefield, $arr->cell);
 
-            if (null !== $game->getResult() || $this->detectVictory($battlefield)) {
+            if (null !== $game->getResult()) {
                 $std->victory = GameResultModel::getJSON($game->getResult());
                 break;
             }
@@ -141,7 +135,7 @@ class GameModel
         $this->om->flush();
 
         foreach (CellModel::getChangedCells() as $cell) {
-            if (!isset($std->{$cell->getBattlefield()->getId()})) {
+            if (empty($std->{$cell->getBattlefield()->getId()})) {
                 $std->{$cell->getBattlefield()->getId()} = [];
             }
 
@@ -168,8 +162,9 @@ class GameModel
                 break;
         }
 
-        $this->strategyService->isShipDead($_cell);
+        $this->ai->getStrategyService()->isShipDead($_cell);
         $this->om->persist($_cell);
+        $this->detectVictory($battlefield);
     }
 
     public function detectVictory(Battlefield $battlefield) : bool
