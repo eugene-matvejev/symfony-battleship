@@ -1,5 +1,6 @@
 {
     "name": "eugenematvejev/battleship-game-api",
+    "description": "Spare time project (API part), highly experimental! the aim is to get done API on SF3, and front-end as SPA",
     "license": "MIT",
     "type": "project",
     "autoload": {

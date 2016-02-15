@@ -69,7 +69,6 @@ UI.prototype = {
     }
 };
 
-
 UI.resources = {};
 UI.resources.config = {
     attr: {
@@ -101,22 +100,4 @@ UI.resources.html = {
                     '</div>' +
                 '</div>';
     }
-    //layout: function(currPage, nextPage, prevPage, totalPages) {
-    //    var attr = UI.resources.config.attr;
-    //    return '<div class="pagination-area">' +
-    //                '<div class="btn-group btn-group-xs" role="group" aria-label="statistics-pagination">' +
-    //                    '<button id="' + attr.id.prev + '" type="button" ' + attr.page + '="' + prevPage + '" class="btn btn-default">' +
-    //                        '<span class="glyphicon glyphicon-chevron-left"></span>' +
-    //                    '</button>' +
-    //                    '<button id="' + attr.id.curr + '" type="button" ' + attr.page + '="' + currPage + '" class="btn btn-default" disabled="disabled">' +
-    //                        '<span id="' + attr.id.curr + '">' + currPage + '</span>' +
-    //                        '<span> of </span>' +
-    //                        '<span id="' + attr.id.total + '">' + totalPages + '</span>' +
-    //                    '</button>' +
-    //                    '<button id="' + attr.id.next + '" type="button" ' + attr.page + '="' + nextPage + '" class="btn btn-default">' +
-    //                        '<span class="glyphicon glyphicon-chevron-right"></span>' +
-    //                    '</button>' +
-    //                '</div>' +
-    //            '</div>';
-    //}
 };

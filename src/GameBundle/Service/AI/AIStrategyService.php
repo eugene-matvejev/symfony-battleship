@@ -59,6 +59,13 @@ class AIStrategyService
         return [];
     }
 
+    /**
+     * @since 3.5
+     *
+     * @param Cell $cell
+     *
+     * @return int
+     */
     private function decideStrategy(Cell $cell) : int
     {
         $coordinates = [
@@ -105,8 +112,8 @@ class AIStrategyService
         /**
          * @var CoordinatesPair[] $coordinates
          */
-        foreach ($coordinates as $coordinate) {
-            while (null !== $cell = $this->cellModel->getByCoordinatesPair($coordinate)) {
+        foreach ($coordinates as $coordinatesPair) {
+            while (null !== $cell = $this->cellModel->getByCoordinatesPair($coordinatesPair)) {
                 if (!in_array($cell->getState()->getId(), CellModel::STATES_SHIP)) {
                     break;
                 }
@@ -114,7 +121,7 @@ class AIStrategyService
                     return false;
                 }
 
-                $coordinate->prepareForNextStep();
+                $coordinatesPair->prepareForNextStep();
                 $cells[] = $cell;
             }
         }

@@ -185,6 +185,7 @@ Game.prototype = {
         }
     }
 };
+
 Game.resources = {};
 Game.resources.config = {
     trigger: {

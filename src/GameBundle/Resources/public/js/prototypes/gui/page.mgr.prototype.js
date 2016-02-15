@@ -7,6 +7,7 @@ function PageMgr() {
     this.$content   = $('.page-content');
     this.$pageTitle = this.$content.find('.page-section-title');
 }
+
 PageMgr.prototype = {
     toggleSidebar: function() {
         var _css = PageMgr.resources.config.trigger.css;

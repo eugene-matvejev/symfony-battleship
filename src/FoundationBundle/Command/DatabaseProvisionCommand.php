@@ -10,11 +10,6 @@ use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler;
  */
 class DatabaseProvisionCommand extends ScriptHandler
 {
-    /**
-     * @param CommandEvent $event
-     *
-     * @return void
-     */
     static public function initDatabases(CommandEvent $event)
     {
         if (null !== $consoleDir = static::getConsoleDir($event, 'install assets')) {

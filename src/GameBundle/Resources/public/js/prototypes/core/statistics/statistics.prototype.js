@@ -55,7 +55,6 @@ Statistics.prototype = {
     }
 };
 
-
 Statistics.resources = {
     config: {
         text: {

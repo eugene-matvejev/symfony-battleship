@@ -73,12 +73,10 @@ class AIService
      */
     private function attackCell(Cell $cell) : Cell
     {
-        if (in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
-            $this->cellModel->switchState($cell);
-
-            return $cell;
+        if (!in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
+            throw new AIException(__CLASS__ . ':' . __FUNCTION__ . ' cell: ' . $cell->getId() . ' have wrong state: ' . $cell->getState()->getName());
         }
 
-        throw new AIException(__CLASS__ . ':' . __FUNCTION__ . ' cell: ' . $cell->getId() . ' have wrong state: ' . $cell->getState()->getName());
+        return $this->cellModel->switchState($cell);
     }
 }
