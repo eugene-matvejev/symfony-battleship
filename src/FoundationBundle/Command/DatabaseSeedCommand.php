@@ -15,7 +15,7 @@ class DatabaseSeedCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('game:database:seed')
+            ->setName('battleship:database:seed')
             ->setDescription('seeds the database with initial data');
     }
 
@@ -45,6 +45,7 @@ class DatabaseSeedCommand extends ContainerAwareCommand
         $opt = [
             'command' => 'doctrine:migrations:migrate',
             '--no-interaction' => true,
+            'version' => 20160103150000,
             ($input->getOption('quiet') ? '--quiet' : '--verbose') => true
 
         ];
