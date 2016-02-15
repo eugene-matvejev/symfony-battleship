@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -46,13 +47,13 @@ class ExtendedTestCase extends WebTestCase
      * @var bool
      */
     protected static $setUp;
-//    /**
-//     * @var KernelInterface
-//     */
-//    private static $kernel;
+    /**
+     * @var KernelInterface
+     */
+    protected static $kernel;
 
     /**
-     * initialization
+     * @coversNothing
      */
     protected function setUp()
     {
@@ -63,6 +64,8 @@ class ExtendedTestCase extends WebTestCase
             self::$kernel->boot();
 
             self::$container = static::$kernel->getContainer();
+            self::$consoleApp = new Application(self::getClient()->getKernel());
+            self::$consoleApp->setAutoExit(false);
 
             self::$router = static::$container->get('router');
             self::$doctrine = static::$kernel->getContainer()->get('doctrine');
@@ -70,13 +73,11 @@ class ExtendedTestCase extends WebTestCase
 
             static::$setUp = true;
 
-//            $this->runConsole('battleship:database:seed');
+            $this->runConsole('battleship:database:seed');
         }
     }
 
     /**
-     * Run $command on Symfony console
-     *
      * @param string $command
      * @param array  $options
      *
@@ -92,25 +93,19 @@ class ExtendedTestCase extends WebTestCase
 //            self::$consoleApp->setCatchExceptions(false);
             self::$consoleApp->run(new ArrayInput($options));
 //            self::$consoleApp->setCatchExceptions(true);
-        } catch (\Exception $ex) {
-            print $ex->getMessage();
-            print $ex->getTraceAsString();
+        } catch (\Exception $e) {
+            echo PHP_EOL . $e->getMessage() . PHP_EOL;
+            echo PHP_EOL . $e->getTraceAsString() . PHP_EOL;
+
             throw new \Exception();
         }
     }
 
     /**
-     * Return application for run console command
-     *
-     * @return Application
+     * @since 3.5
      */
     protected function getConsoleApp() : Application
     {
-//        if (null === static::$consoleApp) {
-//            self::$consoleApp = new Application(self::getClient()->getKernel());
-//            self::$consoleApp->setAutoExit(false);
-//        }
-
         return self::$consoleApp;
     }
 
