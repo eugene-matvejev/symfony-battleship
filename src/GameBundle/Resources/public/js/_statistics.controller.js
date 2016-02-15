@@ -14,8 +14,6 @@ $(document).ready(function () {
             e.stopPropagation();
 
             var page = this.getAttribute('data-page');
-            //console.log(this, page);
-            //statisticsMgr.pageMgr.switchSection(this);
             statisticsMgr.fetch(page);
         });
 });

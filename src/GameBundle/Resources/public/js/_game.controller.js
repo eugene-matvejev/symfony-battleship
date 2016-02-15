@@ -6,7 +6,6 @@ $(document).ready(function() {
         playerConfig = Player.resources.config;
 
     game.pageMgr.switchSection(document.querySelector('li[data-action="' + pageConfig.action.game.new + '"]'));
-    //console.log('li[data-section="' + pageConfig.action.game.statistics + '"]');
     //var el = document.querySelector('li[data-section="' + pageConfig.section.statistics + '"]');
     //game.pageMgr.switchSection(el);
     //var statisticsMgr = new Statistics();

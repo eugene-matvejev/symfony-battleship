@@ -12,11 +12,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class DatabaseSeedCommand extends ContainerAwareCommand
 {
-    /**
-     * configure command
-     *
-     * @return void
-     */
     protected function configure()
     {
         $this
@@ -24,12 +19,6 @@ class DatabaseSeedCommand extends ContainerAwareCommand
             ->setDescription('seeds the database with initial data');
     }
 
-    /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return void
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->getApplication()->setAutoExit(false);

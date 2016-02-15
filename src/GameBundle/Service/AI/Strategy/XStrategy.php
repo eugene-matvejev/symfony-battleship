@@ -6,6 +6,9 @@ use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\CoordinateSystem\CoordinatesPair;
 
+/**
+ * @since 3.5
+ */
 class XStrategy extends AbstractStrategy
 {
     public function __construct(CellModel $cellModel)

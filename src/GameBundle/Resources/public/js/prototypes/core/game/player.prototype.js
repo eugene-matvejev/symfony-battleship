@@ -75,4 +75,3 @@ Player.resources.html = {
         ));
     }
 };
-
