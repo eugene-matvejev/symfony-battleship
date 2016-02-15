@@ -6,6 +6,9 @@ use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\CoordinateSystem\CoordinatesPair;
 
+/**
+ * @since 3.5
+ */
 abstract class AbstractStrategy
 {
     /**
@@ -18,29 +21,24 @@ abstract class AbstractStrategy
      *
      * @return Cell[]
      */
-    public function verify(Cell $cell) : array {}
+    public function verify(Cell $cell) : array
+    {
+    }
 
     /**
      * @param CoordinatesPair[] $coordinatesPairs
-     * @param bool|false        $closestOnly
      *
      * @return Cell[]
      */
-    protected function verifyByCoordinates(array $coordinatesPairs, bool $closestOnly = false) : array
+    protected function verifyByCoordinates(array $coordinatesPairs) : array
     {
         $cells = [];
 
         foreach ($coordinatesPairs as $coordinatesPair) {
-            while (null !== $cell = $this->cellModel->getByCoordinatesPair($coordinatesPair)) {
-                if (!in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
-                    break;
+            if (null !== $cell = $this->cellModel->getByCoordinatesPair($coordinatesPair)) {
+                if (in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
+                    $cells[] = $cell;
                 }
-
-                $cells[] = $cell;
-                if ($closestOnly) {
-                    break;
-                }
-                $coordinatesPair->prepareForNextStep();
             }
         }
 
