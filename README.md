@@ -1,6 +1,8 @@
 Spare time project. Highly experimental.
 
 
+CPU ship it hardcoded at B2 cell, if you will hit it instant win, it is done to easier tests, as the project is far from being perfect 
+
 # Software requirements
  * database: MySQL => 5.5 or MariaDB >= 9.*
  * http server: apache/nginx with php >= 7.0.1
