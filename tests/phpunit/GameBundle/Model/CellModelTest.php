@@ -97,7 +97,6 @@ class CellModelTest extends ExtendedTestCase
         $this->assertGreaterThanOrEqual($diedStates + $liveStates, $totalStates);
     }
 
-
     /**
      * @see CellModel::switchState()
      * @test

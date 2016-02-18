@@ -172,7 +172,7 @@ class ExtendedTestCase extends WebTestCase
     /**
      * @since 1.0
      */
-    public function assertCorrectResponse(Response $response)
+    public function assertSuccessfulResponse(Response $response)
     {
         $this->assertGreaterThanOrEqual(Response::HTTP_OK, $response->getStatusCode());
         $this->assertLessThan(Response::HTTP_MULTIPLE_CHOICES, $response->getStatusCode());
@@ -185,9 +185,9 @@ class ExtendedTestCase extends WebTestCase
      *
      * @return array
      */
-    public function assertJSONCorrectResponse(Response $response)
+    public function assertJSONSuccessfulResponse(Response $response)
     {
-        $this->assertCorrectResponse($response);
+        $this->assertSuccessfulResponse($response);
 
         return json_decode($response->getContent(), true);
     }

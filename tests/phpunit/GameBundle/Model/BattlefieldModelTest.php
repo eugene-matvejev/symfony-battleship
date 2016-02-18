@@ -24,7 +24,6 @@ class BattlefieldModelTest extends ExtendedTestCase
         $cells = BattlefieldModel::getLiveCells($battlefield);
         $this->assertCount(100, $cells);
 
-
         $cellState = (new CellState())
             ->setName('test cell state')
             ->setId(CellModel::STATE_SHIP_DIED);
