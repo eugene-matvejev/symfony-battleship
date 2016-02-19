@@ -1,7 +1,9 @@
 Spare time project. Highly experimental.
 
+Project aim: deliver some preview about my technical knowledge before job interview, as well as try 'cutting edge' technologies and approaches.
 
-CPU ship is hardcoded at B2 cell, if you will hit it will be instant win, it is done to easier tests, as the project is far from being perfect and keep trying polish it as good as I can.
+CPU chip is hardcoded at B2 cell, if you will hit it - it will be instant win, it is done to easier tests manual testing, as the project is far from 'finished' stage, and I keep trying polish it as good as I can.
+
 
 # Software requirements
  * database: MySQL => 5.5 or MariaDB >= 9.*
