@@ -11,9 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class StatisticsController extends Controller
 {
-    public function overallAction(Request $request) : JsonResponse
+    public function overallAction(int $page) : JsonResponse
     {
-        $json = $this->get('battleship.game.services.statistics.model')->overallStatistics($request->get('page', $request->get('page')));
+        $json = $this->get('battleship.game.services.statistics.model')->overallStatistics($page);
 
         return new JsonResponse($json);
     }
