@@ -8,6 +8,7 @@ CPU chip is hardcoded at B2 cell, if you will hit it - it will be instant win, i
 # Software requirements
  * database: MySQL => 5.5 or MariaDB >= 9.*
  * http server: apache/nginx with php >= 7.0.1
+ * composer
 
 
 ### Key Technologies
