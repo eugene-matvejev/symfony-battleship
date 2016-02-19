@@ -1,6 +1,6 @@
 battleship.game.api.statistics:
   path:     /statistics/page/{page}
-  defaults: { _controller: GameBundle:Statistics:overall}
+  defaults: { _controller: GameBundle:Statistics:overall, page: page}
   methods:  [GET]
   requirements:
     page: \d+
