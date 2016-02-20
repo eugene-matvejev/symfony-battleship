@@ -14,22 +14,6 @@ use EM\GameBundle\Model\PlayerModel;
 class BattlefieldRepository extends EntityRepository
 {
     /**
-     * @param int $gameId
-     *
-     * @return Battlefield[]
-     */
-    public function findByGameId(int $gameId) : array
-    {
-        return $this
-            ->createQueryBuilder('b')
-            ->select('b', 'g')
-            ->join('b.game', 'g')
-            ->where((new Expr())->eq('g.id', $gameId))
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
      * @param Game $game
      *
      * @return Battlefield[]
