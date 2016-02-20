@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8"/>
-    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>{% block title %}{% endblock %}</title>
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('bundles/game/vendor/bootstrap-3.3.5-dist/css/bootstrap.min.css') }}" type="text/css"/>
     <link rel="stylesheet" href="{{ asset('bundles/game/css/layout/layout.css') }}" type="text/css"/>
@@ -15,10 +15,10 @@
 {% block javascripts %}
     <script type="text/javascript" src="{{ asset('bundles/game/vendor/jquery/jquery-2.1.4.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/game/vendor/bootstrap-3.3.5-dist/js/bootstrap.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/prototypes/gui/page.mgr.prototype.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/prototypes/gui/alert.mgr.prototype.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/prototypes/gui/modal.mgr.prototype.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/prototypes/gui/ui.prototype.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/prototype/gui/page.mgr.prototype.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/prototype/gui/alert.mgr.prototype.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/prototype/gui/modal.mgr.prototype.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/prototype/gui/ui.prototype.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/game/js/_page.controller.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/game/js/_alert.controller.js') }}"></script>
 {% endblock %}
