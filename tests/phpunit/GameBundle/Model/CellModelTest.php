@@ -40,7 +40,7 @@ class CellModelTest extends ExtendedTestCase
      * @see CellModel::STATES_WATER
      * @test
      */
-    public function getWaterStates()
+    public function waterStates()
     {
         foreach (CellModel::STATES_WATER as $state) {
             $this->assertContains($state, CellModel::STATES_ALL);
@@ -52,7 +52,7 @@ class CellModelTest extends ExtendedTestCase
      * @see CellModel::STATES_SHIP
      * @test
      */
-    public function getShipStates()
+    public function shipStates()
     {
         foreach (CellModel::STATES_SHIP as $state) {
             $this->assertContains($state, CellModel::STATES_ALL);
@@ -64,7 +64,7 @@ class CellModelTest extends ExtendedTestCase
      * @see CellModel::STATES_LIVE
      * @test
      */
-    public function getLiveStates()
+    public function liveStates()
     {
         foreach (CellModel::STATES_LIVE as $state) {
             $this->assertContains($state, CellModel::STATES_ALL);
@@ -76,7 +76,7 @@ class CellModelTest extends ExtendedTestCase
      * @see CellModel::STATES_DIED
      * @test
      */
-    public function getDiedStates()
+    public function diedStates()
     {
         foreach (CellModel::STATES_DIED as $state) {
             $this->assertContains($state, CellModel::STATES_ALL);
@@ -88,7 +88,7 @@ class CellModelTest extends ExtendedTestCase
      * @see CellModel::STATES_ALL
      * @test
      */
-    public function getAllStates()
+    public function allStates()
     {
         $diedStates = count(CellModel::STATES_DIED);
         $liveStates = count(CellModel::STATES_LIVE);
