@@ -224,11 +224,11 @@ Game.resources.html = {
                     '</div>' +
                     '<div class="modal-body">' +
                         '<div class="form-group">' +
-                            '<label for="' + config.trigger.player + '">your nickname</label>' +
+                            '<label for="' + config.trigger.player + '">nickname</label>' +
                             '<input type="text" class="form-control" id="' + config.trigger.player + '" placeholder="">' +
                         '</div>' +
                         '<div class="form-group">' +
-                            '<label for="' + config.trigger.bfsize + '">battlefiend size</label>' +
+                            '<label for="' + config.trigger.bfsize + '">battlefield size</label>' +
                             '<input type="test" class="form-control" id="' + config.trigger.bfsize + '"' +
                                 ' placeholder="between ' + config.limits.minBFSize + ' and ' + config.limits.maxBFSize + '">' +
                         '</div>' +
