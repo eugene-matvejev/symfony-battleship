@@ -17,7 +17,7 @@ use Symfony\Component\Routing\RouterInterface;
 /**
  * @since 1.0
  */
-class ExtendedTestCase extends WebTestCase
+abstract class ExtendedTestCase extends WebTestCase
 {
     /**
      * @var ContainerInterface
