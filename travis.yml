@@ -1,0 +1,35 @@
+language: php
+php:
+  - '7.0'
+  - hhvm
+
+before_script:
+  - composer install $flags
+
+sudo: false
+
+addons:
+    apt_packages:
+        - parallel
+        - language-pack-fr-base
+
+env:
+    global:
+        - MIN_PHP=7.0.1
+#
+#matrix:
+#    include:
+#        - php: hhvm
+#        - php: 5.5
+#        - php: 5.6
+#          env: deps=high
+#        - php: 7.0
+#          env: deps=low
+#    fast_finish: true
+#
+#cache:
+#    directories:
+#        - .phpunit
+#        - php-$MIN_PHP
+#
+#services: mongodb
