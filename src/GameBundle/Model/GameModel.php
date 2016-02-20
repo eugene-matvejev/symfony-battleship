@@ -116,7 +116,7 @@ class GameModel
         $std = new \stdClass();
 
         if (null === $game = $this->gameRepository->find($arr->game->id)) {
-            throw new GameException(__FUNCTION__ . ' game: ' . $arr->game->id . ' doesn\'t exists.');
+            throw new GameException(__FUNCTION__ . ' game: ' . $arr->game->id . ' don\'t exists.');
         }
 
         if (null !== $game->getResult()) {
