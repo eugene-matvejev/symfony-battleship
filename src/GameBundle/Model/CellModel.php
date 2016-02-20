@@ -40,7 +40,7 @@ class CellModel
     function __construct(ObjectManager $om)
     {
         if (null === self::$cellStates) {
-            self::$cellStates = $om->getRepository('GameBundle:CellState')->getStates();
+            self::$cellStates = $om->getRepository('GameBundle:CellState')->getAllIndexed();
         }
     }
 
