@@ -41,12 +41,12 @@
  * apache virtual host config:
  ```
 <VirtualHost 127.0.0.1:80 ::1:80>
-    DocumentRoot "/Users/eugenematvejev/php-prototypes/battleship-game-api/web"
-    ErrorLog "/Users/eugenematvejev/php-prototypes/battleship-game-api/var/logs/apache_log"
+    DocumentRoot "%PROJECT_ROOT_DIRECTORY%/web"
+    ErrorLog "%PROJECT_ROOT_DIRECTORY%/var/logs/apache_log"
 
     ServerName api.game.local
     ServerAlias api.game.local
-    <Directory /Users/eugenematvejev/php-prototypes/battleship-game-api/web>
+    <Directory %PROJECT_ROOT_DIRECTORY%/web>
         AllowOverride All
         Order Allow,Deny
         Allow from All
