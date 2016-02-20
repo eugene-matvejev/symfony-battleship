@@ -18,7 +18,6 @@ class DatabaseProvisionCommand extends ScriptHandler
 
             if ($event->isDevMode()) {
                 static::executeCommand($event, $consoleDir, 'doctrine:database:create --env=test --if-not-exists');
-                static::executeCommand($event, $consoleDir, 'doctrine:migrations:migrate --env=test --no-interaction');
             }
         }
     }
