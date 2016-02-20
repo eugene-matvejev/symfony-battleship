@@ -174,14 +174,14 @@ Game.prototype = {
         }
     },
     modalUnlockSubmition: function() {
-        this.modalMgr.unlockSubmision(false);
+        this.modalMgr.unlockSubmission(false);
 
         var _config = Game.resources.config,
             player  = document.getElementById(_config.trigger.player),
             bfSize  = document.getElementById(_config.trigger.bfsize);
 
         if(this.modalValidateInput(player) && this.modalValidateInput(bfSize)) {
-            this.modalMgr.unlockSubmision(true);
+            this.modalMgr.unlockSubmission(true);
         }
     }
 };
