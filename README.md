@@ -1,3 +1,5 @@
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc/mini.png)](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc)
+
 # Battleship Game API
 ### Spare time project, Work in Progress! Highly experimental!!!
 #### Project aim
