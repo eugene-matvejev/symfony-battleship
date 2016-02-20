@@ -1,43 +1,8 @@
-function UI($el, currPage, nextPage, prevPage, totalPages) {
-    this.$area      = $el;
-
-    this.currPage   = currPage !== undefined ? currPage : undefined;
-    this.nextPage   = nextPage !== undefined ? nextPage : undefined;
-    this.prevPage   = prevPage !== undefined ? prevPage : undefined;
-    this.totalPages = totalPages !== undefined ? totalPages : undefined;
+function UI($el) {
+    this.$area = $el;
 }
 
 UI.prototype = {
-    getCurrPage: function() {
-        return this.currPage;
-    },
-    setCurrPage: function(page) {
-        this.currPage = page;
-
-        return this;
-    },
-    getNextPage: function() {
-        return this.nextPage;
-    },
-    setNextPage: function(page) {
-        this.nextPage = page;
-
-        return this;
-    },
-    getPrevPage: function() {
-        return this.prevPage;
-    },
-    setPrevPage: function(page) {
-        this.prevPage = page;
-
-        return this;
-    },
-    getTotalPage: function() {
-        return this.totalPages;
-    },
-    setTotalPage: function(amount) {
-        return this.totalPages = amount;
-    },
     htmlUpdate: function(currPage, totalPages) {
         var attr = UI.resources.config.attr,
             nextPage = currPage + 1 > totalPages ? totalPages : currPage + 1,
@@ -47,7 +12,6 @@ UI.prototype = {
             this.$area.append(UI.resources.html.layout());
 
         this.$area.find('button[type="button"]').each(function() {
-            console.log(this);
             switch(this.id) {
                 case attr.id.curr:
                     this.setAttribute(attr.page, currPage);
@@ -90,9 +54,9 @@ UI.resources.html = {
                             '<span class="glyphicon glyphicon-chevron-left"></span>' +
                         '</button>' +
                         '<button id="' + attr.id.curr + '" type="button" class="btn btn-default" disabled="disabled">' +
-                            '<span id="' + attr.id.curr + '"></span>' +
+                            '<span></span>' +
                             '<span> of </span>' +
-                            '<span id="' + attr.id.total + '"></span>' +
+                            '<span></span>' +
                         '</button>' +
                         '<button id="' + attr.id.next + '" type="button" class="btn btn-default">' +
                             '<span class="glyphicon glyphicon-chevron-right"></span>' +

@@ -173,7 +173,7 @@ Game.prototype = {
                 return el.value >= _config.limits.minBFSize && el.value <= _config.limits.maxBFSize;
         }
     },
-    modalUnlockSubmition: function() {
+    modalUnlockSubmission: function() {
         this.modalMgr.unlockSubmission(false);
 
         var _config = Game.resources.config,

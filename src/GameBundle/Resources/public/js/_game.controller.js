@@ -36,7 +36,7 @@ $(document).ready(function() {
         .on('input', '#' + gameConfig.trigger.player + ', #' + gameConfig.trigger.bfsize, function(e) {
             e.stopPropagation();
 
-            game.modalUnlockSubmition();
+            game.modalUnlockSubmission();
         })
         .on('click', '#new-game-btn', function(e) {
             e.stopPropagation();

@@ -10,7 +10,6 @@ Statistics.prototype = {
         var self = this,
             url  = this.$area.attr(Statistics.resources.config.route.data) + page;
 
-        console.log(url);
         this.pageMgr.loadingMode(true);
 
         this.apiMgr.request('GET', url, undefined,
@@ -28,7 +27,6 @@ Statistics.prototype = {
         }
 
         this.$area.html($table);
-        console.log(json);
         this.$paginator.htmlUpdate(page.curr, page.total);
     },
     htmlRow: function(json) {
