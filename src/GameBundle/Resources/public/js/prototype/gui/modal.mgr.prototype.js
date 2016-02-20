@@ -12,8 +12,7 @@ ModalMgr.prototype = {
     hide: function() {
         this.$area.find('.modal').modal('hide');
         $('body').removeClass('modal-open');
-
-        $('.modal-backdrop.fade.in').remove(); //TODO REMOVE HACK
+        $('.modal-backdrop.fade.in').remove();
 
         return this;
     },
@@ -22,7 +21,7 @@ ModalMgr.prototype = {
 
         return this;
     },
-    unlockSubmision: function(enable) {
+    unlockSubmission: function(enable) {
         var $btn = this.$area.find('button.btn[type="button"]');
         enable === undefined || enable
             ? $btn.removeAttr('disabled')
