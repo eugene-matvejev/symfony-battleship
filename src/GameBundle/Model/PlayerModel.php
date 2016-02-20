@@ -22,8 +22,16 @@ class PlayerModel
     function __construct(ObjectManager $om)
     {
         if (null === self::$playerTypes) {
-            self::$playerTypes = $om->getRepository('GameBundle:PlayerType')->getTypes();
+            self::$playerTypes = $om->getRepository('GameBundle:PlayerType')->getAllIndexed();
         }
+    }
+
+    /**
+     * @return PlayerType[]
+     */
+    public function getTypes() : array
+    {
+        return self::$playerTypes;
     }
 
     public static function getJSON(Player $player) : \stdClass
@@ -33,13 +41,5 @@ class PlayerModel
             'name' => $player->getName(),
             'type' => $player->getType()->getId()
         ];
-    }
-
-    /**
-     * @return PlayerType[]
-     */
-    public function getTypes() : array
-    {
-        return self::$playerTypes;
     }
 }

@@ -15,7 +15,7 @@ class PlayerTypeRepository extends EntityRepository
     /**
      * @return PlayerType[]
      */
-    public function getTypes() : array
+    public function getAllIndexed() : array
     {
         return $this
             ->createQueryBuilder('q', 'q.id')

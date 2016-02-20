@@ -15,7 +15,7 @@ class CellStateRepository extends EntityRepository
     /**
      * @return CellState[]
      */
-    public function getStates() : array
+    public function getAllIndexed() : array
     {
         return $this
             ->createQueryBuilder('q', 'q.id')
