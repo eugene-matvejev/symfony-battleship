@@ -2,7 +2,7 @@ function Player($area, name, type, size) {
     var _config = Player.resources.config;
 
     this.$html = Player.resources.html.layout();
-    this.setId('undefined').setName(name).setType(type !== undefined ? _config.type.cpu : _config.type.human)
+    this.setId('undefined').setName(name).setType(type !== undefined ? _config.type.cpu : _config.type.human);
     this.battlefield = (new Battlefield(size, this.$html.find('.' + _config.trigger.css.field)));
 
     $area.append(this.$html);
