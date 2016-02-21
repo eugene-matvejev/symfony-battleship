@@ -130,7 +130,7 @@
  ```
 
 ### How to launch tests
- * *phpunit -c app* or *php bin/phpunit -c app* (fixtures will wipe and populate database)
+ * *phpunit -c app* or *php bin/phpunit -c tests* (fixtures will wipe and populate database)
 
 ### used patterns
  * Front Controller
