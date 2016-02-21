@@ -1,0 +1,19 @@
+language: php
+php:
+  - '7.0'
+#  - hhvm
+
+before_script:
+  - cp app/config/parameters.yml.dist app/config/parameters.yml
+  - composer install
+
+env:
+  global:
+    - MIN_PHP=7.0.1
+
+script:
+  - php bin/phpunit -c app/phpunit.xml --colors=always || (echo -e "\e[41mFAILED\e[0m {}" && $(exit 1));
+
+services:
+  - mongodb
+  - mysql
