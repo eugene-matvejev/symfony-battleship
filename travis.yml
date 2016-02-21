@@ -4,18 +4,12 @@ php:
   - hhvm
 
 before_script:
-  - composer install $flags
-
-sudo: false
-
-addons:
-    apt_packages:
-        - parallel
-        - language-pack-fr-base
+  - cp app/config/parameters.yml.dist app/config/parameters.yml
+  - composer install
 
 env:
-    global:
-        - MIN_PHP=7.0.1
+  global:
+    - MIN_PHP=7.0.1
 #
 #matrix:
 #    include:
@@ -27,9 +21,10 @@ env:
 #          env: deps=low
 #    fast_finish: true
 #
-#cache:
-#    directories:
-#        - .phpunit
-#        - php-$MIN_PHP
-#
-#services: mongodb
+
+script:
+  - php bin/phpunit -c app/phpunit.xml --colors=always || (echo -e "\e[41mFAILED\e[0m {}" && $(exit 1));
+
+services:
+  - mongodb
+  - mysql
