@@ -27,9 +27,7 @@
                 <directory>../src/*Bundle/DataFixtures</directory>
                 <directory>../src/*Bundle/DependencyInjection</directory>
                 <directory>../src/*Bundle/Resources</directory>
-                <directory>../src/*Bundle/TestEnvironment</directory>
             </exclude>
         </whitelist>
     </filter>
 </phpunit>
-
