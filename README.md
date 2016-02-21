@@ -8,7 +8,7 @@
  * deliver some preview about my technical knowledge before job interview
   * try 'cutting edge' technologies and approaches.
 
-### cheat-code:
+### game cheat-code:
  * CPU have only one-cell ship which is hardcoded at __B2__ cell
   * if you will hit it __B2__ cell - it will be instant win
    * it is done to easier tests manual testing, as the project is far from 'finished' stage, as I keep trying polish it.
@@ -147,7 +147,7 @@
  * Dependency Injection
 
 ### github usage:
- * pull-requests to the master
+ * semantic versioning with pull-requests into the master branch
 
 ### used standarts:
  * PHP-FIG:
