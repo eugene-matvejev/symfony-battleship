@@ -16,9 +16,6 @@ trait NameableTrait
      */
     protected $name;
 
-    /**
-     * @return string
-     */
     public function getName() : string
     {
         return $this->name;
@@ -29,7 +26,7 @@ trait NameableTrait
      *
      * @return $this
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 

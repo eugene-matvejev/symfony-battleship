@@ -23,7 +23,12 @@ trait PlayerTrait
         return $this->player;
     }
 
-    public function setPlayer(Player $player) : self
+    /**
+     * @param Player $player
+     *
+     * @return $this
+     */
+    public function setPlayer(Player $player)
     {
         $this->player = $player;
 

@@ -8,4 +8,6 @@ namespace EM\GameBundle\ORM;
 interface IdentifiableInterface
 {
     public function getId();
+
+    public function setId(int $id);
 }
