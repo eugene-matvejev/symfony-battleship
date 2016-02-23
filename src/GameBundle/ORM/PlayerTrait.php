@@ -18,9 +18,6 @@ trait PlayerTrait
      */
     private $player;
 
-    /**
-     * @return Player
-     */
     public function getPlayer() : Player
     {
         return $this->player;
