@@ -18,20 +18,12 @@ trait PlayerTrait
      */
     private $player;
 
-    /**
-     * @return Player
-     */
     public function getPlayer() : Player
     {
         return $this->player;
     }
 
-    /**
-     * @param Player $player
-     *
-     * @return $this
-     */
-    public function setPlayer(Player $player)
+    public function setPlayer(Player $player) : self
     {
         $this->player = $player;
 
