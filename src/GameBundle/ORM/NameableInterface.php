@@ -9,5 +9,5 @@ interface NameableInterface
 {
     public function getName() : string;
 
-    public function setName($name);
+    public function setName(string $name);
 }

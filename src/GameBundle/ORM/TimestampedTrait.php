@@ -21,9 +21,13 @@ trait TimestampedTrait
 
     /**
      * @ORM\PrePersist
+     *
+     * @return $this
      */
     public function setTimestamp()
     {
         $this->timestamp = new \DateTime();
+
+        return $this;
     }
 }
