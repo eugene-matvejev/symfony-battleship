@@ -16,14 +16,17 @@ abstract class AbstractStrategy
      */
     protected $cellModel;
 
+    public function getCellModel() : CellModel
+    {
+        return $this->cellModel;
+    }
+
     /**
      * @param Cell $cell
      *
      * @return Cell[]
      */
-    public function verify(Cell $cell) : array
-    {
-    }
+    abstract function verify(Cell $cell) : array;
 
     /**
      * @param CoordinatesPair[] $coordinatesPairs
