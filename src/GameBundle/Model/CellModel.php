@@ -25,13 +25,13 @@ class CellModel
     const STATES_DIED  = [self::STATE_WATER_DIED, self::STATE_SHIP_DIED];
     const STATES_ALL   = [self::STATE_WATER_LIVE, self::STATE_WATER_DIED, self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED, self::STATE_WATER_SKIP];
     /**
-     * @var Cell[][]
-     */
-    private $cachedCells;
-    /**
      * @var CellState[]
      */
     private static $cellStates;
+    /**
+     * @var Cell[][]
+     */
+    private $cachedCells;
     /**
      * @var Cell[]
      */

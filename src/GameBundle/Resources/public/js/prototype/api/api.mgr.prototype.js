@@ -1,5 +1,5 @@
 function APIMgr() {
-    this.pageMgr   = new PageMgr();
+    this.pageMgr = new PageMgr();
 }
 
 APIMgr.prototype = {
