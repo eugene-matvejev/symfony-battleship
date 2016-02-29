@@ -51,9 +51,9 @@ class AIStrategyService
                     return $this->xStrategy->verify($cell);
                 case self::STRATEGY_Y:
                     return $this->yStrategy->verify($cell);
-                default:
-                    return $this->randStrategy->verify($cell);
             }
+
+            return $this->randStrategy->verify($cell);
         }
 
         return [];
