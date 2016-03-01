@@ -55,6 +55,10 @@ class AIServiceTest extends ExtendedTestCase
     }
 
     /**
+     * @param int $cellStateId
+     *
+     * @return Cell
+     *
      * @coversNothing
      */
     protected function getMockedCell(int $cellStateId) : Cell
