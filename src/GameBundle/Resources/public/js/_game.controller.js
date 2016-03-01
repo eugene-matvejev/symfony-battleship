@@ -21,7 +21,7 @@ $(document).ready(function() {
     );
 
     $('#game-area')
-        .on('click', '.player-area:not(.finished)[' + playerConfig.trigger.type +'="' + playerConfig.type.cpu + '"] .battlefield-cell[data-s="' + cellConfig.state.seaLive + '"]', function(e) {
+        .on('click', '.player-area:not(.finished)[' + playerConfig.trigger.type + '="' + playerConfig.type.cpu + '"] .battlefield-cell[data-s="' + cellConfig.state.seaLive + '"]', function(e) {
             e.stopPropagation();
 
             game.updateGame(this);

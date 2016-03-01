@@ -4,7 +4,8 @@ function Battlefield(size, $el) {
     this.size  = size;
     this.cells = new CellContainer();
 
-    this.initData().htmlUpdate();
+    this.initData()
+        .htmlUpdate();
 }
 
 Battlefield.prototype = {
