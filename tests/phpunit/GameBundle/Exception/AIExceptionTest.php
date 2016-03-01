@@ -1,11 +1,12 @@
 <?php
 
-namespace EM\Tests\PHPUnit\GameBundle\Service\AI;
+namespace EM\Tests\PHPUnit\GameBundle\Exception;
 
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Exception\AIException;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIService;
+use EM\Tests\PHPUnit\GameBundle\Service\AI\AIServiceTest;
 
 /**
  * @see AIService
