@@ -36,7 +36,7 @@
  * Twig
  * Twitter Bootstrap 3
  * Monolog
- * JavaScript ES6
+ * EMCAScript6 (JavaScript ES6)
 
 # How to install
  * copy *app/config/parameters.yml.dist* to *app/config/parameters.yml* and amend database settings
