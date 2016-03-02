@@ -79,7 +79,7 @@ Game.prototype = {
     updateGame: function(el) {
 
         var _config = Player.resources.config,
-            player  = this.findPlayerById(el.parentElement.parentElement.parentElement.getAttribute(_config.trigger.id));
+            player  = this.findPlayerById(el.parentElement.parentElement.parentElement.getAttribute(_config.attribute.id));
         if(player instanceof Player && player.type !== _config.type.human) {
                 _config = Cell.resources.config;
             var cell    = this.cellGet(player.id, el.getAttribute(_config.html.attr.x), el.getAttribute(_config.html.attr.y));

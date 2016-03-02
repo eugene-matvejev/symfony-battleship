@@ -1,49 +1,98 @@
-function Player($area, name, type, size) {
-    var _config = Player.resources.config;
+'use strict';
 
-    this.$html = Player.resources.html.layout();
-    this.setId('undefined').setName(name).setType(type !== undefined ? _config.type.cpu : _config.type.human);
-    this.battlefield = (new Battlefield(size, this.$html.find('.' + _config.trigger.css.field)));
+/**
+ *
+ * @param {jQuery} $area
+ * @param {string} playerName
+ * @param {bool}   isCPUPlayer
+ * @param {int}    battlefieldSize
+ *
+ * @constructor
+ */
+function Player($area, playerName, isCPUPlayer, battlefieldSize) {
+    let resources  = Player.resources,
+        playerType = resources.config.type;
 
+    this.$html = $(resources.html.layout());
     $area.append(this.$html);
 
-    if (this.type === Player.resources.config.type.human) {
+    this.setName(playerName)
+        .setType(isCPUPlayer !== undefined || isCPUPlayer ? playerType.cpu : playerType.human);
+
+    this.battlefield = (new Battlefield(battlefieldSize, this.$html.find('.' + resources.config.class.area)));
+    if (this.type === playerType.human) {
         this.battlefield.mockData();
     }
 }
 
 Player.prototype = {
+    /**
+     * @type {int}
+     */
+    id: 'undefined',
+    /**
+     * @type {string}
+     */
+    name: 'undefined',
+    /**
+     * @type {int}
+     */
+    type: 'undefined',
+    /**
+     * @param {int} id
+     *
+     * @returns {Player}
+     */
     setId: function(id) {
         this.id = id;
-        this.htmlUpdate(Player.resources.config.trigger.id, id);
+        this.updateHTML(Player.resources.config.attribute.id, id);
 
         return this;
     },
-    setType: function(type) {
-        this.type = type;
-        this.htmlUpdate(Player.resources.config.trigger.type, type);
-
-        return this;
-    },
+    /**
+     * @param {string} name
+     *
+     * @returns {Player}
+     */
     setName: function(name) {
         this.name = name;
-        this.htmlUpdate(Player.resources.config.trigger.css.name, name);
+        this.updateHTML(Player.resources.config.class.name, name);
 
         return this;
     },
+    /**
+     * @param {int} type
+     *
+     * @returns {Player}
+     */
+    setType: function(type) {
+        this.type = type;
+        this.updateHTML(Player.resources.config.attribute.type, type);
+
+        return this;
+    },
+    /**
+     * @returns {Object}
+     */
     getJSON: function() {
         return {id: this.id, name: this.name, type: this.type};
     },
-    htmlUpdate: function(type, val) {
-        var trigger = Player.resources.config.trigger;
+    /**
+     * @param {string}     field
+     * @param {string|int} value
+     *
+     * @returns {void}
+     */
+    updateHTML: function(field, value) {
+        let config = Player.resources.config;
 
-        switch (type) {
-            case trigger.id:
-            case trigger.type:
-                this.$html.attr(type, val);
+        switch (field) {
+            case config.attribute.id:
+            case config.attribute.type:
+                this.$html.attr(field, value);
                 break;
-            case trigger.css.name:
-                this.$html.find('>.' + type).text(val);
+            case config.class.name:
+                this.$html.find('>.' + field).text(value);
                 break;
         }
     }
@@ -51,28 +100,48 @@ Player.prototype = {
 
 Player.resources = {};
 Player.resources.config = {
-    trigger: {
+    attribute: {
+        /**
+         * @type {string}
+         */
         id: 'data-player-id',
-        type: 'data-player-type',
-        css: {
-            name: 'player-name',
-            field: 'player-field'
-        }
+        /**
+         * @type {string}
+         */
+        type: 'data-player-type'
+    },
+    class: {
+        /**
+         * @type {string}
+         */
+        name: 'player-name',
+        /**
+         * @type {string}
+         */
+        area: 'player-field'
     },
     type: {
+        /**
+         * @type {int}
+         */
         cpu: 1,
+        /**
+         * @type {int}
+         */
         human: 2
     }
 };
 Player.resources.html = {
+    /**
+     * @returns {string}
+     */
     layout: function() {
-        var _trigger = Player.resources.config.trigger;
+        let config = Player.resources.config;
 
-        return $($.parseHTML(
-            '<div class="col-md-6 player-area" ' + _trigger.id + '="unk" ' + _trigger.type + '="unk">' +
-                '<div class="player-name">unk</div>' +
-                '<div class="player-field"></div>' +
-            '</div>'
-        ));
+        return '' +
+            '<div class="col-md-6 player-area" ' + config.attribute.id + '="unk" ' + config.attribute.type + '="unk">' +
+                '<div class="' + config.class.name + '">unk</div>' +
+                '<div class="' + config.class.area +'"></div>' +
+            '</div>';
     }
 };

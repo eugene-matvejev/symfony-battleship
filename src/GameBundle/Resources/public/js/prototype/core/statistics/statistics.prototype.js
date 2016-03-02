@@ -1,53 +1,82 @@
 'use strict';
 
+/**
+ * @constructor
+ */
 function Statistics() {
     this.apiMgr     = new APIMgr();
     this.pageMgr    = new PageMgr();
-    this.$area      = $('div#stats-area');
-    this.$paginator = new UI(this.$area, undefined, undefined, undefined, undefined);
+    this.$html      = $('div#stats-area');
+    this.$paginator = new UI(this.$html, undefined, undefined, undefined, undefined);
 }
 
 Statistics.prototype = {
+    /**
+     * @param {int} page
+     */
     fetch: function(page) {
         let self = this,
-            url  = this.$area.attr(Statistics.resources.config.route.data) + page;
+            url  = this.$html.attr(Statistics.resources.config.attribute.route) + page;
 
         this.pageMgr.loadingMode(true);
 
         this.apiMgr.request('GET', url, undefined,
             function(json) {
-                self.htmlUpdate(json);
+                self.updateHTML(json);
                 self.pageMgr.loadingMode(false);
             }
         );
     },
-    htmlUpdate: function(response) {
-        let resources = Statistics.resources,
-            page      = response.meta.page,
-            $table    = $(resources.html.table());
+    /**
+     * @param {Object} response
+     *
+     * @returns {void}
+     */
+    updateHTML: function(response) {
+        let page   = response.meta.page,
+            html   = Statistics.resources.html,
+            $table = $(html.table());
 
-        response.data.every(el => $table.append(resources.html.row(el)));
+        response.data.every(el => $table.append(html.row(el)));
 
-        this.$area.html($table);
+        this.$html.html($table);
         this.$paginator.htmlUpdate(page.curr, page.total);
     }
 };
 
 Statistics.resources = {};
 Statistics.resources.config = {
-    route: {
-        data: 'data-stats-link'
+    attribute: {
+        /**
+         * @type {string}
+         */
+        route: 'data-stats-link'
     }
 };
 Statistics.resources.text = {
+    /**
+     * @type {string}
+     */
     id: 'id',
+    /**
+     * @type {string}
+     */
     winner: 'Winner',
     time: {
+        /**
+         * @type {string}
+         */
         start: 'Game started at',
+        /**
+         * @type {string}
+         */
         finish: 'Game started at'
     }
 };
 Statistics.resources.html = {
+    /**
+     * @returns {string}
+     */
     table: function() {
         let text = Statistics.resources.text;
 
@@ -61,6 +90,11 @@ Statistics.resources.html = {
                 '</tr>' +
             '</table>';
     },
+    /**
+     * @param {Object} obj
+     *
+     * @returns {string}
+     */
     row: function(obj) {
         return '' +
             '<tr>' +
