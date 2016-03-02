@@ -7,8 +7,9 @@ function Player($area, name, type, size) {
 
     $area.append(this.$html);
 
-    if(this.type == Player.resources.config.type.human)
+    if (this.type === Player.resources.config.type.human) {
         this.battlefield.mockData();
+    }
 }
 
 Player.prototype = {
@@ -34,14 +35,14 @@ Player.prototype = {
         return {id: this.id, name: this.name, type: this.type};
     },
     htmlUpdate: function(type, val) {
-        var _trigger = Player.resources.config.trigger;
+        var trigger = Player.resources.config.trigger;
 
-        switch(type) {
-            case _trigger.id:
-            case _trigger.type:
+        switch (type) {
+            case trigger.id:
+            case trigger.type:
                 this.$html.attr(type, val);
                 break;
-            case _trigger.css.name:
+            case trigger.css.name:
                 this.$html.find('>.' + type).text(val);
                 break;
         }
