@@ -1,5 +1,3 @@
-'use strict';
-
 function Statistics() {
     this.apiMgr     = new APIMgr();
     this.pageMgr    = new PageMgr();
@@ -9,7 +7,7 @@ function Statistics() {
 
 Statistics.prototype = {
     fetch: function(page) {
-        let self = this,
+        var self = this,
             url  = this.$area.attr(Statistics.resources.config.route.data) + page;
 
         this.pageMgr.loadingMode(true);
@@ -21,53 +19,50 @@ Statistics.prototype = {
             }
         );
     },
-    htmlUpdate: function(response) {
-        let resources = Statistics.resources,
-            page      = response.meta.page,
-            $table    = $(resources.html.table());
-
-        response.data.every(el => $table.append(resources.html.row(el)));
+    htmlUpdate: function(json) {
+        var $table = this.htmlTable(),
+            page = json.meta.page;
+        for(var i in json.data) {
+            $table.append(this.htmlRow(json.data[i]));
+        }
 
         this.$area.html($table);
         this.$paginator.htmlUpdate(page.curr, page.total);
-    }
-};
+    },
+    htmlRow: function(json) {
+        return '<tr>' +
+                    '<td>' + json.id + '</td>' +
+                    '<td>' + json.time.s + '</td>' +
+                    '<td>' + json.time.f + '</td>' +
+                    '<td>' + json.player.name + '</td>' +
+                '</tr>';
+    },
+    htmlTable: function() {
+        var text = Statistics.resources.config.text;
 
-Statistics.resources = {};
-Statistics.resources.config = {
-    route: {
-        data: 'data-stats-link'
-    }
-};
-Statistics.resources.text = {
-    id: 'id',
-    winner: 'Winner',
-    time: {
-        start: 'Game started at',
-        finish: 'Game started at'
-    }
-};
-Statistics.resources.html = {
-    table: function() {
-        let text = Statistics.resources.text;
-
-        return '' +
+        return $($.parseHTML(
             '<table class="table">' +
                 '<tr>' +
                     '<th>' + text.id + '</th>' +
-                    '<th>' + text.time.start + '</th>' +
-                    '<th>' + text.time.finish + '</th>' +
+                    '<th>' + text.gameStart + '</th>' +
+                    '<th>' + text.gameEnded + '</th>' +
                     '<th>' + text.winner + '</th>' +
                 '</tr>' +
-            '</table>';
-    },
-    row: function(obj) {
-        return '' +
-            '<tr>' +
-                '<td>' + obj.id + '</td>' +
-                '<td>' + obj.time.s + '</td>' +
-                '<td>' + obj.time.f + '</td>' +
-                '<td>' + obj.player.name + '</td>' +
-            '</tr>';
+            '</table>'
+        ));
+    }
+};
+
+Statistics.resources = {
+    config: {
+        text: {
+            id: 'id',
+            winner: 'Winner',
+            gameStart: 'Game started at',
+            gameEnded: 'Game finished at'
+        },
+        route: {
+            data: 'data-stats-link'
+        }
     }
 };
