@@ -1,21 +1,58 @@
+'use strict';
+
+/**
+ * @param {int} x
+ * @param {int} y
+ * @param {int|undefined} state
+ *
+ * @constructor
+ */
 function Cell(x, y, state) {
+    let resources = Cell.resources;
+
     this.x = x;
     this.y = y;
-    this.s = state !== undefined ? state : Cell.resources.config.state.seaLive;
-    this.$html = Cell.resources.html.layout(this.x, this.y, this.s, undefined);
+    this.s = undefined !== state ? state : resources.config.state.sea.live;
+    this.$html = $(resources.html.layout(this.x, this.y, this.s, undefined));
 }
 
 Cell.prototype = {
+    /**
+     * @type {int}
+     */
+    x: 'undefined',
+    /**
+     * @type {int}
+     */
+    y: 'undefined',
+    /**
+     * @type {int|undefined}
+     */
+    s: 'undefined',
+    /**
+     * @param {int} state
+     *
+     * @returns {Cell}
+     */
     setState: function(state) {
         this.s = state;
-        this.htmlUpdate(Cell.resources.config.html.attr.state, this.s);
+        this.updateHTML(Cell.resources.config.html.attr.state, this.s);
 
         return this;
     },
+    /**
+     * @returns {{x: {int}, y: {int}}}
+     */
     getJSON: function() {
         return {x: this.x, y: this.y};
     },
-    htmlUpdate: function(attr, val) {
+    /**
+     * @param {string}     attr
+     * @param {string|int} val
+     *
+     * @returns {void}
+     */
+    updateHTML: function(attr, val) {
         this.$html.attr(attr, val);
     }
 };
@@ -23,30 +60,60 @@ Cell.prototype = {
 Cell.resources = {};
 Cell.resources.config = {
     state: {
-        seaLive: 1,
-        seaDied: 2,
-        shipLive: 3,
-        shipDied: 4
-    },
-    html: {
-        attr: {
-            x: 'data-x',
-            y: 'data-y',
-            state: 'data-s'
+        sea: {
+            /**
+             * @type {int}
+             */
+            live: 1,
+            /**
+             * @type {int}
+             */
+            dead: 2
+        },
+        ship: {
+            /**
+             * @type {int}
+             */
+            live: 3,
+            /**
+             * @type {int}
+             */
+            dead: 4
         }
+    },
+    attribute: {
+        /**
+         * @type {string}
+         */
+        xAxis: 'data-x',
+        /**
+         * @type {string}
+         */
+        yAxis: 'data-y',
+        /**
+         * @type {string}
+         */
+        state: 'data-s'
     }
 };
 Cell.resources.html = {
+    /**
+     * @param {int} x
+     * @param {int} y
+     * @param {int} state
+     * @param {string|undefined} txt
+     *
+     * @returns {string}
+     */
     layout: function(x, y, state, txt) {
-        var _attr = Cell.resources.config.html.attr;
+        let attribute = Cell.resources.config.attribute;
 
-        return $($.parseHTML(
-            '<div class="col-md-1 battlefield-cell"' +
-                ' ' + _attr.x + '="' + x + '"' +
-                ' ' + _attr.y + '="' + y + '"' +
-                ' ' + _attr.state + '="' + state +'">' +
-                (txt !== undefined ? txt : '') +
-            '</div>'
-        ));
+        return '' +
+            '<div class="col-md-1 battlefield-cell" ' +
+                 attribute.xAxis + '="' + x + '" ' +
+                 attribute.yAxis + '="' + y + '" ' +
+                 attribute.state + '="' + state +'">' +
+                (undefined !== txt ? txt : '') +
+            '</div>';
     }
 };

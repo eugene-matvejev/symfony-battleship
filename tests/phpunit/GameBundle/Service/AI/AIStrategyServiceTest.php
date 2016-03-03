@@ -1,39 +1,52 @@
 <?php
 
-//namespace EM\Tests\PHPUnit\GameBundle\Service\AI;
-//
-//use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
+namespace EM\Tests\PHPUnit\GameBundle\Service\AI;
 
-///**
-// * @see AIStrategyService
-// */
-//class AIStrategyServiceTest extends ExtendedTestCase
-//{
-//    const STRATEGY_X        = 0;
-//    const STRATEGY_Y        = 1;
-//    const STRATEGY_RAND     = 2;
-//    const COORDINATES_STEPS = [-1, 0, 1];
-//    /**
-//     * @var CellModel
-//     */
-//    private $cellModel;
-//
-//    public function __construct(CellModel $model, XStrategy $xStrategy, YStrategy $yStrategy, RandomStrategy $randomStrategy)
-//    {
-//        $this->cellModel = $model;
-//        $this->xStrategy = $xStrategy;
-//        $this->yStrategy = $yStrategy;
-//        $this->randStrategy = $randomStrategy;
-//    }
-//
-//    /**
-//     * @param Battlefield $battlefield
-//     *
-//     * @return Cell[]
-//     */
-//    public function attack(Battlefield $battlefield) : array
-//    {
-//        $this->cellModel->indexCells($battlefield);
+use EM\GameBundle\Entity\Battlefield;
+use EM\GameBundle\Entity\Cell;
+use EM\GameBundle\Entity\CellState;
+use EM\GameBundle\Model\CellModel;
+use EM\GameBundle\Service\AI\AIStrategyService;
+use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
+
+/**
+ * @see AIStrategyService
+ */
+class AIStrategyServiceTest extends ExtendedTestCase
+{
+    /**
+     * @var AIStrategyService
+     */
+    private $strategyService;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->strategyService = $this->getContainer()->get('battleship.game.services.ai.strategy.service');
+    }
+
+    /**
+     * @see AIStrategyService::attack()
+     * @test
+     */
+    public function attack()
+    {
+        $battlefield = $this->getMockedBattlefield();
+        $cells = $this->strategyService->attack($battlefield);
+        $this->assertCount(0, $cells);
+
+        $cellState = (new CellState())
+            ->setId(CellModel::STATE_SHIP_DIED)
+            ->setName('test cell state');
+
+        foreach ($battlefield->getCells() as $cell) {
+            if ($cell->getX() === 2 && $cell->getY() === 2) {
+                $cell->setState($cellState);
+            }
+        }
+
+        $cells = $this->strategyService->attack($battlefield);
+        $this->assertCount(4, $cells);
 //
 //        foreach ($battlefield->getCells() as $cell) {
 //            if ($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED || $this->isShipDead($cell)) {
@@ -51,6 +64,46 @@
 //        }
 //
 //        return [];
+    }
+
+    /**
+     * @coversNothing
+     */
+    protected function getMockedBattlefield() : Battlefield
+    {
+        $battlefield = new Battlefield();
+        $cellState = (new CellState())
+            ->setName('test cell state')
+            ->setId(CellModel::STATE_WATER_LIVE);
+        for ($x = 0; $x < 10; $x++) {
+            for ($y = 0; $y < 10; $y++) {
+                $cell = (new Cell())
+                    ->setX($x)
+                    ->setY($y)
+                    ->setState($cellState);
+
+                $battlefield->addCell($cell);
+            }
+        }
+
+        return $battlefield;
+    }
+
+//    const STRATEGY_X        = 0;
+//    const STRATEGY_Y        = 1;
+//    const STRATEGY_RAND     = 2;
+//    const COORDINATES_STEPS = [-1, 0, 1];
+//    /**
+//     * @var CellModel
+//     */
+//    private $cellModel;
+//
+//    public function __construct(CellModel $model, XStrategy $xStrategy, YStrategy $yStrategy, RandomStrategy $randomStrategy)
+//    {
+//        $this->cellModel = $model;
+//        $this->xStrategy = $xStrategy;
+//        $this->yStrategy = $yStrategy;
+//        $this->randStrategy = $randomStrategy;
 //    }
 //
 //    /**
@@ -139,4 +192,4 @@
 //
 //        return true;
 //    }
-//}
+}
