@@ -1,134 +1,146 @@
+'use strict';
+
+/**
+ * @constructor
+ */
 function Game() {
+    this.$html    = $('#game-area');
     this.apiMgr   = new APIMgr();
     this.pageMgr  = new PageMgr();
     this.alertMgr = new AlertMgr();
     this.modalMgr = new ModalMgr();
-    this.$area    = $('#game-area');
+
+    this.id       = 'undefined';
+    this.players  = [];
 }
 
+/**
+ * @property {int}      id
+ * @property {Player[]} players
+ */
 Game.prototype = {
-    id: 'undefined',
-    data: [],
+    ///**
+    // * @type {int|string}
+    // */
+    //id: 'undefined',
+    /**
+     * @param {int} id
+     *
+     * @returns {Game}
+     */
     setId: function(id) {
         this.id = id;
 
         return this;
     },
+    /**
+     * @returns {{id: {int}}}
+     */
     getJSON: function() {
         return {id: this.id};
     },
+    /**
+     * @param {{name: {string}, isCPU: {boolean}}[]} players
+     * @param {int} battlefieldSize
+     */
     init: function(players, battlefieldSize) {
-        this.data = [];
-        this.id   = 'undefined';
-        this.pageMgr.loadingMode(true);
+        this.id      = 'undefined';
+        this.players = [];
         this.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="' + PageMgr.resources.config.section.game + '"]'));
 
-        this.htmlWipe();
-        var json = {
-            id: this.id,
-            data: []
-        };
+        this.$html.html('');
+        let self = this,
+            requestData = {
+                id: this.getJSON(),
+                data: []
+            };
 
-        for(var i in players) {
-            var player = (new Player(this.$area, players[i].name, players[i].name === 'CPU' ? true : undefined, battlefieldSize)),
-                cells  = player.battlefield.cells.data,
-                _json  = {
-                    player: {id: player.id, name: player.name, type: player.type},
-                    battlefield: {id: player.battlefield.id},
-                    cells: []
-                };
+        players.map(function(el) {
+            let player = new Player(self.$html, el.name, el.isCPU || false, battlefieldSize);
+            self.players.push(player);
 
-            for(var x in cells) {
-                for(var y in cells[x]) {
-                    _json.cells.push(cells[x][y]);
-                }
-            }
+            requestData.data.push({
+                player: player.getJSON(),
+                battlefield: player.battlefield.getJSON(),
+                cells: player.battlefield.cellContainer.getJSON()
+            });
+        });
 
-            json.data.push(_json);
-
-            this.data.push(player);
-        }
-
-        var self = this;
-        this.apiMgr.request('POST', this.$area.attr(Game.resources.config.route.init), JSON.stringify(json),
-            function(json) {
-                self.parseInitResponse(json);
-                self.pageMgr.loadingMode(false);
+        this.apiMgr.request('POST', this.$html.attr(Game.resources.config.route.init), requestData,
+            function(response) {
+                self.parseInitResponse(response);
+            },
+            function(response) {
             }
         );
     },
-    parseInitResponse: function(json) {
-        for(var i in json.data) {
-            var _player = json.data[i].player,
-                player  = this.findPlayerByName(_player.name);
-            if(player instanceof Player)
-                player.setId(_player.id);
-        }
+    parseInitResponse: function(response) {
+        this.setId(response.id);
+        let self = this;
 
-        this.setId(json.id);
-        this.htmlUpdate();
-    },
-    htmlWipe: function() {
-        this.$area.html('');
-    },
-    htmlUpdate: function() {
-        //for(var i in this.data) {
-        //    this.data[i].player.htmlUpdate();
+        response.data.map(function(el) {
+            let player  = self.findPlayerByName(el.player.name);
+
+            if (undefined !== player) {
+                player.setId(el.player.id);
+            }
+        });
+        //for (let i in response.data) {
+        //    let _player = response.data[i].player,
+        //        player  = this.findPlayerByName(_player.name);
+        //
+        //    if (player instanceof Player) {
+        //        player.setId(_player.id);
+        //    }
         //}
     },
-    updateGame: function(el) {
+    update: function(el) {
+        let config = Player.resources.config,
+            pid = el.parentElement.parentElement.parentElement.getAttribute(config.attribute.id);
+        let player = this.findPlayerById(pid);
 
-        var _config = Player.resources.config,
-            player  = this.findPlayerById(el.parentElement.parentElement.parentElement.getAttribute(_config.attribute.id));
-        if(player instanceof Player && player.type !== _config.type.human) {
-                _config = Cell.resources.config;
-            var cell    = this.cellGet(player.id, el.getAttribute(_config.html.attr.x), el.getAttribute(_config.html.attr.y));
+        if(player instanceof Player && player.type !== config.type.human) {
+            let attr = Cell.resources.config.attribute,
+                cell = this.findCell(player.id, parseInt(el.getAttribute(attr.xAxis)), parseInt(el.getAttribute(attr.yAxis)));
 
-            if(cell instanceof Cell)
+            if(cell instanceof Cell) {
                 this.cellSend({game: this.getJSON(), player: player.getJSON(), cell: cell.getJSON()});
-        }
-    },
-    findByPlayerCriteria: function(criteria, value) {
-        for(var i in this.data) {
-            if(this.data[i][criteria] == value)
-                return this.data[i];
+            }
         }
     },
     findPlayerById: function(id) {
-        return this.findByPlayerCriteria('id', id);
+        return this.players.find(el => el.id == id);
     },
     findPlayerByName: function(name) {
-        return this.findByPlayerCriteria('name', name);
-    },
-    findPlayerByType: function(type) {
-        return this.findByPlayerCriteria('type', type);
+        return this.players.find(el => el.name == name);
     },
     findHumanPlayer: function() {
-        return this.findPlayerByType(Player.resources.config.type.human);
+        return this.players.find(el => el.isHuman());
     },
     cellSend: function(cell) {
         var self = this;
 
-        this.pageMgr.loadingMode(true);
-        this.apiMgr.request('PATCH', this.$area.attr(Game.resources.config.route.turn), JSON.stringify(cell),
-            function(json) {
-                self.pageMgr.loadingMode(false);
-                self.cellUpdate(json);
+        this.apiMgr.request('PATCH', this.$html.attr(Game.resources.config.route.turn), cell,
+            function(response) {
+                self.parseUpdateResponse(response);
+            },
+            function(response) {
+
             }
         );
 
     },
-    cellUpdate: function(json) {
+    parseUpdateResponse: function(response) {
         var _config = Game.resources.config;
-        for(var index in json) {
+        for(var index in response) {
             if(index ===  _config.json.victory) {
-                json[index].player.id != this.findHumanPlayer().id
+                response[index].player.id != this.findHumanPlayer().id
                     ? this.alertMgr.show(_config.text.loss, AlertMgr.resources.config.type.error)
                     : this.alertMgr.show(_config.text.win, AlertMgr.resources.config.type.success);
             } else {
-                var battlefield = json[index];
+                var battlefield = response[index];
                 for(var subIndex in battlefield) {
-                    var cell = this.cellGet(battlefield[subIndex].player.id, battlefield[subIndex].x, battlefield[subIndex].y);
+                    var cell = this.findCell(battlefield[subIndex].player.id, battlefield[subIndex].x, battlefield[subIndex].y);
                     if(cell instanceof Cell) {
                         cell.setState(battlefield[subIndex].s);
                     }
@@ -136,14 +148,19 @@ Game.prototype = {
             }
 
         }
-        this.htmlUpdate();
     },
-    cellGet: function(pid, x, y) {
-        var player = this.findPlayerById(pid);
-        if(player instanceof Player) {
-            var cell = player.battlefield.getCell(x, y);
-            if(cell instanceof Cell)
-                return cell;
+    /**
+     * @param {int} pid
+     * @param {int} x
+     * @param {int} y
+     *
+     * @returns {Cell|undefined}
+     */
+    findCell: function(pid, x, y) {
+        let player = this.findPlayerById(pid);
+
+        if (player instanceof Player) {
+            return player.battlefield.getCell(x, y);
         }
     },
     modalGameInitiation: function() {
@@ -152,6 +169,11 @@ Game.prototype = {
 
         return this;
     },
+    /**
+     * @param {Element} el
+     *
+     * @returns {boolean}
+     */
     modalValidateInput: function(el) {
         var _config = Game.resources.config;
 
@@ -176,9 +198,9 @@ Game.prototype = {
     modalUnlockSubmission: function() {
         this.modalMgr.unlockSubmission(false);
 
-        var _config = Game.resources.config,
-            player  = document.getElementById(_config.trigger.player),
-            bfSize  = document.getElementById(_config.trigger.bfsize);
+        var trigger = Game.resources.config.trigger,
+            player  = document.getElementById(trigger.player),
+            bfSize  = document.getElementById(trigger.bfsize);
 
         if(this.modalValidateInput(player) && this.modalValidateInput(bfSize)) {
             this.modalMgr.unlockSubmission(true);
@@ -210,34 +232,38 @@ Game.resources.config = {
     }
 };
 Game.resources.html = {
+    /**
+     * @returns {string}
+     */
     modal: function() {
-        var config = Game.resources.config;
+        let config = Game.resources.config;
 
-        return '<div class="modal fade">' +
-            '<div class="modal-dialog">' +
-                '<div class="modal-content">' +
-                    '<div class="modal-header">' +
-                        '<button type="button" class="close" data-dismiss="modal">' +
-                            '<span aria-hidden="true">&times;</span>' +
-                        '</button>' +
-                        '<h4 class="modal-title">your details</h4>' +
-                    '</div>' +
-                    '<div class="modal-body">' +
-                        '<div class="form-group">' +
-                            '<label for="' + config.trigger.player + '">nickname</label>' +
-                            '<input type="text" class="form-control" id="' + config.trigger.player + '" placeholder="">' +
+        return '' +
+            '<div class="modal fade">' +
+                '<div class="modal-dialog">' +
+                    '<div class="modal-content">' +
+                        '<div class="modal-header">' +
+                            '<button type="button" class="close" data-dismiss="modal">' +
+                                '<span aria-hidden="true">&times;</span>' +
+                            '</button>' +
+                            '<h4 class="modal-title">your details</h4>' +
                         '</div>' +
-                        '<div class="form-group">' +
-                            '<label for="' + config.trigger.bfsize + '">battlefield size</label>' +
-                            '<input type="test" class="form-control" id="' + config.trigger.bfsize + '"' +
-                                ' placeholder="between ' + config.limits.minBFSize + ' and ' + config.limits.maxBFSize + '">' +
+                        '<div class="modal-body">' +
+                            '<div class="form-group">' +
+                                '<label for="' + config.trigger.player + '">nickname</label>' +
+                                '<input type="text" class="form-control" id="' + config.trigger.player + '" placeholder="">' +
+                            '</div>' +
+                            '<div class="form-group">' +
+                                '<label for="' + config.trigger.bfsize + '">battlefield size</label>' +
+                                '<input type="test" class="form-control" id="' + config.trigger.bfsize + '"' +
+                                    ' placeholder="between ' + config.limits.minBFSize + ' and ' + config.limits.maxBFSize + '">' +
+                            '</div>' +
                         '</div>' +
-                    '</div>' +
-                    '<div class="modal-footer">' +
-                        '<button type="button" id="new-game-btn" class="btn btn-primary" disabled="disabled">next step</button>' +
+                        '<div class="modal-footer">' +
+                            '<button type="button" id="new-game-btn" class="btn btn-primary" disabled="disabled">next step</button>' +
+                        '</div>' +
                     '</div>' +
                 '</div>' +
-            '</div>' +
-        '</div>'
+            '</div>'
     }
 };

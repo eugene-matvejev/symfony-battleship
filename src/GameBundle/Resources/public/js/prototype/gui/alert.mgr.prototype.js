@@ -1,29 +1,49 @@
+'use strict';
+
+/**
+ * @constructor
+ */
 function AlertMgr() {
-    this.$area    = $('#notification-area');
-    this.$content = this.$area.find('.notification-content');
+    this.$html = $('#notification-area');
+    this.$content = this.$html.find('.notification-content');
 }
 
 AlertMgr.prototype = {
+    /**
+     * @param {string} txt
+     * @param {string} type
+     *
+     * @returns {AlertMgr}
+     */
     show: function(txt, type) {
-        this.$content.html(txt);
         this.colorByType(type);
-        this.$area.removeClass(PageMgr.resources.config.trigger.css.hidden);
+        this.$content.html(txt);
+        this.$html.removeClass(PageMgr.resources.config.trigger.css.hidden);
 
         return this;
     },
+    /**
+     * @returns {AlertMgr}
+     */
     hide: function() {
-        this.$area.addClass(PageMgr.resources.config.trigger.css.hidden);
+        this.$html.addClass(PageMgr.resources.config.trigger.css.hidden);
 
         return this;
     },
-    colorByType: function(type) {
-        var _type = AlertMgr.resources.config.type;
+    /**
+     * @param {string} _type
+     *
+     * @returns {AlertMgr}
+     */
+    colorByType: function(_type) {
+        let type = AlertMgr.resources.config.type;
+
         switch(type) {
-            case _type.info:
-            case _type.success:
-            case _type.warning:
-            case _type.error:
-                this.$area.removeClass().addClass('alert alert-' + type);
+            case type.info:
+            case type.success:
+            case type.warning:
+            case type.error:
+                this.$html.removeClass().addClass('alert alert-' + _type);
                 break;
         }
 
@@ -34,9 +54,21 @@ AlertMgr.prototype = {
 AlertMgr.resources = {
     config: {
         type: {
+            /**
+             * @type {string}
+             */
             info: 'info',
+            /**
+             * @type {string}
+             */
             success: 'success',
+            /**
+             * @type {string}
+             */
             warning: 'warning',
+            /**
+             * @type {string}
+             */
             error: 'danger'
         }
     }

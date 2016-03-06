@@ -2,44 +2,41 @@
 
 /**
  *
- * @param {jQuery} $area
- * @param {string} playerName
- * @param {bool}   isCPUPlayer
- * @param {int}    battlefieldSize
+ * @param {jQuery}  $area
+ * @param {string}  playerName
+ * @param {boolean} isCPUPlayer
+ * @param {int}     battlefieldSize
  *
  * @constructor
  */
 function Player($area, playerName, isCPUPlayer, battlefieldSize) {
-    let resources  = Player.resources,
-        playerType = resources.config.type;
+    let resources = Player.resources,
+        type      = resources.config.type;
 
     this.$html = $(resources.html.layout());
     $area.append(this.$html);
+    //this.id = 'undefined';
+    //this.name = 'undefined';
+    //this.type = 'undefined';
 
-    this.setName(playerName)
-        .setType(isCPUPlayer !== undefined || isCPUPlayer ? playerType.cpu : playerType.human);
+    this.setId('undefined')
+        .setName(playerName)
+        .setType(isCPUPlayer ? type.cpu : type.human);
 
     this.battlefield = (new Battlefield(battlefieldSize, this.$html.find('.' + resources.config.class.area)));
-    if (this.type === playerType.human) {
+    if (this.isHuman()) {
         this.battlefield.mockData();
     }
 }
 
+/**
+ * @property {int|string} id
+ * @property {int}        type
+ * @property {string}     name
+ */
 Player.prototype = {
     /**
-     * @type {int}
-     */
-    id: 'undefined',
-    /**
-     * @type {string}
-     */
-    name: 'undefined',
-    /**
-     * @type {int}
-     */
-    type: 'undefined',
-    /**
-     * @param {int} id
+     * @param {string|int} id
      *
      * @returns {Player}
      */
@@ -72,7 +69,19 @@ Player.prototype = {
         return this;
     },
     /**
-     * @returns {Object}
+     * @returns {boolean}
+     */
+    isCPU: function() {
+        return this.type === Player.resources.config.type.cpu
+    },
+    /**
+     * @returns {boolean}
+     */
+    isHuman: function() {
+        return !this.isCPU();
+    },
+    /**
+     * @returns {{id: {int}, name: {string}, type: {int}}}
      */
     getJSON: function() {
         return {id: this.id, name: this.name, type: this.type};
@@ -80,8 +89,6 @@ Player.prototype = {
     /**
      * @param {string}     field
      * @param {string|int} value
-     *
-     * @returns {void}
      */
     updateHTML: function(field, value) {
         let config = Player.resources.config;
@@ -100,34 +107,25 @@ Player.prototype = {
 
 Player.resources = {};
 Player.resources.config = {
+    /**
+     * @enum {string}
+     */
     attribute: {
-        /**
-         * @type {string}
-         */
         id: 'data-player-id',
-        /**
-         * @type {string}
-         */
         type: 'data-player-type'
     },
+    /**
+     * @enum {string}
+     */
     class: {
-        /**
-         * @type {string}
-         */
         name: 'player-name',
-        /**
-         * @type {string}
-         */
         area: 'player-field'
     },
+    /**
+     * @enum {int}
+     */
     type: {
-        /**
-         * @type {int}
-         */
         cpu: 1,
-        /**
-         * @type {int}
-         */
         human: 2
     }
 };

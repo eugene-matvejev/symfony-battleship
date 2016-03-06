@@ -1,29 +1,50 @@
+'use strict';
+
+/**
+ * @constructor
+ */
 function ModalMgr() {
-    this.$area = $('#modal-area');
+    this.$html = $('#modal-area');
 }
 
 ModalMgr.prototype = {
+    /**
+     * @returns {ModalMgr}
+     */
     show: function() {
-        this.$area.removeClass(PageMgr.resources.config.trigger.css.hidden);
-        this.$area.find('.modal').modal({ keyboard: false });
+        this.$html.removeClass(PageMgr.resources.config.trigger.css.hidden);
+        this.$html.find('.modal').modal({ keyboard: false });
 
         return this;
     },
+    /**
+     * @returns {ModalMgr}
+     */
     hide: function() {
-        this.$area.find('.modal').modal('hide');
+        this.$html.find('.modal').modal('hide');
         $('body').removeClass('modal-open');
         $('.modal-backdrop.fade.in').remove();
 
         return this;
     },
+    /**
+     * @param {string} html
+     *
+     * @returns {ModalMgr}
+     */
     updateHTML: function(html) {
-        this.$area.html(html);
+        this.$html.html(html);
 
         return this;
     },
+    /**
+     * @param {boolean} enable
+     *
+     * @returns {ModalMgr}
+     */
     unlockSubmission: function(enable) {
-        var $btn = this.$area.find('button.btn[type="button"]');
-        enable === undefined || enable
+        let $btn = this.$html.find('button.btn[type="button"]');
+        undefined === enable || enable
             ? $btn.removeAttr('disabled')
             : $btn.attr('disabled', 'disabled');
 

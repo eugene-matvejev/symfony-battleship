@@ -4,30 +4,64 @@
  * @constructor
  */
 function CellContainer() {
-    this.navX = [];
-    this.navY = [];
-    this.data = [];
-    let asd = this.date.map(el => el.value === '');
-    let asd1;
-    for(let i = 0;;) {
-        asd1.push()
-    }
-
-
+    /**
+     * @type {Cell[]}
+     */
+    this.xAxisNav = [];
+    /**
+     * @type {Cell[]}
+     */
+    this.yAxisNav = [];
+    /**
+     * @type {Cell[]}
+     */
+    this.cells = [];
+    this.id = Math.random();
 }
 
 CellContainer.prototype = {
+    /**
+     * @returns {{x: {int}, y: {int}, s: {int}}[]}
+     */
     getJSON: function() {
-        return this.data;
+        return this.cells.map(el => el.getJSON());
+    },
+    /**
+     * @returns {Cell[]}
+     */
+    getCells: function() {
+        return this.cells;
+    },
+    /**
+     * @param {int} x
+     * @param {int} y
+     *
+     * @returns {Cell|undefined}
+     */
+    getCell: function(x, y) {
+        //for(let i in this.cells) {
+        //    let cell = this.cells[i];
+        //    if(cell.x == x && cell.y == y)
+        //        return cell;
+        //}
+        return this.cells.find(el => el.x === x && el.y === y);
+    },
+    /**
+     * @param {Cell} cell
+     *
+     * @returns {CellContainer}
+     */
+    addCell: function(cell) {
+        this.cells.push(cell);
+
+        return this;
     }
 };
 
 CellContainer.resources = {};
 CellContainer.resources.html = {
     /**
-     * @returns {string}
+     * @type {string}
      */
-    layout: function () {
-        return '<div class="row battlefield-cell-container"></div>';
-    }
+    layout: '<div class="row battlefield-cell-container"></div>'
 };

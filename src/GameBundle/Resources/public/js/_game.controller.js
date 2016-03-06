@@ -1,31 +1,32 @@
-$(document).ready(function() {
-    var game         = new Game(),
-        gameConfig   = Game.resources.config,
-        cellConfig   = Cell.resources.config,
-        pageConfig   = PageMgr.resources.config,
-        playerConfig = Player.resources.config;
+'use strict';
+let game         = new Game(),
+    gameConfig   = Game.resources.config,
+    pageConfig   = PageMgr.resources.config,
+    playerConfig = Player.resources.config;
 
-    game.pageMgr.switchSection(document.querySelector('li[data-action="' + pageConfig.action.game.new + '"]'));
+$(document).ready(function() {
+
     //var el = document.querySelector('li[data-section="' + pageConfig.section.statistics + '"]');
     //game.pageMgr.switchSection(el);
     //var statisticsMgr = new Statistics();
     //    statisticsMgr.pageMgr.switchSection(el);
     //    statisticsMgr.fetch(1);
 
+    game.pageMgr.switchSection(document.querySelector('li[data-action="' + pageConfig.action.game.new + '"]'));
     game.init(
         [
-            {id:  1, name: 'CPU'},
-            {id: '', name: 'Human'}
+            {name: 'CPU', isCPU: true},
+            {name: 'Human'}
         ],
         7
     );
 
     $('#game-area')
-        .on('click', '.player-area:not(.finished)[' + playerConfig.attribute.type + '="' + playerConfig.type.cpu + '"]' +
-                    ' .battlefield-cell[data-s="' + cellConfig.state.seaLive + '"]', function(e) {
+        .on('click', '.player-area:not([' + playerConfig.attribute.type + '="' + playerConfig.type.player + '"]):not(.finished)' +
+                    ' .battlefield-cell[data-s="' + Cell.resources.config.state.sea.live + '"]', function(e) {
             e.stopPropagation();
 
-            game.updateGame(this);
+            game.update(this);
         });
     $('.page-sidebar')
         .on('click', 'li[data-action="' + pageConfig.action.game.new + '"]', function(e) {
