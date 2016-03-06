@@ -10,7 +10,7 @@ function Game() {
     this.alertMgr = new AlertMgr();
     this.modalMgr = new ModalMgr();
 
-    this.id       = 'undefined';
+    this.setId('undefined');
     this.players  = [];
 }
 
@@ -19,12 +19,8 @@ function Game() {
  * @property {Player[]} players
  */
 Game.prototype = {
-    ///**
-    // * @type {int|string}
-    // */
-    //id: 'undefined',
     /**
-     * @param {int} id
+     * @param {int|string} id
      *
      * @returns {Game}
      */
@@ -44,7 +40,7 @@ Game.prototype = {
      * @param {int} battlefieldSize
      */
     init: function(players, battlefieldSize) {
-        this.id      = 'undefined';
+        this.setId('undefined');
         this.players = [];
         this.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="' + PageMgr.resources.config.section.game + '"]'));
 
@@ -85,25 +81,17 @@ Game.prototype = {
                 player.setId(el.player.id);
             }
         });
-        //for (let i in response.data) {
-        //    let _player = response.data[i].player,
-        //        player  = this.findPlayerByName(_player.name);
-        //
-        //    if (player instanceof Player) {
-        //        player.setId(_player.id);
-        //    }
-        //}
     },
     update: function(el) {
         let config = Player.resources.config,
-            pid = el.parentElement.parentElement.parentElement.getAttribute(config.attribute.id);
-        let player = this.findPlayerById(pid);
+            pid = el.parentElement.parentElement.parentElement.getAttribute(config.attribute.id),
+            player = this.findPlayerById(pid);
 
-        if(player instanceof Player && player.type !== config.type.human) {
+        if (undefined !== player && player.isCPU()) {
             let attr = Cell.resources.config.attribute,
                 cell = this.findCell(player.id, parseInt(el.getAttribute(attr.xAxis)), parseInt(el.getAttribute(attr.yAxis)));
 
-            if(cell instanceof Cell) {
+            if (undefined !== cell) {
                 this.cellSend({game: this.getJSON(), player: player.getJSON(), cell: cell.getJSON()});
             }
         }

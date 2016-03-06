@@ -1,7 +1,6 @@
 'use strict';
 
 /**
- *
  * @param {jQuery}  $area
  * @param {string}  playerName
  * @param {boolean} isCPUPlayer
@@ -15,9 +14,6 @@ function Player($area, playerName, isCPUPlayer, battlefieldSize) {
 
     this.$html = $(resources.html.layout());
     $area.append(this.$html);
-    //this.id = 'undefined';
-    //this.name = 'undefined';
-    //this.type = 'undefined';
 
     this.setId('undefined')
         .setName(playerName)
@@ -36,7 +32,7 @@ function Player($area, playerName, isCPUPlayer, battlefieldSize) {
  */
 Player.prototype = {
     /**
-     * @param {string|int} id
+     * @param {int|string} id
      *
      * @returns {Player}
      */
@@ -138,7 +134,7 @@ Player.resources.html = {
 
         return '' +
             '<div class="col-md-6 player-area" ' + config.attribute.id + '="unk" ' + config.attribute.type + '="unk">' +
-                '<div class="' + config.class.name + '">unk</div>' +
+                '<div class="' + config.class.name + '">undefined</div>' +
                 '<div class="' + config.class.area +'"></div>' +
             '</div>';
     }
