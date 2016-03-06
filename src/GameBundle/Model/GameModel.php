@@ -114,13 +114,16 @@ class GameModel
     {
         $arr = json_decode($json);
         $std = new \stdClass();
+        $std->cells = [];
 
         if (null === $game = $this->gameRepository->find($arr->game->id)) {
             throw new GameException(__FUNCTION__ . ' game: ' . $arr->game->id . ' don\'t exists.');
         }
 
         if (null !== $game->getResult()) {
-            return $std->victory = GameResultModel::getJSON($game->getResult());
+            $std->victory = GameResultModel::getJSON($game->getResult());
+
+            return $std;
         }
 
         foreach ($game->getBattlefields() as $battlefield) {
@@ -135,11 +138,7 @@ class GameModel
         $this->om->flush();
 
         foreach (CellModel::getChangedCells() as $cell) {
-            if (empty($std->{$cell->getBattlefield()->getId()})) {
-                $std->{$cell->getBattlefield()->getId()} = [];
-            }
-
-            $std->{$cell->getBattlefield()->getId()}[] = CellModel::getJSON($cell);
+            $std->cells[] = CellModel::getJSON($cell);
         }
 
         return $std;
