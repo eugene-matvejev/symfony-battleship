@@ -17,6 +17,6 @@ $(document).ready(function () {
         .on('click', 'button.button:not(.disabled)', function(e) {
             e.stopPropagation();
 
-            pageMgr.fetch();
+            pageMgr.fetch(1);
         });
 });

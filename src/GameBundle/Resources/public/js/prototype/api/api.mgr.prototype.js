@@ -4,7 +4,7 @@ function APIMgr() {
 
 APIMgr.prototype = {
     request: function(requestMethod, requestURL, requestData, onSuccess, onError, onComplete) {
-        console.log(requestMethod, requestURL, requestData);
+//        console.log(requestMethod, requestURL, requestData);
         var self = this;
         if(onError === undefined) {
             onError = function() {
@@ -13,7 +13,7 @@ APIMgr.prototype = {
         }
         if(onComplete === undefined) {
             onComplete = function(json) {
-                console.log(' >>> ' + requestMethod, requestURL, json, json.responseText);
+//                console.log(' >>> ' + requestMethod, requestURL, json, json.responseText);
             };
         }
 
