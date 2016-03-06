@@ -1,3 +1,10 @@
+'use strict';
+
+/**
+ * @param $el
+ *
+ * @constructor
+ */
 function UI($el) {
     this.$area = $el;
 }
@@ -46,22 +53,27 @@ UI.resources.config = {
     }
 };
 UI.resources.html = {
+    /**
+     * @returns {string}
+     */
     layout: function() {
-        var attr = UI.resources.config.attr;
-        return '<div class="pagination-area">' +
-                    '<div class="btn-group btn-group-xs" role="group" aria-label="statistics-pagination">' +
-                        '<button id="' + attr.id.prev + '" type="button" class="btn btn-default">' +
-                            '<span class="glyphicon glyphicon-chevron-left"></span>' +
-                        '</button>' +
-                        '<button id="' + attr.id.curr + '" type="button" class="btn btn-default" disabled="disabled">' +
-                            '<span></span>' +
-                            '<span> of </span>' +
-                            '<span></span>' +
-                        '</button>' +
-                        '<button id="' + attr.id.next + '" type="button" class="btn btn-default">' +
-                            '<span class="glyphicon glyphicon-chevron-right"></span>' +
-                        '</button>' +
-                    '</div>' +
-                '</div>';
+        let attr = UI.resources.config.attr;
+
+        return '' +
+            '<div class="pagination-area">' +
+                '<div class="btn-group btn-group-xs" role="group" aria-label="statistics-pagination">' +
+                    '<button id="' + attr.id.prev + '" type="button" class="btn btn-default">' +
+                        '<span class="glyphicon glyphicon-chevron-left"></span>' +
+                    '</button>' +
+                    '<button id="' + attr.id.curr + '" type="button" class="btn btn-default" disabled="disabled">' +
+                        '<span></span>' +
+                        '<span> of </span>' +
+                        '<span></span>' +
+                    '</button>' +
+                    '<button id="' + attr.id.next + '" type="button" class="btn btn-default">' +
+                        '<span class="glyphicon glyphicon-chevron-right"></span>' +
+                    '</button>' +
+                '</div>' +
+            '</div>';
     }
 };

@@ -4,9 +4,9 @@
  * @constructor
  */
 function Statistics() {
+    this.$html      = $('div#stats-area');
     this.apiMgr     = new APIMgr();
     this.pageMgr    = new PageMgr();
-    this.$html      = $('div#stats-area');
     this.$paginator = new UI(this.$html, undefined, undefined, undefined, undefined);
 }
 
@@ -18,23 +18,20 @@ Statistics.prototype = {
         let self = this,
             url  = this.$html.attr(Statistics.resources.config.attribute.route) + page;
 
-        this.pageMgr.loadingMode(true);
-
         this.apiMgr.request('GET', url, undefined,
-            function(json) {
-                self.updateHTML(json);
-                self.pageMgr.loadingMode(false);
+            function(response) {
+                self.updateHTML(response);
+            },
+            function(response) {
             }
         );
     },
     /**
      * @param {Object} response
-     *
-     * @returns {void}
      */
     updateHTML: function(response) {
-        let page   = response.meta.page,
-            html   = Statistics.resources.html,
+        let html   = Statistics.resources.html,
+            page   = response.meta.page,
             $table = $(html.table());
 
         response.data.every(el => $table.append(html.row(el)));

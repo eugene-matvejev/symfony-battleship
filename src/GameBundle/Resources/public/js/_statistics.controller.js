@@ -13,6 +13,6 @@ $(document).ready(function() {
         .on('click', 'button[data-page]', function(e) {
             e.stopPropagation();
 
-            statistics.fetch(this.getAttribute('data-page'));
+            statistics.fetch(parseInt(this.getAttribute('data-page')));
         });
 });

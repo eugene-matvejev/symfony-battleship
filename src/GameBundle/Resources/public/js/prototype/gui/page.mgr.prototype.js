@@ -1,3 +1,8 @@
+'use strict';
+
+/**
+ * @constructor
+ */
 function PageMgr() {
     this.modalMgr   = new ModalMgr();
     this.alertMgr   = new AlertMgr();
