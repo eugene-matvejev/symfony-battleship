@@ -45,8 +45,8 @@ class AIStrategyServiceTest extends ExtendedTestCase
             }
         }
 
-        $cells = $this->strategyService->attack($battlefield);
-        $this->assertCount(4, $cells);
+//        $cells = $this->strategyService->attack($battlefield);
+//        $this->assertCount(4, $cells);
 //
 //        foreach ($battlefield->getCells() as $cell) {
 //            if ($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED || $this->isShipDead($cell)) {
