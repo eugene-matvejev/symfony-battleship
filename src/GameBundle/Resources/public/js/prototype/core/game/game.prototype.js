@@ -116,26 +116,46 @@ Game.prototype = {
 
             }
         );
-
     },
+    /**
+     * @param {{cells: [], victory: {Object}}} response
+     */
     parseUpdateResponse: function(response) {
-        var _config = Game.resources.config;
-        for(var index in response) {
-            if(index ===  _config.json.victory) {
-                response[index].player.id != this.findHumanPlayer().id
-                    ? this.alertMgr.show(_config.text.loss, AlertMgr.resources.config.type.error)
-                    : this.alertMgr.show(_config.text.win, AlertMgr.resources.config.type.success);
-            } else {
-                var battlefield = response[index];
-                for(var subIndex in battlefield) {
-                    var cell = this.findCell(battlefield[subIndex].player.id, battlefield[subIndex].x, battlefield[subIndex].y);
-                    if(cell instanceof Cell) {
-                        cell.setState(battlefield[subIndex].s);
-                    }
-                }
-            }
+        let self = this;
+        response.cells.map(function(el) {
+            let cell = self.findCell(el.player.id, el.x, el.y);
 
+            if (undefined !== cell) {
+                cell.setState(el.s);
+            }
+        });
+
+        if (undefined !== response.victory) {
+            let text = Game.resources.config.text,
+                type = AlertMgr.resources.config.type,
+                player = this.findPlayerById(response.victory.player.id);
+
+            if (undefined !== player) {
+                player.isHuman()
+                    ? this.alertMgr.show(text.win, type.success)
+                    : this.alertMgr.show(text.loss, type.error);
+            }
         }
+        //for(var index in response) {
+        //    if(index ===  _config.json.victory) {
+        //        response[index].player.id != this.findHumanPlayer().id
+        //            ? this.alertMgr.show(_config.text.loss, AlertMgr.resources.config.type.error)
+        //            : this.alertMgr.show(_config.text.win, AlertMgr.resources.config.type.success);
+        //    } else {
+        //        var battlefield = response[index];
+        //        for(var subIndex in battlefield) {
+        //            var cell = this.findCell(battlefield[subIndex].player.id, battlefield[subIndex].x, battlefield[subIndex].y);
+        //            if(cell instanceof Cell) {
+        //                cell.setState(battlefield[subIndex].s);
+        //            }
+        //        }
+        //    }
+        //}
     },
     /**
      * @param {int} pid
