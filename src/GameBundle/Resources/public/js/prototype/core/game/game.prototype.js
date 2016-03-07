@@ -70,6 +70,9 @@ Game.prototype = {
             }
         );
     },
+    /**
+     * @param {{id: {int}, data: []}}response
+     */
     parseInitResponse: function(response) {
         this.setId(response.id);
         let self = this;
@@ -82,6 +85,9 @@ Game.prototype = {
             }
         });
     },
+    /**
+     * @param {Element} el
+     */
     update: function(el) {
         let config = Player.resources.config,
             pid = el.parentElement.parentElement.parentElement.getAttribute(config.attribute.id),
@@ -96,15 +102,25 @@ Game.prototype = {
             }
         }
     },
+    /**
+     * @param id {int}
+     *
+     * @returns {Player|undefined}
+     */
     findPlayerById: function(id) {
         return this.players.find(el => el.id == id);
     },
+    /**
+     * @param name {string}
+     *
+     * @returns {Player|undefined}
+     */
     findPlayerByName: function(name) {
         return this.players.find(el => el.name == name);
     },
-    findHumanPlayer: function() {
-        return this.players.find(el => el.isHuman());
-    },
+    /**
+     * @param {Cell} cell
+     */
     cellSend: function(cell) {
         var self = this;
 
@@ -116,36 +132,41 @@ Game.prototype = {
 
             }
         );
-
     },
+    /**
+     * @param {{cells: [], victory: {Object}}} response
+     */
     parseUpdateResponse: function(response) {
-        var _config = Game.resources.config;
-        for(var index in response) {
-            if(index ===  _config.json.victory) {
-                response[index].player.id != this.findHumanPlayer().id
-                    ? this.alertMgr.show(_config.text.loss, AlertMgr.resources.config.type.error)
-                    : this.alertMgr.show(_config.text.win, AlertMgr.resources.config.type.success);
-            } else {
-                var battlefield = response[index];
-                for(var subIndex in battlefield) {
-                    var cell = this.findCell(battlefield[subIndex].player.id, battlefield[subIndex].x, battlefield[subIndex].y);
-                    if(cell instanceof Cell) {
-                        cell.setState(battlefield[subIndex].s);
-                    }
-                }
-            }
+        let self = this;
+        response.cells.map(function(el) {
+            let cell = self.findCell(el.player.id, el.x, el.y);
 
+            if (undefined !== cell) {
+                cell.setState(el.s);
+            }
+        });
+
+        if (undefined !== response.victory) {
+            let text = Game.resources.config.text,
+                type = AlertMgr.resources.config.type,
+                player = this.findPlayerById(response.victory.player.id);
+
+            if (undefined !== player) {
+                player.isHuman()
+                    ? this.alertMgr.show(text.win, type.success)
+                    : this.alertMgr.show(text.loss, type.error);
+            }
         }
     },
     /**
-     * @param {int} pid
+     * @param {int} playerId
      * @param {int} x
      * @param {int} y
      *
      * @returns {Cell|undefined}
      */
-    findCell: function(pid, x, y) {
-        let player = this.findPlayerById(pid);
+    findCell: function(playerId, x, y) {
+        let player = this.findPlayerById(playerId);
 
         if (player instanceof Player) {
             return player.battlefield.getCell(x, y);
@@ -214,9 +235,6 @@ Game.resources.config = {
     route: {
         turn: 'data-turn-link',
         init: 'data-init-link'
-    },
-    json: {
-        victory: 'victory'
     }
 };
 Game.resources.html = {
