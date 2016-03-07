@@ -71,7 +71,7 @@ Game.prototype = {
         );
     },
     /**
-     * @param {{id: {int}, data: []}}response
+     * @param {{id: {int}, data: []}} response
      */
     parseInitResponse: function(response) {
         this.setId(response.id);
@@ -119,12 +119,12 @@ Game.prototype = {
         return this.players.find(el => el.name == name);
     },
     /**
-     * @param {Cell} cell
+     * @param {{game: {Object}, player: {Object}, cell: {Object}}} requestData
      */
-    cellSend: function(cell) {
+    cellSend: function(requestData) {
         var self = this;
 
-        this.apiMgr.request('PATCH', this.$html.attr(Game.resources.config.route.turn), cell,
+        this.apiMgr.request('PATCH', this.$html.attr(Game.resources.config.route.turn), requestData,
             function(response) {
                 self.parseUpdateResponse(response);
             },
@@ -168,7 +168,7 @@ Game.prototype = {
     findCell: function(playerId, x, y) {
         let player = this.findPlayerById(playerId);
 
-        if (player instanceof Player) {
+        if (undefined !== player) {
             return player.battlefield.getCell(x, y);
         }
     },
@@ -219,19 +219,38 @@ Game.prototype = {
 
 Game.resources = {};
 Game.resources.config = {
+    /**
+     * @enum {string}
+     */
     trigger: {
         player: 'player-nickname',
         bfsize: 'game-battlefield-size'
     },
+    /**
+     * @enum {string}
+     */
     text: {
         win: 'you won',
         loss: 'you lost'
     },
-    limits: {
-        minBFSize: 5,
-        maxBFSize: 15,
-        namePattern: /^[a-zA-Z0-9\.\-\ \@]{1,255}$/
+    pattern: {
+        /**
+         * @enum {string}
+         */
+        battlefield: {
+            min: 5,
+            max: 15
+        },
+        /**
+         * @enum {Object}
+         */
+        username: {
+            pattern: /^[a-zA-Z0-9\.\-\ \@]{1,100}$/
+        }
     },
+    /**
+     * @enum {string}
+     */
     route: {
         turn: 'data-turn-link',
         init: 'data-init-link'
