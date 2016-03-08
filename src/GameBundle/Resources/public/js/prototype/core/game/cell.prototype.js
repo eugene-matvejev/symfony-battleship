@@ -17,23 +17,12 @@ function Cell(x, y, undefinedState) {
 }
 
 /**
+ * @property {jQuery}     $html
  * @property {int|string} x
  * @property {int|string} y
  * @property {int|string} s
  */
 Cell.prototype = {
-    ///**
-    // * @type {int|string}
-    // */
-    //x: 'undefined',
-    ///**
-    // * @type {int|string}
-    // */
-    //y: 'undefined',
-    ///**
-    // * @type {int|string}
-    // */
-    //s: 'undefined',
     /**
      * @param {int} state
      *
@@ -54,8 +43,6 @@ Cell.prototype = {
     /**
      * @param {string}     attr
      * @param {string|int} val
-     *
-     * @returns {void}
      */
     updateHTML: function(attr, val) {
         this.$html.attr(attr, val);

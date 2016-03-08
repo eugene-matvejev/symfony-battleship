@@ -7,6 +7,9 @@ function APIMgr() {
     this.pageMgr = new PageMgr();
 }
 
+/**
+ * @type {PageMgr} pageMgr
+ */
 APIMgr.prototype = {
     /**
      * @param {string}             requestMethod
@@ -17,8 +20,7 @@ APIMgr.prototype = {
      */
     request: function(requestMethod, requestURL, requestData, onSuccess, onError) {
         let self = this;
-        //console.log();
-        console.log(requestData);
+
         if (requestData instanceof Object) {
             requestData = JSON.stringify(requestData);
         }
@@ -36,9 +38,8 @@ APIMgr.prototype = {
             success: onSuccess,
             error: onError,
             timeout: 1000,
-            complete: function(jqXHR, status) {
+            complete: function() {
                 self.pageMgr.loadingMode(false);
-//                console.log(' <<< ' + requestMethod + ' ' + requestURL + ' : ' + status, jqXHR.responseText);
             }
         });
     }

@@ -16,9 +16,13 @@ function CellContainer() {
      * @type {Cell[]}
      */
     this.cells = [];
-    this.id = Math.random();
 }
 
+/**
+ * @property {Cell[]} xAxisNav
+ * @property {Cell[]} yAxisNav
+ * @property {Cell[]} cells
+ */
 CellContainer.prototype = {
     /**
      * @returns {{x: {int}, y: {int}, s: {int}}[]}
@@ -27,23 +31,12 @@ CellContainer.prototype = {
         return this.cells.map(el => el.getJSON());
     },
     /**
-     * @returns {Cell[]}
-     */
-    getCells: function() {
-        return this.cells;
-    },
-    /**
      * @param {int} x
      * @param {int} y
      *
      * @returns {Cell|undefined}
      */
     getCell: function(x, y) {
-        //for(let i in this.cells) {
-        //    let cell = this.cells[i];
-        //    if(cell.x == x && cell.y == y)
-        //        return cell;
-        //}
         return this.cells.find(el => el.x === x && el.y === y);
     },
     /**
