@@ -10,6 +10,9 @@ function Statistics() {
     this.$paginator = new UI(this.$html, undefined, undefined, undefined, undefined);
 }
 
+/**
+ * @property {jQuery} $html
+ */
 Statistics.prototype = {
     /**
      * @param {int} page
@@ -59,14 +62,11 @@ Statistics.resources.text = {
      * @type {string}
      */
     winner: 'Winner',
+    /**
+     * @enum {string}
+     */
     time: {
-        /**
-         * @type {string}
-         */
         start: 'Game started at',
-        /**
-         * @type {string}
-         */
         finish: 'Game started at'
     }
 };

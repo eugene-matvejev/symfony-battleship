@@ -15,6 +15,7 @@ function Game() {
 }
 
 /**
+ * @property {jQuery}   $html
  * @property {int}      id
  * @property {Player[]} players
  */
@@ -37,7 +38,7 @@ Game.prototype = {
     },
     /**
      * @param {{name: {string}, isCPU: {boolean}}[]} players
-     * @param {int} battlefieldSize
+     * @param {int}                                  battlefieldSize
      */
     init: function(players, battlefieldSize) {
         this.setId('undefined');
@@ -138,6 +139,7 @@ Game.prototype = {
      */
     parseUpdateResponse: function(response) {
         let self = this;
+
         response.cells.map(function(el) {
             let cell = self.findCell(el.player.id, el.x, el.y);
 
@@ -235,7 +237,7 @@ Game.resources.config = {
     },
     pattern: {
         /**
-         * @enum {string}
+         * @enum {int}
          */
         battlefield: {
             min: 5,

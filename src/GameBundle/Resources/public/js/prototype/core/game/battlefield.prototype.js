@@ -1,32 +1,25 @@
 'use strict';
 
 /**
- * @param {int}    size
  * @param {jQuery} $el
+ * @param {int}    size
  *
  * @constructor
  */
-function Battlefield(size, $el) {
+function Battlefield($el, size) {
     this.$html = $el;
     this.size  = size;
-    //this.cellContainer = new CellContainer();
+
     this.init()
         .updateHTML();
 }
 
+/**
+ * @property {jQuery}        $html
+ * @property {int}           size
+ * @property {cellContainer} cellContainer
+ */
 Battlefield.prototype = {
-    ///**
-    // * @type {int|string}
-    // */
-    //id: 'undefined',
-    ///**
-    // * @type {int}
-    // */
-    //size: 'undefined',
-    ///**
-    // * @type {CellContainer}
-    // */
-    //cellContainer: undefined,
     /**
      * @returns {Battlefield}
      */

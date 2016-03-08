@@ -19,13 +19,14 @@ function Player($area, playerName, isCPUPlayer, battlefieldSize) {
         .setName(playerName)
         .setType(isCPUPlayer ? type.cpu : type.human);
 
-    this.battlefield = (new Battlefield(battlefieldSize, this.$html.find('.' + resources.config.class.area)));
+    this.battlefield = (new Battlefield(this.$html.find('.' + resources.config.class.area), battlefieldSize));
     if (this.isHuman()) {
         this.battlefield.mockData();
     }
 }
 
 /**
+ * @property {jQuery}     $html
  * @property {int|string} id
  * @property {int}        type
  * @property {string}     name
