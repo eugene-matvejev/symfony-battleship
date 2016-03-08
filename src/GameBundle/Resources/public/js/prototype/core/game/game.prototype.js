@@ -6,8 +6,8 @@
 function Game() {
     this.$html    = $('#game-area');
     this.apiMgr   = new APIMgr();
-    this.pageMgr  = new PageMgr();
     this.alertMgr = new AlertMgr();
+    this.pageMgr  = new PageMgr();
     this.modalMgr = new ModalMgr();
 
     this.setId('undefined');
@@ -15,7 +15,13 @@ function Game() {
 }
 
 /**
+ * @property {APIMgr}   apiMgr
+ * @property {AlertMgr} alertMgr
+ * @property {PageMgr}  pageMgr
+ * @property {ModalMgr} modalMgr
+ *
  * @property {jQuery}   $html
+ *
  * @property {int}      id
  * @property {Player[]} players
  */
@@ -186,34 +192,36 @@ Game.prototype = {
      * @returns {boolean}
      */
     modalValidateInput: function(el) {
-        var _config = Game.resources.config;
+        let config          = Game.resources.config,
+            battlefieldSize = config.pattern.battlefield;
 
-        switch(el.id) {
-            case _config.trigger.player:
-                console.log(el.value);
-                if(!_config.limits.namePattern.test(el.value)) {
+        switch (el.id) {
+            case config.trigger.player:
+                if(!config.pattern.username.test(el.value)) {
                     el.value = el.value.substr(0, el.value.length - 1);
+
                     return false;
                 }
                 return true;
-            case _config.trigger.bfsize:
-                if(el.value.length > 0 && isNaN(el.value))
+            case config.trigger.bfsize:
+                if(isNaN(el.value))
                     el.value = el.value.substr(0, el.value.length - 1);
-                else if(el.value.length > 1 && el.value < _config.limits.minBFSize)
-                    el.value = _config.limits.minBFSize;
-                else if(el.value.length > 2 || el.value > _config.limits.maxBFSize)
-                    el.value = _config.limits.maxBFSize;
-                return el.value >= _config.limits.minBFSize && el.value <= _config.limits.maxBFSize;
+                else if(el.value.length > 1 && el.value < battlefieldSize.min)
+                    el.value = battlefieldSize.min;
+                else if(el.value.length > 2 || el.value > battlefieldSize.max)
+                    el.value = battlefieldSize.max;
+
+                return battlefieldSize.min >= el.value <= battlefieldSize.max;
         }
     },
     modalUnlockSubmission: function() {
         this.modalMgr.unlockSubmission(false);
 
-        var trigger = Game.resources.config.trigger,
-            player  = document.getElementById(trigger.player),
-            bfSize  = document.getElementById(trigger.bfsize);
+        let trigger = Game.resources.config.trigger,
+            isUsernameValid        = this.modalValidateInput(document.getElementById(trigger.player)),
+            isBattlefieldSizeValid = this.modalValidateInput(document.getElementById(trigger.bfsize));
 
-        if(this.modalValidateInput(player) && this.modalValidateInput(bfSize)) {
+        if (isUsernameValid && isBattlefieldSizeValid) {
             this.modalMgr.unlockSubmission(true);
         }
     }
@@ -246,9 +254,7 @@ Game.resources.config = {
         /**
          * @enum {Object}
          */
-        username: {
-            pattern: /^[a-zA-Z0-9\.\-\ \@]{1,100}$/
-        }
+        username: /^[a-zA-Z0-9\.\-\ \@]{1,100}$/
     },
     /**
      * @enum {string}
@@ -283,7 +289,7 @@ Game.resources.html = {
                             '<div class="form-group">' +
                                 '<label for="' + config.trigger.bfsize + '">battlefield size</label>' +
                                 '<input type="test" class="form-control" id="' + config.trigger.bfsize + '"' +
-                                    ' placeholder="between ' + config.limits.minBFSize + ' and ' + config.limits.maxBFSize + '">' +
+                                    ' placeholder="between ' + config.pattern.battlefield.min + ' and ' + config.pattern.battlefield.max + '">' +
                             '</div>' +
                         '</div>' +
                         '<div class="modal-footer">' +
