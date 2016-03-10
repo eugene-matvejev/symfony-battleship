@@ -16,7 +16,7 @@ trait IdentifiableTrait
      *
      * @var int
      */
-    protected $id;
+    private $id;
 
     /**
      * @return int
