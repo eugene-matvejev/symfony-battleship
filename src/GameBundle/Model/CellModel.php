@@ -62,12 +62,6 @@ class CellModel
         return self::$changedCells;
     }
 
-    /**
-     * @param Cell $cell
-     *
-     * @return Cell
-     * @throws CellException
-     */
     public function switchState(Cell $cell) : Cell
     {
         switch ($cell->getState()->getId()) {
@@ -79,8 +73,6 @@ class CellModel
                 $cell->setState(self::$cellStates[self::STATE_SHIP_DIED]);
                 self::$changedCells[] = $cell;
                 break;
-            default:
-                throw new CellException(__FUNCTION__ . '::' . $cell->getId() . ' have inappropriate state');
         }
 
         return $cell;
