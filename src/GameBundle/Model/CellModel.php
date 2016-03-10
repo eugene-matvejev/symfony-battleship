@@ -6,6 +6,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Entity\CellState;
+use EM\GameBundle\Exception\CellException;
+use EM\GameBundle\Repository\CellStateRepository;
 use EM\GameBundle\Service\CoordinateSystem\CoordinatesPair;
 
 /**
@@ -37,10 +39,10 @@ class CellModel
      */
     private static $changedCells = [];
 
-    function __construct(ObjectManager $om)
+    function __construct(CellStateRepository $repository)
     {
         if (null === self::$cellStates) {
-            self::$cellStates = $om->getRepository('GameBundle:CellState')->getAllIndexed();
+            self::$cellStates = $repository->getAllIndexed();
         }
     }
 
@@ -60,6 +62,12 @@ class CellModel
         return self::$changedCells;
     }
 
+    /**
+     * @param Cell $cell
+     *
+     * @return Cell
+     * @throws CellException
+     */
     public function switchState(Cell $cell) : Cell
     {
         switch ($cell->getState()->getId()) {
@@ -71,6 +79,8 @@ class CellModel
                 $cell->setState(self::$cellStates[self::STATE_SHIP_DIED]);
                 self::$changedCells[] = $cell;
                 break;
+            default:
+                throw new CellException(__FUNCTION__ . '::' . $cell->getId() . ' have inappropriate state');
         }
 
         return $cell;
@@ -106,7 +116,7 @@ class CellModel
      */
     public function getByCoordinatesPair(CoordinatesPair $pair)
     {
-        return $this->cachedCells[$pair->getX()][$pair->getY()] ?? null;
+        return $this->getByCoordinates($pair->getX(), $pair->getY());
     }
 
     public function indexCells(Battlefield $battlefield)
@@ -124,11 +134,12 @@ class CellModel
 
     public static function getJSON(Cell $cell) : \stdClass
     {
-        return (object)[
-            'x' => $cell->getX(),
-            'y' => $cell->getY(),
-            's' => $cell->getState()->getId(),
-            'player' => PlayerModel::getJSON($cell->getBattlefield()->getPlayer())
-        ];
+        $std = new \stdClass();
+        $std->x = $cell->getX();
+        $std->y = $cell->getY();
+        $std->s = $cell->getState()->getId();
+        $std->player = PlayerModel::getJSON($cell->getBattlefield()->getPlayer());
+
+        return $std;
     }
 }

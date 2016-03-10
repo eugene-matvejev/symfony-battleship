@@ -2,7 +2,6 @@
 
 namespace EM\GameBundle\Model;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use EM\GameBundle\Repository\GameResultRepository;
 
 /**
@@ -19,10 +18,10 @@ class StatisticsModel
      */
     private $gameResultsPerPage;
 
-    function __construct(ObjectManager $om, int $perPage)
+    function __construct(int $recordsPerPage, GameResultRepository $repository)
     {
-        $this->gameResultRepository = $om->getRepository('GameBundle:GameResult');
-        $this->gameResultsPerPage = $perPage;
+        $this->gameResultsPerPage = $recordsPerPage;
+        $this->gameResultRepository = $repository;
     }
 
     public function overallStatistics(int $currentPage) : array

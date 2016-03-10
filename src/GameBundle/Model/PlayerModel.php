@@ -2,9 +2,9 @@
 
 namespace EM\GameBundle\Model;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Entity\PlayerType;
+use EM\GameBundle\Repository\PlayerTypeRepository;
 
 /**
  * @since 2.0
@@ -19,10 +19,10 @@ class PlayerModel
      */
     private static $playerTypes;
 
-    function __construct(ObjectManager $om)
+    function __construct(PlayerTypeRepository $repository)
     {
         if (null === self::$playerTypes) {
-            self::$playerTypes = $om->getRepository('GameBundle:PlayerType')->getAllIndexed();
+            self::$playerTypes = $repository->getAllIndexed();
         }
     }
 

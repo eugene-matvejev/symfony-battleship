@@ -64,10 +64,10 @@ class GameModel
         $game = new Game();
         $this->om->persist($game);
 
-        foreach (json_decode($json)->data as $_player) {
-            if (null === $player = $this->playerRepository->findOneBy(['name' => $_player->player->name])) {
+        foreach (json_decode($json)->data as $data) {
+            if (null === $player = $this->playerRepository->findOneBy(['name' => $data->player->name])) {
                 $player = (new Player())
-                    ->setName($_player->player->name)
+                    ->setName($data->player->name)
                     ->setType($this->playerModel->getTypes()[PlayerModel::TYPE_HUMAN]);
             }
 
@@ -76,12 +76,12 @@ class GameModel
                 ->setPlayer($player);
             $game->addBattlefield($battlefield);
 
-            foreach ($_player->cells as $_cell) {
+            foreach ($data->cells as $cellData) {
                 $cell = (new Cell())
-                    ->setX($_cell->x)
-                    ->setY($_cell->y)
+                    ->setX($cellData->x)
+                    ->setY($cellData->y)
                     ->setState($battlefield->getPlayer()->getType()->getId() !== PlayerModel::TYPE_CPU
-                        ? $this->cellModel->getCellStates()[$_cell->s]
+                        ? $this->cellModel->getCellStates()[$cellData->s]
                         : $this->cellModel->getCellStates()[CellModel::STATE_WATER_LIVE]);
                 $battlefield->addCell($cell);
             }
@@ -112,13 +112,14 @@ class GameModel
      */
     public function nextTurn(string $json) : \stdClass
     {
-        $arr = json_decode($json);
+        $data = json_decode($json);
+
+        if (null === $game = $this->gameRepository->find($data->game->id)) {
+            throw new GameException(__FUNCTION__ . ' game: ' . $data->game->id . ' don\'t exists.');
+        }
+
         $std = new \stdClass();
         $std->cells = [];
-
-        if (null === $game = $this->gameRepository->find($arr->game->id)) {
-            throw new GameException(__FUNCTION__ . ' game: ' . $arr->game->id . ' don\'t exists.');
-        }
 
         if (null !== $game->getResult()) {
             $std->victory = GameResultModel::getJSON($game->getResult());
@@ -127,7 +128,7 @@ class GameModel
         }
 
         foreach ($game->getBattlefields() as $battlefield) {
-            $this->playerTurn($battlefield, $arr->cell);
+            $this->playerTurn($battlefield, $data->cell);
 
             if (null !== $game->getResult()) {
                 $std->victory = GameResultModel::getJSON($game->getResult());
