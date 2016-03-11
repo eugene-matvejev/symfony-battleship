@@ -2,11 +2,9 @@
 
 namespace EM\GameBundle\Model;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Entity\CellState;
-use EM\GameBundle\Exception\CellException;
 use EM\GameBundle\Repository\CellStateRepository;
 use EM\GameBundle\Service\CoordinateSystem\CoordinatesPair;
 
