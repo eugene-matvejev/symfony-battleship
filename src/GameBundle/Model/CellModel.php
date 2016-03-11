@@ -124,12 +124,11 @@ class CellModel
 
     public static function getJSON(Cell $cell) : \stdClass
     {
-        $std = new \stdClass();
-        $std->x = $cell->getX();
-        $std->y = $cell->getY();
-        $std->s = $cell->getState()->getId();
-        $std->player = PlayerModel::getJSON($cell->getBattlefield()->getPlayer());
-
-        return $std;
+        return (object)[
+            'x' => $cell->getX(),
+            'y' => $cell->getY(),
+            's' => $cell->getState()->getId(),
+            'player' => PlayerModel::getJSON($cell->getBattlefield()->getPlayer())
+        ];
     }
 }
