@@ -3,6 +3,7 @@
 namespace EM\GameBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use EM\GameBundle\ORM\IdentifiableInterface;
 use EM\GameBundle\ORM\IdentifiableTrait;
@@ -20,14 +21,14 @@ class Game implements IdentifiableInterface, TimestampedInterface
 {
     use IdentifiableTrait, TimestampedTrait;
     /**
-     * @ORM\OneToMany(targetEntity="EM\GameBundle\Entity\Battlefield", mappedBy="game", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="EM\GameBundle\Entity\Battlefield", mappedBy="game", cascade={"persist"}, fetch="EAGER")
      * @ORM\JoinColumn(name="id", referencedColumnName="game", nullable=false)
      *
-     * @var Battlefield[]
+     * @var Collection|Battlefield[]
      */
     private $battlefields;
     /**
-     * @ORM\OneToOne(targetEntity="EM\GameBundle\Entity\GameResult", mappedBy="game", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="EM\GameBundle\Entity\GameResult", mappedBy="game", cascade={"persist"}, fetch="EAGER")
      *
      * @var GameResult
      */
@@ -54,9 +55,9 @@ class Game implements IdentifiableInterface, TimestampedInterface
     }
 
     /**
-     * @return Battlefield[]
+     * @return Collection|Battlefield[]
      */
-    public function getBattlefields()
+    public function getBattlefields() : Collection
     {
         return $this->battlefields;
     }
