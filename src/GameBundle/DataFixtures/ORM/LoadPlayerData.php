@@ -29,10 +29,10 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
         $om->persist($playerTypeHuman);
 
         $playerCPU = (new Player())
-            ->setName('TEST CPU')
-            ->setType($playerTypeHuman);
+            ->setName('CPU')
+            ->setType($playerTypeCPU);
         $playerHuman = (new Player())
-            ->setName('TEST PLAYER')
+            ->setName('Human')
             ->setType($playerTypeHuman);
         $om->persist($playerCPU);
         $om->persist($playerHuman);
