@@ -1,0 +1,19 @@
+EM\GameBundle\Entity\PlayerType:
+#    exclusion_policy: ALL
+    xml_root_name: player
+    read_only: true
+    accessor_order: custom
+    custom_accessor_order: [id, type, name]
+
+    properties:
+#        id:
+#            expose: true
+#            type: integer
+#        type:
+#            expose: true
+#            type: string
+#        name:
+#            expose: true
+#            type: EM\GameBundle\Entity\PlayerType
+#            serialized_name: battlefields
+#            read_only: true

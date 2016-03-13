@@ -1,0 +1,15 @@
+EM\GameBundle\Response\GameTurnResponse:
+    xml_root_name: statistics
+    read_only: true
+    accessor_order: custom
+    custom_accessor_order: [meta, data]
+
+    properties:
+        meta:
+            type: array<integer>
+        data:
+            type: array<EM\GameBundle\Entity\GameResult>
+            serialized_name: results
+            xml_list:
+                inline: false
+                entry_name: result

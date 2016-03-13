@@ -45,7 +45,6 @@ class DatabaseSeedCommand extends ContainerAwareCommand
         $opt = [
             'command' => 'doctrine:migrations:migrate',
             '--no-interaction' => true,
-            'version' => 20160103150000,
             ($input->getOption('quiet') ? '--quiet' : '--verbose') => true
 
         ];

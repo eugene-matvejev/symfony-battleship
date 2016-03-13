@@ -27,7 +27,7 @@ class GameResult implements IdentifiableInterface, PlayerInterface, TimestampedI
 {
     use IdentifiableTrait, PlayerTrait, TimestampedTrait;
     /**
-     * @ORM\OneToOne(targetEntity="EM\GameBundle\Entity\Game", inversedBy="result")
+     * @ORM\OneToOne(targetEntity="EM\GameBundle\Entity\Game", inversedBy="result", fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)
      *
      * @var Game
