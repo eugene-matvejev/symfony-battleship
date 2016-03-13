@@ -17,25 +17,38 @@ class GameController extends Controller
         return $this->render('@Game/index.html.twig');
     }
 
-    public function initAction(Request $request) : JsonResponse
+    public function initAction(Request $request, string $format) : Response
     {
         if (empty($request->getContent())) {
             return new JsonResponse();
         }
 
-        $json = $this->get('battleship.game.services.game.model')->init($request->getContent());
+        $game = $this->get('battleship.game.services.game.model')->init($request->getContent());
 
-        return new JsonResponse($json, Response::HTTP_CREATED);
+        return new Response($this->get('jms_serializer')->serialize($game, $format), Response::HTTP_CREATED);
     }
 
-    public function turnAction(Request $request) : JsonResponse
+    public function turnAction(Request $request, string $format) : Response
     {
         if (empty($request->getContent())) {
             return new JsonResponse();
         }
 
-        $json = $this->get('battleship.game.services.game.model')->nextTurn($request->getContent());
+        $response = $this->get('battleship.game.services.game.model')->nextTurn($request->getContent());
 
-        return new JsonResponse($json);
+        return new Response($this->get('jms_serializer')->serialize($response, $format));
+    }
+
+    public function testAction(string $format) : Response
+    {
+        $data = $this->get('doctrine.orm.default_entity_manager')->getRepository('GameBundle:GameResult')->find(1);
+//        $data = $this->get('doctrine.orm.default_entity_manager')->getRepository('GameBundle:Game')->find(1);
+//        $data = $this->get('doctrine.orm.default_entity_manager')->getRepository('GameBundle:Cell')->find(1);
+//        $data = $this->get('doctrine.orm.default_entity_manager')->getRepository('GameBundle:CellState')->find(1);
+//        $data = $this->get('doctrine.orm.default_entity_manager')->getRepository('GameBundle:Player')->find(1);
+//        $data = $this->get('doctrine.orm.default_entity_manager')->getRepository('GameBundle:PlayerType')->find(1);
+//        $data = $this->get('doctrine.orm.default_entity_manager')->getRepository('GameBundle:Battlefield')->find(1);
+
+        return new Response($this->get('jms_serializer')->serialize($data, $format));
     }
 }

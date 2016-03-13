@@ -1,0 +1,17 @@
+EM\GameBundle\Entity\GameResult:
+    accessor_order: custom
+    custom_accessor_order: [id, timestamp, player]
+
+    xml_root_name: gameResult
+#    exclusion_policy: ALL
+
+    properties:
+        id:
+            expose: true
+            type: integer
+        timestamp:
+            expose: true
+            type: DateTime
+        player:
+            expose: true
+            type: EM\GameBundle\Entity\Player

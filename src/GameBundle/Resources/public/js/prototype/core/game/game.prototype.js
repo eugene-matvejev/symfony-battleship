@@ -78,14 +78,14 @@ Game.prototype = {
         );
     },
     /**
-     * @param {{id: {int}, data: []}} response
+     * @param {{id: {int}, battlefields: []}} response
      */
     parseInitResponse: function(response) {
         this.setId(response.id);
         let self = this;
 
-        response.data.map(function(el) {
-            let player  = self.findPlayerByName(el.player.name);
+        response.battlefields.map(function(el) {
+            let player = self.findPlayerByName(el.player.name);
 
             if (undefined !== player) {
                 player.setId(el.player.id);
@@ -141,7 +141,7 @@ Game.prototype = {
         );
     },
     /**
-     * @param {{cells: [], victory: {Object}}} response
+     * @param {{cells: [], result: {Object}}} response
      */
     parseUpdateResponse: function(response) {
         let self = this;
@@ -154,10 +154,10 @@ Game.prototype = {
             }
         });
 
-        if (undefined !== response.victory) {
+        if (undefined !== response.result) {
             let text = Game.resources.config.text,
                 type = AlertMgr.resources.config.type,
-                player = this.findPlayerById(response.victory.player.id);
+                player = this.findPlayerById(response.result.player.id);
 
             if (undefined !== player) {
                 player.isHuman()

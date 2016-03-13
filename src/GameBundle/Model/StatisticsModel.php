@@ -3,9 +3,10 @@
 namespace EM\GameBundle\Model;
 
 use EM\GameBundle\Repository\GameResultRepository;
+use EM\GameBundle\Response\StatisticsResponse;
 
 /**
- * @since 2.0
+ * @since 5.0
  */
 class StatisticsModel
 {
@@ -24,24 +25,11 @@ class StatisticsModel
         $this->gameResultRepository = $repository;
     }
 
-    public function overallStatistics(int $currentPage) : array
+    public function overallStatistics(int $currentPage) : StatisticsResponse
     {
-        $data = [];
-        foreach ($this->gameResultRepository->getAllOrderByDate($currentPage, $this->gameResultsPerPage) as $result) {
-            $data[] = GameResultModel::getJSON($result);
-        }
-
-        return [
-            'data' => $data,
-            'meta' => [
-                'config' => [
-                    'perPage' => $this->gameResultsPerPage
-                ],
-                'page' => [
-                    'curr' => $currentPage,
-                    'total' => ceil($this->gameResultRepository->countTotalResults() / $this->gameResultsPerPage)
-                ]
-            ]
-        ];
+        return (new StatisticsResponse())
+            ->setData($this->gameResultRepository->getAllOrderByDate($currentPage, $this->gameResultsPerPage))
+            ->setCurrentPage($currentPage)
+            ->setTotalPages(ceil($this->gameResultRepository->countTotalResults() / $this->gameResultsPerPage));
     }
 }

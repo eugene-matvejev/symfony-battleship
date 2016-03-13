@@ -1,0 +1,14 @@
+EM\GameBundle\Entity\Cell:
+    xml_root_name: cell
+    accessor_order: custom
+    custom_accessor_order: [id, x, y, state]
+
+    properties:
+        id:
+            type: integer
+        x:
+            type: integer
+        y:
+            type: integer
+        state:
+            type: EM\GameBundle\Entity\CellState

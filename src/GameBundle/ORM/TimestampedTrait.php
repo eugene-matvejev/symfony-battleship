@@ -2,6 +2,8 @@
 
 namespace EM\GameBundle\ORM;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * @since 1.0
  */
@@ -21,10 +23,8 @@ trait TimestampedTrait
 
     /**
      * @ORM\PrePersist
-     *
-     * @return $this
      */
-    public function setTimestamp()
+    public function setTimestamp() : self
     {
         $this->timestamp = new \DateTime();
 
