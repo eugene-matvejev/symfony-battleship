@@ -1,7 +1,8 @@
 EM\GameBundle\Entity\Battlefield:
-    xml_root_name: battlefield
     accessor_order: custom
     custom_accessor_order: [id, player, cells]
+
+    xml_root_name: battlefield
 
     properties:
         id:

@@ -2,7 +2,7 @@ EM\GameBundle\Entity\Game:
     accessor_order: custom
     custom_accessor_order: [id, timestamp, result, battlefields]
 
-#    xml_root_name: game
+    xml_root_name: game
 
     properties:
         id:

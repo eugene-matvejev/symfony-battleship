@@ -3,17 +3,13 @@ EM\GameBundle\Entity\Player:
     custom_accessor_order: [id, type, name]
 
     xml_root_name: player
-#    exclusion_policy: ALL
 
-#    properties:
-#        id:
-#            expose: true
-#            type: integer
-#        type:
-#            expose: true
-#            type: string
-#        name:
-#            expose: true
-#            type: EM\GameBundle\Entity\PlayerType
-#            serialized_name: battlefields
-#            read_only: true
+    properties:
+        id:
+            type: integer
+        type:
+            type: EM\GameBundle\Entity\PlayerType
+        name:
+            type: string
+            xml_element:
+                cdata: false
