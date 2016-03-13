@@ -188,14 +188,14 @@ class GameModel
 
     public static function getJSON(Game $game) : \stdClass
     {
-        $std = new \stdClass();
-        $std->id = $game->getId();
-        $std->data = [];
-
+        $data = [];
         foreach ($game->getBattlefields() as $battlefield) {
-            $std->data[] = BattlefieldModel::getJSON($battlefield);
+            $data[] = BattlefieldModel::getJSON($battlefield);
         }
 
-        return $std;
+        return (object)[
+            'id' => $game->getId(),
+            'data' => $data
+        ];
     }
 }

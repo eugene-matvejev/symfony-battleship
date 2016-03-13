@@ -3,6 +3,7 @@
 namespace EM\GameBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use EM\GameBundle\ORM\IdentifiableInterface;
 use EM\GameBundle\ORM\IdentifiableTrait;
@@ -31,9 +32,9 @@ class Battlefield implements IdentifiableInterface, PlayerInterface
      */
     private $game;
     /**
-     * @ORM\OneToMany(targetEntity="EM\GameBundle\Entity\Cell", mappedBy="battlefield", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="EM\GameBundle\Entity\Cell", mappedBy="battlefield", cascade={"persist"}, fetch="EAGER")
      *
-     * @var Cell[]
+     * @var Collection|Cell[]
      */
     private $cells;
 
@@ -70,9 +71,9 @@ class Battlefield implements IdentifiableInterface, PlayerInterface
     }
 
     /**
-     * @return Cell[]
+     * @return Collection|Cell[]
      */
-    public function getCells()
+    public function getCells() : Collection
     {
         return $this->cells;
     }
