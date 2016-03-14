@@ -38,7 +38,7 @@ AlertMgr.prototype = {
     colorByType: function(_type) {
         let type = AlertMgr.resources.config.type;
 
-        switch(type) {
+        switch(_type) {
             case type.info:
             case type.success:
             case type.warning:
