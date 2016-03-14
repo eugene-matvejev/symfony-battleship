@@ -2,4 +2,5 @@ parameters:
 #    parameter_name: value
 
 #imports:
-#    - { resource: @GameBundle/Resources/config/services.yml }
+#    - { resource: "@GameBundle/Resources/config/services.yml" }
+

@@ -36,8 +36,7 @@ class AIStrategyServiceTest extends ExtendedTestCase
         $this->assertCount(0, $cells);
 
         $cellState = (new CellState())
-            ->setId(CellModel::STATE_SHIP_DIED)
-            ->setName('test cell state');
+            ->setId(CellModel::STATE_SHIP_DIED);
 
         foreach ($battlefield->getCells() as $cell) {
             if ($cell->getX() === 2 && $cell->getY() === 2) {
@@ -73,7 +72,6 @@ class AIStrategyServiceTest extends ExtendedTestCase
     {
         $battlefield = new Battlefield();
         $cellState = (new CellState())
-            ->setName('test cell state')
             ->setId(CellModel::STATE_WATER_LIVE);
         for ($x = 0; $x < 10; $x++) {
             for ($y = 0; $y < 10; $y++) {
