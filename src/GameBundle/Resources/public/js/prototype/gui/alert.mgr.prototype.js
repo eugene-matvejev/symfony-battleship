@@ -8,6 +8,10 @@ function AlertMgr() {
     this.$content = this.$html.find('.notification-content');
 }
 
+/**
+ * @property {jQuery} $html
+ * @property {jQuery} $content
+ */
 AlertMgr.prototype = {
     /**
      * @param {string} txt
@@ -53,22 +57,13 @@ AlertMgr.prototype = {
 
 AlertMgr.resources = {
     config: {
+        /**
+         * @enum {string}
+         */
         type: {
-            /**
-             * @type {string}
-             */
             info: 'info',
-            /**
-             * @type {string}
-             */
             success: 'success',
-            /**
-             * @type {string}
-             */
             warning: 'warning',
-            /**
-             * @type {string}
-             */
             error: 'danger'
         }
     }
