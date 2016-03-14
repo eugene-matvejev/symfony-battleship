@@ -38,17 +38,4 @@ class GameController extends Controller
 
         return new Response($this->get('jms_serializer')->serialize($response, $format));
     }
-
-    public function testAction(string $format) : Response
-    {
-        $data = $this->get('doctrine.orm.default_entity_manager')->getRepository('GameBundle:GameResult')->find(1);
-//        $data = $this->get('doctrine.orm.default_entity_manager')->getRepository('GameBundle:Game')->find(1);
-//        $data = $this->get('doctrine.orm.default_entity_manager')->getRepository('GameBundle:Cell')->find(1);
-//        $data = $this->get('doctrine.orm.default_entity_manager')->getRepository('GameBundle:CellState')->find(1);
-//        $data = $this->get('doctrine.orm.default_entity_manager')->getRepository('GameBundle:Player')->find(1);
-//        $data = $this->get('doctrine.orm.default_entity_manager')->getRepository('GameBundle:PlayerType')->find(1);
-//        $data = $this->get('doctrine.orm.default_entity_manager')->getRepository('GameBundle:Battlefield')->find(1);
-
-        return new Response($this->get('jms_serializer')->serialize($data, $format));
-    }
 }

@@ -86,7 +86,7 @@ class GameModel
         }
         $this->om->flush();
 
-        return $game; //self::getJSON($game);
+        return $game;
     }
 
     public function initCPUShips(Battlefield $battlefield)
@@ -177,18 +177,5 @@ class GameModel
         }
 
         return false;
-    }
-
-    public static function getJSON(Game $game) : \stdClass
-    {
-        $data = [];
-        foreach ($game->getBattlefields() as $battlefield) {
-            $data[] = BattlefieldModel::getJSON($battlefield);
-        }
-
-        return (object)[
-            'id' => $game->getId(),
-            'data' => $data
-        ];
     }
 }

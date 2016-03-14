@@ -1,15 +1,16 @@
 EM\GameBundle\Response\StatisticsResponse:
-    xml_root_name: statistics
-    read_only: true
     accessor_order: custom
-    custom_accessor_order: [meta, data]
+    custom_accessor_order: [meta, results]
+
+    xml_root_name: statistics
 
     properties:
         meta:
-            type: array<integer>
-        data:
+            type: array<string, integer>
+            inline: false
+            xml_key_value_pairs: true
+        results:
             type: array<EM\GameBundle\Entity\GameResult>
-            serialized_name: results
             xml_list:
                 inline: false
                 entry_name: result

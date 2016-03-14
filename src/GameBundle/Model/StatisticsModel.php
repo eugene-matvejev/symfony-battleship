@@ -28,7 +28,7 @@ class StatisticsModel
     public function overallStatistics(int $currentPage) : StatisticsResponse
     {
         return (new StatisticsResponse())
-            ->setData($this->gameResultRepository->getAllOrderByDate($currentPage, $this->gameResultsPerPage))
+            ->setResults($this->gameResultRepository->getAllOrderByDate($currentPage, $this->gameResultsPerPage))
             ->setCurrentPage($currentPage)
             ->setTotalPages(ceil($this->gameResultRepository->countTotalResults() / $this->gameResultsPerPage));
     }

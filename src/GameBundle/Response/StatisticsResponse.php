@@ -2,20 +2,48 @@
 
 namespace EM\GameBundle\Response;
 
+use EM\GameBundle\GameBundle;
+
 /**
  * @since 5.0
  */
-class StatisticsResponse extends AbstractResponse
+class StatisticsResponse
 {
-    const META_INDEX_TOTAL_PAGES = 'totalPages';
-    const META_INDEX_PER_PAGE = 'perPages';
-    const META_INDEX_CURRENT_PAG = 'currentPages';
+    const META_INDEX_CURRENT_PAGE = 'currentPage';
+    const META_INDEX_TOTAL_PAGES  = 'totalPages';
     /**
-     * @var string[]|int[]
+     * @var GameBundle[]
+     */
+    private $results = [];
+    /**
+     * @var string[]
      */
     private $meta = [];
 
-    public function getMeta() : array
+    /**
+     * @return GameBundle[]
+     */
+    public function getResults() : array
+    {
+        return $this->results;
+    }
+
+    /**
+     * @param GameBundle[] $results
+     *
+     * @return $this
+     */
+    public function setResults(array $results) : self
+    {
+        $this->results = $results;
+
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getMeta()
     {
         return $this->meta;
     }
@@ -36,7 +64,7 @@ class StatisticsResponse extends AbstractResponse
 
     public function setCurrentPage(int $value) : self
     {
-        $this->setMeta(self::META_INDEX_PER_PAGE, $value);
+        $this->setMeta(self::META_INDEX_CURRENT_PAGE, $value);
 
         return $this;
     }

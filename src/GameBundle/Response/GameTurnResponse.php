@@ -8,20 +8,44 @@ use EM\GameBundle\Entity\GameResult;
 /**
  * @since 5.0
  */
-class GameTurnResponse extends AbstractResponse
+class GameTurnResponse
 {
-    public function __construct()
-    {
-        $this->data['cells'] = [];
-    }
+    /**
+     * @var array
+     */
+    private $cells = [];
+    /**
+     * @var GameResult
+     */
+    private $result;
 
     public function addCell(Cell $cell) : self
     {
-        $this->data['cells'][] = $cell;
+        $this->cells[] = ['cell' => $cell, 'player' => $cell->getBattlefield()->getPlayer()];
+
+        return $this;
+    }
+
+    /**
+     * @return Cell[]
+     */
+    public function getCells() : array
+    {
+        return $this->cells;
+    }
+
+    /**
+     * @return GameResult
+     */
+    public function getResult()
+    {
+        return $this->result;
     }
 
     public function setGameResult(GameResult $result) : self
     {
-        $this->data['result'] = $result;
+        $this->result = $result;
+
+        return $this;
     }
 }

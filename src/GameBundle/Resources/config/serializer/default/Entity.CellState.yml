@@ -1,5 +1,0 @@
-EM\GameBundle\Entity\CellState:
-    xml_root_name: cellState
-    properties:
-        id:
-            type: integer

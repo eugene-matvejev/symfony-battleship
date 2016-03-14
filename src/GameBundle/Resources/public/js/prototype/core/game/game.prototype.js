@@ -141,16 +141,16 @@ Game.prototype = {
         );
     },
     /**
-     * @param {{cells: [], result: {Object}}} response
+     * @param {{cells: {cell: {Object}, player: {Object}}[], result: {player: {Object}}}} response
      */
     parseUpdateResponse: function(response) {
         let self = this;
 
         response.cells.map(function(el) {
-            let cell = self.findCell(el.player.id, el.x, el.y);
+            let cell = self.findCell(el.player.id, el.cell.x, el.cell.y);
 
             if (undefined !== cell) {
-                cell.setState(el.s);
+                cell.setState(el.cell.state.id);
             }
         });
 
@@ -252,7 +252,7 @@ Game.resources.config = {
             max: 15
         },
         /**
-         * @enum {Object}
+         * @type {Object}
          */
         username: /^[a-zA-Z0-9\.\-\ \@]{1,100}$/
     },

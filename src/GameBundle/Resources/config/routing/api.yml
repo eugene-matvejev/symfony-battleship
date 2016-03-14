@@ -1,25 +1,19 @@
 battleship.game.api.statistics:
-  path:     statistics/page/{page}/{format}
-  defaults: { _controller: GameBundle:Statistics:overall, page: 1, format: json}
-  methods:  [GET]
-  requirements:
-    format: json|xml
-    page: \d+
+    path:     statistics/page/{page}/{format}
+    defaults: { _controller: GameBundle:Statistics:overall, page: 1, format: json}
+    methods:  [GET]
+    requirements:
+        format: json|xml
+        page: \d+
 battleship.game.api.init:
-  path:     init/{format}
-  defaults: { _controller: GameBundle:Game:init, format: json }
-  methods:  [POST]
-  requirements:
-    format: json|xml
+    path:     init/{format}
+    defaults: { _controller: GameBundle:Game:init, format: json }
+    methods:  [POST]
+    requirements:
+        format: json|xml
 battleship.game.api.turn:
-  path:     turn/{format}
-  defaults: { _controller: GameBundle:Game:turn, format: json }
-  methods:  [PATCH]
-  requirements:
-    format: json|xml
-battleship.game.api.test:
-  path:     test/{format}
-  defaults: { _controller: GameBundle:Game:test, format: json }
-  methods:  [GET]
-  requirements:
-    format: json|xml
+    path:     turn/{format}
+    defaults: { _controller: GameBundle:Game:turn, format: json }
+    methods:  [PATCH]
+    requirements:
+        format: json|xml
