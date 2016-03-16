@@ -13,6 +13,15 @@ function PageMgr() {
     this.$pageTitle = this.$content.find('.page-section-title');
 }
 
+/**
+ * @property {ModalMgr} modalMgr
+ * @property {AlertMgr} alertMgr
+ * @property {jQuery}   $docTitle
+ * @property {jQuery}   $loading
+ * @property {jQuery}   $sidebar
+ * @property {jQuery}   $content
+ * @property {jQuery}   $pageTitle
+ */
 PageMgr.prototype = {
     toggleSidebar: function() {
         var _css = PageMgr.resources.config.trigger.css;

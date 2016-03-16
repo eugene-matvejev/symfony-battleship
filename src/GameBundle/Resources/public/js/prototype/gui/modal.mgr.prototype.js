@@ -7,6 +7,9 @@ function ModalMgr() {
     this.$html = $('#modal-area');
 }
 
+/**
+ * @property {jQuery} $html
+ */
 ModalMgr.prototype = {
     /**
      * @returns {ModalMgr}
@@ -43,10 +46,11 @@ ModalMgr.prototype = {
      * @returns {ModalMgr}
      */
     unlockSubmission: function(enable) {
-        let $btn = this.$html.find('button.btn[type="button"]');
+        let $button = this.$html.find('button.btn[type="button"]');
+
         undefined === enable || enable
-            ? $btn.removeAttr('disabled')
-            : $btn.attr('disabled', 'disabled');
+            ? $button.removeAttr('disabled')
+            : $button.attr('disabled', 'disabled');
 
         return this;
     }
