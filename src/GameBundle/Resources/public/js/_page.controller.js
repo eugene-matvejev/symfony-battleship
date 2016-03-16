@@ -1,5 +1,7 @@
+'use strict';
+
 $(document).ready(function () {
-    var pageMgr = new PageMgr();
+    let pageMgr = new PageMgr();
 
     $('.page-sidebar, .page-content')
         .on('click', '.toggle-btn, .switch-btn', function(e) {
@@ -13,10 +15,5 @@ $(document).ready(function () {
             e.stopPropagation();
 
             pageMgr.switchSection(this);
-        })
-        .on('click', 'button.button:not(.disabled)', function(e) {
-            e.stopPropagation();
-
-            pageMgr.fetch(1);
         });
 });

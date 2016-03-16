@@ -15,7 +15,7 @@ function Statistics() {
  */
 Statistics.prototype = {
     /**
-     * @param {int} page
+     * @param {int|string} page
      */
     fetch: function(page) {
         let self = this,

@@ -1,5 +1,7 @@
+'use strict';
+
 $(document).ready(function() {
-    var statistics = new Statistics();
+    let statistics = new Statistics();
 
     $('.page-sidebar')
         .on('click', 'li[data-section="stats-area"]', function(e) {
@@ -13,6 +15,6 @@ $(document).ready(function() {
         .on('click', 'button[data-page]', function(e) {
             e.stopPropagation();
 
-            statistics.fetch(parseInt(this.getAttribute('data-page')));
+            statistics.fetch(this.getAttribute('data-page'));
         });
 });

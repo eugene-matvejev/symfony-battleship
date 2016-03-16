@@ -9,6 +9,9 @@ function UI($el) {
     this.$area = $el;
 }
 
+/**
+ * @property {jQuery} $area
+ */
 UI.prototype = {
     htmlUpdate: function(currPage, totalPages) {
         var attr = UI.resources.config.attr,
