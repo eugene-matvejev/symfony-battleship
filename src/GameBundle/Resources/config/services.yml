@@ -1,11 +1,4 @@
 services:
-    # Event Listeners
-    battleship.game.listener.game.response.listener:
-        class: EM\GameBundle\EventListener\GameResponseListener
-        arguments:
-            - "@jms_serializer"
-        tags:
-            - { name: kernel.event_listener, event: kernel.response, method: onKernelRequest }
     # Models
     battleship.game.services.cell.model:
         class: EM\GameBundle\Model\CellModel

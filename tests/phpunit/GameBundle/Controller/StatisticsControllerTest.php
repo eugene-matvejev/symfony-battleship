@@ -19,7 +19,7 @@ class StatisticsControllerTest extends ExtendedTestCase
     public function overall()
     {
         $client = $this->getClient();
-        $client->request(Request::METHOD_GET, $this->getRouter()->generate('battleship.game.api.statistics', ['page' => 1]));
+        $client->request(Request::METHOD_GET, $this->getRouter()->generate('battleship.game.api.game.results', ['page' => 1]));
 
         $this->assertJSONSuccessfulResponse($client->getResponse());
     }

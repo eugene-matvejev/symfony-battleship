@@ -6,13 +6,13 @@ battleship.game.api.game.results:
         page: \d+
         _format: json|xml
 battleship.game.api.init:
-    path:     init/{format}
+    path:     init
     defaults: { _controller: GameBundle:Game:init }
     methods:  [POST]
     requirements:
         _format: json|xml
 battleship.game.api.turn:
-    path:     turn/{format}
+    path:     turn
     defaults: { _controller: GameBundle:Game:turn }
     methods:  [PATCH]
     requirements:
