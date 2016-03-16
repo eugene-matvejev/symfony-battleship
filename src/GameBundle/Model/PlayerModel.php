@@ -33,13 +33,4 @@ class PlayerModel
     {
         return self::$playerTypes;
     }
-
-    public static function getJSON(Player $player) : \stdClass
-    {
-        return (object)[
-            'id'   => $player->getId(),
-            'name' => $player->getName(),
-            'type' => $player->getType()->getId()
-        ];
-    }
 }

@@ -121,14 +121,4 @@ class CellModel
             $this->cachedCells[$cell->getX()][$cell->getY()] = $cell;
         }
     }
-
-    public static function getJSON(Cell $cell) : \stdClass
-    {
-        return (object)[
-            'x' => $cell->getX(),
-            'y' => $cell->getY(),
-            's' => $cell->getState()->getId(),
-            'player' => PlayerModel::getJSON($cell->getBattlefield()->getPlayer())
-        ];
-    }
 }

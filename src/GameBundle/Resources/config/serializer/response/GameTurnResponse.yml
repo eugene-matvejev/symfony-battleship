@@ -1,0 +1,14 @@
+EM\GameBundle\Response\GameTurnResponse:
+    accessor_order: custom
+    custom_accessor_order: [cells, result]
+
+    xml_root_name: turn
+
+    properties:
+        cells:
+            xml_key_value_pairs: true
+            xml_list:
+                inline: false
+                entry_name: cell
+        result:
+            type: EM\GameBundle\Entity\GameResult

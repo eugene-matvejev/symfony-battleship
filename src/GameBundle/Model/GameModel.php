@@ -10,6 +10,7 @@ use EM\GameBundle\Entity\Game;
 use EM\GameBundle\Entity\GameResult;
 use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Exception\GameException;
+use EM\GameBundle\Response\GameTurnResponse;
 use EM\GameBundle\Service\AI\AIService;
 
 /**
@@ -52,14 +53,7 @@ class GameModel
         $this->playerRepository = $om->getRepository('GameBundle:Player');
     }
 
-    /**
-     * verify, init and save game
-     *
-     * @param string $json
-     *
-     * @return \stdClass
-     */
-    public function init(string $json) : \stdClass
+    public function init(string $json) : Game
     {
         $game = new Game();
         $this->om->persist($game);
@@ -92,7 +86,7 @@ class GameModel
         }
         $this->om->flush();
 
-        return self::getJSON($game);
+        return $game;
     }
 
     public function initCPUShips(Battlefield $battlefield)
@@ -107,10 +101,10 @@ class GameModel
     /**
      * @param string $json
      *
-     * @return \stdClass
+     * @return GameTurnResponse
      * @throws GameException
      */
-    public function nextTurn(string $json) : \stdClass
+    public function nextTurn(string $json) : GameTurnResponse
     {
         $data = json_decode($json);
 
@@ -118,20 +112,19 @@ class GameModel
             throw new GameException(__FUNCTION__ . ' game: ' . $data->game->id . ' don\'t exists.');
         }
 
-        $std = new \stdClass();
-        $std->cells = [];
+        $response = new GameTurnResponse();
 
         if (null !== $game->getResult()) {
-            $std->victory = GameResultModel::getJSON($game->getResult());
+            $response->setGameResult($game->getResult());
 
-            return $std;
+            return $response;
         }
 
         foreach ($game->getBattlefields() as $battlefield) {
             $this->playerTurn($battlefield, $data->cell);
 
             if (null !== $game->getResult()) {
-                $std->victory = GameResultModel::getJSON($game->getResult());
+                $response->setGameResult($game->getResult());
                 break;
             }
         }
@@ -139,10 +132,10 @@ class GameModel
         $this->om->flush();
 
         foreach (CellModel::getChangedCells() as $cell) {
-            $std->cells[] = CellModel::getJSON($cell);
+            $response->addCell($cell);
         }
 
-        return $std;
+        return $response;
     }
 
     public function playerTurn(Battlefield $battlefield, \stdClass $cellData)
@@ -184,18 +177,5 @@ class GameModel
         }
 
         return false;
-    }
-
-    public static function getJSON(Game $game) : \stdClass
-    {
-        $data = [];
-        foreach ($game->getBattlefields() as $battlefield) {
-            $data[] = BattlefieldModel::getJSON($battlefield);
-        }
-
-        return (object)[
-            'id' => $game->getId(),
-            'data' => $data
-        ];
     }
 }

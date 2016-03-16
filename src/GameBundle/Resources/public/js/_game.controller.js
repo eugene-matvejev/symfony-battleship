@@ -6,9 +6,8 @@ let game         = new Game(),
 
 $(document).ready(function() {
 
-    //var el = document.querySelector('li[data-section="' + pageConfig.section.statistics + '"]');
-    //game.pageMgr.switchSection(el);
-    //var statisticsMgr = new Statistics();
+    //let el = document.querySelector('li[data-section="' + pageConfig.section.statistics + '"]'),
+    //    statisticsMgr = new Statistics();
     //    statisticsMgr.pageMgr.switchSection(el);
     //    statisticsMgr.fetch(1);
 
@@ -45,8 +44,8 @@ $(document).ready(function() {
 
             game.init(
                 [
-                    {id:  1, name: 'CPU'},
-                    {id: '', name: document.getElementById(gameConfig.trigger.player).value}
+                    {name: 'CPU', isCPU: true},
+                    {name: document.getElementById(gameConfig.trigger.player).value}
                 ],
                 document.getElementById(gameConfig.trigger.bfsize).value
             );

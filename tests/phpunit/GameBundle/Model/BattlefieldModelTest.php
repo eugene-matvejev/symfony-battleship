@@ -25,7 +25,6 @@ class BattlefieldModelTest extends ExtendedTestCase
         $this->assertCount(100, $cells);
 
         $cellState = (new CellState())
-            ->setName('test cell state')
             ->setId(CellModel::STATE_SHIP_DIED);
         foreach ($battlefield->getCells() as $cell) {
             if ($cell->getX() === 0) {
@@ -46,7 +45,6 @@ class BattlefieldModelTest extends ExtendedTestCase
         $this->assertFalse(BattlefieldModel::isUnfinished($battlefield));
 
         $cellState = (new CellState())
-            ->setName('test cell state')
             ->setId(CellModel::STATE_SHIP_DIED);
         foreach ($battlefield->getCells() as $cell) {
             $cell->setState($cellState);
@@ -61,7 +59,6 @@ class BattlefieldModelTest extends ExtendedTestCase
     {
         $battlefield = new Battlefield();
         $cellState = (new CellState())
-            ->setName('test cell state')
             ->setId(CellModel::STATE_SHIP_LIVE);
         for ($x = 0; $x < 10; $x++) {
             for ($y = 0; $y < 10; $y++) {

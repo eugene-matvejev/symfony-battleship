@@ -1,0 +1,6 @@
+EM\GameBundle\Entity\PlayerType:
+    xml_root_name: playerType
+
+    properties:
+        id:
+            type: integer

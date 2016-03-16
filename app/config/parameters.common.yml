@@ -1,4 +1,2 @@
 parameters:
-#  battleship.config.ship.size.min: 1
-#  battleship.config.ship.size.max: 4
-  battleship.config.statistics.results.per.page: 10
+    battleship.config.statistics.results.per.page: 10

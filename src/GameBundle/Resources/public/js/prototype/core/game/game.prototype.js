@@ -78,14 +78,14 @@ Game.prototype = {
         );
     },
     /**
-     * @param {{id: {int}, data: []}} response
+     * @param {{id: {int}, battlefields: []}} response
      */
     parseInitResponse: function(response) {
         this.setId(response.id);
         let self = this;
 
-        response.data.map(function(el) {
-            let player  = self.findPlayerByName(el.player.name);
+        response.battlefields.map(function(el) {
+            let player = self.findPlayerByName(el.player.name);
 
             if (undefined !== player) {
                 player.setId(el.player.id);
@@ -141,23 +141,23 @@ Game.prototype = {
         );
     },
     /**
-     * @param {{cells: [], victory: {Object}}} response
+     * @param {{cells: {cell: {Object}, player: {Object}}[], result: {player: {Object}}}} response
      */
     parseUpdateResponse: function(response) {
         let self = this;
 
         response.cells.map(function(el) {
-            let cell = self.findCell(el.player.id, el.x, el.y);
+            let cell = self.findCell(el.player.id, el.cell.x, el.cell.y);
 
             if (undefined !== cell) {
-                cell.setState(el.s);
+                cell.setState(el.cell.state.id);
             }
         });
 
-        if (undefined !== response.victory) {
+        if (undefined !== response.result) {
             let text = Game.resources.config.text,
                 type = AlertMgr.resources.config.type,
-                player = this.findPlayerById(response.victory.player.id);
+                player = this.findPlayerById(response.result.player.id);
 
             if (undefined !== player) {
                 player.isHuman()
@@ -252,7 +252,7 @@ Game.resources.config = {
             max: 15
         },
         /**
-         * @enum {Object}
+         * @type {Object}
          */
         username: /^[a-zA-Z0-9\.\-\ \@]{1,100}$/
     },

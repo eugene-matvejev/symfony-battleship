@@ -1,0 +1,21 @@
+EM\GameBundle\Entity\Cell:
+    accessor_order: custom
+    custom_accessor_order: [id, x, y, state]
+
+    exclusion_policy: ALL
+
+    xml_root_name: cell
+
+    properties:
+        id:
+            type: integer
+            expose: true
+        x:
+            type: integer
+            expose: true
+        y:
+            type: integer
+            expose: true
+        state:
+            type: EM\GameBundle\Entity\CellState
+            expose: true

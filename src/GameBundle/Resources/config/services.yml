@@ -1,63 +1,63 @@
 services:
-  # Models
-  battleship.game.services.cell.model:
-    class: EM\GameBundle\Model\CellModel
-    arguments:
-      - "@battleship.game.services.cell.state.repository"
-  battleship.game.services.player.model:
-    class: EM\GameBundle\Model\PlayerModel
-    arguments:
-      - "@battleship.game.services.player.type.repository"
-  battleship.game.services.game.model:
-    class: EM\GameBundle\Model\GameModel
-    arguments:
-      - "@battleship.game.services.ai.core.service"
-      - "@battleship.game.services.cell.model"
-      - "@battleship.game.services.player.model"
-      - "@doctrine.orm.entity_manager"
-  battleship.game.services.statistics.model:
-    class: EM\GameBundle\Model\StatisticsModel
-    arguments:
-      - %battleship.config.statistics.results.per.page%
-      - "@battleship.game.services.game.result.repository"
-  # AI
-  battleship.game.services.ai.core.service:
-    class: EM\GameBundle\Service\AI\AIService
-    arguments:
-      - "@battleship.game.services.cell.model"
-      - "@battleship.game.services.ai.strategy.service"
-  battleship.game.services.ai.strategy.service:
-    class: EM\GameBundle\Service\AI\AIStrategyService
-    arguments:
-      - "@battleship.game.services.cell.model"
-      - "@battleship.game.services.ai.x.strategy.service"
-      - "@battleship.game.services.ai.y.strategy.service"
-      - "@battleship.game.services.ai.rand.strategy.service"
-  battleship.game.services.ai.x.strategy.service:
-    class: EM\GameBundle\Service\AI\Strategy\XStrategy
-    arguments:
-      - "@battleship.game.services.cell.model"
-  battleship.game.services.ai.y.strategy.service:
-    class: EM\GameBundle\Service\AI\Strategy\YStrategy
-    arguments:
-      - "@battleship.game.services.cell.model"
-  battleship.game.services.ai.rand.strategy.service:
-    class: EM\GameBundle\Service\AI\Strategy\RandomStrategy
-    arguments:
-      - "@battleship.game.services.cell.model"
-  # Repositories
-  battleship.game.services.cell.state.repository:
-    class: EM\GameBundle\Repository\CellStateRepository
-    factory: ["@doctrine.orm.entity_manager", getRepository]
-    arguments:
-      - EM\GameBundle\Entity\CellState
-  battleship.game.services.player.type.repository:
-    class: EM\GameBundle\Repository\PlayerTypeRepository
-    factory: ["@doctrine.orm.entity_manager", getRepository]
-    arguments:
-      - EM\GameBundle\Entity\PlayerType
-  battleship.game.services.game.result.repository:
-    class: EM\GameBundle\Repository\GameResultRepository
-    factory: ["@doctrine.orm.entity_manager", getRepository]
-    arguments:
-      - EM\GameBundle\Entity\GameResult
+    # Models
+    battleship.game.services.cell.model:
+        class: EM\GameBundle\Model\CellModel
+        arguments:
+            - "@battleship.game.services.cell.state.repository"
+    battleship.game.services.player.model:
+        class: EM\GameBundle\Model\PlayerModel
+        arguments:
+            - "@battleship.game.services.player.type.repository"
+    battleship.game.services.game.model:
+        class: EM\GameBundle\Model\GameModel
+        arguments:
+            - "@battleship.game.services.ai.core.service"
+            - "@battleship.game.services.cell.model"
+            - "@battleship.game.services.player.model"
+            - "@doctrine.orm.entity_manager"
+    battleship.game.services.game.result.model:
+        class: EM\GameBundle\Model\GameResultModel
+        arguments:
+            - %battleship.config.statistics.results.per.page%
+            - "@battleship.game.services.game.result.repository"
+    # AI
+    battleship.game.services.ai.core.service:
+        class: EM\GameBundle\Service\AI\AIService
+        arguments:
+            - "@battleship.game.services.cell.model"
+            - "@battleship.game.services.ai.strategy.service"
+    battleship.game.services.ai.strategy.service:
+        class: EM\GameBundle\Service\AI\AIStrategyService
+        arguments:
+            - "@battleship.game.services.cell.model"
+            - "@battleship.game.services.ai.x.strategy.service"
+            - "@battleship.game.services.ai.y.strategy.service"
+            - "@battleship.game.services.ai.rand.strategy.service"
+    battleship.game.services.ai.x.strategy.service:
+        class: EM\GameBundle\Service\AI\Strategy\XStrategy
+        arguments:
+            - "@battleship.game.services.cell.model"
+    battleship.game.services.ai.y.strategy.service:
+        class: EM\GameBundle\Service\AI\Strategy\YStrategy
+        arguments:
+            - "@battleship.game.services.cell.model"
+    battleship.game.services.ai.rand.strategy.service:
+        class: EM\GameBundle\Service\AI\Strategy\RandomStrategy
+        arguments:
+            - "@battleship.game.services.cell.model"
+    # Repositories
+    battleship.game.services.cell.state.repository:
+        class: EM\GameBundle\Repository\CellStateRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - EM\GameBundle\Entity\CellState
+    battleship.game.services.player.type.repository:
+        class: EM\GameBundle\Repository\PlayerTypeRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - EM\GameBundle\Entity\PlayerType
+    battleship.game.services.game.result.repository:
+        class: EM\GameBundle\Repository\GameResultRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - EM\GameBundle\Entity\GameResult

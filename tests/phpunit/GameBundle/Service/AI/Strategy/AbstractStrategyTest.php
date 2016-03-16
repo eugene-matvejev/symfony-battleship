@@ -18,7 +18,6 @@ class AbstractStrategyTest extends ExtendedTestCase
 {
     const COORDINATE_X = 2;
     const COORDINATE_Y = 2;
-
     /**
      * @var CellModel
      */
@@ -54,9 +53,8 @@ class AbstractStrategyTest extends ExtendedTestCase
         $this->assertCount(4, $cells);
 
         $cellState = (new CellState())
-            ->setName('test cell state')
             ->setId(CellModel::STATE_WATER_DIED);
-        foreach($coordinatesPairs as $coordinatesPair) {
+        foreach ($coordinatesPairs as $coordinatesPair) {
             $this->cellModel->getByCoordinatesPair($coordinatesPair)->setState($cellState);
         }
 
@@ -71,10 +69,9 @@ class AbstractStrategyTest extends ExtendedTestCase
     {
         $battlefield = new Battlefield();
         $cellState = (new CellState())
-            ->setName('test cell state')
             ->setId(CellModel::STATE_WATER_LIVE);
-        for($x = 0; $x < 10; $x++) {
-            for($y = 0; $y < 10; $y++) {
+        for ($x = 0; $x < 10; $x++) {
+            for ($y = 0; $y < 10; $y++) {
                 $cell = (new Cell())
                     ->setX($x)
                     ->setY($y)
@@ -98,12 +95,12 @@ class AbstractStrategyTest extends ExtendedTestCase
     protected function getMockedCell(int $x = self::COORDINATE_X, int $y = self::COORDINATE_Y) : Cell
     {
         $cellState = (new CellState())
-            ->setName('test cell state')
             ->setId(CellModel::STATE_WATER_LIVE);
         $cell = (new Cell())
             ->setX($x)
             ->setY($y)
             ->setState($cellState);
+
         return $cell;
     }
 }

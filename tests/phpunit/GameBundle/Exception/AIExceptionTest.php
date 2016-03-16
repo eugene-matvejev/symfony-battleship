@@ -27,7 +27,7 @@ class AIExceptionTest extends AIServiceTest
      * @test
      * @expectedException \EM\GameBundle\Exception\AIException
      */
-    public function attackCellwithCellState_2()
+    public function attackCellWithCellState_2()
     {
         $this->simulateAttackCell(CellModel::STATE_WATER_DIED, CellModel::STATE_WATER_DIED);
     }
@@ -46,7 +46,7 @@ class AIExceptionTest extends AIServiceTest
      * @test
      * @expectedException \EM\GameBundle\Exception\AIException
      */
-    public function attackCellwithCellState_4()
+    public function attackCellWithCellState_4()
     {
         $this->simulateAttackCell(CellModel::STATE_SHIP_DIED, CellModel::STATE_SHIP_DIED);
     }
@@ -56,7 +56,7 @@ class AIExceptionTest extends AIServiceTest
      * @test
      * @expectedException \EM\GameBundle\Exception\AIException
      */
-    public function attackCellwithCellState_5()
+    public function attackCellWithCellState_5()
     {
         $this->simulateAttackCell(CellModel::STATE_WATER_SKIP, CellModel::STATE_WATER_SKIP);
     }

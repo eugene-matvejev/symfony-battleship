@@ -31,7 +31,7 @@ trait IdentifiableTrait
      *
      * @return $this
      */
-    public function setId(int $id)
+    public function setId(int $id) : self
     {
         $this->id = $id;
 

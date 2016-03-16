@@ -27,6 +27,7 @@ APIMgr.prototype = {
 
         $.ajax({
             contentType: 'application/json; charset=utf-8',
+            accepts: 'application/json',
             dataType: 'json',
             method: requestMethod,
             url: requestURL,
@@ -37,7 +38,7 @@ APIMgr.prototype = {
             },
             success: onSuccess,
             error: onError,
-            timeout: 1000,
+            timeout: 2000,
             complete: function() {
                 self.pageMgr.loadingMode(false);
             }

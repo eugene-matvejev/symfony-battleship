@@ -34,7 +34,6 @@ class AIServiceTest extends ExtendedTestCase
         $this->assertNull($this->invokePrivateMethod(AIService::class, $this->ai, 'chooseCellToAttack', ['cells' => []]));
     }
 
-
     /**
      * @see AIService::attackCell
      * @test
@@ -64,7 +63,6 @@ class AIServiceTest extends ExtendedTestCase
     protected function getMockedCell(int $cellStateId) : Cell
     {
         $cellState = (new CellState())
-            ->setName('test cell state')
             ->setId($cellStateId);
         $cell = (new Cell())
             ->setState($cellState);

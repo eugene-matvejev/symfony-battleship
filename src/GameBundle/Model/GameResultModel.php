@@ -2,25 +2,35 @@
 
 namespace EM\GameBundle\Model;
 
-use EM\GameBundle\Entity\GameResult;
+use EM\GameBundle\Repository\GameResultRepository;
+use EM\GameBundle\Response\GameResultsResponse;
+use EM\GameBundle\Response\StatisticsResponse;
 
 /**
- * @since 3.0
+ * @since 5.0
  */
 class GameResultModel
 {
-    const TIME_FORMAT = 'd - m - Y / H:i';
+    /**
+     * @var GameResultRepository
+     */
+    private $gameResultRepository;
+    /**
+     * @var int
+     */
+    private $gameResultsPerPage;
 
-    public static function getJSON(GameResult $result) : \stdClass
+    function __construct(int $recordsPerPage, GameResultRepository $repository)
     {
-        return (object)[
-            'id' => $result->getId(),
-            'game' => (object)['id' => $result->getGame()->getId()],
-            'time' => (object)[
-                's' => $result->getGame()->getTimestamp()->format(self::TIME_FORMAT),
-                'f' => $result->getTimestamp()->format(self::TIME_FORMAT)
-            ],
-            'player' => PlayerModel::getJSON($result->getPlayer())
-        ];
+        $this->gameResultsPerPage = $recordsPerPage;
+        $this->gameResultRepository = $repository;
+    }
+
+    public function prepareResponse(int $currentPage) : GameResultsResponse
+    {
+        return (new GameResultsResponse())
+            ->setResults($this->gameResultRepository->getAllOrderByDate($currentPage, $this->gameResultsPerPage))
+            ->setCurrentPage($currentPage)
+            ->setTotalPages(ceil($this->gameResultRepository->countTotalResults() / $this->gameResultsPerPage));
     }
 }

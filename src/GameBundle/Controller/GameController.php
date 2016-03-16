@@ -2,7 +2,6 @@
 
 namespace EM\GameBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,32 +9,32 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @since 1.0
  */
-class GameController extends Controller
+class GameController extends AbstractAPIController
 {
     public function indexAction() : Response
     {
         return $this->render('@Game/index.html.twig');
     }
 
-    public function initAction(Request $request) : JsonResponse
+    public function initAction(Request $request) : Response
     {
         if (empty($request->getContent())) {
             return new JsonResponse();
         }
 
-        $json = $this->get('battleship.game.services.game.model')->init($request->getContent());
+        $game = $this->get('battleship.game.services.game.model')->init($request->getContent());
 
-        return new JsonResponse($json, Response::HTTP_CREATED);
+        return $this->prepareSerializedOutput($request, $game, Response::HTTP_CREATED);
     }
 
-    public function turnAction(Request $request) : JsonResponse
+    public function turnAction(Request $request) : Response
     {
         if (empty($request->getContent())) {
             return new JsonResponse();
         }
 
-        $json = $this->get('battleship.game.services.game.model')->nextTurn($request->getContent());
+        $data = $this->get('battleship.game.services.game.model')->nextTurn($request->getContent());
 
-        return new JsonResponse($json);
+        return $this->prepareSerializedOutput($request, $data, Response::HTTP_CREATED);
     }
 }

@@ -63,17 +63,56 @@ doctrine:
     naming_strategy: doctrine.orm.naming_strategy.underscore
     auto_mapping: true
 
-# Doctrine Migrations Configuration
+#swiftmailer:
+#  transport: "%mailer_transport%"
+#  host:      "%mailer_host%"
+#  username:  "%mailer_user%"
+#  password:  "%mailer_password%"
+#  spool:     { type: memory }
+
 doctrine_migrations:
   dir_name: "%kernel.root_dir%/DoctrineMigrations"
   namespace: Application\Migrations
   table_name: __doctrine_migrations
   name: Application Migrations
 
-## Swiftmailer Configuration
-#swiftmailer:
-#    transport: "%mailer_transport%"
-#    host:      "%mailer_host%"
-#    username:  "%mailer_user%"
-#    password:  "%mailer_password%"
-#    spool:     { type: memory }
+jms_serializer:
+  handlers:
+    datetime:
+      default_format: "c" # ISO8601
+      default_timezone: "UTC" # defaults to whatever timezone set in php.ini or via date_default_timezone_set
+
+  property_naming:
+    separator:  _
+    lower_case: true
+
+  metadata:
+    cache: file
+    debug: "%kernel.debug%"
+    file_cache:
+      dir: "%kernel.cache_dir%/serializer"
+
+    # Using auto-detection, the mapping files for each bundle will be
+    # expected in the Resources/config/serializer directory.
+    #
+    # Example:
+    # class: My\FooBundle\Entity\User
+    # expected path: @MyFooBundle/Resources/config/serializer/Entity.User.(yml|xml|php)
+    auto_detection: false
+
+    # if you don't want to use auto-detection, you can also define the
+    # namespace prefix and the corresponding directory explicitly
+    directories:
+      game-bundle-entity:
+        namespace_prefix: "EM\\GameBundle\\Entity\\"
+        path: "@GameBundle/Resources/config/serializer/entity"
+      game-bundle-response:
+        namespace_prefix: "EM\\GameBundle\\Response\\"
+        path: "@GameBundle/Resources/config/serializer/response"
+
+#  visitors:
+#    json:
+#      options: 0 # json_encode options bitmask
+#    xml:
+#      doctype_whitelist:
+#        - '<!DOCTYPE authorized SYSTEM "http://some_url">' # an authorized document type for xml deserialization
