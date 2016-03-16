@@ -1,4 +1,4 @@
-EM\GameBundle\Response\StatisticsResponse:
+EM\GameBundle\Response\GameResultsResponse:
     accessor_order: custom
     custom_accessor_order: [meta, results]
 

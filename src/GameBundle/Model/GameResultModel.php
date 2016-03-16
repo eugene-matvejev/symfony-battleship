@@ -3,12 +3,13 @@
 namespace EM\GameBundle\Model;
 
 use EM\GameBundle\Repository\GameResultRepository;
+use EM\GameBundle\Response\GameResultsResponse;
 use EM\GameBundle\Response\StatisticsResponse;
 
 /**
  * @since 5.0
  */
-class StatisticsModel
+class GameResultModel
 {
     /**
      * @var GameResultRepository
@@ -25,9 +26,9 @@ class StatisticsModel
         $this->gameResultRepository = $repository;
     }
 
-    public function overallStatistics(int $currentPage) : StatisticsResponse
+    public function prepareResponse(int $currentPage) : GameResultsResponse
     {
-        return (new StatisticsResponse())
+        return (new GameResultsResponse())
             ->setResults($this->gameResultRepository->getAllOrderByDate($currentPage, $this->gameResultsPerPage))
             ->setCurrentPage($currentPage)
             ->setTotalPages(ceil($this->gameResultRepository->countTotalResults() / $this->gameResultsPerPage));

@@ -27,6 +27,7 @@ APIMgr.prototype = {
 
         $.ajax({
             contentType: 'application/json; charset=utf-8',
+            accepts: 'application/json',
             dataType: 'json',
             method: requestMethod,
             url: requestURL,

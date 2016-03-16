@@ -1,4 +1,11 @@
 services:
+    # Event Listeners
+    battleship.game.listener.game.response.listener:
+        class: EM\GameBundle\EventListener\GameResponseListener
+        arguments:
+            - "@jms_serializer"
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelRequest }
     # Models
     battleship.game.services.cell.model:
         class: EM\GameBundle\Model\CellModel
@@ -15,8 +22,8 @@ services:
             - "@battleship.game.services.cell.model"
             - "@battleship.game.services.player.model"
             - "@doctrine.orm.entity_manager"
-    battleship.game.services.statistics.model:
-        class: EM\GameBundle\Model\StatisticsModel
+    battleship.game.services.game.result.model:
+        class: EM\GameBundle\Model\GameResultModel
         arguments:
             - %battleship.config.statistics.results.per.page%
             - "@battleship.game.services.game.result.repository"

@@ -2,17 +2,17 @@
 
 namespace EM\GameBundle\Response;
 
-use EM\GameBundle\GameBundle;
+use EM\GameBundle\Entity\GameResult;
 
 /**
  * @since 5.0
  */
-class StatisticsResponse
+class GameResultsResponse
 {
     const META_INDEX_CURRENT_PAGE = 'currentPage';
     const META_INDEX_TOTAL_PAGES  = 'totalPages';
     /**
-     * @var GameBundle[]
+     * @var GameResult[]
      */
     private $results = [];
     /**
@@ -21,7 +21,7 @@ class StatisticsResponse
     private $meta = [];
 
     /**
-     * @return GameBundle[]
+     * @return GameResult[]
      */
     public function getResults() : array
     {
@@ -29,7 +29,7 @@ class StatisticsResponse
     }
 
     /**
-     * @param GameBundle[] $results
+     * @param GameResult[] $results
      *
      * @return $this
      */
