@@ -1,10 +1,10 @@
 'use strict';
-let game         = new Game(),
-    gameConfig   = Game.resources.config,
-    pageConfig   = PageMgr.resources.config,
-    playerConfig = Player.resources.config;
 
 $(document).ready(function() {
+    let game         = new Game(),
+        gameConfig   = Game.resources.config,
+        pageConfig   = PageMgr.resources.config,
+        playerConfig = Player.resources.config;
 
     //let el = document.querySelector('li[data-section="' + pageConfig.section.statistics + '"]'),
     //    statisticsMgr = new Statistics();

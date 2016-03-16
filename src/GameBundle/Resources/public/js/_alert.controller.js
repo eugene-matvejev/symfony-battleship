@@ -1,5 +1,7 @@
+'use strict';
+
 $(document).ready(function() {
-    var alertMgr = new AlertMgr();
+    let alertMgr = new AlertMgr();
 
     $('#notification-area')
         .on('click', 'span.notification-control', function(e) {
