@@ -43,6 +43,9 @@ UI.prototype = {
 UI.resources = {};
 UI.resources.config = {
     attr: {
+        /**
+         * @enum {string}
+         */
         id: {
             prev: 'prev',
             curr: 'curr',
