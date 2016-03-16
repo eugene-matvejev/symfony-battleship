@@ -24,7 +24,7 @@ class GameController extends AbstractAPIController
 
         $game = $this->get('battleship.game.services.game.model')->init($request->getContent());
 
-        return $this->prepareSerializedOutput($request, $game, Response::HTTP_CREATED);
+        return $this->prepareSerializedOutput($game, Response::HTTP_CREATED);
     }
 
     public function turnAction(Request $request) : Response
@@ -35,6 +35,6 @@ class GameController extends AbstractAPIController
 
         $data = $this->get('battleship.game.services.game.model')->nextTurn($request->getContent());
 
-        return $this->prepareSerializedOutput($request, $data, Response::HTTP_CREATED);
+        return $this->prepareSerializedOutput($data, Response::HTTP_CREATED);
     }
 }

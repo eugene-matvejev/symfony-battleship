@@ -43,7 +43,7 @@ class GameResultsResponse
     /**
      * @return string[]
      */
-    public function getMeta()
+    public function getMeta() : array
     {
         return $this->meta;
     }
