@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * @param $el
+ * @param {jQuery} $el
  *
  * @constructor
  */
@@ -18,8 +18,9 @@ UI.prototype = {
             nextPage = currPage + 1 > totalPages ? totalPages : currPage + 1,
             prevPage = currPage - 1 <= 0 ? 1 : currPage - 1;
 
-        if(this.$area.find('>.pagination-area').length < 1)
+        if(this.$area.find('>.pagination-area').length < 1) {
             this.$area.append(UI.resources.html.layout());
+        }
 
         this.$area.find('button[type="button"]').each(function() {
             switch(this.id) {
@@ -29,13 +30,15 @@ UI.prototype = {
                     $(this).find('>span:last-child').html(totalPages);
                     break;
                 case attr.id.prev:
-                    if(currPage == 1)
+                    if(currPage == 1) {
                         this.setAttribute('disabled', 'disabled');
+                    }
                     this.setAttribute(attr.page, prevPage);
                     break;
                 case attr.id.next:
-                    if(currPage == totalPages)
+                    if(currPage == totalPages) {
                         this.setAttribute('disabled', 'disabled');
+                    }
                     this.setAttribute(attr.page, nextPage);
                     break;
             }
@@ -46,12 +49,18 @@ UI.prototype = {
 UI.resources = {};
 UI.resources.config = {
     attr: {
+        /**
+         * @enum {string}
+         */
         id: {
             prev: 'prev',
             curr: 'curr',
             next: 'next',
             total: 'total'
         },
+        /**
+         * @type {string}
+         */
         page: 'data-page'
     }
 };
