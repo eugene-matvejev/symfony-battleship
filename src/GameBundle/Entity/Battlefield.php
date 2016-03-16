@@ -32,7 +32,7 @@ class Battlefield implements IdentifiableInterface, PlayerInterface
      */
     private $game;
     /**
-     * @ORM\OneToMany(targetEntity="EM\GameBundle\Entity\Cell", mappedBy="battlefield", cascade={"persist"}, fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="EM\GameBundle\Entity\Cell", mappedBy="battlefield", cascade={"persist"}, fetch="EAGER", indexBy="id")
      *
      * @var Collection|Cell[]
      */
