@@ -13,7 +13,7 @@ use EM\GameBundle\ORM\IdentifiableTrait;
  * @ORM\Table(
  *      name="cells",
  *      uniqueConstraints={
- *          @ORM\UniqueConstraint(name="axisXY", columns={"battlefield", "x", "y"})
+ *          @ORM\UniqueConstraint(name="INDEX_BATTLEFIELD_UNIQUE_CELL", columns={"battlefield", "x", "y"})
  *      },
  *      indexes={
  *          @ORM\Index(name="INDEX_CELL_BATTLEFIELD", columns={"battlefield"})
