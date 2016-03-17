@@ -3,7 +3,6 @@
 namespace EM\GameBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -11,12 +10,12 @@ use Symfony\Component\HttpFoundation\Response;
  */
 abstract class AbstractAPIController extends Controller
 {
-    protected function prepareSerializedOutput(Request $request, $data, int $httpStatusCode = Response::HTTP_OK, array $headers = []) : Response
+    protected function prepareSerializedOutput($data, int $status = Response::HTTP_OK, array $headers = []) : Response
     {
-        $serialized = (false !== strpos($request->headers->get('accept'), 'application/xml'))
-            ? $this->get('jms_serializer')->serialize($data, 'xml')
-            : $this->get('jms_serializer')->serialize($data, 'json');
+        $acceptHeader = $this->get('request_stack')->getMasterRequest()->headers->get('accept');
+        $format = (false !== strpos($acceptHeader, 'application/xml')) ? 'xml' : 'json';
+        $headers['Content-Type'] = 'application/' . $format;
 
-        return new Response($serialized, $httpStatusCode, $headers);
+        return new Response($this->get('jms_serializer')->serialize($data, $format), $status, $headers);
     }
 }
