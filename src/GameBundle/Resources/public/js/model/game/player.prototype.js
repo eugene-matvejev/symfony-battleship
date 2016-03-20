@@ -17,7 +17,7 @@ function Player(playerName, isCPUPlayer, battlefieldSize) {
         .setName(playerName)
         .setType(isCPUPlayer ? type.cpu : type.human);
 
-    this.battlefield = (new Battlefield(this.$html.find('.' + resources.config.class.area), battlefieldSize));
+    this.battlefield = (new Battlefield(this.$html.find('.player-field'), battlefieldSize, this));
     if (this.isHuman()) {
         this.battlefield.mockData();
     }

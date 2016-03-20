@@ -41,13 +41,21 @@ CellContainer.prototype = {
         return this;
     },
     /**
-     * @param {int} x
-     * @param {int} y
+     * @param {{id: {int}, x: {int}, y: {int}}} criteria
      *
      * @returns {Cell|undefined}
      */
-    getCell: function (x, y) {
-        return this.cells.find(cell => cell.x === x && cell.y === y);
+    findCell: function (criteria) {
+        return this.cells.find(function (cell) {
+            if (undefined !== criteria.id && cell.id == criteria.id) {
+                return cell;
+            }
+            if (criteria.x !== undefined !== criteria.y && cell.x == criteria.x && cell.y == criteria.y) {
+                return cell
+            }
+
+            return undefined;
+        });
     }
 };
 

@@ -2,7 +2,7 @@
 
 /**
  * @param {jQuery} $el
- * 
+ *
  * @constructor
  */
 function GameResults($el) {
@@ -26,7 +26,9 @@ GameResults.prototype = {
     fetch: function (page) {
         let self = this,
             requestUrl = this.$html.attr(GameResults.resources.config.attribute.route) + page,
-            onSuccess = function (response) { self.updateHTML(response); };
+            onSuccess = function (response) {
+                self.updateHTML(response);
+            };
 
         this.apiMgr.request('GET', requestUrl, undefined, onSuccess);
     },

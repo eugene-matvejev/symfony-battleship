@@ -21,7 +21,7 @@ class GameTurnResponse
 
     public function addCell(Cell $cell) : self
     {
-        $this->cells[] = ['cell' => $cell, 'player' => $cell->getBattlefield()->getPlayer()];
+        $this->cells[] = $cell;
 
         return $this;
     }

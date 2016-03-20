@@ -1,15 +1,17 @@
 'use strict';
 
 /**
- * @param {int|string} x
- * @param {int|string} y
+ * @param {int|string}  x
+ * @param {int|string}  y
+ * @param {Battlefield} battlefield
  *
  * @constructor
  */
-function Cell(x, y) {
+function Cell(x, y, battlefield) {
     let resources = Cell.resources;
 
     this.$html = $(resources.html.layout);
+    this.battlefield = battlefield;
     this.setId('undefined')
         .setX(x)
         .setY(y)
@@ -120,14 +122,6 @@ Cell.resources = {
                 dead: 4
             }
         }
-        // ,
-        // /** @enum {string} */
-        // attribute: {
-        //     id: 'data-id',
-        //     x: 'data-x',
-        //     y: 'data-y',
-        //     state: 'data-state'
-        // }
     },
     text: {
         format: {

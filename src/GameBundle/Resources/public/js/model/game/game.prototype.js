@@ -97,12 +97,11 @@ Game.prototype = {
             if (undefined !== player) {
                 player.setId(el.player.id);
 
-                el.cells.map(function (el) {
-                    let cell = self.findCell(player.id, el.x, el.y);
+                el.cells.forEach(function (el) {
+                    let cell = self.findCell({playerId: player.id, x: el.x, y: el.y});
 
                     if (undefined !== cell) {
                         cell.setId(el.id);
-                        // .setState(el.state.id);
                     }
                 });
             }
@@ -112,14 +111,9 @@ Game.prototype = {
      * @param {Element} el
      */
     update: function (el) {
-        let player = this.findPlayerById(el.parentElement.parentElement.parentElement.getAttribute('data-player-id'));
-
-        if (undefined !== player && player.isCPU()) {
-            let cell = this.findCell(player.id, parseInt(el.getAttribute('data-cell-x')), parseInt(el.getAttribute('data-cell-y')));
-
-            if (undefined !== cell) {
-                this.cellSend({game: this.getJSON(), player: player.getJSON(), cell: cell.getJSON()});
-            }
+        let cell = this.findCell({id: el.getAttribute('data-cell-id')});
+        if (undefined !== cell) {
+            this.cellSend(cell.getJSON());
         }
     },
     /**
@@ -139,7 +133,7 @@ Game.prototype = {
         return this.players.find(player => player.name == name);
     },
     /**
-     * @param {{game: {Object}, player: {Object}, cell: {Object}}} requestData
+     * @param {{cell: {Object}}} requestData
      */
     cellSend: function (requestData) {
         var self = this,
@@ -150,16 +144,16 @@ Game.prototype = {
         this.apiMgr.request('PATCH', this.$html.attr(Game.resources.config.route.turn), requestData, onSuccess);
     },
     /**
-     * @param {{cells: {cell: {Object}, player: {Object}}[], result: {player: {Object}}}} response
+     * @param {{cells: {id: {int}, state: {id: {int}}}[], result: {player: {Object}}}} response
      */
     parseUpdateResponse: function (response) {
         let self = this;
 
-        response.cells.map(function (_cell) {
-            let cell = self.findCell(_cell.player.id, _cell.cell.x, _cell.cell.y);
+        response.cells.forEach(function (_cell) {
+            let cell = self.findCell({id: _cell.id});
 
             if (undefined !== cell) {
-                cell.setState(_cell.cell.state.id);
+                cell.setState(_cell.state.id);
             }
         });
 
@@ -176,17 +170,21 @@ Game.prototype = {
         }
     },
     /**
-     * @param {int} playerId
-     * @param {int} x
-     * @param {int} y
+     * @param {{playerId: {int}, id: {int}, x: {int}, y: {int}}} criteria
      *
-     * @returns {Cell|undefined}
+     * @returns {Cell}
      */
-    findCell: function (playerId, x, y) {
-        let player = this.findPlayerById(playerId);
+    findCell: function (criteria) {
+        for (let i = 0; i < this.players.length; i++) {
+            if (undefined !== criteria.playerId && criteria.playerId !== this.players[i].id) {
+                continue;
+            }
 
-        if (undefined !== player) {
-            return player.battlefield.getCell(x, y);
+            let cell = this.players[i].battlefield.findCell(criteria);
+
+            if (undefined !== cell) {
+                return cell;
+            }
         }
     },
     modalGameInitiation: function () {

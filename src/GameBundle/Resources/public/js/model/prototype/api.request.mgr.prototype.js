@@ -15,7 +15,7 @@ APIRequestMgr.prototype = {
      * @param {string}        requestMethod
      * @param {string}        requestURL
      * @param {string|Object} requestData
-     * @param {function}      onSuccess
+     * @param {function}      [onSuccess]
      * @param {function}      [onError]
      */
     request: function (requestMethod, requestURL, requestData, onSuccess, onError) {
@@ -35,10 +35,11 @@ APIRequestMgr.prototype = {
             timeout: APIRequestMgr.resources.config.timeout,
             beforeSend: function () {
                 self.pageMgr.loadingMode(true);
-                console.log(' >>> ' + requestMethod + ' :: ' + requestURL, requestData);
+                console.log(' <<< ' + requestMethod + ' :: ' + requestURL, requestData);
             },
-            complete: function () {
+            complete: function (jqXHR) {
                 self.pageMgr.loadingMode(false);
+                console.log(' >>> ' + requestMethod + ' :: ' + requestURL, jqXHR);
             },
             success: onSuccess,
             error: onError

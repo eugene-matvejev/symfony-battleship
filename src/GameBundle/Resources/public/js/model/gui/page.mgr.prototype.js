@@ -30,8 +30,8 @@ PageMgr.prototype = {
     toggleSidebar: function () {
         let css = PageMgr.resources.config.trigger.css;
 
-        this.$content.toggleClass(css.toggle);
         this.$sidebar.toggleClass(css.toggle);
+        this.$content.toggleClass(css.toggle);
 
         return this;
     },
