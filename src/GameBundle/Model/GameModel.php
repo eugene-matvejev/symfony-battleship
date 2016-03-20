@@ -9,7 +9,7 @@ use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Entity\Game;
 use EM\GameBundle\Entity\GameResult;
 use EM\GameBundle\Entity\Player;
-use EM\GameBundle\Exception\GameException;
+use EM\GameBundle\Exception\CellException;
 use EM\GameBundle\Response\GameTurnResponse;
 use EM\GameBundle\Service\AI\AIService;
 
@@ -37,7 +37,7 @@ class GameModel
     /**
      * @var EntityRepository
      */
-    private $gameRepository;
+    private $cellRepository;
     /**
      * @var EntityRepository
      */
@@ -49,7 +49,7 @@ class GameModel
         $this->cellModel = $cellModel;
         $this->playerModel = $playerModel;
         $this->om = $om;
-        $this->gameRepository = $om->getRepository('GameBundle:Game');
+        $this->cellRepository = $om->getRepository('GameBundle:Cell');
         $this->playerRepository = $om->getRepository('GameBundle:Player');
     }
 
@@ -71,11 +71,12 @@ class GameModel
             $game->addBattlefield($battlefield);
 
             foreach ($data->cells as $cellData) {
+                $cell = $cellData;
                 $cell = (new Cell())
                     ->setX($cellData->x)
                     ->setY($cellData->y)
                     ->setState($battlefield->getPlayer()->getType()->getId() !== PlayerModel::TYPE_CPU
-                        ? $this->cellModel->getCellStates()[$cellData->s]
+                        ? $this->cellModel->getCellStates()[$cellData->state]
                         : $this->cellModel->getCellStates()[CellModel::STATE_WATER_LIVE]);
                 $battlefield->addCell($cell);
             }
@@ -102,17 +103,18 @@ class GameModel
      * @param string $json
      *
      * @return GameTurnResponse
-     * @throws GameException
+     * @throws CellException
      */
     public function nextTurn(string $json) : GameTurnResponse
     {
-        $data = json_decode($json);
-
-        if (null === $game = $this->gameRepository->find($data->game->id)) {
-            throw new GameException(__FUNCTION__ . ' game: ' . $data->game->id . ' don\'t exists.');
+        $cellData = json_decode($json);
+        /** @var Cell $cell */
+        if (null === $cell = $this->cellRepository->find($cellData->id)) {
+            throw new CellException(__FUNCTION__ . ' cell: ' . $cellData->id . ' don\'t exists.');
         }
 
         $response = new GameTurnResponse();
+        $game = $cell->getBattlefield()->getGame();
 
         if (null !== $game->getResult()) {
             $response->setGameResult($game->getResult());
@@ -121,7 +123,7 @@ class GameModel
         }
 
         foreach ($game->getBattlefields() as $battlefield) {
-            $this->playerTurn($battlefield, $data->cell);
+            $this->playerTurn($battlefield, $cellData);
 
             if (null !== $game->getResult()) {
                 $response->setGameResult($game->getResult());
@@ -140,24 +142,24 @@ class GameModel
 
     public function playerTurn(Battlefield $battlefield, \stdClass $cellData)
     {
-        $_cell = null;
         switch ($battlefield->getPlayer()->getType()->getId()) {
             case PlayerModel::TYPE_HUMAN:
-                $_cell = $this->ai->turn($battlefield);
+                $cell = $this->ai->turn($battlefield);
                 break;
+            default:
             case PlayerModel::TYPE_CPU:
-                foreach ($battlefield->getCells() as $cell) {
-                    if ($cell->getX() === $cellData->x && $cell->getY() === $cellData->y) {
-                        $_cell = $this->cellModel->switchState($cell);
-                        break;
-                    }
+                $cell = $battlefield->getCells()[$cellData->id] ?? null;
+                if (null !== $cell) {
+                    $this->cellModel->switchState($cell);
                 }
                 break;
         }
 
-        $this->ai->getStrategyService()->isShipDead($_cell);
-        $this->om->persist($_cell);
-        $this->detectVictory($battlefield);
+        if(null !== $cell) {
+            $this->ai->getStrategyService()->isShipDead($cell);
+            $this->om->persist($cell);
+            $this->detectVictory($battlefield);
+        }
     }
 
     public function detectVictory(Battlefield $battlefield) : bool

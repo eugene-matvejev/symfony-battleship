@@ -15,8 +15,8 @@ ModalMgr.prototype = {
      * @returns {ModalMgr}
      */
     show: function() {
-        this.$html.removeClass(PageMgr.resources.config.trigger.css.hidden);
-        this.$html.find('.modal').modal({ keyboard: false });
+        this.$html.removeClass(PageMgr.resources.config.trigger.css.hidden)
+                  .find('.modal').modal({ keyboard: false });
 
         return this;
     },

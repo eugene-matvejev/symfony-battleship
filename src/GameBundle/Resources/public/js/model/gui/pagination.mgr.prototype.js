@@ -5,38 +5,38 @@
  *
  * @constructor
  */
-function UI($el) {
+function PaginationMgr($el) {
     this.$area = $el;
 }
 
 /**
  * @property {jQuery} $area
  */
-UI.prototype = {
-    htmlUpdate: function(currPage, totalPages) {
-        var attr = UI.resources.config.attr,
+PaginationMgr.prototype = {
+    /**
+     * @param {int|string} currPage
+     * @param {int|string} totalPages
+     */
+    updateHTML: function (currPage, totalPages) {
+        let attr = PaginationMgr.resources.config.attr,
             nextPage = currPage + 1 > totalPages ? totalPages : currPage + 1,
             prevPage = currPage - 1 <= 0 ? 1 : currPage - 1;
 
-        if(this.$area.find('>.pagination-area').length < 1) {
-            this.$area.append(UI.resources.html.layout());
-        }
-
-        this.$area.find('button[type="button"]').each(function() {
-            switch(this.id) {
+        this.$area.find('button[type="button"]').each(function () {
+            switch (this.id) {
                 case attr.id.curr:
-                    this.setAttribute(attr.page, currPage);
                     $(this).find('>span:first-child').html(currPage);
                     $(this).find('>span:last-child').html(totalPages);
+                    this.setAttribute(attr.page, currPage);
                     break;
                 case attr.id.prev:
-                    if(currPage == 1) {
+                    if (currPage == 1) {
                         this.setAttribute('disabled', 'disabled');
                     }
                     this.setAttribute(attr.page, prevPage);
                     break;
                 case attr.id.next:
-                    if(currPage == totalPages) {
+                    if (currPage === totalPages) {
                         this.setAttribute('disabled', 'disabled');
                     }
                     this.setAttribute(attr.page, nextPage);
@@ -46,30 +46,26 @@ UI.prototype = {
     }
 };
 
-UI.resources = {};
-UI.resources.config = {
+PaginationMgr.resources = {};
+PaginationMgr.resources.config = {
     attr: {
-        /**
-         * @enum {string}
-         */
+        /** @enum {string} */
         id: {
             prev: 'prev',
             curr: 'curr',
             next: 'next',
             total: 'total'
         },
-        /**
-         * @type {string}
-         */
+        /** @type {string} */
         page: 'data-page'
     }
 };
-UI.resources.html = {
+PaginationMgr.resources.html = {
     /**
      * @returns {string}
      */
-    layout: function() {
-        let attr = UI.resources.config.attr;
+    layout: function () {
+        let attr = PaginationMgr.resources.config.attr;
 
         return '' +
             '<div class="pagination-area">' +

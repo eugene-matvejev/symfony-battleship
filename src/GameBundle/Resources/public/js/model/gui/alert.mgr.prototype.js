@@ -19,9 +19,10 @@ AlertMgr.prototype = {
      *
      * @returns {AlertMgr}
      */
-    show: function(txt, type) {
+    show: function (txt, type) {
         this.colorByType(type);
         this.$content.html(txt);
+
         this.$html.removeClass(PageMgr.resources.config.trigger.css.hidden);
 
         return this;
@@ -29,7 +30,7 @@ AlertMgr.prototype = {
     /**
      * @returns {AlertMgr}
      */
-    hide: function() {
+    hide: function () {
         this.$html.addClass(PageMgr.resources.config.trigger.css.hidden);
 
         return this;
@@ -39,10 +40,10 @@ AlertMgr.prototype = {
      *
      * @returns {AlertMgr}
      */
-    colorByType: function(_type) {
+    colorByType: function (_type) {
         let type = AlertMgr.resources.config.type;
 
-        switch(_type) {
+        switch (_type) {
             case type.info:
             case type.success:
             case type.warning:
@@ -55,16 +56,13 @@ AlertMgr.prototype = {
     }
 };
 
-AlertMgr.resources = {
-    config: {
-        /**
-         * @enum {string}
-         */
-        type: {
-            info: 'info',
-            success: 'success',
-            warning: 'warning',
-            error: 'danger'
-        }
+AlertMgr.resources = {};
+AlertMgr.resources.config = {
+    /** @enum {string} */
+    type: {
+        info: 'info',
+        success: 'success',
+        warning: 'warning',
+        error: 'danger'
     }
 };
