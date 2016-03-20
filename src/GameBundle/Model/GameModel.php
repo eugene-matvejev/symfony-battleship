@@ -71,11 +71,12 @@ class GameModel
             $game->addBattlefield($battlefield);
 
             foreach ($data->cells as $cellData) {
+                $cell = $cellData;
                 $cell = (new Cell())
                     ->setX($cellData->x)
                     ->setY($cellData->y)
                     ->setState($battlefield->getPlayer()->getType()->getId() !== PlayerModel::TYPE_CPU
-                        ? $this->cellModel->getCellStates()[$cellData->s]
+                        ? $this->cellModel->getCellStates()[$cellData->state]
                         : $this->cellModel->getCellStates()[CellModel::STATE_WATER_LIVE]);
                 $battlefield->addCell($cell);
             }

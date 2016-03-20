@@ -1,19 +1,17 @@
 'use strict';
 
 /**
- * @param {jQuery}  $area
  * @param {string}  playerName
  * @param {boolean} isCPUPlayer
  * @param {int}     battlefieldSize
  *
  * @constructor
  */
-function Player($area, playerName, isCPUPlayer, battlefieldSize) {
+function Player(playerName, isCPUPlayer, battlefieldSize) {
     let resources = Player.resources,
-        type      = resources.config.type;
+        type = resources.config.type;
 
     this.$html = $(resources.html.layout());
-    $area.append(this.$html);
 
     this.setId('undefined')
         .setName(playerName)
@@ -27,6 +25,7 @@ function Player($area, playerName, isCPUPlayer, battlefieldSize) {
 
 /**
  * @property {jQuery}     $html
+ *
  * @property {int|string} id
  * @property {int}        type
  * @property {string}     name
@@ -37,7 +36,7 @@ Player.prototype = {
      *
      * @returns {Player}
      */
-    setId: function(id) {
+    setId: function (id) {
         this.id = id;
         this.updateHTML(Player.resources.config.attribute.id, id);
 
@@ -48,7 +47,7 @@ Player.prototype = {
      *
      * @returns {Player}
      */
-    setName: function(name) {
+    setName: function (name) {
         this.name = name;
         this.updateHTML(Player.resources.config.class.name, name);
 
@@ -59,7 +58,7 @@ Player.prototype = {
      *
      * @returns {Player}
      */
-    setType: function(type) {
+    setType: function (type) {
         this.type = type;
         this.updateHTML(Player.resources.config.attribute.type, type);
 
@@ -68,26 +67,26 @@ Player.prototype = {
     /**
      * @returns {boolean}
      */
-    isCPU: function() {
+    isCPU: function () {
         return this.type === Player.resources.config.type.cpu
     },
     /**
      * @returns {boolean}
      */
-    isHuman: function() {
+    isHuman: function () {
         return !this.isCPU();
     },
     /**
      * @returns {{id: {int}, name: {string}, type: {int}}}
      */
-    getJSON: function() {
+    getJSON: function () {
         return {id: this.id, name: this.name, type: this.type};
     },
     /**
      * @param {string}     field
      * @param {string|int} value
      */
-    updateHTML: function(field, value) {
+    updateHTML: function (field, value) {
         let config = Player.resources.config;
 
         switch (field) {
@@ -104,23 +103,17 @@ Player.prototype = {
 
 Player.resources = {};
 Player.resources.config = {
-    /**
-     * @enum {string}
-     */
+    /** @enum {string} */
     attribute: {
         id: 'data-player-id',
         type: 'data-player-type'
     },
-    /**
-     * @enum {string}
-     */
+    /** @enum {string} */
     class: {
         name: 'player-name',
         area: 'player-field'
     },
-    /**
-     * @enum {int}
-     */
+    /** @enum {int} */
     type: {
         cpu: 1,
         human: 2
@@ -130,7 +123,7 @@ Player.resources.html = {
     /**
      * @returns {string}
      */
-    layout: function() {
+    layout: function () {
         let config = Player.resources.config;
 
         return '' +

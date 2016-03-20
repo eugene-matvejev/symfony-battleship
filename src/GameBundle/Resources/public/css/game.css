@@ -1,0 +1,92 @@
+.battlefield-cell {
+    height: 32px;
+    width: 32px;
+    padding: 0;
+    opacity: 1;
+    font-size: 12px;
+    line-height: 32px;
+    text-align: center;
+}
+
+.battlefield-cell-container > .battlefield-cell[data-cell-x][data-cell-y]:not([data-cell-x="undefined"]):not([data-cell-y="undefined"]) {
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
+}
+.battlefield-cell-container > .battlefield-cell[data-cell-x][data-cell-y]:nth-last-child(2):not([data-cell-x="undefined"]):not([data-cell-y="undefined"]) {
+    border-right: 1px solid #000;
+}
+.battlefield-cell-container:nth-last-child(2) > .battlefield-cell[data-cell-x][data-cell-y]:not([data-cell-x="undefined"]):not([data-cell-y="undefined"]) {
+    border-bottom: 1px solid #000;
+}
+
+.battlefield-cell[data-cell-state="1"]:hover {
+    background: rgba(225, 255, 255, 0.75);
+    cursor: pointer;
+}
+.history-element[data-cell-state="1"],
+.battlefield-cell[data-cell-state="1"] {
+    background: #e1ffff;
+}
+.history-element[data-cell-state="2"],
+.battlefield-cell[data-cell-state="2"] {
+    background: #1e5799;
+}
+.history-element[data-cell-state="3"],
+.battlefield-cell[data-cell-state="3"] {
+    background: #000;
+}
+.history-element[data-cell-state="4"],
+.battlefield-cell[data-cell-state="4"] {
+    background: #6d0019;
+}
+.history-element[data-cell-state="5"],
+.battlefield-cell[data-cell-state="5"] {
+    background: #556980;
+}
+
+.player-area>.player-name {
+    font-size: 32px;
+}
+.player-area {
+    margin-top: 25px;
+}
+.player-area .battlefield-cell:not([data-cell-state="undefined"]):hover {
+    cursor: no-drop;
+}
+.player-area[data-player-type="1"] .battlefield-cell:not([data-cell-state="2"]):not([data-cell-state="4"]):not([data-cell-state="5"]):hover {
+    cursor: pointer;
+}
+
+.player-field div[data-cell-state="undefined"] {
+    opacity: 0.75;
+}
+
+div#game-current-area,
+div#game-results-area {
+    display: inline-block;
+    width: 100%;
+}
+
+li.history-container {
+    margin-top: 75px;
+}
+li.history-container ul {
+    list-style-type: none;
+}
+li.history-container li {
+    font-size: 12px;
+    vertical-align: middle;
+    margin: 5px 0px;
+}
+li.history-container .history-title {
+    display: block;
+    text-align: center;
+    border-bottom: 1px dashed #fff;
+    margin-bottom: 10px;
+}
+li.history-container .history-element {
+    height: 28px;
+    width: 28px;
+    display: inline-block;
+    vertical-align: middle;
+}

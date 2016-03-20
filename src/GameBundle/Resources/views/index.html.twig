@@ -2,25 +2,25 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('bundles/game/css/game/game.css') }}" type="text/css"/>
-    <link rel="stylesheet" href="{{ asset('bundles/game/css/game/statistics.css') }}" type="text/css"/>
+    <link rel="stylesheet" href="{{ asset('bundles/game/css/game.css') }}" type="text/css"/>
+    <link rel="stylesheet" href="{{ asset('bundles/game/css/game.results.css') }}" type="text/css"/>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ asset('bundles/game/js/prototype/api/api.mgr.prototype.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/prototype/core/game/cell.prototype.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/prototype/core/game/cell.container.prototype.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/prototype/core/game/battlefield.prototype.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/prototype/core/game/player.prototype.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/prototype/core/game/game.prototype.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/prototype/core/results/game.results.prototype.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/_game.controller.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/_statistics.controller.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/model/prototype/api.request.mgr.prototype.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/model/game/cell.prototype.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/model/game/cell.container.prototype.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/model/game/battlefield.prototype.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/model/game/player.prototype.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/model/game/game.prototype.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/model/game.results/game.results.prototype.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/controller/game.controller.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/controller/game.results.controller.js') }}"></script>
 {% endblock %}
 
 {% block content %}
-    <div id="game-area" data-turn-link="{{ path('battleship.game.api.turn') }}" data-init-link="{{ path('battleship.game.api.init') }}"></div>
+    <div id="game-current-area" data-turn-link="{{ path('battleship.game.api.turn') }}" data-init-link="{{ path('battleship.game.api.init') }}"></div>
     <div id="modal-area"></div>
-    <div id="stats-area" data-stats-link="{{ path('battleship.game.api.game.results', {'page' : 0})|trim('0') }}"></div>
+    <div id="game-results-area" data-stats-link="{{ path('battleship.game.api.game.results', {'page' : 0})|trim('0') }}"></div>
 {% endblock %}
