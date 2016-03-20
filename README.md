@@ -41,6 +41,7 @@
 # How to install
  * copy *app/config/parameters.yml.dist* to *app/config/parameters.yml* and amend database settings
  * *composer install* (will create databases as well as run migrations)
+ * *php bin/console battleship:database:seed --env=prod* (to seed database with necessary data e.g. cell states, player types)
  * *php bin/console assets:install* (as need dump assets once)
  * apache virtual host config:
  ```
