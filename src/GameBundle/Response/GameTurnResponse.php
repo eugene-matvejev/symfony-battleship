@@ -8,7 +8,7 @@ use EM\GameBundle\Entity\GameResult;
 /**
  * @since 5.0
  */
-class GameTurnResponse
+class GameTurnResponse implements GameResponseInterface
 {
     /**
      * @var array

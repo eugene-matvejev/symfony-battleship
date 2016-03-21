@@ -1,4 +1,12 @@
 services:
+    battleship.game.response.listener:
+        class: EM\GameBundle\EventListener\GameResponseListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+    battleship.game.request.listener:
+        class: EM\GameBundle\EventListener\GameRequestListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
     # Models
     battleship.game.services.cell.model:
         class: EM\GameBundle\Model\CellModel
