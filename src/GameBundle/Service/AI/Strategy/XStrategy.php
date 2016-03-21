@@ -23,7 +23,7 @@ class XStrategy extends AbstractStrategy
      */
     public function verify(Cell $cell) : array
     {
-        return parent::verifyByCoordinates([
+        return $this->verifyByCoordinates([
             new CoordinatesPair(CoordinatesPair::WAY_LEFT, $cell->getX() + 1, $cell->getY()), // -- left
             new CoordinatesPair(CoordinatesPair::WAY_RIGHT, $cell->getX() - 1, $cell->getY()) // ++ right
         ]);

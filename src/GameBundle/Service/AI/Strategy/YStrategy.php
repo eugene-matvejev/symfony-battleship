@@ -23,7 +23,7 @@ class YStrategy extends AbstractStrategy
      */
     public function verify(Cell $cell) : array
     {
-        return parent::verifyByCoordinates([
+        return $this->verifyByCoordinates([
             new CoordinatesPair(CoordinatesPair::WAY_UP, $cell->getX(), $cell->getY() + 1),   // -- up
             new CoordinatesPair(CoordinatesPair::WAY_DOWN, $cell->getX(), $cell->getY() - 1)  // ++ down
         ]);
