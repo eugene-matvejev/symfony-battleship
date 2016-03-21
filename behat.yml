@@ -1,0 +1,48 @@
+default:
+    extensions:
+        Behat\Symfony2Extension: ~
+#        Behat\MinkExtension\Extension:
+#            default_session: symfony2
+#            show_cmd: 'open -a Google\ Chrome.app %s'
+#            base_url: http://api.game.local/app_dev.php
+#        Behat\Symfony2Extension: ~
+        Behat\MinkExtension:
+            sessions:
+                default:
+                    symfony2: ~
+#
+#    formatter:
+#        name: pretty
+
+    suites:
+# *** *** *** *** *** API *** *** *** *** ***
+#        api.game_features:
+#            contexts:
+#                - EM\Tests\Behat\GameBundle\Controller\GameControllerContext:
+#                    session:   '@session'
+#        api.game_results_features:
+#            contexts:
+#                - EM\Tests\Behat\GameBundle\Controller\GameControllerContext:
+#                    session:   '@session'
+# *** *** *** *** *** GUI *** *** *** *** ***
+        gui.game_features:
+            paths: [%paths.base%/tests/behat/features/gui] #/api_game.feature
+            contexts:
+                - EM\Tests\Behat\GameBundle\Controller\GameControllerContext:
+                    session:   '@session'
+
+#
+#default:
+#    formatter:
+#        name: pretty
+#    paths:
+#        features: features
+#    context:
+#        class:  Context\FeatureContext
+#    extensions:
+#        Behat\MinkExtension\Extension:
+#            default_session: symfony2
+#            show_cmd: 'open -a Firefox.app %s'
+#            base_url: http://myproject.dev
+#
+#        Behat\Symfony2Extension\Extension: ~
