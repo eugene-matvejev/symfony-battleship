@@ -10,7 +10,7 @@ use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler;
  */
 class DatabaseProvisionCommand extends ScriptHandler
 {
-    static public function initDatabases(CommandEvent $event)
+    public static function initDatabases(CommandEvent $event)
     {
         if (null !== $consoleDir = static::getConsoleDir($event, 'install assets')) {
             static::executeCommand($event, $consoleDir, 'doctrine:database:create --env=prod --if-not-exists');
