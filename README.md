@@ -1,6 +1,7 @@
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
+[![Build Status](https://travis-ci.org/eugene-matvejev/battleship-game-api.svg?branch=master)](https://travis-ci.org/eugene-matvejev/battleship-game-api)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc/mini.png)](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc)
 
-[![Build Status](https://travis-ci.org/eugene-matvejev/battleship-game-api.svg?branch=master)](https://travis-ci.org/eugene-matvejev/battleship-game-api)
 
 # Battleship Game API
 ### Spare time project, Work in Progress! Highly experimental!!!
@@ -41,6 +42,7 @@
 # How to install
  * copy *app/config/parameters.yml.dist* to *app/config/parameters.yml* and amend database settings
  * *composer install* (will create databases as well as run migrations)
+ * *php bin/console battleship:database:seed --env=prod* (to seed database with necessary data e.g. cell states, player types)
  * *php bin/console assets:install* (as need dump assets once)
  * apache virtual host config:
  ```

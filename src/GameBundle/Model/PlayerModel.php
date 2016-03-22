@@ -2,7 +2,6 @@
 
 namespace EM\GameBundle\Model;
 
-use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Entity\PlayerType;
 use EM\GameBundle\Repository\PlayerTypeRepository;
 

@@ -21,7 +21,7 @@ class Game implements IdentifiableInterface, TimestampedInterface
 {
     use IdentifiableTrait, TimestampedTrait;
     /**
-     * @ORM\OneToMany(targetEntity="EM\GameBundle\Entity\Battlefield", mappedBy="game", cascade={"persist"}, fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="EM\GameBundle\Entity\Battlefield", mappedBy="game", cascade={"persist"}, fetch="EAGER", indexBy="id")
      * @ORM\JoinColumn(name="id", referencedColumnName="game", nullable=false)
      *
      * @var Collection|Battlefield[]
