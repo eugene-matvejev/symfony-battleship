@@ -71,7 +71,6 @@ class GameModel
             $game->addBattlefield($battlefield);
 
             foreach ($data->cells as $cellData) {
-                $cell = $cellData;
                 $cell = (new Cell())
                     ->setX($cellData->x)
                     ->setY($cellData->y)
