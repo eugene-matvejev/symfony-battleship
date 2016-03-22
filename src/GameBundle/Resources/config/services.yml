@@ -18,7 +18,7 @@ services:
     battleship.game.services.game.result.model:
         class: EM\GameBundle\Model\GameResultModel
         arguments:
-            - %battleship.config.statistics.results.per.page%
+            - %battleship.game.config.game.results.per.page%
             - "@battleship.game.services.game.result.repository"
     # AI
     battleship.game.services.ai.core.service:
