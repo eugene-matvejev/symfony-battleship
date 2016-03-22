@@ -24,6 +24,7 @@ class CellModel
     const STATES_LIVE  = [self::STATE_WATER_LIVE, self::STATE_SHIP_LIVE];
     const STATES_DIED  = [self::STATE_WATER_DIED, self::STATE_SHIP_DIED];
     const STATES_ALL   = [self::STATE_WATER_LIVE, self::STATE_WATER_DIED, self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED, self::STATE_WATER_SKIP];
+
     /**
      * @var CellState[]
      */
@@ -60,16 +61,18 @@ class CellModel
         return self::$changedCells;
     }
 
-    public function switchState(Cell $cell) : Cell
+    public function switchState(Cell $cell, int $state = null) : Cell
     {
         switch ($cell->getState()->getId()) {
             case self::STATE_WATER_LIVE:
-                $cell->setState(self::$cellStates[self::STATE_WATER_DIED]);
+                $cell->setState(self::$cellStates[$state ?? self::STATE_WATER_DIED]);
                 self::$changedCells[] = $cell;
                 break;
             case self::STATE_SHIP_LIVE:
-                $cell->setState(self::$cellStates[self::STATE_SHIP_DIED]);
-                self::$changedCells[] = $cell;
+                if (!isset($state)) {
+                    $cell->setState(self::$cellStates[self::STATE_SHIP_DIED]);
+                    self::$changedCells[] = $cell;
+                }
                 break;
         }
 
@@ -78,14 +81,7 @@ class CellModel
 
     public function switchStateToSkipped(Cell $cell) : Cell
     {
-        switch ($cell->getState()->getId()) {
-            case self::STATE_WATER_LIVE:
-                $cell->setState(self::$cellStates[self::STATE_WATER_SKIP]);
-                self::$changedCells[] = $cell;
-                break;
-        }
-
-        return $cell;
+        return $this->switchState($cell, self::STATE_WATER_SKIP);
     }
 
     /**
