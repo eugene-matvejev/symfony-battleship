@@ -141,11 +141,11 @@ class GameModel
 
     public function playerTurn(Battlefield $battlefield, \stdClass $cellData)
     {
+        $cell = null;
         switch ($battlefield->getPlayer()->getType()->getId()) {
             case PlayerModel::TYPE_HUMAN:
                 $cell = $this->ai->turn($battlefield);
                 break;
-            default:
             case PlayerModel::TYPE_CPU:
                 $cell = $battlefield->getCells()[$cellData->id] ?? null;
                 if (null !== $cell) {
