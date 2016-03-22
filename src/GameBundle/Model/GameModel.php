@@ -43,7 +43,7 @@ class GameModel
      */
     private $playerRepository;
 
-    function __construct(AIService $ai, CellModel $cellModel, PlayerModel $playerModel, ObjectManager $om)
+    public function __construct(AIService $ai, CellModel $cellModel, PlayerModel $playerModel, ObjectManager $om)
     {
         $this->ai = $ai;
         $this->cellModel = $cellModel;
