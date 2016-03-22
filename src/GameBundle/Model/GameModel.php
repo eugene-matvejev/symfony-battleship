@@ -75,8 +75,8 @@ class GameModel
                     ->setX($cellData->x)
                     ->setY($cellData->y)
                     ->setState($battlefield->getPlayer()->getType()->getId() !== PlayerModel::TYPE_CPU
-                        ? $this->cellModel->getCellStates()[$cellData->state]
-                        : $this->cellModel->getCellStates()[CellModel::STATE_WATER_LIVE]);
+                        ? $this->cellModel->getAllStates()[$cellData->state]
+                        : $this->cellModel->getAllStates()[CellModel::STATE_WATER_LIVE]);
                 $battlefield->addCell($cell);
             }
 
@@ -93,7 +93,7 @@ class GameModel
     {
         foreach ($battlefield->getCells() as $cell) {
             if ($cell->getX() === 1 && $cell->getY() === 1) {
-                $cell->setState($this->cellModel->getCellStates()[CellModel::STATE_SHIP_LIVE]);
+                $cell->setState($this->cellModel->getAllStates()[CellModel::STATE_SHIP_LIVE]);
             }
         }
     }
