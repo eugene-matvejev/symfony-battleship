@@ -82,25 +82,21 @@ class AIStrategyService
     private function decideStrategy(Cell $cell) : int
     {
         $coordinates = [
-            new CoordinatesPair(CoordinatesPair::WAY_LEFT, $cell->getX() + 1, $cell->getY()), // -- left
-            new CoordinatesPair(CoordinatesPair::WAY_RIGHT, $cell->getX() - 1, $cell->getY()),// ++ right
+            self::STRATEGY_X => [
+                new CoordinatesPair(CoordinatesPair::WAY_LEFT, $cell->getX() + 1, $cell->getY()), // -- left
+                new CoordinatesPair(CoordinatesPair::WAY_RIGHT, $cell->getX() - 1, $cell->getY()),// ++ right
+            ],
+            self::STRATEGY_Y => [
+                new CoordinatesPair(CoordinatesPair::WAY_UP, $cell->getX(), $cell->getY() + 1),   // -- up
+                new CoordinatesPair(CoordinatesPair::WAY_DOWN, $cell->getX(), $cell->getY() - 1)  // ++ down
+            ]
         ];
-        foreach ($coordinates as $coordinatePair) {
-            if (null !== $_cell = $this->cellModel->getByCoordinatesPair($coordinatePair)) {
-                if ($_cell->getState()->getId() === CellModel::STATE_SHIP_DIED) {
-                    return self::STRATEGY_X;
-                }
-            }
-        }
-
-        $coordinates = [
-            new CoordinatesPair(CoordinatesPair::WAY_UP, $cell->getX(), $cell->getY() + 1),   // -- up
-            new CoordinatesPair(CoordinatesPair::WAY_DOWN, $cell->getX(), $cell->getY() - 1)  // ++ down
-        ];
-        foreach ($coordinates as $coordinatePair) {
-            if (null !== $_cell = $this->cellModel->getByCoordinatesPair($coordinatePair)) {
-                if ($_cell->getState()->getId() === CellModel::STATE_SHIP_DIED) {
-                    return self::STRATEGY_Y;
+        foreach ($coordinates as $strategyId => $coordinatePairs) {
+            foreach ($coordinatePairs as $coordinatePair) {
+                if (null !== $_cell = $this->cellModel->getByCoordinatesPair($coordinatePair)) {
+                    if ($_cell->getState()->getId() === CellModel::STATE_SHIP_DIED) {
+                        return $strategyId;
+                    }
                 }
             }
         }
