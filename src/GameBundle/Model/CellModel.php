@@ -48,7 +48,7 @@ class CellModel
     /**
      * @return CellState[]
      */
-    public function getCellStates() : array
+    public function getAllStates() : array
     {
         return self::$cellStates;
     }
@@ -61,19 +61,20 @@ class CellModel
         return self::$changedCells;
     }
 
-    public function switchState(Cell $cell, int $state = null) : Cell
+    public function switchState(Cell $cell, int $customState = null) : Cell
     {
+        $oldState = $cell->getState()->getId();
         switch ($cell->getState()->getId()) {
             case self::STATE_WATER_LIVE:
-                $cell->setState(self::$cellStates[$state ?? self::STATE_WATER_DIED]);
-                self::$changedCells[] = $cell;
+                $cell->setState(self::$cellStates[$customState ?? self::STATE_WATER_DIED]);
                 break;
             case self::STATE_SHIP_LIVE:
-                if (!isset($state)) {
-                    $cell->setState(self::$cellStates[self::STATE_SHIP_DIED]);
-                    self::$changedCells[] = $cell;
-                }
+                $cell->setState(self::$cellStates[self::STATE_SHIP_DIED]);
                 break;
+        }
+
+        if($cell->getState()->getId() !== $oldState) {
+            self::$changedCells[] = $cell;
         }
 
         return $cell;

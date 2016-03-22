@@ -24,16 +24,16 @@ class CellModelTest extends ExtendedTestCase
     }
 
     /**
-     * @see CellModel::getCellStates()
+     * @see CellModel::getAllStates()
      * @test
      */
-    public function getCellStates()
+    public function getAllStates()
     {
-        foreach ($this->cellModel->getCellStates() as $state) {
+        foreach ($this->cellModel->getAllStates() as $state) {
             $this->assertContains($state->getId(), CellModel::STATES_ALL);
         }
 
-        $this->assertEquals(count($this->cellModel->getCellStates()), count(CellModel::STATES_ALL));
+        $this->assertEquals(count($this->cellModel->getAllStates()), count(CellModel::STATES_ALL));
     }
 
     /**
@@ -103,16 +103,14 @@ class CellModelTest extends ExtendedTestCase
      */
     public function switchState()
     {
-        foreach ($this->cellModel->getCellStates() as $cellState) {
-            $stateBefore = $cellState->getId();
+        foreach ($this->cellModel->getAllStates() as $cellState) {
+            $oldState = $cellState->getId();
             $cell = $this->getMockedCell($cellState);
             $this->cellModel->switchState($cell);
 
-            if (in_array($stateBefore, CellModel::STATES_LIVE)) {
-                $this->assertContains($cell->getState()->getId(), CellModel::STATES_DIED);
-            } else {
-                $this->assertEquals($stateBefore, $cell->getState()->getId());
-            }
+            in_array($oldState, CellModel::STATES_LIVE)
+                ? $this->assertContains($cell->getState()->getId(), CellModel::STATES_DIED)
+                : $this->assertEquals($oldState, $cell->getState()->getId());
         }
     }
 
@@ -122,16 +120,14 @@ class CellModelTest extends ExtendedTestCase
      */
     public function switchStateToSkipped()
     {
-        foreach ($this->cellModel->getCellStates() as $cellState) {
-            $stateBefore = $cellState->getId();
+        foreach ($this->cellModel->getAllStates() as $cellState) {
+            $oldState = $cellState->getId();
             $cell = $this->getMockedCell($cellState);
             $this->cellModel->switchStateToSkipped($cell);
 
-            if ($stateBefore === CellModel::STATE_WATER_LIVE) {
-                $this->assertEquals(CellModel::STATE_WATER_SKIP, $cell->getState()->getId());
-            } else {
-                $this->assertEquals($stateBefore, $cell->getState()->getId());
-            }
+            $oldState === CellModel::STATE_WATER_LIVE
+                ? $this->assertEquals(CellModel::STATE_WATER_SKIP, $cell->getState()->getId())
+                : $this->assertNotContains($cell->getState()->getId(), CellModel::STATES_LIVE);
         }
     }
 
@@ -144,9 +140,7 @@ class CellModelTest extends ExtendedTestCase
      */
     private function getMockedCell(CellState $state) : Cell
     {
-        $cell = (new Cell())
+        return (new Cell())
             ->setState($state);
-
-        return $cell;
     }
 }
