@@ -37,7 +37,7 @@ class CellModel
      */
     private static $changedCells = [];
 
-    function __construct(CellStateRepository $repository)
+    public function __construct(CellStateRepository $repository)
     {
         if (null === self::$cellStates) {
             self::$cellStates = $repository->getAllIndexed();

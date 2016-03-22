@@ -26,7 +26,7 @@ abstract class AbstractStrategy
      *
      * @return Cell[]
      */
-    abstract function verify(Cell $cell) : array;
+    abstract public function verify(Cell $cell) : array;
 
     /**
      * @param CoordinatesPair[] $coordinatesPairs

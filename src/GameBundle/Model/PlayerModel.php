@@ -19,7 +19,7 @@ class PlayerModel
      */
     private static $playerTypes;
 
-    function __construct(PlayerTypeRepository $repository)
+    public function __construct(PlayerTypeRepository $repository)
     {
         if (null === self::$playerTypes) {
             self::$playerTypes = $repository->getAllIndexed();
