@@ -4,7 +4,6 @@ namespace EM\GameBundle\Model;
 
 use EM\GameBundle\Repository\GameResultRepository;
 use EM\GameBundle\Response\GameResultsResponse;
-use EM\GameBundle\Response\StatisticsResponse;
 
 /**
  * @since 5.0
