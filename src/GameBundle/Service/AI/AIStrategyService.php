@@ -19,6 +19,19 @@ class AIStrategyService
     const STRATEGY_Y        = 1;
     const STRATEGY_RAND     = 2;
     const COORDINATES_STEPS = [-1, 0, 1];
+
+    /**
+     * @var XStrategy
+     */
+    private $xStrategy;
+    /**
+     * @var YStrategy
+     */
+    private $yStrategy;
+    /**
+     * @var RandomStrategy
+     */
+    private $randStrategy;
     /**
      * @var CellModel
      */
