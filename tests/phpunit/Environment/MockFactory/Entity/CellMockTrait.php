@@ -11,10 +11,10 @@ trait CellMockTrait
 {
     use CellStateMockTrait;
 
-    protected function getCellMock(string $coordinate, int $state = null) : Cell
+    protected function getCellMock(string $coordinate, int $stateId = null) : Cell
     {
         return (new Cell())
             ->setCoordinate($coordinate)
-            ->setState($this->getCellStateMock($state));
+            ->setState($this->getCellStateMock($stateId));
     }
 }

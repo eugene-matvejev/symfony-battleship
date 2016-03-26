@@ -2,7 +2,6 @@
 
 namespace EM\Tests\PHPUnit\GameBundle\Model;
 
-use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Model\GameModel;
 use EM\Tests\PHPUnit\Environment\ExtendedTestCase;

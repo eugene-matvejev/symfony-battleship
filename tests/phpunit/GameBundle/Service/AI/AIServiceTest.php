@@ -8,12 +8,14 @@ use EM\GameBundle\Exception\AIException;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIService;
 use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
+use EM\Tests\PHPUnit\Environment\MockFactory\Entity\CellMockTrait;
 
 /**
  * @see AIService
  */
 class AIServiceTest extends ExtendedTestCase
 {
+    use CellMockTrait;
     /**
      * @var AIService
      */
@@ -44,29 +46,12 @@ class AIServiceTest extends ExtendedTestCase
 
         foreach (CellModel::STATES_ALL as $cellStateId) {
             try {
-                $cell = $this->getMockedCell($cellStateId);
+                $cell = $this->getCellMock($cellStateId);
                 $this->invokePrivateMethod(AIService::class, $this->ai, 'attackCell', [$cell]);
                 $this->assertContains($cell->getState()->getId(), CellModel::STATES_DIED);
             } catch (AIException $e) {
                 $this->assertContains($cell->getState()->getId(), $cellToException);
             }
         }
-    }
-
-    /**
-     * @param int $cellStateId
-     *
-     * @return Cell
-     *
-     * @coversNothing
-     */
-    protected function getMockedCell(int $cellStateId) : Cell
-    {
-        $cellState = (new CellState())
-            ->setId($cellStateId);
-        $cell = (new Cell())
-            ->setState($cellState);
-
-        return $cell;
     }
 }

@@ -80,6 +80,11 @@ class CoordinateServiceTest extends ExtendedTestCase
      */
     public function calculateNextCoordinate()
     {
+        /**
+         *  T-L    T   T-R
+         *   L < cell > R
+         *  D-L    D   D-R
+         */
         $patterns = [
             ['way' => CoordinateService::WAY_LEFT, 'expected' => 'C4'],
             ['way' => CoordinateService::WAY_RIGHT, 'expected' => 'E4'],

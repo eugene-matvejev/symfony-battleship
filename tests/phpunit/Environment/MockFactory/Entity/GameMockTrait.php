@@ -15,7 +15,7 @@ trait GameMockTrait
     {
         $game = new Game();
 
-        for($i = 0; $i < $battlefields; $i++) {
+        for ($i = 0; $i < $battlefields; $i++) {
             $game->addBattlefield($this->getBattlefieldMock());
         }
 
