@@ -19,14 +19,11 @@ class RandomStrategy extends AbstractStrategy
     {
         $service = new CoordinateService($cell);
 
-
-        $coordinates = [
+        return $this->verifyByCoordinates($cell->getBattlefield(), [
             clone $service->setWay(CoordinateService::WAY_LEFT),
             clone $service->setWay(CoordinateService::WAY_RIGHT),
             clone $service->setWay(CoordinateService::WAY_UP),
             clone $service->setWay(CoordinateService::WAY_DOWN)
-        ];
-
-        return $this->verifyByCoordinates($cell->getBattlefield(), $coordinates, false);
+        ]);
     }
 }

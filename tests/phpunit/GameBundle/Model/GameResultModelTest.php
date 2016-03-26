@@ -7,8 +7,8 @@ use EM\GameBundle\Model\GameResultModel;
 use EM\GameBundle\Model\PlayerModel;
 use EM\GameBundle\Response\GameResultsResponse;
 use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
-use EM\Tests\PHPUnit\Environment\MockFactory\GameMockTrait;
-use EM\Tests\PHPUnit\Environment\MockFactory\GameResultMockTrait;
+use EM\Tests\PHPUnit\Environment\MockFactory\Entity\GameMockTrait;
+use EM\Tests\PHPUnit\Environment\MockFactory\Entity\GameResultMockTrait;
 
 /**
  * @see GameResultModel

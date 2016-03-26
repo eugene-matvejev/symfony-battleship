@@ -1,7 +1,8 @@
 <?php
 
-namespace EM\Tests\PHPUnit\Environment\MockFactory;
+namespace EM\Tests\PHPUnit\Environment\MockFactory\Service;
 
+use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Service\CoordinateSystem\CoordinateService;
 
 /**

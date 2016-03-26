@@ -6,7 +6,7 @@ use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Model\GameModel;
 use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
-use EM\Tests\PHPUnit\Environment\MockFactory\GameMockTrait;
+use EM\Tests\PHPUnit\Environment\MockFactory\Entity\GameMockTrait;
 
 /**
  * @see GameModel

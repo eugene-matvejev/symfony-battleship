@@ -65,7 +65,7 @@ class CoordinateService
     {
         $this->way = $way;
         $this->value = $this->cell->getCoordinate();
-        
+
         return $this;
     }
 
@@ -88,7 +88,7 @@ class CoordinateService
             case self::WAY_UP:
                 return $this->value = $letter . --$number;
             case self::WAY_DOWN:
-                return ++$this->value;
+                return $this->value = $letter . ++$number; // no ++$this->value; as ++'B9' -> C0
             case self::WAY_LEFT:
                 return $this->value = chr(ord($letter) - 1) . $number;
             case self::WAY_LEFT_UP:

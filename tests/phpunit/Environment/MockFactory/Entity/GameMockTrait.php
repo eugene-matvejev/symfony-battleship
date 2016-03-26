@@ -1,6 +1,6 @@
 <?php
 
-namespace EM\Tests\PHPUnit\Environment\MockFactory;
+namespace EM\Tests\PHPUnit\Environment\MockFactory\Entity;
 
 use EM\GameBundle\Entity\Game;
 
@@ -11,7 +11,7 @@ trait GameMockTrait
 {
     use BattlefieldMockTrait;
 
-    private function getGameMock(int $battlefields = 2) : Game
+    protected function getGameMock(int $battlefields = 2) : Game
     {
         $game = new Game();
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace EM\Tests\PHPUnit\Environment\MockFactory;
+namespace EM\Tests\PHPUnit\Environment\MockFactory\Entity;
 
 use EM\GameBundle\Entity\Cell;
 
@@ -11,7 +11,7 @@ trait CellMockTrait
 {
     use CellStateMockTrait;
 
-    private function getCellMock(string $coordinate, int $state = null) : Cell
+    protected function getCellMock(string $coordinate, int $state = null) : Cell
     {
         return (new Cell())
             ->setCoordinate($coordinate)

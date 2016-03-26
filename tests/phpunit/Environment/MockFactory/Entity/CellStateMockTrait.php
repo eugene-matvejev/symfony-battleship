@@ -1,6 +1,6 @@
 <?php
 
-namespace EM\Tests\PHPUnit\Environment\MockFactory;
+namespace EM\Tests\PHPUnit\Environment\MockFactory\Entity;
 
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
@@ -12,7 +12,7 @@ use EM\GameBundle\Model\CellModel;
  */
 trait CellStateMockTrait
 {
-    private function getCellStateMock(int $stateId = null) : CellState
+    protected function getCellStateMock(int $stateId = null) : CellState
     {
         return (new CellState())
             ->setId($stateId ?? CellModel::STATE_WATER_LIVE);

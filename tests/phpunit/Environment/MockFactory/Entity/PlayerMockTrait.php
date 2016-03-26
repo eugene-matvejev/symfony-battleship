@@ -1,6 +1,6 @@
 <?php
 
-namespace EM\Tests\PHPUnit\Environment\MockFactory;
+namespace EM\Tests\PHPUnit\Environment\MockFactory\Entity;
 
 use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Entity\PlayerType;
@@ -12,7 +12,7 @@ trait PlayerMockTrait
 {
     use PlayerTypeMockTrait;
 
-    private function getPlayerMock(string $name, PlayerType $type = null) : Player
+    protected function getPlayerMock(string $name, PlayerType $type = null) : Player
     {
         return (new Player())
             ->setName($name)

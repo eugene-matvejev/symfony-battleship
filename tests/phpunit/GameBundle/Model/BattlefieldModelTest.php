@@ -5,7 +5,7 @@ namespace EM\Tests\PHPUnit\GameBundle\Model;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
 use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
-use EM\Tests\PHPUnit\Environment\MockFactory\BattlefieldMockTrait;
+use EM\Tests\PHPUnit\Environment\MockFactory\Entity\BattlefieldMockTrait;
 
 /**
  * @see BattlefieldModel

@@ -3,82 +3,107 @@
 namespace EM\Tests\PHPUnit\GameBundle\Service\CoordinateSystem;
 
 use EM\GameBundle\Service\CoordinateSystem\CoordinateService;
-use EM\GameBundle\Service\CoordinateSystem\CoordinatesPair;
 use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
+use EM\Tests\PHPUnit\Environment\MockFactory\Entity\CellMockTrait;
+use EM\Tests\PHPUnit\Environment\MockFactory\Service\CoordinateServiceMockTrait;
 
 /**
  * @see CoordinateService
  */
 class CoordinateServiceTest extends ExtendedTestCase
 {
-    const COORDINATE_X = 2;
-    const COORDINATE_Y = 2;
+    use CoordinateServiceMockTrait, CellMockTrait;
 
     /**
-     * @see CoordinatesPair::prepareForNextStep
+     * @see CoordinateService::ALL_WAYS
      * @test
      */
-    public function wayLeft()
+    public function allWays()
     {
-        $coordinatesPair = $this->getMockedCoordinatesPair(CoordinatesPair::WAY_LEFT);
-        $this->assertSame(self::COORDINATE_X, $coordinatesPair->getX());
-        $this->assertSame(self::COORDINATE_Y, $coordinatesPair->getY());
-        $coordinatesPair->prepareForNextStep();
-        $this->assertSame(self::COORDINATE_X - 1, $coordinatesPair->getX());
-        $this->assertSame(self::COORDINATE_Y, $coordinatesPair->getY());
+        $this->assertCount(8, CoordinateService::ALL_WAYS);
+
+        $this->assertContains(CoordinateService::WAY_LEFT, CoordinateService::ALL_WAYS);
+        $this->assertContains(CoordinateService::WAY_RIGHT, CoordinateService::ALL_WAYS);
+        $this->assertContains(CoordinateService::WAY_UP, CoordinateService::ALL_WAYS);
+        $this->assertContains(CoordinateService::WAY_DOWN, CoordinateService::ALL_WAYS);
+
+        $this->assertContains(CoordinateService::WAY_LEFT_UP, CoordinateService::ALL_WAYS);
+        $this->assertContains(CoordinateService::WAY_LEFT_DOWN, CoordinateService::ALL_WAYS);
+
+        $this->assertContains(CoordinateService::WAY_RIGHT_UP, CoordinateService::ALL_WAYS);
+        $this->assertContains(CoordinateService::WAY_RIGHT_DOWN, CoordinateService::ALL_WAYS);
+
+        $this->assertNotContains(CoordinateService::WAY_NONE, CoordinateService::ALL_WAYS);
     }
 
     /**
-     * @see CoordinatesPair::prepareForNextStep
+     * @see CoordinateService::ALL_BASIC_WAYS
      * @test
      */
-    public function wayRight()
+    public function basicWays()
     {
-        $coordinatesPair = $this->getMockedCoordinatesPair(CoordinatesPair::WAY_RIGHT);
-        $this->assertSame(self::COORDINATE_X, $coordinatesPair->getX());
-        $this->assertSame(self::COORDINATE_Y, $coordinatesPair->getY());
-        $coordinatesPair->prepareForNextStep();
-        $this->assertSame(self::COORDINATE_X + 1, $coordinatesPair->getX());
-        $this->assertSame(self::COORDINATE_Y, $coordinatesPair->getY());
+        $this->assertCount(4, CoordinateService::ALL_BASIC_WAYS);
+
+        $this->assertContains(CoordinateService::WAY_LEFT, CoordinateService::ALL_BASIC_WAYS);
+        $this->assertContains(CoordinateService::WAY_RIGHT, CoordinateService::ALL_BASIC_WAYS);
+        $this->assertContains(CoordinateService::WAY_UP, CoordinateService::ALL_BASIC_WAYS);
+        $this->assertContains(CoordinateService::WAY_DOWN, CoordinateService::ALL_BASIC_WAYS);
     }
 
     /**
-     * @see CoordinatesPair::prepareForNextStep
+     * @see CoordinateService::STRATEGY_X
      * @test
      */
-    public function wayUp()
+    public function xWays()
     {
-        $coordinatesPair = $this->getMockedCoordinatesPair(CoordinatesPair::WAY_UP);
-        $this->assertSame(self::COORDINATE_X, $coordinatesPair->getX());
-        $this->assertSame(self::COORDINATE_Y, $coordinatesPair->getY());
-        $coordinatesPair->prepareForNextStep();
-        $this->assertSame(self::COORDINATE_X, $coordinatesPair->getX());
-        $this->assertSame(self::COORDINATE_Y - 1, $coordinatesPair->getY());
+        $this->assertCount(2, CoordinateService::STRATEGY_X);
+
+        $this->assertContains(CoordinateService::WAY_LEFT, CoordinateService::ALL_BASIC_WAYS);
+        $this->assertContains(CoordinateService::WAY_RIGHT, CoordinateService::ALL_BASIC_WAYS);
     }
 
     /**
-     * @see CoordinatesPair::prepareForNextStep
+     * @see CoordinateService::STRATEGY_Y
      * @test
      */
-    public function wayDown()
+    public function yWays()
     {
-        $coordinatesPair = $this->getMockedCoordinatesPair(CoordinatesPair::WAY_DOWN);
-        $this->assertSame(self::COORDINATE_X, $coordinatesPair->getX());
-        $this->assertSame(self::COORDINATE_Y, $coordinatesPair->getY());
-        $coordinatesPair->prepareForNextStep();
-        $this->assertSame(self::COORDINATE_X, $coordinatesPair->getX());
-        $this->assertSame(self::COORDINATE_Y + 1, $coordinatesPair->getY());
+        $this->assertCount(2, CoordinateService::STRATEGY_Y);
+
+        $this->assertContains(CoordinateService::WAY_UP, CoordinateService::ALL_BASIC_WAYS);
+        $this->assertContains(CoordinateService::WAY_DOWN, CoordinateService::ALL_BASIC_WAYS);
     }
 
     /**
-     * @param int $way
-     *
-     * @return CoordinatesPair
-     *
-     * @coversNothing
+     * @see CoordinateService::calculateNextCoordinate
+     * @test
      */
-    protected function getMockedCoordinatesPair(int $way) : CoordinatesPair
+    public function calculateNextCoordinate()
     {
-        return new CoordinatesPair($way, self::COORDINATE_X, self::COORDINATE_Y);
+        $patterns = [
+            ['way' => CoordinateService::WAY_LEFT, 'expected' => 'C4'],
+            ['way' => CoordinateService::WAY_RIGHT, 'expected' => 'E4'],
+            ['way' => CoordinateService::WAY_UP, 'expected' => 'D3'],
+            ['way' => CoordinateService::WAY_DOWN, 'expected' => 'D5'],
+
+            ['way' => CoordinateService::WAY_NONE, 'expected' => 'D4'],
+
+            ['way' => CoordinateService::WAY_LEFT_UP, 'expected' => 'C3'],
+            ['way' => CoordinateService::WAY_LEFT_DOWN, 'expected' => 'C5'],
+            ['way' => CoordinateService::WAY_RIGHT_UP, 'expected' => 'E3'],
+            ['way' => CoordinateService::WAY_RIGHT_DOWN, 'expected' => 'E5']
+        ];
+
+        foreach ($patterns as $pattern) {
+            $this->validateWay($pattern['way'], $pattern['expected'], 'D4');
+        }
+    }
+
+    private function validateWay(int $wayId, string $expectedCoordinate, string $startCoordinate)
+    {
+        $service = $this->getCoordinateServiceMock($this->getCellMock($startCoordinate));
+        $service->setWay($wayId);
+        $service->calculateNextCoordinate();
+        $this->assertEquals($expectedCoordinate, $service->getValue());
     }
 }

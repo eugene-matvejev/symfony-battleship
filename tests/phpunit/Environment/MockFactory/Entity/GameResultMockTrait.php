@@ -1,6 +1,6 @@
 <?php
 
-namespace EM\Tests\PHPUnit\Environment\MockFactory;
+namespace EM\Tests\PHPUnit\Environment\MockFactory\Entity;
 
 use EM\GameBundle\Entity\GameResult;
 
@@ -9,7 +9,7 @@ use EM\GameBundle\Entity\GameResult;
  */
 trait GameResultMockTrait
 {
-    private function getGameResultMock() : GameResult
+    protected function getGameResultMock() : GameResult
     {
         return new GameResult();
     }

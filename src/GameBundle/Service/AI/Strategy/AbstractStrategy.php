@@ -2,9 +2,8 @@
 
 namespace EM\GameBundle\Service\AI\Strategy;
 
-use EM\GameBundle\Entity\{
-    Battlefield, Cell
-};
+use EM\GameBundle\Entity\Battlefield;
+use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\CoordinateSystem\CoordinateService;
 
@@ -38,7 +37,7 @@ abstract class AbstractStrategy
                 if (in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
                     $cells[] = $cell;
                     break;
-                };
+                }
             }
         }
 

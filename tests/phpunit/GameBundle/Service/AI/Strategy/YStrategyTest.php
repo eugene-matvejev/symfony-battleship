@@ -2,15 +2,14 @@
 
 namespace EM\Tests\PHPUnit\GameBundle\Service\AI\Strategy;
 
+use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Service\AI\Strategy\YStrategy;
 
+/**
+ * @see YStrategy
+ */
 class YStrategyTest extends AbstractStrategyTest
 {
-    /**
-     * @var YStrategy
-     */
-    protected $strategyService;
-
     protected function setUp()
     {
         parent::setUp();
@@ -23,9 +22,11 @@ class YStrategyTest extends AbstractStrategyTest
      */
     public function verify()
     {
-        $this->strategyService->getCellModel()->indexCells($this->getMockedBattlefield());
-        $cells = $this->strategyService->verify($this->getMockedCell());
+        $cells = $this->strategyService->verify($this->getBattlefieldMock()->getCellByCoordinate('B2'));
 
+        $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
         $this->assertCount(2, $cells);
+        $this->assertEquals('B1', $cells[0]->getCoordinate());
+        $this->assertEquals('B3', $cells[1]->getCoordinate());
     }
 }

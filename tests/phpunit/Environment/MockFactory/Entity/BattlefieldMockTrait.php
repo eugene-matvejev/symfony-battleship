@@ -1,6 +1,6 @@
 <?php
 
-namespace EM\Tests\PHPUnit\Environment\MockFactory;
+namespace EM\Tests\PHPUnit\Environment\MockFactory\Entity;
 
 use EM\GameBundle\Entity\Battlefield;
 
@@ -11,7 +11,7 @@ trait BattlefieldMockTrait
 {
     use CellMockTrait, PlayerMockTrait;
 
-    private function getBattlefieldMock() : Battlefield
+    protected function getBattlefieldMock() : Battlefield
     {
         $battlefield = (new Battlefield())
             ->setPlayer($this->getPlayerMock('TEST PLAYER'));
