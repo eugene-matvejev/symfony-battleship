@@ -2,24 +2,23 @@
 
 namespace EM\GameBundle\Service\AI;
 
-use EM\GameBundle\Entity\Battlefield;
-use EM\GameBundle\Entity\Cell;
+use EM\GameBundle\Entity\{
+    Battlefield, Cell
+};
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Service\AI\Strategy\RandomStrategy;
-use EM\GameBundle\Service\AI\Strategy\XStrategy;
-use EM\GameBundle\Service\AI\Strategy\YStrategy;
-use EM\GameBundle\Service\CoordinateSystem\CoordinatesPair;
+use EM\GameBundle\Service\AI\Strategy\{
+    RandomStrategy, XStrategy, YStrategy
+};
+use EM\GameBundle\Service\CoordinateSystem\CoordinateService;
 
 /**
  * @since 3.0
  */
 class AIStrategyService
 {
-    const STRATEGY_X        = 0;
-    const STRATEGY_Y        = 1;
-    const STRATEGY_RAND     = 2;
-    const COORDINATES_STEPS = [-1, 0, 1];
-
+    const STRATEGY_X = 0;
+    const STRATEGY_Y = 1;
+    const STRATEGY_RAND = 2;
     /**
      * @var XStrategy
      */
@@ -52,8 +51,6 @@ class AIStrategyService
      */
     public function attack(Battlefield $battlefield) : array
     {
-        $this->cellModel->indexCells($battlefield);
-
         foreach ($battlefield->getCells() as $cell) {
             if ($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED || $this->isShipDead($cell)) {
                 continue;
@@ -64,9 +61,10 @@ class AIStrategyService
                     return $this->xStrategy->verify($cell);
                 case self::STRATEGY_Y:
                     return $this->yStrategy->verify($cell);
+                default:
+                case self::STRATEGY_RAND:
+                    return $this->randStrategy->verify($cell);
             }
-
-            return $this->randStrategy->verify($cell);
         }
 
         return [];
@@ -82,20 +80,18 @@ class AIStrategyService
     private function decideStrategy(Cell $cell) : int
     {
         $coordinates = [
-            self::STRATEGY_X => [
-                new CoordinatesPair(CoordinatesPair::WAY_LEFT, $cell->getX() + 1, $cell->getY()), // -- left
-                new CoordinatesPair(CoordinatesPair::WAY_RIGHT, $cell->getX() - 1, $cell->getY()),// ++ right
-            ],
-            self::STRATEGY_Y => [
-                new CoordinatesPair(CoordinatesPair::WAY_UP, $cell->getX(), $cell->getY() + 1),   // -- up
-                new CoordinatesPair(CoordinatesPair::WAY_DOWN, $cell->getX(), $cell->getY() - 1)  // ++ down
-            ]
+            self::STRATEGY_X => CoordinateService::STRATEGY_X,
+            self::STRATEGY_Y => CoordinateService::STRATEGY_Y
         ];
-        foreach ($coordinates as $strategyId => $coordinatePairs) {
-            foreach ($coordinatePairs as $coordinatePair) {
-                if (null !== $_cell = $this->cellModel->getByCoordinatesPair($coordinatePair)) {
+
+        $service = new CoordinateService($cell);
+        foreach ($coordinates as $strategy => $ways) {
+            foreach ($ways as $way) {
+                $service->setWay($way)->calculateNextCoordinate();
+
+                if (null !== $_cell = $cell->getBattlefield()->getCellByCoordinate($service->getValue())) {
                     if ($_cell->getState()->getId() === CellModel::STATE_SHIP_DIED) {
-                        return $strategyId;
+                        return $strategy;
                     }
                 }
             }
@@ -110,45 +106,28 @@ class AIStrategyService
             return false;
         }
 
-        $coordinates = [
-            new CoordinatesPair(CoordinatesPair::WAY_LEFT, $cell->getX() + 1, $cell->getY()), // -- left
-            new CoordinatesPair(CoordinatesPair::WAY_RIGHT, $cell->getX() - 1, $cell->getY()),// ++ right
-            new CoordinatesPair(CoordinatesPair::WAY_UP, $cell->getX(), $cell->getY() + 1),   // -- up
-            new CoordinatesPair(CoordinatesPair::WAY_DOWN, $cell->getX(), $cell->getY() - 1)  // ++ down
-        ];
         $cells = [$cell];
 
-        /**
-         * @var CoordinatesPair[] $coordinates
-         */
-        foreach ($coordinates as $coordinatesPair) {
-            while (null !== $cell = $this->cellModel->getByCoordinatesPair($coordinatesPair)) {
-                if (!in_array($cell->getState()->getId(), CellModel::STATES_SHIP)) {
+        $service = new CoordinateService($cell);
+        foreach (CoordinateService::ALL_BASIC_WAYS as $way) {
+            $service->setWay($way)->calculateNextCoordinate();
+
+            while (null !== $_cell = $cell->getBattlefield()->getCellByCoordinate($service->getValue())) {
+                if (!in_array($_cell->getState()->getId(), CellModel::STATES_SHIP)) {
                     break;
                 }
-                if ($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
+                if ($_cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
                     return false;
                 }
 
-                $coordinatesPair->prepareForNextStep();
+                $service->calculateNextCoordinate();
                 $cells[] = $cell;
             }
         }
 
-        /**
-         * @var Cell[] $cells
-         *
-         *  x-1; y-1 | x ; y-1 | x+1; y-1
-         *  x-1;   y | x ; y   | x+1; y
-         *  x-1; y+1 | x ; y+1 | x+1; y+1
-         */
         foreach ($cells as $cell) {
-            foreach (self::COORDINATES_STEPS as $x) {
-                foreach (self::COORDINATES_STEPS as $y) {
-                    if (null !== $_cell = $this->cellModel->getByCoordinates($cell->getX() + $x, $cell->getY() + $y)) {
-                        $this->cellModel->switchStateToSkipped($_cell);
-                    }
-                }
+            foreach ((new CoordinateService($cell))->getAdjacentCells() as $_cell) {
+                $this->cellModel->switchStateToSkipped($_cell);
             }
         }
 

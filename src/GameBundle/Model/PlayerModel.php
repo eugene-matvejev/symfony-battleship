@@ -16,12 +16,12 @@ class PlayerModel
     /**
      * @var PlayerType[]
      */
-    private static $playerTypes;
+    private static $cachedTypes;
 
     public function __construct(PlayerTypeRepository $repository)
     {
-        if (null === self::$playerTypes) {
-            self::$playerTypes = $repository->getAllIndexed();
+        if (null === self::$cachedTypes) {
+            self::$cachedTypes = $repository->getAllIndexed();
         }
     }
 
@@ -30,6 +30,6 @@ class PlayerModel
      */
     public function getTypes() : array
     {
-        return self::$playerTypes;
+        return self::$cachedTypes;
     }
 }

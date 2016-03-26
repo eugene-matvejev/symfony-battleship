@@ -2,11 +2,13 @@
 
 namespace EM\GameBundle\Service\AI;
 
-use EM\GameBundle\Entity\Battlefield;
-use EM\GameBundle\Entity\Cell;
+use EM\GameBundle\Entity\{
+    Battlefield, Cell
+};
 use EM\GameBundle\Exception\AIException;
-use EM\GameBundle\Model\BattlefieldModel;
-use EM\GameBundle\Model\CellModel;
+use EM\GameBundle\Model\{
+    BattlefieldModel, CellModel
+};
 
 /**
  * @since 3.0
@@ -79,7 +81,7 @@ class AIService
     private function attackCell(Cell $cell) : Cell
     {
         if (!in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
-            throw new AIException(__CLASS__ . ':' . __FUNCTION__ . ' cell: ' . $cell->getId() . ' have wrong state: ' . $cell->getState()->getId());
+            throw new AIException(__CLASS__ . ':' . __FUNCTION__ . " cell: {$cell->getId()} have wrong state: {$cell->getState()->getId()}");
         }
 
         return $this->cellModel->switchState($cell);

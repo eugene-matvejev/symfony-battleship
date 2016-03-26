@@ -2,13 +2,14 @@
 
 namespace EM\Tests\PHPUnit\GameBundle\Service\CoordinateSystem;
 
+use EM\GameBundle\Service\CoordinateSystem\CoordinateService;
 use EM\GameBundle\Service\CoordinateSystem\CoordinatesPair;
 use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
 
 /**
- * @see CoordinatesPair
+ * @see CoordinateService
  */
-class CoordinatesPairTest extends ExtendedTestCase
+class CoordinateServiceTest extends ExtendedTestCase
 {
     const COORDINATE_X = 2;
     const COORDINATE_Y = 2;

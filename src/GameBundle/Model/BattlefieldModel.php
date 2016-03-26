@@ -27,14 +27,14 @@ class BattlefieldModel
         return $cells;
     }
 
-    public static function isUnfinished(Battlefield $battlefield) : bool
+    public static function hasUnfinishedShips(Battlefield $battlefield) : bool
     {
         foreach ($battlefield->getCells() as $cell) {
             if ($cell->getState()->getId() === CellModel::STATE_SHIP_LIVE) {
-                return false;
+                return true;
             }
         }
 
-        return true;
+        return false;
     }
 }

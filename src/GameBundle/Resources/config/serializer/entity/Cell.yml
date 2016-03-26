@@ -1,6 +1,6 @@
 EM\GameBundle\Entity\Cell:
     accessor_order: custom
-    custom_accessor_order: [id, x, y, state]
+    custom_accessor_order: [id, coordinate, state]
 
     exclusion_policy: ALL
 
@@ -10,12 +10,10 @@ EM\GameBundle\Entity\Cell:
         id:
             type: integer
             expose: true
-        x:
-            type: integer
-            expose: true
-        y:
-            type: integer
-            expose: true
+        coordinate:
+            type: string
+            xml_element:
+                cdata: false
         state:
             type: EM\GameBundle\Entity\CellState
             expose: true

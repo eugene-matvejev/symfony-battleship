@@ -83,7 +83,7 @@ Game.prototype = {
      *          battlefields: {
      *              id: {int},
      *              player: {id: {int}, name: {string}},
-     *              cells: {id: {int}, x: {int}, y: {int}, state: {id: {int}}}
+     *              cells: {id: {int}, coordinate: {string}, state: {id: {int}}}
      *          }[]
      *        }} response
      */
@@ -91,17 +91,18 @@ Game.prototype = {
         this.setId(response.id);
         let self = this;
 
-        response.battlefields.map(function (el) {
-            let player = self.findPlayerByName(el.player.name);
+        response.battlefields.forEach(function (battlefield) {
+            let player = self.findPlayerByName(battlefield.player.name);
 
             if (undefined !== player) {
-                player.setId(el.player.id);
+                player.setId(battlefield.player.id);
 
-                el.cells.forEach(function (el) {
-                    let cell = self.findCell({playerId: player.id, x: el.x, y: el.y});
+                Object.keys(battlefield.cells).forEach(function (index) {
+                    let _cell = battlefield.cells[index],
+                        cell = self.findCell({playerId: player.id, coordinate: _cell.coordinate});
 
                     if (undefined !== cell) {
-                        cell.setId(el.id);
+                        cell.setId(_cell.id);
                     }
                 });
             }
@@ -111,7 +112,7 @@ Game.prototype = {
      * @param {Element} el
      */
     update: function (el) {
-        let cell = this.findCell({id: el.getAttribute('data-cell-id')});
+        let cell = this.findCell({id: el.getAttribute('data-id')});
         if (undefined !== cell) {
             this.cellSend(cell.getJSON());
         }
@@ -170,7 +171,7 @@ Game.prototype = {
         }
     },
     /**
-     * @param {{playerId: {int}, id: {int}, x: {int}, y: {int}}} criteria
+     * @param {{playerId: {int}, id: {int}, coordinate: {string}}} criteria
      *
      * @returns {Cell}
      */

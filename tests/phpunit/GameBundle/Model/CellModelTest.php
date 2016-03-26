@@ -3,15 +3,16 @@
 namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\Entity\Cell;
-use EM\GameBundle\Entity\CellState;
 use EM\GameBundle\Model\CellModel;
 use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
+use EM\Tests\PHPUnit\Environment\MockFactory\CellMockTrait;
 
 /**
  * @see CellModel
  */
 class CellModelTest extends ExtendedTestCase
 {
+    use CellMockTrait;
     /**
      * @var CellModel
      */
@@ -103,15 +104,13 @@ class CellModelTest extends ExtendedTestCase
      */
     public function switchState()
     {
-        foreach ($this->cellModel->getAllStates() as $cellState) {
-            $oldState = $cellState->getId();
-            $cell = $this->getMockedCell($cellState);
+        $this->iterateCellStates(function ($oldStateId, Cell $cell) {
             $this->cellModel->switchState($cell);
 
-            in_array($oldState, CellModel::STATES_LIVE)
+            in_array($oldStateId, CellModel::STATES_LIVE)
                 ? $this->assertContains($cell->getState()->getId(), CellModel::STATES_DIED)
-                : $this->assertEquals($oldState, $cell->getState()->getId());
-        }
+                : $this->assertEquals($oldStateId, $cell->getState()->getId());
+        });
     }
 
     /**
@@ -120,27 +119,33 @@ class CellModelTest extends ExtendedTestCase
      */
     public function switchStateToSkipped()
     {
-        foreach ($this->cellModel->getAllStates() as $cellState) {
-            $oldState = $cellState->getId();
-            $cell = $this->getMockedCell($cellState);
+        $this->iterateCellStates(function ($oldStateId, Cell $cell) {
             $this->cellModel->switchStateToSkipped($cell);
 
-            $oldState === CellModel::STATE_WATER_LIVE
+            $oldStateId === CellModel::STATE_WATER_LIVE
                 ? $this->assertEquals(CellModel::STATE_WATER_SKIP, $cell->getState()->getId())
                 : $this->assertNotContains($cell->getState()->getId(), CellModel::STATES_LIVE);
-        }
+        });
     }
 
     /**
-     * @param CellState $state
-     *
-     * @return Cell
-     *
-     * @coversNothing
+     * @see CellModel::getChangedCells()
+     * @test
      */
-    private function getMockedCell(CellState $state) : Cell
+    public function getChangedCells()
     {
-        return (new Cell())
-            ->setState($state);
+        $this->switchState();
+        $this->assertContainsOnlyInstancesOf(Cell::class, CellModel::getChangedCells());
+        $this->assertGreaterThanOrEqual(5, count(CellModel::getChangedCells()));
+    }
+
+    private function iterateCellStates(\Closure $function)
+    {
+        foreach ($this->cellModel->getAllStates() as $state) {
+            $oldStateId = $state->getId();
+            $cell = $this->getCellMock('A1', $state->getId());
+
+            $function($oldStateId, $cell);
+        }
     }
 }

@@ -72,8 +72,7 @@ class GameModel
 
             foreach ($data->cells as $cellData) {
                 $cell = (new Cell())
-                    ->setX($cellData->x)
-                    ->setY($cellData->y)
+                    ->setCoordinate($cellData->coordinate)
                     ->setState($battlefield->getPlayer()->getType()->getId() !== PlayerModel::TYPE_CPU
                         ? $this->cellModel->getAllStates()[$cellData->state]
                         : $this->cellModel->getAllStates()[CellModel::STATE_WATER_LIVE]);
@@ -81,7 +80,7 @@ class GameModel
             }
 
             if ($battlefield->getPlayer()->getType()->getId() === PlayerModel::TYPE_CPU) {
-                $this->initCPUShips($battlefield);
+                $this->initCPUBattlefield($battlefield);
             }
         }
         $this->om->flush();
@@ -89,13 +88,14 @@ class GameModel
         return $game;
     }
 
-    public function initCPUShips(Battlefield $battlefield)
+    public function initCPUBattlefield(Battlefield $battlefield)
     {
-        foreach ($battlefield->getCells() as $cell) {
-            if ($cell->getX() === 1 && $cell->getY() === 1) {
-                $cell->setState($this->cellModel->getAllStates()[CellModel::STATE_SHIP_LIVE]);
-            }
-        }
+        $liveShipState = $this->cellModel->getAllStates()[CellModel::STATE_SHIP_LIVE];
+
+        $battlefield->getCellByCoordinate('B2')->setState($liveShipState);
+        $battlefield->getCellByCoordinate('B3')->setState($liveShipState);
+
+        $battlefield->getCellByCoordinate('D5')->setState($liveShipState);
     }
 
     /**
@@ -109,11 +109,11 @@ class GameModel
         $cellData = json_decode($json);
         /** @var Cell $cell */
         if (null === $cell = $this->cellRepository->find($cellData->id)) {
-            throw new CellException(__FUNCTION__ . ' cell: ' . $cellData->id . ' don\'t exists.');
+            throw new CellException(__FUNCTION__ . " cell: {$cellData->id} doesn't exist");
         }
 
-        $response = new GameTurnResponse();
         $game = $cell->getBattlefield()->getGame();
+        $response = new GameTurnResponse();
 
         if (null !== $game->getResult()) {
             $response->setGameResult($game->getResult());
@@ -122,7 +122,7 @@ class GameModel
         }
 
         foreach ($game->getBattlefields() as $battlefield) {
-            $this->playerTurn($battlefield, $cellData);
+            $this->playerTurn($battlefield, $cellData->coordinate);
 
             if (null !== $game->getResult()) {
                 $response->setGameResult($game->getResult());
@@ -132,14 +132,12 @@ class GameModel
 
         $this->om->flush();
 
-        foreach (CellModel::getChangedCells() as $cell) {
-            $response->addCell($cell);
-        }
+        $response->setCells(CellModel::getChangedCells());
 
         return $response;
     }
 
-    public function playerTurn(Battlefield $battlefield, \stdClass $cellData)
+    public function playerTurn(Battlefield $battlefield, string $playerCellCoordinate)
     {
         $cell = null;
         switch ($battlefield->getPlayer()->getType()->getId()) {
@@ -147,8 +145,7 @@ class GameModel
                 $cell = $this->ai->turn($battlefield);
                 break;
             case PlayerModel::TYPE_CPU:
-                $cell = $battlefield->getCells()[$cellData->id] ?? null;
-                if (null !== $cell) {
+                if (null !== $cell = $battlefield->getCellByCoordinate($playerCellCoordinate)) {
                     $this->cellModel->switchState($cell);
                 }
                 break;
@@ -163,20 +160,23 @@ class GameModel
 
     public function detectVictory(Battlefield $battlefield) : bool
     {
-        $game = $battlefield->getGame();
-        if (BattlefieldModel::isUnfinished($battlefield)) {
-            foreach ($game->getBattlefields() as $_battlefield) {
-                if ($battlefield->getId() !== $_battlefield->getId()) {
-                    $result = (new GameResult())
-                        ->setPlayer($_battlefield->getPlayer());
-                    $game->setResult($result);
-                    $this->om->persist($result);
-
-                    return true;
-                }
-            }
+        if (BattlefieldModel::hasUnfinishedShips($battlefield)) {
+            return false;
         }
 
-        return false;
+        $game = $battlefield->getGame();
+        foreach ($game->getBattlefields() as $_battlefield) {
+            if ($battlefield->getPlayer() === $_battlefield->getPlayer()) {
+                continue;
+            }
+
+            $result = (new GameResult())
+                ->setPlayer($_battlefield->getPlayer());
+
+            $game->setResult($result);
+//            $this->om->persist($result);
+        }
+
+        return true;
     }
 }

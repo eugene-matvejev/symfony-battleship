@@ -40,8 +40,8 @@ Battlefield.prototype = {
         for (let y = 0; y < this.size; y++) {
             let $row = $cellRow.clone();
 
-            this.cellContainer.xAxisNav.push((new Cell(y, 'undefined', this)).actAsAxisLabel('x'));
-            this.cellContainer.yAxisNav.push((new Cell('undefined', y, this)).actAsAxisLabel('y'));
+            this.cellContainer.xAxisNav.push((new Cell(this.prepareCoordinate(0, y), this)).actAsAxisLabel('digit'));
+            this.cellContainer.yAxisNav.push((new Cell(this.prepareCoordinate(y, 0), this)).actAsAxisLabel('letter'));
 
             this.$html.append($row);
 
@@ -49,7 +49,7 @@ Battlefield.prototype = {
             $top.append(this.cellContainer.yAxisNav[y].$html.clone());
 
             for (let x = 0; x < this.size; x++) {
-                let cell = (new Cell(x, y, this)).setState(Cell.resources.config.state.sea.live);
+                let cell = (new Cell(this.prepareCoordinate(x, y), this)).setState(Cell.resources.config.state.sea.live);
                 $row.append(cell.$html);
                 this.cellContainer.addCell(cell);
             }
@@ -63,7 +63,7 @@ Battlefield.prototype = {
         return this;
     },
     /**
-     * @param {{id: {int}, x: {int}, y: {int}}} criteria
+     * @param {{id: {int}, coordinate: {string}}} criteria
      *
      * @returns {Cell}
      */
@@ -78,25 +78,33 @@ Battlefield.prototype = {
     },
     /** *** *** *** *** *** *** *** *** *** *** *** *** *** **/
     mockData: function () {
-        let shipState = Cell.resources.config.state.ship;
+        let ship = Cell.resources.config.state.ship;
 
-        this.findCell({x: 0, y: 1}).setState(shipState.dead);
-        this.findCell({x: 0, y: 2}).setState(shipState.live);
-        this.findCell({x: 0, y: 3}).setState(shipState.live);
+        this.findCell({coordinate: "A1"}).setState(ship.dead);
+        this.findCell({coordinate: "A2"}).setState(ship.live);
+        this.findCell({coordinate: "A3"}).setState(ship.live);
 
-        this.findCell({x: 2, y: 2}).setState(shipState.live);
-        this.findCell({x: 2, y: 3}).setState(shipState.live);
+        this.findCell({coordinate: "C3"}).setState(ship.live);
+        this.findCell({coordinate: "C4"}).setState(ship.live);
+        this.findCell({coordinate: "C5"}).setState(ship.live);
 
-        this.findCell({x: 2, y: 5}).setState(shipState.live);
+        this.findCell({coordinate: "C1"}).setState(ship.live);
+        this.findCell({coordinate: "D1"}).setState(ship.live);
+        this.findCell({coordinate: "E1"}).setState(ship.live);
+        this.findCell({coordinate: "F1"}).setState(ship.live);
 
-        this.findCell({x: 2, y: 0}).setState(shipState.live);
-        this.findCell({x: 3, y: 0}).setState(shipState.live);
-        this.findCell({x: 4, y: 0}).setState(shipState.live);
-        this.findCell({x: 5, y: 0}).setState(shipState.live);
+        this.findCell({coordinate: "G5"}).setState(ship.live);
+        this.findCell({coordinate: "G6"}).setState(ship.live);
 
-        this.findCell({x: 5, y: 4}).setState(shipState.live);
-        this.findCell({x: 5, y: 5}).setState(shipState.live);
-
-        this.findCell({x: 4, y: 2}).setState(shipState.live);
+        this.findCell({coordinate: "F3"}).setState(ship.live);
+    },
+    /**
+     * @param {int} x
+     * @param {int} y
+     *
+     * @returns {string}
+     */
+    prepareCoordinate: function(x, y) {
+        return String.fromCharCode(97 + x).toUpperCase() + (1 + y);
     }
 };

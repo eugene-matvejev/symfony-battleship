@@ -35,16 +35,10 @@ services:
             - "@battleship.game.services.ai.rand.strategy.service"
     battleship.game.services.ai.x.strategy.service:
         class: EM\GameBundle\Service\AI\Strategy\XStrategy
-        arguments:
-            - "@battleship.game.services.cell.model"
     battleship.game.services.ai.y.strategy.service:
         class: EM\GameBundle\Service\AI\Strategy\YStrategy
-        arguments:
-            - "@battleship.game.services.cell.model"
     battleship.game.services.ai.rand.strategy.service:
         class: EM\GameBundle\Service\AI\Strategy\RandomStrategy
-        arguments:
-            - "@battleship.game.services.cell.model"
     # Repositories
     battleship.game.services.cell.state.repository:
         class: EM\GameBundle\Repository\CellStateRepository

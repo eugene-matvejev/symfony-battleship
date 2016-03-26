@@ -20,8 +20,8 @@ class GameResultRepository extends EntityRepository
     {
         return $this->findBy([], ['timestamp' => 'DESC'], $perPage, ($page < 1 ? 0 : $page - 1) * $perPage);
     }
-
-    public function countTotalResults() : int
+    
+    public function countTotal() : int
     {
         return $this
             ->createQueryBuilder('q')

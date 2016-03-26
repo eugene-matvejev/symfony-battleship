@@ -2,25 +2,17 @@
 
 namespace EM\GameBundle\Service\AI\Strategy;
 
-use EM\GameBundle\Entity\Cell;
+use EM\GameBundle\Entity\{
+    Battlefield, Cell
+};
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Service\CoordinateSystem\CoordinatesPair;
+use EM\GameBundle\Service\CoordinateSystem\CoordinateService;
 
 /**
  * @since 3.5
  */
 abstract class AbstractStrategy
 {
-    /**
-     * @var CellModel
-     */
-    protected $cellModel;
-
-    public function getCellModel() : CellModel
-    {
-        return $this->cellModel;
-    }
-
     /**
      * @param Cell $cell
      *
@@ -29,19 +21,24 @@ abstract class AbstractStrategy
     abstract public function verify(Cell $cell) : array;
 
     /**
-     * @param CoordinatesPair[] $coordinatesPairs
+     * @param Battlefield         $battlefield
+     * @param CoordinateService[] $coordinates
      *
      * @return Cell[]
      */
-    protected function verifyByCoordinates(array $coordinatesPairs) : array
+    protected function verifyByCoordinates(Battlefield $battlefield, array $coordinates) : array
     {
         $cells = [];
+        foreach ($coordinates as $coordinate) {
+            $coordinate->calculateNextCoordinate();
 
-        foreach ($coordinatesPairs as $coordinatesPair) {
-            if (null !== $cell = $this->cellModel->getByCoordinatesPair($coordinatesPair)) {
+            while ($cell = $battlefield->getCellByCoordinate($coordinate->getValue())) {
+                $coordinate->calculateNextCoordinate();
+
                 if (in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
                     $cells[] = $cell;
-                }
+                    break;
+                };
             }
         }
 

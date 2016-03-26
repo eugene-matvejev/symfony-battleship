@@ -13,7 +13,7 @@ use EM\GameBundle\ORM\PlayerTrait;
 /**
  * @since 1.0
  *
- * @ORM\Entity(repositoryClass="EM\GameBundle\Repository\BattlefieldRepository", readOnly=true)
+ * @ORM\Entity(readOnly=true)
  * @ORM\Table(
  *     name="battlefields",
  *     indexes={
@@ -25,14 +25,14 @@ class Battlefield implements IdentifiableInterface, PlayerInterface
 {
     use IdentifiableTrait, PlayerTrait;
     /**
-     * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\Game", inversedBy="battlefields")
+     * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\Game", inversedBy="battlefields", fetch="EAGER")
      * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)
      *
      * @var Game
      */
     private $game;
     /**
-     * @ORM\OneToMany(targetEntity="EM\GameBundle\Entity\Cell", mappedBy="battlefield", cascade={"persist"}, fetch="EAGER", indexBy="id")
+     * @ORM\OneToMany(targetEntity="EM\GameBundle\Entity\Cell", mappedBy="battlefield", cascade={"persist"}, fetch="EAGER", indexBy="coordinate")
      *
      * @var Collection|Cell[]
      */
@@ -58,7 +58,7 @@ class Battlefield implements IdentifiableInterface, PlayerInterface
     public function addCell(Cell $cell) : self
     {
         $cell->setBattlefield($this);
-        $this->cells->add($cell);
+        $this->cells->set($cell->getCoordinate(), $cell);
 
         return $this;
     }
@@ -76,5 +76,15 @@ class Battlefield implements IdentifiableInterface, PlayerInterface
     public function getCells() : Collection
     {
         return $this->cells;
+    }
+
+    /**
+     * @param string $coordinate
+     *
+     * @return Cell|null
+     */
+    public function getCellByCoordinate(string $coordinate)
+    {
+        return $this->cells->get($coordinate);
     }
 }
