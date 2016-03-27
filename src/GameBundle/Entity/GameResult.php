@@ -3,8 +3,7 @@
 namespace EM\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use EM\GameBundle\ORM\IdentifiableInterface;
-use EM\GameBundle\ORM\IdentifiableTrait;
+use EM\GameBundle\ORM\AbstractEntity;
 use EM\GameBundle\ORM\PlayerInterface;
 use EM\GameBundle\ORM\PlayerTrait;
 use EM\GameBundle\ORM\TimestampedInterface;
@@ -23,9 +22,9 @@ use EM\GameBundle\ORM\TimestampedTrait;
  * )
  * @ORM\HasLifecycleCallbacks
  */
-class GameResult implements IdentifiableInterface, PlayerInterface, TimestampedInterface
+class GameResult extends AbstractEntity implements PlayerInterface, TimestampedInterface
 {
-    use IdentifiableTrait, PlayerTrait, TimestampedTrait;
+    use PlayerTrait, TimestampedTrait;
     /**
      * @ORM\OneToOne(targetEntity="EM\GameBundle\Entity\Game", inversedBy="result", fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)

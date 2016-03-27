@@ -5,18 +5,18 @@ namespace EM\GameBundle\ORM;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @since 1.0
+ * @since 8.0
  */
-trait IdentifiableTrait
+abstract class AbstractEntity implements IdentifiableInterface
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      *
      * @var int
      */
-    private $id;
+    protected $id;
 
     /**
      * @return int
@@ -26,11 +26,6 @@ trait IdentifiableTrait
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return $this
-     */
     public function setId(int $id) : self
     {
         $this->id = $id;

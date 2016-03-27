@@ -16,7 +16,7 @@ trait PlayerTrait
      *
      * @var Player
      */
-    private $player;
+    protected $player;
 
     public function getPlayer() : Player
     {

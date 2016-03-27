@@ -14,7 +14,7 @@ trait TimestampedTrait
      *
      * @var \DateTime
      */
-    private $timestamp;
+    protected $timestamp;
 
     public function getTimestamp() : \DateTime
     {
