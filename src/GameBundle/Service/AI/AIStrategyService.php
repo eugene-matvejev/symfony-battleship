@@ -34,6 +34,10 @@ class AIStrategyService
      * @var CellModel
      */
     private $cellModel;
+    /**
+     * @var Cell[]
+     */
+    private $checkedCells = [];
 
     public function __construct(CellModel $model, XStrategy $xStrategy, YStrategy $yStrategy, RandomStrategy $randomStrategy)
     {
@@ -51,7 +55,7 @@ class AIStrategyService
     public function attack(Battlefield $battlefield) : array
     {
         foreach ($battlefield->getCells() as $cell) {
-            if ($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED || $this->isShipDead($cell)) {
+            if ($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED || isset($this->checkedCells[$cell->getId()]) || $this->isShipDead($cell)) {
                 continue;
             }
 
@@ -100,11 +104,12 @@ class AIStrategyService
 
     public function isShipDead(Cell $cell) : bool
     {
-        if ($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
+        if (!isset($this->checkedCells[$cell->getId()]) && $cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
             return false;
         }
 
         $cells = [$cell];
+        $this->checkedCells[$cell->getId()] = $cell;
 
         $service = new CoordinateService($cell);
         foreach (CoordinateService::ALL_BASIC_WAYS as $way) {
@@ -120,6 +125,7 @@ class AIStrategyService
 
                 $service->calculateNextCoordinate();
                 $cells[] = $cell;
+                $this->checkedCells[$cell->getId()] = $cell;
             }
         }
 
