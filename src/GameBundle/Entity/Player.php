@@ -3,8 +3,7 @@
 namespace EM\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use EM\GameBundle\ORM\IdentifiableInterface;
-use EM\GameBundle\ORM\IdentifiableTrait;
+use EM\GameBundle\ORM\AbstractEntity;
 use EM\GameBundle\ORM\NameableInterface;
 use EM\GameBundle\ORM\NameableTrait;
 
@@ -14,9 +13,9 @@ use EM\GameBundle\ORM\NameableTrait;
  * @ORM\Entity()
  * @ORM\Table(name="players")
  */
-class Player implements IdentifiableInterface, NameableInterface
+class Player extends AbstractEntity implements NameableInterface
 {
-    use IdentifiableTrait, NameableTrait;
+    use NameableTrait;
     /**
      * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\PlayerType", fetch="EAGER")
      * @ORM\JoinColumn(name="type", referencedColumnName="id", nullable=false)

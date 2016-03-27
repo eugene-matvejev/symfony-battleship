@@ -3,8 +3,7 @@
 namespace EM\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use EM\GameBundle\ORM\IdentifiableInterface;
-use EM\GameBundle\ORM\IdentifiableTrait;
+use EM\GameBundle\ORM\AbstractEntity;
 
 /**
  * @since 1.0
@@ -20,9 +19,8 @@ use EM\GameBundle\ORM\IdentifiableTrait;
  *      }
  * )
  */
-class Cell implements IdentifiableInterface
+class Cell extends AbstractEntity
 {
-    use IdentifiableTrait;
     /**
      * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\Battlefield", inversedBy="cells", fetch="EAGER")
      * @ORM\JoinColumn(name="battlefield", referencedColumnName="id", nullable=false)

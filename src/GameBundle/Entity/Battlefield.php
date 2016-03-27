@@ -5,8 +5,7 @@ namespace EM\GameBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use EM\GameBundle\ORM\IdentifiableInterface;
-use EM\GameBundle\ORM\IdentifiableTrait;
+use EM\GameBundle\ORM\AbstractEntity;
 use EM\GameBundle\ORM\PlayerInterface;
 use EM\GameBundle\ORM\PlayerTrait;
 
@@ -21,9 +20,9 @@ use EM\GameBundle\ORM\PlayerTrait;
  *          @ORM\Index(name="INDEX_BATTLEFIELD_PLAYER", columns={"player"})
  *     })
  */
-class Battlefield implements IdentifiableInterface, PlayerInterface
+class Battlefield extends AbstractEntity implements PlayerInterface
 {
-    use IdentifiableTrait, PlayerTrait;
+    use PlayerTrait;
     /**
      * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\Game", inversedBy="battlefields", fetch="EAGER")
      * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)

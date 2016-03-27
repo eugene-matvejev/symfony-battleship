@@ -3,8 +3,7 @@
 namespace EM\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use EM\GameBundle\ORM\IdentifiableInterface;
-use EM\GameBundle\ORM\IdentifiableTrait;
+use EM\GameBundle\ORM\AbstractEntity;
 
 /**
  * @since 1.0
@@ -12,7 +11,6 @@ use EM\GameBundle\ORM\IdentifiableTrait;
  * @ORM\Entity(repositoryClass="EM\GameBundle\Repository\PlayerTypeRepository", readOnly=true)
  * @ORM\Table(name="player_types")
  */
-class PlayerType implements IdentifiableInterface
+class PlayerType extends AbstractEntity
 {
-    use IdentifiableTrait;
 }

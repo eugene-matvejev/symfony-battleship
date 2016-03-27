@@ -5,8 +5,7 @@ namespace EM\GameBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use EM\GameBundle\ORM\IdentifiableInterface;
-use EM\GameBundle\ORM\IdentifiableTrait;
+use EM\GameBundle\ORM\AbstractEntity;
 use EM\GameBundle\ORM\TimestampedInterface;
 use EM\GameBundle\ORM\TimestampedTrait;
 
@@ -17,9 +16,9 @@ use EM\GameBundle\ORM\TimestampedTrait;
  * @ORM\Table(name="games")
  * @ORM\HasLifecycleCallbacks
  */
-class Game implements IdentifiableInterface, TimestampedInterface
+class Game extends AbstractEntity implements TimestampedInterface
 {
-    use IdentifiableTrait, TimestampedTrait;
+    use TimestampedTrait;
     /**
      * @ORM\OneToMany(targetEntity="EM\GameBundle\Entity\Battlefield", mappedBy="game", cascade={"persist"}, fetch="EAGER", indexBy="id")
      * @ORM\JoinColumn(name="id", referencedColumnName="game", nullable=false)
