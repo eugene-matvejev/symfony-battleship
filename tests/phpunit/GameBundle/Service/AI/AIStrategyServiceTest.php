@@ -4,13 +4,13 @@ namespace EM\Tests\PHPUnit\GameBundle\Service\AI;
 
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIStrategyService;
-use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
+use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
 use EM\Tests\PHPUnit\Environment\MockFactory\Entity\BattlefieldMockTrait;
 
 /**
  * @see AIStrategyService
  */
-class AIStrategyServiceTest extends ExtendedTestCase
+class AIStrategyServiceTest extends ExtendedTestSuite
 {
     use BattlefieldMockTrait;
     /**

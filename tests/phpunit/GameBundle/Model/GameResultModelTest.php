@@ -6,14 +6,14 @@ use EM\GameBundle\Entity\GameResult;
 use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Model\GameResultModel;
 use EM\GameBundle\Response\GameResultsResponse;
-use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
+use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
 use EM\Tests\PHPUnit\Environment\MockFactory\Entity\GameMockTrait;
 use EM\Tests\PHPUnit\Environment\MockFactory\Entity\GameResultMockTrait;
 
 /**
  * @see GameResultModel
  */
-class GameResultModelTest extends ExtendedTestCase
+class GameResultModelTest extends ExtendedTestSuite
 {
     use GameMockTrait, GameResultMockTrait;
     /**

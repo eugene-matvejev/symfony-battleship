@@ -7,13 +7,13 @@ use EM\GameBundle\Entity\CellState;
 use EM\GameBundle\Exception\AIException;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIService;
-use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
+use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
 use EM\Tests\PHPUnit\Environment\MockFactory\Entity\CellMockTrait;
 
 /**
  * @see AIService
  */
-class AIServiceTest extends ExtendedTestCase
+class AIServiceTest extends ExtendedTestSuite
 {
     use CellMockTrait;
     /**

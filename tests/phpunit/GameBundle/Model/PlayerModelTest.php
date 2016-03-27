@@ -3,12 +3,12 @@
 namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\Model\PlayerModel;
-use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
+use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
 
 /**
  * @see PlayerModel
  */
-class PlayerModelTest extends ExtendedTestCase
+class PlayerModelTest extends ExtendedTestSuite
 {
     /**
      * @var PlayerModel

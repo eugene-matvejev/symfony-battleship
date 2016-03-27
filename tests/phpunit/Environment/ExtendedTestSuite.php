@@ -7,17 +7,15 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @since 1.0
  */
-abstract class ExtendedTestCase extends WebTestCase
+abstract class ExtendedTestSuite extends ExtendedAssertionSuite
 {
     /**
      * @var ContainerInterface
@@ -170,29 +168,6 @@ abstract class ExtendedTestCase extends WebTestCase
     }
 
     /**
-     * @since 1.0
-     */
-    public function assertSuccessfulResponse(Response $response)
-    {
-        $this->assertGreaterThanOrEqual(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertLessThan(Response::HTTP_MULTIPLE_CHOICES, $response->getStatusCode());
-    }
-
-    /**
-     * @since 1.0
-     *
-     * @param Response $response
-     *
-     * @return array
-     */
-    public function assertJSONSuccessfulResponse(Response $response)
-    {
-        $this->assertSuccessfulResponse($response);
-
-        return json_decode($response->getContent());
-    }
-
-    /**
      * @param string $className
      * @param mixed  $classInstance
      * @param string $methodName
@@ -203,8 +178,8 @@ abstract class ExtendedTestCase extends WebTestCase
      */
     protected function invokePrivateMethod(string $className, $classInstance, string $methodName, array $methodArguments = [])
     {
-        $reflected = new \ReflectionClass($className);
-        $method = $reflected->getMethod($methodName);
+//        $reflected = new \ReflectionClass($className);
+        $method = (new \ReflectionClass($className))->getMethod($methodName);
         $method->setAccessible(true);
 
         return $method->invokeArgs($classInstance, $methodArguments);

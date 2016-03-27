@@ -3,14 +3,14 @@
 namespace EM\Tests\PHPUnit\GameBundle\Service\CoordinateSystem;
 
 use EM\GameBundle\Service\CoordinateSystem\CoordinateService;
-use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
+use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
 use EM\Tests\PHPUnit\Environment\MockFactory\Entity\CellMockTrait;
 use EM\Tests\PHPUnit\Environment\MockFactory\Service\CoordinateServiceMockTrait;
 
 /**
  * @see CoordinateService
  */
-class CoordinateServiceTest extends ExtendedTestCase
+class CoordinateServiceTest extends ExtendedTestSuite
 {
     use CoordinateServiceMockTrait, CellMockTrait;
 

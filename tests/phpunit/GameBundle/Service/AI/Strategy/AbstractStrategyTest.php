@@ -7,14 +7,14 @@ use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\Strategy\AbstractStrategy;
 use EM\GameBundle\Service\AI\Strategy\RandomStrategy;
 use EM\GameBundle\Service\CoordinateSystem\CoordinateService;
-use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
+use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
 use EM\Tests\PHPUnit\Environment\MockFactory\Entity\BattlefieldMockTrait;
 use EM\Tests\PHPUnit\Environment\MockFactory\Service\CoordinateServiceMockTrait;
 
 /**
  * @see AbstractStrategy
  */
-class AbstractStrategyTest extends ExtendedTestCase
+class AbstractStrategyTest extends ExtendedTestSuite
 {
     use BattlefieldMockTrait, CoordinateServiceMockTrait;
     /**
