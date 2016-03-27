@@ -17,7 +17,7 @@ class GameController extends AbstractAPIController
 
     public function initAction(Request $request) : Response
     {
-        if (!$this->validateInitRequest($request->getContent())) {
+        if (!$this->validateInitRequest($request)) {
             throw new \Exception('expected format {data: %array%{player: {name: %string%}, cells: %array%{coordinate: %string%, state: %int%}}, ...}');
         }
 
@@ -28,7 +28,7 @@ class GameController extends AbstractAPIController
 
     public function turnAction(Request $request) : Response
     {
-        if (!$this->validateTurnRequest($request->getContent())) {
+        if (!$this->validateTurnRequest($request)) {
             throw new \Exception('expected format: {id: %int%, ... }');
         }
 
@@ -37,8 +37,12 @@ class GameController extends AbstractAPIController
         return $this->prepareSerializedResponse($data);
     }
 
-    private function validateInitRequest(string $content) : bool
+    private function validateInitRequest(Request $request) : bool
     {
+        $content = $request->getContent();
+        if (!is_string($content)) {
+            return false;
+        }
         $request = json_decode($content);
         if (!isset($request->data) || !is_array($request->data)) {
             return false;
@@ -58,8 +62,10 @@ class GameController extends AbstractAPIController
         return true;
     }
 
-    private function validateTurnRequest(string $content) : bool
+    private function validateTurnRequest(Request $request) : bool
     {
-        return 0 !== preg_match('/^{\"id\"\:[0-9]++\,.*\}$/', $content);
+        $content = $request->getContent();
+
+        return is_string($content) && 0 !== preg_match('/^{\"id\"\:[0-9]++\,.*\}$/', $content);
     }
 }
