@@ -4,13 +4,13 @@ namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Model\GameModel;
-use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
+use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
 use EM\Tests\PHPUnit\Environment\MockFactory\Entity\GameMockTrait;
 
 /**
  * @see GameModel
  */
-class GameModelTest extends ExtendedTestCase
+class GameModelTest extends ExtendedTestSuite
 {
     use GameMockTrait;
     /**
