@@ -2,8 +2,6 @@
 
 namespace EM\Tests\PHPUnit\GameBundle\Service\AI;
 
-use EM\GameBundle\Entity\Cell;
-use EM\GameBundle\Entity\CellState;
 use EM\GameBundle\Exception\AIException;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIService;
