@@ -31,7 +31,7 @@ abstract class AbstractStrategy
         foreach ($coordinates as $coordinate) {
             $coordinate->calculateNextCoordinate();
 
-            while ($cell = $battlefield->getCellByCoordinate($coordinate->getValue())) {
+            while (null !== $cell = $battlefield->getCellByCoordinate($coordinate->getValue())) {
                 $coordinate->calculateNextCoordinate();
 
                 if (in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
