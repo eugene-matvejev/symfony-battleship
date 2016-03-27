@@ -7,7 +7,7 @@ use EM\GameBundle\Entity\GameResult;
 /**
  * @since 5.0
  */
-class GameResultsResponse
+class GameResultsResponse implements GameResponseInterface
 {
     const META_INDEX_CURRENT_PAGE = 'currentPage';
     const META_INDEX_TOTAL_PAGES  = 'totalPages';
