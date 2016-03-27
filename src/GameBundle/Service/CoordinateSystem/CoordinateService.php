@@ -90,7 +90,7 @@ class CoordinateService
             case self::WAY_UP:
                 return $this->value = $letter . --$number;
             case self::WAY_DOWN:
-                return $this->value = $letter . ++$number; // as ++'B9' -> C0
+                return $this->value = $letter . ++$number;
             case self::WAY_LEFT:
                 return $this->value = $prevLetter . $number;
             case self::WAY_LEFT_UP:
