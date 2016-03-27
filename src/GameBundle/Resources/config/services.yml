@@ -1,4 +1,5 @@
 services:
+    # Event Listeners
     battleship.game.response.listener:
         class: EM\GameBundle\EventListener\GameResponseListener
         tags:
