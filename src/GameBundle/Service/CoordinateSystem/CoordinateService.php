@@ -82,19 +82,21 @@ class CoordinateService
          *                   DOWN (digit ++ )
          */
         $letter = substr($this->value, 0, 1);
+        $prevLetter = chr(ord($letter) - 1);
         $number = substr($this->value, 1);
+
 
         switch ($this->way) {
             case self::WAY_UP:
                 return $this->value = $letter . --$number;
             case self::WAY_DOWN:
-                return $this->value = $letter . ++$number; // no ++$this->value; as ++'B9' -> C0
+                return $this->value = $letter . ++$number; // as ++'B9' -> C0
             case self::WAY_LEFT:
-                return $this->value = chr(ord($letter) - 1) . $number;
+                return $this->value = $prevLetter . $number;
             case self::WAY_LEFT_UP:
-                return $this->value = chr(ord($letter) - 1) . --$number;
-            case self::WAY_LEFT_DOWN;
-                return $this->value = chr(ord($letter) - 1) . ++$number;
+                return $this->value = $prevLetter . --$number;
+            case self::WAY_LEFT_DOWN:
+                return $this->value = $prevLetter . ++$number;
             case self::WAY_RIGHT:
                 return $this->value = ++$letter . $number;
             case self::WAY_RIGHT_UP:

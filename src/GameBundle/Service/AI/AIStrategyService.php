@@ -2,13 +2,12 @@
 
 namespace EM\GameBundle\Service\AI;
 
-use EM\GameBundle\Entity\{
-    Battlefield, Cell
-};
+use EM\GameBundle\Entity\Battlefield;
+use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Service\AI\Strategy\{
-    RandomStrategy, XStrategy, YStrategy
-};
+use EM\GameBundle\Service\AI\Strategy\RandomStrategy;
+use EM\GameBundle\Service\AI\Strategy\XStrategy;
+use EM\GameBundle\Service\AI\Strategy\YStrategy;
 use EM\GameBundle\Service\CoordinateSystem\CoordinateService;
 
 /**
@@ -61,7 +60,6 @@ class AIStrategyService
                     return $this->xStrategy->verify($cell);
                 case self::STRATEGY_Y:
                     return $this->yStrategy->verify($cell);
-                default:
                 case self::STRATEGY_RAND:
                     return $this->randStrategy->verify($cell);
             }

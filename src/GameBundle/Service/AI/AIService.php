@@ -2,13 +2,11 @@
 
 namespace EM\GameBundle\Service\AI;
 
-use EM\GameBundle\Entity\{
-    Battlefield, Cell
-};
+use EM\GameBundle\Entity\Battlefield;
+use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Exception\AIException;
-use EM\GameBundle\Model\{
-    BattlefieldModel, CellModel
-};
+use EM\GameBundle\Model\BattlefieldModel;
+use EM\GameBundle\Model\CellModel;
 
 /**
  * @since 3.0
