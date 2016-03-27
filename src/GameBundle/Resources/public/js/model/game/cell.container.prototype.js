@@ -41,7 +41,7 @@ CellContainer.prototype = {
         return this;
     },
     /**
-     * @param {{id: {int}, x: {int}, y: {int}}} criteria
+     * @param {{id: {int}, coordinate: {string}}} criteria
      *
      * @returns {Cell|undefined}
      */
@@ -50,7 +50,7 @@ CellContainer.prototype = {
             if (undefined !== criteria.id && cell.id == criteria.id) {
                 return cell;
             }
-            if (criteria.x !== undefined !== criteria.y && cell.x == criteria.x && cell.y == criteria.y) {
+            if (undefined !== criteria.coordinate && cell.coordinate == criteria.coordinate) {
                 return cell
             }
 

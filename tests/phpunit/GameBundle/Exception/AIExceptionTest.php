@@ -6,6 +6,7 @@ use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Exception\AIException;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIService;
+use EM\Tests\PHPUnit\Environment\MockFactory\Entity\CellMockTrait;
 use EM\Tests\PHPUnit\GameBundle\Service\AI\AIServiceTest;
 
 /**
@@ -13,6 +14,7 @@ use EM\Tests\PHPUnit\GameBundle\Service\AI\AIServiceTest;
  */
 class AIExceptionTest extends AIServiceTest
 {
+    use CellMockTrait;
     /**
      * @see AIService::chooseCellToAttack
      * @test
@@ -69,7 +71,7 @@ class AIExceptionTest extends AIServiceTest
      */
     private function simulateAttackCell(int $origCellStateId, int $expectedCellStateId)
     {
-        $cell = $this->getMockedCell($origCellStateId);
+        $cell = $this->getCellMock('A1', $origCellStateId);
         $returnedCell = $this->invokePrivateMethod(AIService::class, $this->ai, 'chooseCellToAttack', ['cells' => [$cell]]);
 
         $this->assertInstanceOf(Cell::class, $returnedCell);

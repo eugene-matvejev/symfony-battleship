@@ -12,11 +12,11 @@ use EM\GameBundle\ORM\IdentifiableTrait;
  * @ORM\Entity()
  * @ORM\Table(
  *      name="cells",
- *      uniqueConstraints={
- *          @ORM\UniqueConstraint(name="INDEX_BATTLEFIELD_UNIQUE_CELL", columns={"battlefield", "x", "y"})
- *      },
  *      indexes={
  *          @ORM\Index(name="INDEX_CELL_BATTLEFIELD", columns={"battlefield"})
+ *      },
+ *      uniqueConstraints={
+ *          @ORM\UniqueConstraint(name="INDEX_BATTLEFIELD_UNIQUE_CELL", columns={"battlefield", "coordinate"})
  *      }
  * )
  */
@@ -38,17 +38,11 @@ class Cell implements IdentifiableInterface
      */
     private $state;
     /**
-     * @ORM\Column(name="x", type="integer", nullable=false)
+     * @ORM\Column(name="coordinate", type="string", nullable=false, length=3)
      *
-     * @var int
+     * @var string
      */
-    private $x;
-    /**
-     * @ORM\Column(name="y", type="integer", nullable=false)
-     *
-     * @var int
-     */
-    private $y;
+    private $coordinate;
 
     public function getBattlefield() : Battlefield
     {
@@ -62,6 +56,18 @@ class Cell implements IdentifiableInterface
         return $this;
     }
 
+    public function getCoordinate() : string
+    {
+        return $this->coordinate;
+    }
+
+    public function setCoordinate(string $coordinate) : self
+    {
+        $this->coordinate = $coordinate;
+
+        return $this;
+    }
+
     public function getState() : CellState
     {
         return $this->state;
@@ -70,30 +76,6 @@ class Cell implements IdentifiableInterface
     public function setState(CellState $state) : self
     {
         $this->state = $state;
-
-        return $this;
-    }
-
-    public function getX() : int
-    {
-        return $this->x;
-    }
-
-    public function setX(int $x) : self
-    {
-        $this->x = $x;
-
-        return $this;
-    }
-
-    public function getY() : int
-    {
-        return $this->y;
-    }
-
-    public function setY(int $y) : self
-    {
-        $this->y = $y;
 
         return $this;
     }

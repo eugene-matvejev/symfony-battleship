@@ -13,23 +13,23 @@ class GameResultModel
     /**
      * @var GameResultRepository
      */
-    private $gameResultRepository;
+    private $repository;
     /**
      * @var int
      */
-    private $gameResultsPerPage;
+    private $resultsPerPage;
 
     public function __construct(int $recordsPerPage, GameResultRepository $repository)
     {
-        $this->gameResultsPerPage = $recordsPerPage;
-        $this->gameResultRepository = $repository;
+        $this->resultsPerPage = $recordsPerPage;
+        $this->repository = $repository;
     }
 
     public function prepareResponse(int $currentPage) : GameResultsResponse
     {
         return (new GameResultsResponse())
-            ->setResults($this->gameResultRepository->getAllOrderByDate($currentPage, $this->gameResultsPerPage))
+            ->setResults($this->repository->getAllOrderByDate($currentPage, $this->resultsPerPage))
             ->setCurrentPage($currentPage)
-            ->setTotalPages(ceil($this->gameResultRepository->countTotalResults() / $this->gameResultsPerPage));
+            ->setTotalPages(ceil($this->repository->countTotal() / $this->resultsPerPage));
     }
 }

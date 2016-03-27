@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 abstract class AbstractAPIController extends Controller
 {
-    protected function prepareSerializedOutput($data, int $status = Response::HTTP_OK, array $headers = []) : Response
+    protected function prepareSerializedResponse($data, int $status = Response::HTTP_OK, array $headers = []) : Response
     {
         $acceptHeader = $this->get('request_stack')->getMasterRequest()->headers->get('accept');
         $format = (false !== strpos($acceptHeader, 'application/xml')) ? 'xml' : 'json';

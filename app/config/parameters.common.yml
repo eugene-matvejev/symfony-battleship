@@ -1,2 +1,2 @@
 parameters:
-    battleship.config.statistics.results.per.page: 10
+    battleship.game.config.game.results.per.page: 10

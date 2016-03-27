@@ -2,74 +2,44 @@
 
 namespace EM\Tests\PHPUnit\GameBundle\Model;
 
-use EM\GameBundle\Entity\Battlefield;
-use EM\GameBundle\Entity\Cell;
-use EM\GameBundle\Entity\CellState;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
 use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
+use EM\Tests\PHPUnit\Environment\MockFactory\Entity\BattlefieldMockTrait;
 
 /**
  * @see BattlefieldModel
  */
 class BattlefieldModelTest extends ExtendedTestCase
 {
+    use BattlefieldMockTrait;
+
     /**
      * @see BattlefieldModel::getLiveCells
      * @test
      */
     public function getLiveCells()
     {
-        $battlefield = $this->getMockedBattlefield();
-        $cells = BattlefieldModel::getLiveCells($battlefield);
-        $this->assertCount(100, $cells);
+        $battlefield = $this->getBattlefieldMock();
+        $this->assertCount(100, BattlefieldModel::getLiveCells($battlefield));
 
-        $cellState = (new CellState())
-            ->setId(CellModel::STATE_SHIP_DIED);
-        foreach ($battlefield->getCells() as $cell) {
-            if ($cell->getX() === 0) {
-                $cell->setState($cellState);
-            }
-        }
-        $cells = BattlefieldModel::getLiveCells($battlefield);
-        $this->assertCount(90, $cells);
+        $battlefield->getCellByCoordinate('A1')->setState($this->getCellStateMock(CellModel::STATE_SHIP_DIED));
+        $this->assertCount(99, BattlefieldModel::getLiveCells($battlefield));
     }
 
     /**
-     * @see BattlefieldModel::isUnfinished
+     * @see BattlefieldModel::hasUnfinishedShips
      * @test
      */
-    public function isUnfinished()
+    public function hasUnfinishedShips()
     {
-        $battlefield = $this->getMockedBattlefield();
-        $this->assertFalse(BattlefieldModel::isUnfinished($battlefield));
+        $battlefield = $this->getBattlefieldMock();
+        $this->assertFalse(BattlefieldModel::hasUnfinishedShips($battlefield));
 
-        $cellState = (new CellState())
-            ->setId(CellModel::STATE_SHIP_DIED);
-        foreach ($battlefield->getCells() as $cell) {
-            $cell->setState($cellState);
-        }
-        $this->assertTrue(BattlefieldModel::isUnfinished($battlefield));
-    }
+        $battlefield->getCellByCoordinate('A1')->setState($this->getCellStateMock(CellModel::STATE_SHIP_LIVE));
+        $this->assertTrue(BattlefieldModel::hasUnfinishedShips($battlefield));
 
-    /**
-     * @coversNothing
-     */
-    private function getMockedBattlefield()
-    {
-        $battlefield = new Battlefield();
-        $cellState = (new CellState())
-            ->setId(CellModel::STATE_SHIP_LIVE);
-        for ($x = 0; $x < 10; $x++) {
-            for ($y = 0; $y < 10; $y++) {
-                $cell = (new Cell())
-                    ->setX($x)
-                    ->setY($y)
-                    ->setState($cellState);
-                $battlefield->addCell($cell);
-            }
-        }
-
-        return $battlefield;
+        $battlefield->getCellByCoordinate('A1')->setState($this->getCellStateMock(CellModel::STATE_SHIP_DIED));
+        $this->assertFalse(BattlefieldModel::hasUnfinishedShips($battlefield));
     }
 }

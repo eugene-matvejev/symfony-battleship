@@ -50,5 +50,5 @@ APIRequestMgr.prototype = {
 APIRequestMgr.resources = {};
 APIRequestMgr.resources.config = {
     /** @type {int} */
-    timeout: 2000 /** in milliseconds */
+    timeout: 5000 /** in milliseconds */
 };

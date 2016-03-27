@@ -19,9 +19,14 @@ class GameTurnResponse
      */
     private $result;
 
-    public function addCell(Cell $cell) : self
+    /**
+     * @param Cell[] $cells
+     *
+     * @return GameTurnResponse
+     */
+    public function setCells(array $cells) : self
     {
-        $this->cells[] = $cell;
+        $this->cells = $cells;
 
         return $this;
     }

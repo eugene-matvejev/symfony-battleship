@@ -1,20 +1,18 @@
 'use strict';
 
 /**
- * @param {int|string}  x
- * @param {int|string}  y
+ * @param {string}      coordinate
  * @param {Battlefield} battlefield
  *
  * @constructor
  */
-function Cell(x, y, battlefield) {
+function Cell(coordinate, battlefield) {
     let resources = Cell.resources;
 
     this.$html = $(resources.html.layout);
     this.battlefield = battlefield;
     this.setId('undefined')
-        .setX(x)
-        .setY(y)
+        .setCoordinate(coordinate)
         .setState('undefined');
 }
 
@@ -22,8 +20,7 @@ function Cell(x, y, battlefield) {
  * @property {jQuery}     $html
  *
  * @property {int|string} id
- * @property {int|string} x
- * @property {int|string} y
+ * @property {string}     coordinate
  * @property {int|string} s
  */
 Cell.prototype = {
@@ -34,29 +31,18 @@ Cell.prototype = {
      */
     setId: function (id) {
         this.id = id;
-        this.updateHTML('data-cell-id', this.id);
+        this.updateHTML('data-id', this.id);
 
         return this;
     },
     /**
-     * @param {int|string} x
+     * @param {string} coordinate
      *
      * @returns {Cell}
      */
-    setX: function (x) {
-        this.x = x;
-        this.updateHTML('data-cell-x', this.x);
-
-        return this;
-    },
-    /**
-     * @param {int|string} y
-     *
-     * @returns {Cell}
-     */
-    setY: function (y) {
-        this.y = y;
-        this.updateHTML('data-cell-y', this.y);
+    setCoordinate: function (coordinate) {
+        this.coordinate = coordinate;
+        this.updateHTML('data-coordinate', this.coordinate);
 
         return this;
     },
@@ -67,25 +53,25 @@ Cell.prototype = {
      */
     setState: function (state) {
         this.state = state;
-        this.updateHTML('data-cell-state', this.state);
+        this.updateHTML('data-state', this.state);
 
         return this;
     },
     /**
-     * @param {string} axis
+     * @param {string} mode
      *
      * @returns {Cell}
      */
-    actAsAxisLabel: function (axis) {
+    actAsAxisLabel: function (mode) {
         let txt = '',
             format = Cell.resources.text.format;
 
-        switch (axis) {
-            case 'y':
-                txt = format.yAxis(this);
+        switch (mode) {
+            case 'letter':
+                txt = format.letter(this);
                 break;
-            case 'x':
-                txt = format.xAxis(this);
+            case 'digit':
+                txt = format.digit(this);
                 break;
         }
 
@@ -94,10 +80,10 @@ Cell.prototype = {
         return this;
     },
     /**
-     * @returns {{id: {int}, x: {int}, y: {int}, state: {int}}}
+     * @returns {{id: {int}, coordinate: {string}, state: {int}}}
      */
     getJSON: function () {
-        return {id: this.id, x: this.x, y: this.y, state: this.state};
+        return {id: this.id, coordinate: this.coordinate, state: this.state};
     },
     /**
      * @param {string} attr
@@ -108,43 +94,42 @@ Cell.prototype = {
     }
 };
 
-Cell.resources = {
-    config: {
-        state: {
-            /** @enum {int} */
-            sea: {
-                live: 1,
-                dead: 2
-            },
-            /** @enum {int} */
-            ship: {
-                live: 3,
-                dead: 4
-            }
+Cell.resources = {};
+Cell.resources.config = {
+    state: {
+        /** @enum {int} */
+        sea: {
+            live: 1,
+            dead: 2
+        },
+        /** @enum {int} */
+        ship: {
+            live: 3,
+            dead: 4
         }
-    },
-    text: {
-        format: {
-            /**
-             * @param {Cell} cell
-             *
-             * @returns {string}
-             */
-            xAxis: function (cell) {
-                return String.fromCharCode(cell.x + 97);
-            },
-            /**
-             * @param {Cell} cell
-             *
-             * @returns {int}
-             */
-            yAxis: function (cell) {
-                return cell.y + 1;
-            }
-        }
-    },
-    html: {
-        /** @type {string} */
-        layout: '<div class="col-md-1 battlefield-cell"></div>'
     }
+};
+Cell.resources.text = {
+    format: {
+        /**
+         * @param {Cell} cell
+         *
+         * @returns {string}
+         */
+        letter: function (cell) {
+            return cell.coordinate.charAt(0);
+        },
+        /**
+         * @param {Cell} cell
+         *
+         * @returns {string}
+         */
+        digit: function (cell) {
+            return cell.coordinate.substring(1);
+        }
+    }
+};
+Cell.resources.html = {
+    /** @type {string} */
+    layout: '<div class="col-md-1 battlefield-cell"></div>'
 };

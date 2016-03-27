@@ -2,26 +2,21 @@
 
 namespace EM\Tests\PHPUnit\GameBundle\Service\AI\Strategy;
 
-use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
-use EM\GameBundle\Entity\CellState;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\Strategy\AbstractStrategy;
 use EM\GameBundle\Service\AI\Strategy\RandomStrategy;
-use EM\GameBundle\Service\CoordinateSystem\CoordinatesPair;
+use EM\GameBundle\Service\CoordinateSystem\CoordinateService;
 use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
+use EM\Tests\PHPUnit\Environment\MockFactory\Entity\BattlefieldMockTrait;
+use EM\Tests\PHPUnit\Environment\MockFactory\Service\CoordinateServiceMockTrait;
 
 /**
  * @see AbstractStrategy
  */
 class AbstractStrategyTest extends ExtendedTestCase
 {
-    const COORDINATE_X = 2;
-    const COORDINATE_Y = 2;
-    /**
-     * @var CellModel
-     */
-    protected $cellModel;
+    use BattlefieldMockTrait, CoordinateServiceMockTrait;
     /**
      * @var RandomStrategy
      */
@@ -30,7 +25,6 @@ class AbstractStrategyTest extends ExtendedTestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->cellModel = $this->getContainer()->get('battleship.game.services.cell.model');
         $this->strategyService = $this->getContainer()->get('battleship.game.services.ai.rand.strategy.service');
     }
 
@@ -40,67 +34,76 @@ class AbstractStrategyTest extends ExtendedTestCase
      */
     public function verifyByCoordinates()
     {
-        $coordinatesPairs = [
-            new CoordinatesPair(CoordinatesPair::WAY_UP, 1, 2),
-            new CoordinatesPair(CoordinatesPair::WAY_RIGHT, 0, 1),
-            new CoordinatesPair(CoordinatesPair::WAY_DOWN, 1, 0),
-            new CoordinatesPair(CoordinatesPair::WAY_LEFT, 2, 1)
-        ];
+        $cellStates = $this->getContainer()->get('battleship.game.services.cell.model')->getAllStates();
 
-        $this->strategyService->getCellModel()->indexCells($this->getMockedBattlefield());
-        $cells = $this->invokePrivateMethod(RandomStrategy::class, $this->strategyService, 'verifyByCoordinates', [$coordinatesPairs]);
+        $battlefield = $this->getBattlefieldMock();
+        $battlefield->getCellByCoordinate('B2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+        $service = $this->getCoordinateServiceMock($battlefield->getCellByCoordinate('B2'));
 
+        $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
+        /** as battlefield is mocked having all cells STATE_WATER_LIVE state */
         $this->assertCount(4, $cells);
+        $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
 
-        $cellState = (new CellState())
-            ->setId(CellModel::STATE_WATER_DIED);
-        foreach ($coordinatesPairs as $coordinatesPair) {
-            $this->cellModel->getByCoordinatesPair($coordinatesPair)->setState($cellState);
+        /** as LEFT (A1) cell is dead */
+        $battlefield->getCellByCoordinate('A2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+        $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
+        $this->assertCount(3, $cells);
+
+        /** as entire horizontal row is dead (A1-J10) cell is dead */
+        for ($letter = 'C'; $letter < 'J'; $letter++) {
+            $battlefield->getCellByCoordinate("{$letter}2")->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+            $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
+            $this->assertCount(3, $cells);
         }
+        /** left for explanation purposes */
+//        $battlefield->getCellByCoordinate('C2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+//        $battlefield->getCellByCoordinate('D2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+//        $battlefield->getCellByCoordinate('E2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+//        $battlefield->getCellByCoordinate('F2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+//        $battlefield->getCellByCoordinate('G2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+//        $battlefield->getCellByCoordinate('H2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+//        $battlefield->getCellByCoordinate('I2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+        $battlefield->getCellByCoordinate('J2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+        $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
+        $this->assertCount(2, $cells);
 
-        $cells = $this->invokePrivateMethod(RandomStrategy::class, $this->strategyService, 'verifyByCoordinates', [$coordinatesPairs]);
+        /** as top (B1) cell is dead also */
+        $battlefield->getCellByCoordinate('B1')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+        $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
+        $this->assertCount(1, $cells);
+
+        /** as vertical (B1-B10) and horizontal (A1-J10) rows contains only dead cells */
+        for ($digit = 3; $digit < 10; $digit++) {
+            $battlefield->getCellByCoordinate("B{$digit}")->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+            $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
+            $this->assertCount(1, $cells);
+        }
+        /** left for explanation purposes */
+//        $battlefield->getCellByCoordinate('B3')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+//        $battlefield->getCellByCoordinate('B4')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+//        $battlefield->getCellByCoordinate('B5')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+//        $battlefield->getCellByCoordinate('B6')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+//        $battlefield->getCellByCoordinate('B7')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+//        $battlefield->getCellByCoordinate('B8')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+//        $battlefield->getCellByCoordinate('B9')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+        $battlefield->getCellByCoordinate('B10')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+        $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
         $this->assertEmpty($cells);
     }
 
-    /**
-     * @coversNothing
-     */
-    protected function getMockedBattlefield() : Battlefield
+    protected function invokeStrategyMethod(array $args) : array
     {
-        $battlefield = new Battlefield();
-        $cellState = (new CellState())
-            ->setId(CellModel::STATE_WATER_LIVE);
-        for ($x = 0; $x < 10; $x++) {
-            for ($y = 0; $y < 10; $y++) {
-                $cell = (new Cell())
-                    ->setX($x)
-                    ->setY($y)
-                    ->setState($cellState);
-
-                $battlefield->addCell($cell);
-            }
-        }
-
-        return $battlefield;
+        return $this->invokePrivateMethod(RandomStrategy::class, $this->strategyService, 'verifyByCoordinates', $args);
     }
 
-    /**
-     * @param int $x
-     * @param int $y
-     *
-     * @return Cell
-     *
-     * @coversNothing
-     */
-    protected function getMockedCell(int $x = self::COORDINATE_X, int $y = self::COORDINATE_Y) : Cell
+    protected function getBasicCoordinates(CoordinateService $service) : array
     {
-        $cellState = (new CellState())
-            ->setId(CellModel::STATE_WATER_LIVE);
-        $cell = (new Cell())
-            ->setX($x)
-            ->setY($y)
-            ->setState($cellState);
-
-        return $cell;
+        return [
+            clone $service->setWay(CoordinateService::WAY_UP),
+            clone $service->setWay(CoordinateService::WAY_DOWN),
+            clone $service->setWay(CoordinateService::WAY_LEFT),
+            clone $service->setWay(CoordinateService::WAY_RIGHT)
+        ];
     }
 }

@@ -56,9 +56,10 @@ class PlayerModelTest extends ExtendedTestCase
      */
     public function getTypes()
     {
-        $this->assertCount(2, $this->playerModel->getTypes());
         foreach ($this->playerModel->getTypes() as $playerType) {
             $this->assertContains($playerType->getId(), PlayerModel::TYPES_ALL);
         }
+
+        $this->assertCount(2, $this->playerModel->getTypes());
     }
 }

@@ -18,7 +18,7 @@ class Player implements IdentifiableInterface, NameableInterface
 {
     use IdentifiableTrait, NameableTrait;
     /**
-     * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\PlayerType")
+     * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\PlayerType", fetch="EAGER")
      * @ORM\JoinColumn(name="type", referencedColumnName="id", nullable=false)
      *
      * @var PlayerType
