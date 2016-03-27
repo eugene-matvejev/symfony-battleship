@@ -189,7 +189,7 @@ abstract class ExtendedTestCase extends WebTestCase
     {
         $this->assertSuccessfulResponse($response);
 
-        return json_decode($response->getContent(), true);
+        return json_decode($response->getContent());
     }
 
     /**

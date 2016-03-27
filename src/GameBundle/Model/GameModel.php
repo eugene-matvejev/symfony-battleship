@@ -93,9 +93,6 @@ class GameModel
         $liveShipState = $this->cellModel->getAllStates()[CellModel::STATE_SHIP_LIVE];
 
         $battlefield->getCellByCoordinate('B2')->setState($liveShipState);
-        $battlefield->getCellByCoordinate('B3')->setState($liveShipState);
-
-        $battlefield->getCellByCoordinate('D5')->setState($liveShipState);
     }
 
     /**
@@ -106,10 +103,10 @@ class GameModel
      */
     public function nextTurn(string $json) : GameTurnResponse
     {
-        $cellData = json_decode($json);
+        $request = json_decode($json);
         /** @var Cell $cell */
-        if (null === $cell = $this->cellRepository->find($cellData->id)) {
-            throw new CellException(__FUNCTION__ . " cell: {$cellData->id} doesn't exist");
+        if (null === $cell = $this->cellRepository->find($request->id)) {
+            throw new CellException("Cell: {$request->id} doesn't exist");
         }
 
         $game = $cell->getBattlefield()->getGame();
@@ -122,7 +119,7 @@ class GameModel
         }
 
         foreach ($game->getBattlefields() as $battlefield) {
-            $this->playerTurn($battlefield, $cellData->coordinate);
+            $this->playerTurn($battlefield, $cell->getCoordinate());
 
             if (null !== $game->getResult()) {
                 $response->setGameResult($game->getResult());
@@ -130,6 +127,9 @@ class GameModel
             }
         }
 
+        foreach (CellModel::getChangedCells() as $cell) {
+            $this->om->persist($cell);
+        }
         $this->om->flush();
 
         $response->setCells(CellModel::getChangedCells());
@@ -151,9 +151,8 @@ class GameModel
                 break;
         }
 
-        if(null !== $cell) {
+        if (null !== $cell) {
             $this->ai->getStrategyService()->isShipDead($cell);
-            $this->om->persist($cell);
             $this->detectVictory($battlefield);
         }
     }
@@ -174,7 +173,6 @@ class GameModel
                 ->setPlayer($_battlefield->getPlayer());
 
             $game->setResult($result);
-//            $this->om->persist($result);
         }
 
         return true;
