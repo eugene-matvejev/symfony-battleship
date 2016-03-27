@@ -42,38 +42,12 @@ class CoordinateServiceTest extends ExtendedTestSuite
      */
     public function basicWays()
     {
-        $this->assertCount(4, CoordinateService::ALL_BASIC_WAYS);
-
         $this->assertContains(CoordinateService::WAY_LEFT, CoordinateService::ALL_BASIC_WAYS);
         $this->assertContains(CoordinateService::WAY_RIGHT, CoordinateService::ALL_BASIC_WAYS);
         $this->assertContains(CoordinateService::WAY_UP, CoordinateService::ALL_BASIC_WAYS);
         $this->assertContains(CoordinateService::WAY_DOWN, CoordinateService::ALL_BASIC_WAYS);
     }
-
-    /**
-     * @see CoordinateService::STRATEGY_X
-     * @test
-     */
-    public function xWays()
-    {
-        $this->assertCount(2, CoordinateService::STRATEGY_X);
-
-        $this->assertContains(CoordinateService::WAY_LEFT, CoordinateService::ALL_BASIC_WAYS);
-        $this->assertContains(CoordinateService::WAY_RIGHT, CoordinateService::ALL_BASIC_WAYS);
-    }
-
-    /**
-     * @see CoordinateService::STRATEGY_Y
-     * @test
-     */
-    public function yWays()
-    {
-        $this->assertCount(2, CoordinateService::STRATEGY_Y);
-
-        $this->assertContains(CoordinateService::WAY_UP, CoordinateService::ALL_BASIC_WAYS);
-        $this->assertContains(CoordinateService::WAY_DOWN, CoordinateService::ALL_BASIC_WAYS);
-    }
-
+    
     /**
      * @see CoordinateService::calculateNextCoordinate
      * @test

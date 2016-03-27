@@ -1,38 +1,37 @@
 <?php
 
-namespace EM\Tests\PHPUnit\GameBundle\Service\AI\Strategy;
+namespace EM\Tests\PHPUnit\GameBundle\Service\AI;
 
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Service\AI\Strategy\AbstractStrategy;
-use EM\GameBundle\Service\AI\Strategy\RandomStrategy;
+use EM\GameBundle\Service\AI\AIStrategyProcessor;
 use EM\GameBundle\Service\CoordinateSystem\CoordinateService;
 use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
 use EM\Tests\PHPUnit\Environment\MockFactory\Entity\BattlefieldMockTrait;
 use EM\Tests\PHPUnit\Environment\MockFactory\Service\CoordinateServiceMockTrait;
 
 /**
- * @see AbstractStrategy
+ * @see AIStrategy
  */
-class AbstractStrategyTest extends ExtendedTestSuite
+class AIStrategyProcessorTest extends ExtendedTestSuite
 {
     use BattlefieldMockTrait, CoordinateServiceMockTrait;
     /**
-     * @var RandomStrategy
+     * @var AIStrategyProcessor
      */
-    protected $strategyService;
+    private $strategyProcessor;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->strategyService = $this->getContainer()->get('battleship.game.services.ai.rand.strategy.service');
+        $this->strategyProcessor = $this->getContainer()->get('battleship.game.services.ai.strategy.processor');
     }
 
     /**
-     * @see AbstractStrategy::verifyByCoordinates
+     * @see AIStrategyProcessor::processCoordinates
      * @test
      */
-    public function verifyByCoordinates()
+    public function processCoordinates()
     {
         $cellStates = $this->getContainer()->get('battleship.game.services.cell.model')->getAllStates();
 
@@ -92,12 +91,71 @@ class AbstractStrategyTest extends ExtendedTestSuite
         $this->assertEmpty($cells);
     }
 
-    protected function invokeStrategyMethod(array $args) : array
+    /**
+     * @see     AIStrategyProcessor::process
+     * @test
+     *
+     * @depends processCoordinates
+     */
+    public function processHorizontalStrategy()
     {
-        return $this->invokePrivateMethod(RandomStrategy::class, $this->strategyService, 'verifyByCoordinates', $args);
+        $cells = $this->strategyProcessor->process(
+            $this->getBattlefieldMock()->getCellByCoordinate('B2'),
+            AIStrategyProcessor::STRATEGY_HORIZONTAL
+        );
+
+        $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
+        $this->assertCount(2, $cells);
+        $this->assertEquals('A2', $cells[0]->getCoordinate());
+        $this->assertEquals('C2', $cells[1]->getCoordinate());
     }
 
-    protected function getBasicCoordinates(CoordinateService $service) : array
+    /**
+     * @see     AIStrategyProcessor::process
+     * @test
+     *
+     * @depends processCoordinates
+     */
+    public function processVerticalStrategy()
+    {
+        $cells = $this->strategyProcessor->process(
+            $this->getBattlefieldMock()->getCellByCoordinate('B2'),
+            AIStrategyProcessor::STRATEGY_VERTICAL
+        );
+
+        $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
+        $this->assertCount(2, $cells);
+        $this->assertEquals('B1', $cells[0]->getCoordinate());
+        $this->assertEquals('B3', $cells[1]->getCoordinate());
+    }
+
+    /**
+     * @see     XStrategy::verify()
+     * @test
+     *
+     * @depends processCoordinates
+     */
+    public function processBothStrategy()
+    {
+        $cells = $this->strategyProcessor->process(
+            $this->getBattlefieldMock()->getCellByCoordinate('B2'),
+            AIStrategyProcessor::STRATEGY_BOTH
+        );
+
+        $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
+        $this->assertCount(4, $cells);
+        $this->assertEquals('A2', $cells[0]->getCoordinate());
+        $this->assertEquals('C2', $cells[1]->getCoordinate());
+        $this->assertEquals('B1', $cells[2]->getCoordinate());
+        $this->assertEquals('B3', $cells[3]->getCoordinate());
+    }
+
+    private function invokeStrategyMethod(array $args) : array
+    {
+        return $this->invokePrivateMethod(AIStrategyProcessor::class, $this->strategyProcessor, 'processCoordinates', $args);
+    }
+
+    private function getBasicCoordinates(CoordinateService $service) : array
     {
         return [
             clone $service->setWay(CoordinateService::WAY_UP),

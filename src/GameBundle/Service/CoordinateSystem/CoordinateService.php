@@ -18,14 +18,6 @@ class CoordinateService
     const WAY_LEFT_DOWN  = 6;
     const WAY_RIGHT_UP   = 7;
     const WAY_RIGHT_DOWN = 8;
-    const STRATEGY_X     = [
-        self::WAY_LEFT,
-        self::WAY_RIGHT
-    ];
-    const STRATEGY_Y     = [
-        self::WAY_UP,
-        self::WAY_DOWN
-    ];
     const ALL_BASIC_WAYS = [
         self::WAY_LEFT,
         self::WAY_RIGHT,
