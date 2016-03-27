@@ -57,18 +57,15 @@ class CellModel
 
     public function switchState(Cell $cell, int $customState = null) : Cell
     {
-        $oldState = $cell->getState()->getId();
         switch ($cell->getState()->getId()) {
             case self::STATE_WATER_LIVE:
                 $cell->setState(self::$cachedStates[$customState ?? self::STATE_WATER_DIED]);
+                self::$changedCells[] = $cell;
                 break;
             case self::STATE_SHIP_LIVE:
                 $cell->setState(self::$cachedStates[self::STATE_SHIP_DIED]);
+                self::$changedCells[] = $cell;
                 break;
-        }
-
-        if($cell->getState()->getId() !== $oldState) {
-            self::$changedCells[] = $cell;
         }
 
         return $cell;
