@@ -1,19 +1,16 @@
 battleship.game.api.game.results:
-    path:     results/page/{page}
-    defaults: { _controller: GameBundle:GameResult:orderedByDate, page: 1 }
+    path:     game-results/page/{page}
+    defaults: { _controller: GameBundle:GameResult:orderedByDate }
     methods:  [GET]
     requirements:
         page: \d+
-        _format: json|xml
 battleship.game.api.init:
-    path:     init
+    path:     game-init
     defaults: { _controller: GameBundle:Game:init }
     methods:  [POST]
-    requirements:
-        _format: json|xml
 battleship.game.api.turn:
-    path:     turn
+    path:     game-turn/cell-id/{cellId}
     defaults: { _controller: GameBundle:Game:turn }
     methods:  [PATCH]
     requirements:
-        _format: json|xml
+        cellId: \d+

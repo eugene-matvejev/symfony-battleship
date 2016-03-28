@@ -114,7 +114,7 @@ Game.prototype = {
     update: function (el) {
         let cell = this.findCell({id: el.getAttribute('data-id')});
         if (undefined !== cell) {
-            this.cellSend(cell.getJSON());
+            this.cellSend(cell);
         }
     },
     /**
@@ -134,15 +134,15 @@ Game.prototype = {
         return this.players.find(player => player.name == name);
     },
     /**
-     * @param {{cell: {Object}}} requestData
+     * @param {Cell} cell
      */
-    cellSend: function (requestData) {
+    cellSend: function (cell) {
         var self = this,
             onSuccess = function (response) {
                 self.parseUpdateResponse(response);
             };
 
-        this.apiMgr.request('PATCH', this.$html.attr(Game.resources.config.route.turn), requestData, onSuccess);
+        this.apiMgr.request('PATCH', this.$html.attr(Game.resources.config.route.turn) + cell.id, undefined, onSuccess);
     },
     /**
      * @param {{cells: {id: {int}, state: {id: {int}}}[], result: {player: {Object}}}} response
