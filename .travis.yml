@@ -12,7 +12,7 @@ env:
     - MIN_PHP=7.0.1
 
 script:
-  - php bin/phpunit -c tests/phpunit.xml --colors=always || (echo -e "\e[41mFAILED\e[0m {}" && $(exit 1));
+  - php bin/phpunit -c tests/phpunit.xml --colors=always --verbose || (echo -e "\e[41mFAILED\e[0m {}" && $(exit 1));
 
 services:
   - mongodb
