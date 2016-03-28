@@ -42,7 +42,7 @@ class AIService
     public function turn(Battlefield $battlefield) : Cell
     {
         try {
-            $cells = $this->strategyService->pickCells($battlefield);
+            $cells = $this->strategyService->chooseCells($battlefield);
 
             if (null === $cell = $this->chooseCellToAttack($cells)) {
                 $cells = BattlefieldModel::getLiveCells($battlefield);
