@@ -1,0 +1,11 @@
+machine:
+    php:
+        version: 7.0.1
+
+dependencies:
+    pre:
+        - cp app/config/parameters.yml.dist app/config/parameters.yml
+
+test:
+    override:
+        - php bin/phpunit -c tests/phpunit.xml --colors=always --verbose || (echo -e "\e[41mFAILED\e[0m {}" && $(exit 1));
