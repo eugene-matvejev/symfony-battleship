@@ -34,14 +34,6 @@ class GameModel
      * @var ObjectManager
      */
     private $om;
-    /**
-     * @var EntityRepository
-     */
-    private $cellRepository;
-    /**
-     * @var EntityRepository
-     */
-    private $playerRepository;
 
     public function __construct(AIService $ai, CellModel $cellModel, PlayerModel $playerModel, ObjectManager $om)
     {
@@ -49,8 +41,6 @@ class GameModel
         $this->cellModel = $cellModel;
         $this->playerModel = $playerModel;
         $this->om = $om;
-        $this->cellRepository = $om->getRepository('GameBundle:Cell');
-        $this->playerRepository = $om->getRepository('GameBundle:Player');
     }
 
     public function init(string $json) : Game
@@ -59,7 +49,7 @@ class GameModel
         $this->om->persist($game);
 
         foreach (json_decode($json)->data as $data) {
-            if (null === $player = $this->playerRepository->findOneBy(['name' => $data->player->name])) {
+            if (null === $player = $this->om->getRepository('GameBundle:Player')->findOneBy(['name' => $data->player->name])) {
                 $player = (new Player())
                     ->setName($data->player->name)
                     ->setType($this->playerModel->getTypes()[PlayerModel::TYPE_HUMAN]);
@@ -96,17 +86,15 @@ class GameModel
     }
 
     /**
-     * @param string $json
+     * @param int $cellId
      *
      * @return GameTurnResponse
      * @throws CellException
      */
-    public function nextTurn(string $json) : GameTurnResponse
+    public function nextTurn(int $cellId) : GameTurnResponse
     {
-        $request = json_decode($json);
-        /** @var Cell $cell */
-        if (null === $cell = $this->cellRepository->find($request->id)) {
-            throw new CellException("Cell: {$request->id} doesn't exist");
+        if (null === $cell = $this->om->getRepository('GameBundle:Cell')->find($cellId)) {
+            throw new CellException("Cell: {$cellId} doesn't exist");
         }
 
         $game = $cell->getBattlefield()->getGame();
