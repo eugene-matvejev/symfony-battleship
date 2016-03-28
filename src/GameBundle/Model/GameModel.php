@@ -139,7 +139,7 @@ class GameModel
         }
 
         if (null !== $cell) {
-            $this->ai->getStrategyService()->isShipDead($cell);
+            $this->cellModel->isShipDead($cell);
             $this->detectVictory($battlefield);
         }
     }

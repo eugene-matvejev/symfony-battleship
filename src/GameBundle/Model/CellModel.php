@@ -5,6 +5,7 @@ namespace EM\GameBundle\Model;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Entity\CellState;
 use EM\GameBundle\Repository\CellStateRepository;
+use EM\GameBundle\Service\CoordinateSystem\CoordinateService;
 
 /**
  * @since 2.0
@@ -31,6 +32,10 @@ class CellModel
      * @var Cell[]
      */
     private static $changedCells = [];
+    /**
+     * @var Cell[]
+     */
+    private static $checkedCells = [];
 
     public function __construct(CellStateRepository $repository)
     {
@@ -74,5 +79,44 @@ class CellModel
     public function switchStateToSkipped(Cell $cell) : Cell
     {
         return $this->switchState($cell, self::STATE_WATER_SKIP);
+    }
+
+    public function isShipDead(Cell $cell) : bool
+    {
+        if ($cell->getState()->getId() !== self::STATE_SHIP_DIED) {
+            return false;
+        }
+        if (isset(self::$checkedCells[$cell->getId()])) {
+            return true;
+        }
+
+        $cells = [$cell];
+        self::$checkedCells[$cell->getId()] = $cell;
+
+        $service = new CoordinateService($cell);
+        foreach (CoordinateService::ALL_BASIC_WAYS as $way) {
+            $service->setWay($way)->calculateNextCoordinate();
+
+            while (null !== $_cell = $cell->getBattlefield()->getCellByCoordinate($service->getValue())) {
+                if (!in_array($_cell->getState()->getId(), self::STATES_SHIP)) {
+                    break;
+                }
+                if ($_cell->getState()->getId() !== self::STATE_SHIP_DIED) {
+                    return false;
+                }
+
+                self::$checkedCells[$cell->getId()] = $cell;
+                $service->calculateNextCoordinate();
+                $cells[] = $cell;
+            }
+        }
+
+        foreach ($cells as $cell) {
+            foreach ((new CoordinateService($cell))->getAdjacentCells() as $_cell) {
+                $this->switchStateToSkipped($_cell);
+            }
+        }
+
+        return true;
     }
 }
