@@ -28,29 +28,23 @@ class AIStrategyProcessor
 
         switch ($strategyId) {
             case self::STRATEGY_HORIZONTAL:
-                $coordinates = [
+                return $this->processCoordinates($cell->getBattlefield(), [
                     clone $service->setWay(CoordinateService::WAY_LEFT),
                     clone $service->setWay(CoordinateService::WAY_RIGHT)
-                ];
-                break;
+                ]);
             case self::STRATEGY_VERTICAL:
-                $coordinates = [
+                return $this->processCoordinates($cell->getBattlefield(), [
                     clone $service->setWay(CoordinateService::WAY_UP),
                     clone $service->setWay(CoordinateService::WAY_DOWN)
-                ];
-                break;
+                ]);
             case self::STRATEGY_BOTH:
-            default:
-                $coordinates = [
+                return $this->processCoordinates($cell->getBattlefield(), [
                     clone $service->setWay(CoordinateService::WAY_LEFT),
                     clone $service->setWay(CoordinateService::WAY_RIGHT),
                     clone $service->setWay(CoordinateService::WAY_UP),
                     clone $service->setWay(CoordinateService::WAY_DOWN)
-                ];
-                break;
+                ]);
         }
-
-        return $this->processCoordinates($cell->getBattlefield(), $coordinates);
     }
 
     /**
