@@ -42,7 +42,7 @@ class AIService
     public function turn(Battlefield $battlefield) : Cell
     {
         try {
-            $cells = $this->strategyService->attack($battlefield);
+            $cells = $this->strategyService->chooseCells($battlefield);
 
             if (null === $cell = $this->chooseCellToAttack($cells)) {
                 $cells = BattlefieldModel::getLiveCells($battlefield);
@@ -50,12 +50,12 @@ class AIService
             }
 
             return $cell;
-        } catch (AIException $e) {
             /**
              * if strategy service unable to find damaged-unfinished ships, it returns empty array
              * exception will be thrown, but AI should continue to look for cell which it gonna hit,
              * so it should continue with random cell which have live status
              */
+        } catch (AIException $e) {
         }
     }
 

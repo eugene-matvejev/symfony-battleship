@@ -25,14 +25,14 @@ class AIStrategyServiceTest extends ExtendedTestSuite
     }
 
     /**
-     * @see AIStrategyService::attack()
+     * @see AIStrategyService::chooseCells()
      * @test
      */
-    public function attack()
+    public function chooseCells()
     {
         $cellStates = $this->getContainer()->get('battleship.game.services.cell.model')->getAllStates();
         $battlefield = $this->getBattlefieldMock();
-        $cells = $this->strategyService->attack($battlefield);
+        $cells = $this->strategyService->chooseCells($battlefield);
         $this->assertCount(0, $cells);
 
         $battlefield->getCellByCoordinate('B2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
