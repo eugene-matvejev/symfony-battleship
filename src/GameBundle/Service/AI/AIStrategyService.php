@@ -36,14 +36,14 @@ class AIStrategyService
      *
      * @return Cell[]
      */
-    public function attack(Battlefield $battlefield) : array
+    public function chooseCells(Battlefield $battlefield) : array
     {
         foreach ($battlefield->getCells() as $cell) {
             if ($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED || $this->isShipDead($cell)) {
                 continue;
             }
 
-            return $this->strategyProcessor->process($cell, $this->decideStrategy($cell));
+            return $this->strategyProcessor->process($cell, $this->chooseStrategy($cell));
         }
 
         return [];
@@ -56,7 +56,7 @@ class AIStrategyService
      *
      * @return int
      */
-    private function decideStrategy(Cell $cell) : int
+    private function chooseStrategy(Cell $cell) : int
     {
         $coordinates = [
             AIStrategyProcessor::STRATEGY_HORIZONTAL => [CoordinateService::WAY_LEFT, CoordinateService::WAY_RIGHT],
