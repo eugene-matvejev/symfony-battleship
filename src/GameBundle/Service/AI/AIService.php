@@ -28,11 +28,6 @@ class AIService
         $this->strategyService = $service;
     }
 
-    public function getStrategyService() : AIStrategyService
-    {
-        return $this->strategyService;
-    }
-
     /**
      * @param Battlefield $battlefield
      *
