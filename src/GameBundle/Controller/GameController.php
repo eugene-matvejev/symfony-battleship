@@ -26,13 +26,9 @@ class GameController extends AbstractAPIController
         return $this->prepareSerializedResponse($data, Response::HTTP_CREATED);
     }
 
-    public function turnAction(Request $request) : Response
+    public function turnAction(int $cellId) : Response
     {
-        if (!$this->validateTurnRequest($request)) {
-            throw new \Exception('expected format: {id: %int%, ... }');
-        }
-
-        $data = $this->get('battleship.game.services.game.model')->nextTurn($request->getContent());
+        $data = $this->get('battleship.game.services.game.model')->nextTurn($cellId);
 
         return $this->prepareSerializedResponse($data);
     }
@@ -60,12 +56,5 @@ class GameController extends AbstractAPIController
         }
 
         return true;
-    }
-
-    private function validateTurnRequest(Request $request) : bool
-    {
-        $content = $request->getContent();
-
-        return is_string($content) && 0 !== preg_match('/^{\"id\"\:[0-9]++\,.*\}$/', $content);
     }
 }

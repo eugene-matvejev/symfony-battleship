@@ -50,7 +50,7 @@ GameResults.resources = {};
 GameResults.resources.config = {
     /** @enum {string} */
     attribute: {
-        route: 'data-stats-link'
+        route: 'data-game-results-link'
     }
 };
 /** @enum {string} */
