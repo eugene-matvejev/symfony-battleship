@@ -93,7 +93,7 @@ class GameControllerTest extends ExtendedTestSuite
         foreach (func_get_arg(0)->battlefields as $battlefield) {
             if ($battlefield->player->type->id === PlayerModel::TYPE_CPU) {
                 /** probably spotted bug in doctrine, or configured environment wrong, disabled for now */
-                foreach($battlefield->cells as $cell) {
+//                foreach($battlefield->cells as $cell) {
 //                    $client->request(
 //                        Request::METHOD_PATCH,
 //                        $this->getRouter()->generate('battleship.game.api.turn', ['cellId' => $cell->id]),
@@ -104,7 +104,7 @@ class GameControllerTest extends ExtendedTestSuite
 //                    );
 //
 //                    $this->assertSuccessfulJSONResponse($client->getResponse());
-                }
+//                }
             }
         }
     }

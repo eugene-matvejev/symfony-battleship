@@ -3,7 +3,6 @@
 namespace EM\GameBundle\Model;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityRepository;
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Entity\Game;
@@ -94,7 +93,7 @@ class GameModel
     public function nextTurn(int $cellId) : GameTurnResponse
     {
         if (null === $cell = $this->om->getRepository('GameBundle:Cell')->find($cellId)) {
-            throw new CellException("Cell: {$cellId} doesn't exist");
+            throw new CellException("cell: {$cellId} doesn't exist");
         }
 
         $game = $cell->getBattlefield()->getGame();
