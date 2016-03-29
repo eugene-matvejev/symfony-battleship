@@ -1,6 +1,6 @@
 language: php
 php:
-  - '7.0'
+  - '7.0.1'
 #  - hhvm
 
 before_script:
@@ -15,5 +15,5 @@ script:
   - php bin/phpunit -c tests/phpunit.xml --colors=always --verbose || (echo -e "\e[41mFAILED\e[0m {}" && $(exit 1));
 
 services:
-  - mongodb
+#  - mongodb
   - mysql
