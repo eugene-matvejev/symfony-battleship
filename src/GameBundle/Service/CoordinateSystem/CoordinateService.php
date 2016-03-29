@@ -18,13 +18,13 @@ class CoordinateService
     const WAY_LEFT_DOWN  = 6;
     const WAY_RIGHT_UP   = 7;
     const WAY_RIGHT_DOWN = 8;
-    const ALL_BASIC_WAYS = [
+    const PRIMARY_WAYS   = [
         self::WAY_LEFT,
         self::WAY_RIGHT,
         self::WAY_UP,
         self::WAY_DOWN
     ];
-    const ALL_WAYS       = [
+    const EXTENDED_WAYS  = [
         self::WAY_LEFT,
         self::WAY_RIGHT,
         self::WAY_UP,
@@ -100,15 +100,18 @@ class CoordinateService
         return $this->value;
     }
 
+    /**
+     * @return Cell[]
+     */
     public function getAdjacentCells() : array
     {
         $cells = [];
-        foreach (self::ALL_WAYS as $way) {
+        foreach (self::PRIMARY_WAYS as $way) {
             $this->setWay($way);
             $this->calculateNextCoordinate();
 
-            if (null !== $_cell = $this->cell->getBattlefield()->getCellByCoordinate($this->value)) {
-                $cells[$this->value] = $_cell;
+            if (null !== $cell = $this->cell->getBattlefield()->getCellByCoordinate($this->value)) {
+                $cells[] = $cell;
             }
         }
 
