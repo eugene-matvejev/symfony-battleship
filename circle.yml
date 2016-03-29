@@ -1,11 +1,11 @@
 machine:
-    php:
-        version: 7.0.0RC7
+  php:
+    version: 7.0.0RC7
 
 dependencies:
-    pre:
-        - cp app/config/parameters.yml.dist app/config/parameters.yml
+  pre:
+    - cp app/config/parameters.yml.dist app/config/parameters.yml
 
 test:
-    override:
-        - php bin/phpunit -c tests/phpunit.xml --colors=always --verbose || (echo -e "\e[41mFAILED\e[0m {}" && $(exit 1));
+  override:
+    - php bin/phpunit -c tests/phpunit.xml --colors=always --verbose || (echo -e "\e[41mFAILED\e[0m {}" && $(exit 1));
