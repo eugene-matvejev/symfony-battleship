@@ -14,7 +14,7 @@ APIRequestMgr.prototype = {
     /**
      * @param {string}        requestMethod
      * @param {string}        requestURL
-     * @param {string|Object} requestData
+     * @param {string|Object} [requestData]
      * @param {function}      [onSuccess]
      * @param {function}      [onError]
      */
