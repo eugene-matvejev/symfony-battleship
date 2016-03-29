@@ -5,10 +5,13 @@ filter:
     - 'bin/*'
     - 'vendor/*'
     - 'web/*'
+
 checks:
   php: true
+
 coding_style:
   php: {  }
+
 build:
   dependencies:
     before:
