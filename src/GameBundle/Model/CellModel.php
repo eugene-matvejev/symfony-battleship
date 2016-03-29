@@ -94,7 +94,7 @@ class CellModel
         self::$checkedCells[$cell->getId()] = $cell;
 
         $service = new CoordinateService($cell);
-        foreach (CoordinateService::ALL_BASIC_WAYS as $way) {
+        foreach (CoordinateService::PRIMARY_WAYS as $way) {
             $service->setWay($way)->calculateNextCoordinate();
 
             while (null !== $_cell = $cell->getBattlefield()->getCellByCoordinate($service->getValue())) {
