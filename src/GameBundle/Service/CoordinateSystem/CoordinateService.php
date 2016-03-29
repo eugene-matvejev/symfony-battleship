@@ -41,7 +41,7 @@ class CoordinateService
     /**
      * @var string
      */
-    private $value;
+    private $coordinate;
     /**
      * @var int
      */
@@ -56,48 +56,47 @@ class CoordinateService
     public function setWay(int $way) : self
     {
         $this->way = $way;
-        $this->value = $this->cell->getCoordinate();
+        $this->coordinate = $this->cell->getCoordinate();
 
         return $this;
     }
 
-    public function getValue() : string
+    public function getCurrentCoordinate() : string
     {
-        return $this->value;
+        return $this->coordinate;
     }
 
-    public function calculateNextCoordinate() : string
+    public function getNextCoordinate() : string
     {
         /**
          *                    UP (digit -- )
          * LEFT (letter -- )     current     RIGHT (letter ++ )
          *                   DOWN (digit ++ )
          */
-        $letter = substr($this->value, 0, 1);
+        $letter = substr($this->coordinate, 0, 1);
         $prevLetter = chr(ord($letter) - 1);
-        $number = substr($this->value, 1);
-
+        $number = substr($this->coordinate, 1);
 
         switch ($this->way) {
             case self::WAY_UP:
-                return $this->value = $letter . --$number;
+                return $this->coordinate = $letter . --$number;
             case self::WAY_DOWN:
-                return $this->value = $letter . ++$number;
+                return $this->coordinate = $letter . ++$number;
             case self::WAY_LEFT:
-                return $this->value = $prevLetter . $number;
+                return $this->coordinate = $prevLetter . $number;
             case self::WAY_LEFT_UP:
-                return $this->value = $prevLetter . --$number;
+                return $this->coordinate = $prevLetter . --$number;
             case self::WAY_LEFT_DOWN:
-                return $this->value = $prevLetter . ++$number;
+                return $this->coordinate = $prevLetter . ++$number;
             case self::WAY_RIGHT:
-                return $this->value = ++$letter . $number;
+                return $this->coordinate = ++$letter . $number;
             case self::WAY_RIGHT_UP:
-                return $this->value = ++$letter . --$number;
+                return $this->coordinate = ++$letter . --$number;
             case self::WAY_RIGHT_DOWN:
-                return $this->value = ++$letter . ++$number;
+                return $this->coordinate = ++$letter . ++$number;
         }
 
-        return $this->value;
+        return $this->coordinate;
     }
 
     /**
@@ -106,11 +105,10 @@ class CoordinateService
     public function getAdjacentCells() : array
     {
         $cells = [];
-        foreach (self::PRIMARY_WAYS as $way) {
+        foreach (self::EXTENDED_WAYS as $way) {
             $this->setWay($way);
-            $this->calculateNextCoordinate();
 
-            if (null !== $cell = $this->cell->getBattlefield()->getCellByCoordinate($this->value)) {
+            if (null !== $cell = $this->cell->getBattlefield()->getCellByCoordinate($this->getNextCoordinate())) {
                 $cells[] = $cell;
             }
         }

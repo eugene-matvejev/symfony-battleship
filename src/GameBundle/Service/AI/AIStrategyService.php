@@ -63,9 +63,9 @@ class AIStrategyService
         $service = new CoordinateService($cell);
 
         foreach (self::STRATEGY_MAP as $way => $strategyId) {
-            $service->setWay($way)->calculateNextCoordinate();
+            $service->setWay($way);
 
-            if (null !== $_cell = $cell->getBattlefield()->getCellByCoordinate($service->getValue())) {
+            if (null !== $_cell = $cell->getBattlefield()->getCellByCoordinate($service->getNextCoordinate())) {
                 if ($_cell->getState()->getId() === CellModel::STATE_SHIP_DIED) {
                     return $strategyId;
                 }

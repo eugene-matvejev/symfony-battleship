@@ -88,14 +88,13 @@ class CellModel
             return true;
         }
 
+        $coordinateService = new CoordinateService($cell);
         $cells = [$cell];
-        self::$checkedCells[$cell->getId()] = $cell;
 
-        $service = new CoordinateService($cell);
         foreach (CoordinateService::PRIMARY_WAYS as $way) {
-            $service->setWay($way)->calculateNextCoordinate();
+            $coordinateService->setWay($way);
 
-            while (null !== $_cell = $cell->getBattlefield()->getCellByCoordinate($service->getValue())) {
+            while (null !== $_cell = $cell->getBattlefield()->getCellByCoordinate($coordinateService->getNextCoordinate())) {
                 if (!in_array($_cell->getState()->getId(), self::STATES_SHIP)) {
                     break;
                 }
@@ -103,13 +102,13 @@ class CellModel
                     return false;
                 }
 
-                self::$checkedCells[$cell->getId()] = $cell;
-                $service->calculateNextCoordinate();
                 $cells[] = $cell;
             }
         }
 
         foreach ($cells as $cell) {
+            self::$checkedCells[$cell->getId()] = $cell;
+
             foreach ((new CoordinateService($cell))->getAdjacentCells() as $_cell) {
                 $this->switchStateToSkipped($_cell);
             }

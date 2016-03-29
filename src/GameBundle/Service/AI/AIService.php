@@ -34,24 +34,16 @@ class AIService
      * @return Cell
      * @throws AIException
      */
-    public function turn(Battlefield $battlefield) : Cell
+    public function processCPUTurn(Battlefield $battlefield) : Cell
     {
-        try {
-            $cells = $this->strategyService->chooseCells($battlefield);
+        $cells = $this->strategyService->chooseCells($battlefield);
 
-            if (null === $cell = $this->chooseCellToAttack($cells)) {
-                $cells = BattlefieldModel::getLiveCells($battlefield);
-                $cell = $this->chooseCellToAttack($cells);
-            }
-
-            return $cell;
-        } catch (AIException $e) {
-            /**
-             * if strategy service unable to find damaged-unfinished ships, it returns empty array
-             * exception will be thrown, but AI should continue to look for cell which it gonna hit,
-             * so it should continue with random cell which have live status
-             */
+        if (null === $cell = $this->chooseCellToAttack($cells)) {
+            $cells = BattlefieldModel::getLiveCells($battlefield);
+            $cell = $this->chooseCellToAttack($cells);
         }
+
+        return $cell;
     }
 
     /**

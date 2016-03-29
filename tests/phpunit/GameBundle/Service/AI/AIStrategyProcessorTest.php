@@ -130,7 +130,7 @@ class AIStrategyProcessorTest extends ExtendedTestSuite
     }
 
     /**
-     * @see     XStrategy::verify()
+     * @see     AIStrategyProcessor::process
      * @test
      *
      * @depends processCoordinates
