@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 class GameControllerTest extends ExtendedTestSuite
 {
     /**
-     * @see GameController::indexAction()
+     * @see GameController::indexAction
      * @test
      */
     public function indexAction()
@@ -25,7 +25,7 @@ class GameControllerTest extends ExtendedTestSuite
     }
 
     /**
-     * @see GameController::initAction()
+     * @see GameController::initAction
      * @test
      */
     public function initAction()
@@ -73,7 +73,7 @@ class GameControllerTest extends ExtendedTestSuite
     }
 
     /**
-     * @see     GameController::turnAction()
+     * @see     GameController::turnAction
      * @test
      *
      * @depends initAction

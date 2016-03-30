@@ -129,7 +129,7 @@ class GameModel
         $cell = null;
         switch ($battlefield->getPlayer()->getType()->getId()) {
             case PlayerModel::TYPE_HUMAN:
-                $cell = $this->ai->turn($battlefield);
+                $cell = $this->ai->processCPUTurn($battlefield);
                 break;
             case PlayerModel::TYPE_CPU:
                 if (null !== $cell = $battlefield->getCellByCoordinate($playerCellCoordinate)) {

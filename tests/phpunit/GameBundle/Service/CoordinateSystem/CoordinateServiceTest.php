@@ -50,13 +50,36 @@ class CoordinateServiceTest extends ExtendedTestSuite
     }
 
     /**
-     * @see     CoordinateService::calculateNextCoordinate
+     * @see     CoordinateService::getAdjacentCells
+     * @test
+     *
+     * @depends extendedWays
+     */
+    public function getAdjacentCells()
+    {
+        $battlefield = $this->getBattlefieldMock();
+        $cells = $this->getCoordinateServiceMock($battlefield->getCellByCoordinate('B2'))->getAdjacentCells();
+
+        $this->assertCount(8, $cells);
+        $this->assertEquals('A2', $cells[0]->getCoordinate());
+        $this->assertEquals('C2', $cells[1]->getCoordinate());
+        $this->assertEquals('B1', $cells[2]->getCoordinate());
+        $this->assertEquals('B3', $cells[3]->getCoordinate());
+
+        $this->assertEquals('A1', $cells[4]->getCoordinate());
+        $this->assertEquals('A3', $cells[5]->getCoordinate());
+        $this->assertEquals('C1', $cells[6]->getCoordinate());
+        $this->assertEquals('C3', $cells[7]->getCoordinate());
+    }
+
+    /**
+     * @see     CoordinateService::getNextCoordinate
      * @test
      *
      * @depends primaryWays
      * @depends extendedWays
      */
-    public function calculateNextCoordinate()
+    public function getNextCoordinate()
     {
         /**
          *  T-L    T   T-R
@@ -64,49 +87,22 @@ class CoordinateServiceTest extends ExtendedTestSuite
          *  D-L    D   D-R
          */
         $patterns = [
-            /** @see CoordinateService::ALL_BASIC_WAYS */
             ['way' => CoordinateService::WAY_LEFT, 'expected' => 'C4'],
             ['way' => CoordinateService::WAY_RIGHT, 'expected' => 'E4'],
             ['way' => CoordinateService::WAY_UP, 'expected' => 'D3'],
             ['way' => CoordinateService::WAY_DOWN, 'expected' => 'D5'],
-            /** @see CoordinateService::WAY_NONE */
+
             ['way' => CoordinateService::WAY_NONE, 'expected' => 'D4'],
-            /** @see CoordinateService::ALL_WAYS */
+
             ['way' => CoordinateService::WAY_LEFT_UP, 'expected' => 'C3'],
             ['way' => CoordinateService::WAY_LEFT_DOWN, 'expected' => 'C5'],
             ['way' => CoordinateService::WAY_RIGHT_UP, 'expected' => 'E3'],
             ['way' => CoordinateService::WAY_RIGHT_DOWN, 'expected' => 'E5']
         ];
 
+        $service = $this->getCoordinateServiceMock($this->getCellMock('D4'));
         foreach ($patterns as $pattern) {
-            $this->validateWay($pattern['way'], $pattern['expected'], 'D4');
+            $this->assertEquals($pattern['expected'], $service->setWay($pattern['way'])->getNextCoordinate());
         }
-    }
-
-    /**
-     * @see     CoordinateService::getAdjacentCells
-     * @test
-     *
-     * @depends primaryWays
-     */
-    public function getAdjacentCells()
-    {
-        $battlefield = $this->getBattlefieldMock();
-        $cells = $this->getCoordinateServiceMock($battlefield->getCellByCoordinate('B2'))->getAdjacentCells();
-
-        $this->assertCount(4, $cells);
-        $this->assertEquals('A2', $cells[0]->getCoordinate());
-        $this->assertEquals('C2', $cells[1]->getCoordinate());
-        $this->assertEquals('B1', $cells[2]->getCoordinate());
-        $this->assertEquals('B3', $cells[3]->getCoordinate());
-    }
-
-    private function validateWay(int $wayId, string $expectedCoordinate, string $startCoordinate)
-    {
-        $service = $this->getCoordinateServiceMock($this->getCellMock($startCoordinate));
-        $service
-            ->setWay($wayId)
-            ->calculateNextCoordinate();
-        $this->assertEquals($expectedCoordinate, $service->getValue());
     }
 }

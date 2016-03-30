@@ -57,11 +57,7 @@ class AIStrategyProcessor
     {
         $cells = [];
         foreach ($coordinates as $coordinate) {
-            $coordinate->calculateNextCoordinate();
-
-            while (null !== $cell = $battlefield->getCellByCoordinate($coordinate->getValue())) {
-                $coordinate->calculateNextCoordinate();
-
+            while (null !== $cell = $battlefield->getCellByCoordinate($coordinate->getNextCoordinate())) {
                 if (in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
                     $cells[] = $cell;
                     break;

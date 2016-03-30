@@ -178,7 +178,6 @@ abstract class ExtendedTestSuite extends ExtendedAssertionSuite
      */
     protected function invokePrivateMethod(string $className, $classInstance, string $methodName, array $methodArguments = [])
     {
-//        $reflected = new \ReflectionClass($className);
         $method = (new \ReflectionClass($className))->getMethod($methodName);
         $method->setAccessible(true);
 

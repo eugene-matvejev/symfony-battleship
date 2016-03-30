@@ -25,19 +25,6 @@ class CellModelTest extends ExtendedTestSuite
     }
 
     /**
-     * @see CellModel::getAllStates()
-     * @test
-     */
-    public function getAllStates()
-    {
-        foreach ($this->cellModel->getAllStates() as $state) {
-            $this->assertContains($state->getId(), CellModel::STATES_ALL);
-        }
-
-        $this->assertEquals(count($this->cellModel->getAllStates()), count(CellModel::STATES_ALL));
-    }
-
-    /**
      * @see CellModel::STATES_WATER
      * @test
      */
@@ -99,8 +86,29 @@ class CellModelTest extends ExtendedTestSuite
     }
 
     /**
+     * @see CellModel::getAllStates
+     * @test
+     * 
+     * @depends waterStates
+     * @depends shipStates
+     * @depends liveStates
+     * @depends diedStates
+     * @depends allStates
+     */
+    public function getAllStates()
+    {
+        foreach ($this->cellModel->getAllStates() as $state) {
+            $this->assertContains($state->getId(), CellModel::STATES_ALL);
+        }
+
+        $this->assertEquals(count($this->cellModel->getAllStates()), count(CellModel::STATES_ALL));
+    }
+
+    /**
      * @see CellModel::switchState()
      * @test
+     * 
+     * @depends getAllStates
      */
     public function switchState()
     {
@@ -116,6 +124,8 @@ class CellModelTest extends ExtendedTestSuite
     /**
      * @see CellModel::switchStateToSkipped()
      * @test
+     * 
+     * @depends switchState
      */
     public function switchStateToSkipped()
     {
@@ -131,6 +141,9 @@ class CellModelTest extends ExtendedTestSuite
     /**
      * @see CellModel::getChangedCells()
      * @test
+     * 
+     * @depends switchState
+     * @depends switchStateToSkipped
      */
     public function getChangedCells()
     {

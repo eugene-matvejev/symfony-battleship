@@ -28,7 +28,7 @@ class GameResultModelTest extends ExtendedTestSuite
     }
 
     /**
-     * @see GameResultModel::prepareResponse()
+     * @see GameResultModel::prepareResponse
      * @test
      */
     public function prepareResponse()

@@ -30,14 +30,15 @@ class AIStrategyServiceTest extends ExtendedTestSuite
      */
     public function chooseCells()
     {
-        $cellStates = $this->getContainer()->get('battleship.game.services.cell.model')->getAllStates();
         $battlefield = $this->getBattlefieldMock();
+        $cellStates = $this->getContainer()->get('battleship.game.services.cell.model')->getAllStates();
+
         $cells = $this->strategyService->chooseCells($battlefield);
         $this->assertCount(0, $cells);
 
         $battlefield->getCellByCoordinate('B2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
 
-//        $cells = $this->strategyService->attack($battlefield);
+//        $cells = $this->strategyService->chooseCells($battlefield);
 //        $this->assertCount(4, $cells);
 //
 //        foreach ($battlefield->getCells() as $cell) {
