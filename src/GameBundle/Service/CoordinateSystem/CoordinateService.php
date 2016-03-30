@@ -50,7 +50,7 @@ class CoordinateService
     public function __construct(Cell $cell)
     {
         $this->cell = $cell;
-        $this->value = $cell->getCoordinate();
+        $this->coordinate = $cell->getCoordinate();
     }
 
     public function setWay(int $way) : self
