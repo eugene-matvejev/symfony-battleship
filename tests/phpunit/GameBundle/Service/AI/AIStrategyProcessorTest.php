@@ -133,6 +133,8 @@ class AIStrategyProcessorTest extends ExtendedTestSuite
      * @see     AIStrategyProcessor::process
      * @test
      *
+     * @depends processHorizontalStrategy
+     * @depends processVerticalStrategy
      * @depends processCoordinates
      */
     public function processBothStrategy()
@@ -150,11 +152,11 @@ class AIStrategyProcessorTest extends ExtendedTestSuite
         $this->assertEquals('B3', $cells[3]->getCoordinate());
     }
 
-    private function invokeStrategyMethod(array $args) : array
-    {
-        return $this->invokePrivateMethod(AIStrategyProcessor::class, $this->strategyProcessor, 'processCoordinates', $args);
-    }
-
+    /**
+     * @param CoordinateService $service
+     *
+     * @return CoordinateService[]
+     */
     private function getBasicCoordinates(CoordinateService $service) : array
     {
         return [
@@ -163,5 +165,10 @@ class AIStrategyProcessorTest extends ExtendedTestSuite
             clone $service->setWay(CoordinateService::WAY_LEFT),
             clone $service->setWay(CoordinateService::WAY_RIGHT)
         ];
+    }
+
+    private function invokeStrategyMethod(array $args) : array
+    {
+        return $this->invokePrivateMethod(AIStrategyProcessor::class, $this->strategyProcessor, 'processCoordinates', $args);
     }
 }
