@@ -38,23 +38,12 @@ class AIService
     {
         $cells = $this->strategyService->chooseCells($battlefield);
 
-        if (null === $cell = $this->chooseCellToAttack($cells)) {
+        if (null === $cell = $this->pickCellToAttack($cells)) {
             $cells = BattlefieldModel::getLiveCells($battlefield);
-            $cell = $this->chooseCellToAttack($cells);
+            $cell = $this->pickCellToAttack($cells);
         }
 
         return $cell;
-    }
-
-    /**
-     * @param Cell[] $cells
-     *
-     * @return Cell|null
-     * @throws AIException
-     */
-    private function chooseCellToAttack(array $cells)
-    {
-        return empty($cells) ? null : $this->attackCell($cells[array_rand($cells, 1)]);
     }
 
     /**
@@ -70,5 +59,16 @@ class AIService
         }
 
         return $this->cellModel->switchState($cell);
+    }
+
+    /**
+     * @param Cell[] $cells
+     *
+     * @return Cell|null
+     * @throws AIException
+     */
+    private function pickCellToAttack(array $cells)
+    {
+        return empty($cells) ? null : $this->attackCell($cells[array_rand($cells, 1)]);
     }
 }

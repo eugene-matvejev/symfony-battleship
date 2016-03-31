@@ -2,6 +2,7 @@
 
 namespace EM\Tests\PHPUnit\GameBundle\Service\AI;
 
+use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Exception\AIException;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIService;
@@ -24,32 +25,46 @@ class AIServiceTest extends ExtendedTestSuite
         parent::setUp();
         $this->ai = $this->getContainer()->get('battleship.game.services.ai.core.service');
     }
-
     /**
-     * @see AIService::chooseCellToAttack
-     * @test
-     */
-    public function chooseCellToAttack()
-    {
-        $this->assertNull($this->invokePrivateMethod(AIService::class, $this->ai, 'chooseCellToAttack', ['cells' => []]));
-    }
-
-    /**
-     * @see AIService::attackCell
+     * @see     AIService::attackCell
      * @test
      */
     public function attackCell()
     {
-        $cellToException = array_merge(CellModel::STATES_DIED, [CellModel::STATE_WATER_SKIP]);
+        $statesWithExpectedException = array_merge(CellModel::STATES_DIED, [CellModel::STATE_WATER_SKIP]);
 
         foreach (CellModel::STATES_ALL as $cellStateId) {
+            $cell = $this->getCellMock($cellStateId);
             try {
-                $cell = $this->getCellMock($cellStateId);
+                $previousCellStateId = $cell->getState()->getId();
                 $this->invokePrivateMethod(AIService::class, $this->ai, 'attackCell', [$cell]);
                 $this->assertContains($cell->getState()->getId(), CellModel::STATES_DIED);
+                $this->assertNotContains($previousCellStateId, $statesWithExpectedException);
             } catch (AIException $e) {
-                $this->assertContains($cell->getState()->getId(), $cellToException);
+                $this->assertContains($cell->getState()->getId(), $statesWithExpectedException);
             }
         }
+    }
+
+
+    /**
+     * @see AIService::pickCellToAttack
+     * @test
+     *
+     * @depends attackCell
+     */
+    public function pickCellToAttack()
+    {
+        $cells = [];
+        $cell = $this->invokePrivateMethod(AIService::class, $this->ai, 'pickCellToAttack', [$cells]);
+        $this->assertNull($cell);
+
+        $cells = [
+            $this->getCellMock('A1'),
+            $this->getCellMock('A2')
+        ];
+        $cell = $this->invokePrivateMethod(AIService::class, $this->ai, 'pickCellToAttack', [$cells]);
+        $this->assertInstanceOf(Cell::class, $cell);
+        $this->assertContains($cell->getState()->getId(), CellModel::STATES_DIED);
     }
 }
