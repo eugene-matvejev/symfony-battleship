@@ -86,23 +86,21 @@ class CoordinateServiceTest extends ExtendedTestSuite
          *   L < cell > R
          *  D-L    D   D-R
          */
-        $patterns = [
-            ['way' => CoordinateService::WAY_LEFT, 'expected' => 'C4'],
-            ['way' => CoordinateService::WAY_RIGHT, 'expected' => 'E4'],
-            ['way' => CoordinateService::WAY_UP, 'expected' => 'D3'],
-            ['way' => CoordinateService::WAY_DOWN, 'expected' => 'D5'],
-
-            ['way' => CoordinateService::WAY_NONE, 'expected' => 'D4'],
-
-            ['way' => CoordinateService::WAY_LEFT_UP, 'expected' => 'C3'],
-            ['way' => CoordinateService::WAY_LEFT_DOWN, 'expected' => 'C5'],
-            ['way' => CoordinateService::WAY_RIGHT_UP, 'expected' => 'E3'],
-            ['way' => CoordinateService::WAY_RIGHT_DOWN, 'expected' => 'E5']
+        $expectedCoordinatesByWay = [
+            CoordinateService::WAY_LEFT       => 'C4',
+            CoordinateService::WAY_RIGHT      => 'E4',
+            CoordinateService::WAY_UP         => 'D3',
+            CoordinateService::WAY_DOWN       => 'D5',
+            CoordinateService::WAY_NONE       => 'D4',
+            CoordinateService::WAY_LEFT_UP    => 'C3',
+            CoordinateService::WAY_LEFT_DOWN  => 'C5',
+            CoordinateService::WAY_RIGHT_UP   => 'E3',
+            CoordinateService::WAY_RIGHT_DOWN => 'E5'
         ];
 
         $service = $this->getCoordinateServiceMock($this->getCellMock('D4'));
-        foreach ($patterns as $pattern) {
-            $this->assertEquals($pattern['expected'], $service->setWay($pattern['way'])->getNextCoordinate());
+        foreach ($expectedCoordinatesByWay as $wayId => $expectedCoordinate) {
+            $this->assertEquals($expectedCoordinate, $service->setWay($wayId)->getNextCoordinate());
         }
     }
 }
