@@ -88,9 +88,8 @@ abstract class ExtendedTestSuite extends ExtendedAssertionSuite
         $options['--quiet'] = true;
         $options = array_merge($options, ['command' => $command]);
         try {
-//            self::$consoleApp->setCatchExceptions(false);
+            self::$consoleApp->setCatchExceptions(false);
             self::$consoleApp->run(new ArrayInput($options));
-//            self::$consoleApp->setCatchExceptions(true);
         } catch (\Exception $e) {
             echo PHP_EOL . $e->getMessage() . PHP_EOL;
             echo PHP_EOL . $e->getTraceAsString() . PHP_EOL;
