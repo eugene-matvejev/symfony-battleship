@@ -18,7 +18,7 @@ class LoadCellStateData extends AbstractFixture implements OrderedFixtureInterfa
      */
     public function load(ObjectManager $om)
     {
-        foreach(CellModel::STATES_ALL as $state) {
+        foreach (CellModel::STATES_ALL as $state) {
             $om->persist((new CellState())->setId($state));
         }
 
