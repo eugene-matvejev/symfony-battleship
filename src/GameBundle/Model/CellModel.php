@@ -89,7 +89,7 @@ class CellModel
         }
 
         $coordinateService = new CoordinateService($cell);
-        $cells = [$cell];
+        $cells = [$cell->getCoordinate() => $cell];
 
         foreach (CoordinateService::PRIMARY_WAYS as $way) {
             $coordinateService->setWay($way);
@@ -102,7 +102,7 @@ class CellModel
                     return false;
                 }
 
-                $cells[] = $cell;
+                $cells[$_cell->getCoordinate()] = $_cell;
             }
         }
 
