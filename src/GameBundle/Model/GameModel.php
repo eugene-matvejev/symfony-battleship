@@ -9,6 +9,7 @@ use EM\GameBundle\Entity\Game;
 use EM\GameBundle\Entity\GameResult;
 use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Exception\CellException;
+use EM\GameBundle\Exception\PlayerException;
 use EM\GameBundle\Response\GameTurnResponse;
 use EM\GameBundle\Service\AI\AIService;
 
@@ -89,11 +90,15 @@ class GameModel
      *
      * @return GameTurnResponse
      * @throws CellException
+     * @throws PlayerException
      */
     public function nextTurn(int $cellId) : GameTurnResponse
     {
         if (null === $cell = $this->om->getRepository('GameBundle:Cell')->find($cellId)) {
             throw new CellException("cell: {$cellId} doesn't exist");
+        }
+        if (!in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
+            throw new CellException("cell: {$cellId} doesn't have *LIVE* status");
         }
 
         $game = $cell->getBattlefield()->getGame();
@@ -106,7 +111,9 @@ class GameModel
         }
 
         foreach ($game->getBattlefields() as $battlefield) {
-            $this->playerTurn($battlefield, $cell->getCoordinate());
+            $cell = $this->playerTurn($battlefield, $cell->getCoordinate());
+            $this->cellModel->isShipDead($cell);
+            $this->detectVictory($battlefield);
 
             if (null !== $game->getResult()) {
                 $response->setGameResult($game->getResult());
@@ -124,24 +131,23 @@ class GameModel
         return $response;
     }
 
-    public function playerTurn(Battlefield $battlefield, string $playerCellCoordinate)
+    /**
+     * @param Battlefield $battlefield
+     * @param string      $playerCellCoordinate
+     *
+     * @return Cell
+     * @throws PlayerException
+     */
+    public function playerTurn(Battlefield $battlefield, string $playerCellCoordinate) : Cell
     {
-        $cell = null;
         switch ($battlefield->getPlayer()->getType()->getId()) {
             case PlayerModel::TYPE_HUMAN:
-                $cell = $this->ai->processCPUTurn($battlefield);
-                break;
+                return $this->ai->processCPUTurn($battlefield);
             case PlayerModel::TYPE_CPU:
-                if (null !== $cell = $battlefield->getCellByCoordinate($playerCellCoordinate)) {
-                    $this->cellModel->switchState($cell);
-                }
-                break;
+                return $this->cellModel->switchState($battlefield->getCellByCoordinate($playerCellCoordinate));
         }
 
-        if (null !== $cell) {
-            $this->cellModel->isShipDead($cell);
-            $this->detectVictory($battlefield);
-        }
+        throw new PlayerException("Player: {$battlefield->getPlayer()} has unknown type {$battlefield->getPlayer()->getType()->getId()}");
     }
 
     public function detectVictory(Battlefield $battlefield) : bool
