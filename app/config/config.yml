@@ -72,7 +72,7 @@ doctrine_migrations:
     dir_name: "%kernel.root_dir%/DoctrineMigrations"
     namespace: Application\Migrations
     table_name: __doctrine_migrations
-    name: Application Migrations
+    name: Doctrine Migrations
 
 jms_serializer:
     handlers:
