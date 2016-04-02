@@ -12,7 +12,7 @@ use EM\GameBundle\Model\PlayerModel;
 /**
  * @since 3.5
  */
-class LoadUserData extends AbstractFixture implements OrderedFixtureInterface
+class LoadPlayerTypeData extends AbstractFixture implements OrderedFixtureInterface
 {
     /**
      * {@inheritDoc}

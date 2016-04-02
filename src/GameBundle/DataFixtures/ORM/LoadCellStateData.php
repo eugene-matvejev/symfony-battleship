@@ -11,7 +11,7 @@ use EM\GameBundle\Model\CellModel;
 /**
  * @since 3.5
  */
-class LoadCellData extends AbstractFixture implements OrderedFixtureInterface
+class LoadCellStateData extends AbstractFixture implements OrderedFixtureInterface
 {
     /**
      * {@inheritDoc}

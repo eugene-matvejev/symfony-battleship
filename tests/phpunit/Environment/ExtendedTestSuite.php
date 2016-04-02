@@ -42,13 +42,13 @@ abstract class ExtendedTestSuite extends ExtendedAssertionSuite
      */
     protected static $client;
     /**
-     * @var bool
-     */
-    protected static $setUp;
-    /**
      * @var KernelInterface
      */
     protected static $kernel;
+    /**
+     * @var bool
+     */
+    protected static $setUp;
 
     /**
      * @coversNothing
@@ -71,7 +71,19 @@ abstract class ExtendedTestSuite extends ExtendedAssertionSuite
 
             static::$setUp = true;
 
-            $this->runConsole('battleship:database:seed');
+            $commandsToExecute = [
+                // reset database
+                'doctrine:database:drop'      => ['--if-exists' => true, '--force' => true],
+                'doctrine:database:create'    => ['--if-not-exists' => true],
+                // keep database schema up-to-date
+                'doctrine:migrations:migrate' => [],
+                // seed database with core data
+                'doctrine:fixtures:load'      => ['--append' => true]
+            ];
+
+            foreach ($commandsToExecute as $command => $args) {
+                $this->runConsoleCommand($command, $args);
+            }
         }
     }
 
@@ -81,7 +93,7 @@ abstract class ExtendedTestSuite extends ExtendedAssertionSuite
      *
      * @throws \Exception
      */
-    protected function runConsole($command, array $options = [])
+    protected function runConsoleCommand($command, array $options = [])
     {
         $options['--env'] = 'test';
         $options['--no-interaction'] = true;
@@ -126,17 +138,11 @@ abstract class ExtendedTestSuite extends ExtendedAssertionSuite
 //        return $commandTester->getDisplay();
 //    }
 
-    /**
-     * @since 1.0
-     */
     public function getClient() : Client
     {
         return self::$client;
     }
 
-    /**
-     * @since 1.0
-     */
     public function getContainer() : ContainerInterface
     {
         return self::$container;

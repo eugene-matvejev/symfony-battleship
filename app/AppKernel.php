@@ -17,8 +17,7 @@ class AppKernel extends Kernel
             /** 3rd PARTY */
             new JMS\SerializerBundle\JMSSerializerBundle(),
             /** CUSTOM BUNDLES */
-            new EM\GameBundle\GameBundle(),
-            new EM\FoundationBundle\FoundationBundle()
+            new EM\GameBundle\GameBundle()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
