@@ -22,12 +22,12 @@
     ],
     "require": {
         "php": ">=7.0.1",
-        "doctrine/doctrine-bundle": "~1.6.1",
-        "doctrine/doctrine-migrations-bundle": "~1.1.1",
-        "doctrine/orm": "~2.5.4",
+        "doctrine/doctrine-bundle": "~1.6",
+        "doctrine/doctrine-migrations-bundle": "~1.1",
+        "doctrine/orm": "~2.5",
         "sensio/distribution-bundle": "^5.0",
-        "symfony/symfony": "~3.0.1",
-        "symfony/monolog-bundle": "~2.8.2",
+        "symfony/symfony": "~3.0",
+        "symfony/monolog-bundle": "~2.8",
         "jms/serializer-bundle": "^1.1"
     },
     "require-dev": {
