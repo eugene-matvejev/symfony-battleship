@@ -113,9 +113,8 @@ class GameModel
         foreach ($game->getBattlefields() as $battlefield) {
             $cell = $this->playerTurn($battlefield, $cell->getCoordinate());
             $this->cellModel->isShipDead($cell);
-            $this->detectVictory($battlefield);
 
-            if (null !== $game->getResult()) {
+            if ($this->detectVictory($battlefield)) {
                 $response->setGameResult($game->getResult());
                 break;
             }
@@ -139,7 +138,7 @@ class GameModel
      * @throws CellException
      * @throws PlayerException
      */
-    public function playerTurn(Battlefield $battlefield, string $playerCellCoordinate) : Cell
+    private function playerTurn(Battlefield $battlefield, string $playerCellCoordinate) : Cell
     {
         switch ($battlefield->getPlayer()->getType()->getId()) {
             case PlayerModel::TYPE_HUMAN:
@@ -151,7 +150,7 @@ class GameModel
                 throw new CellException("Cell with coordinate: {$playerCellCoordinate} in battlefield: {$battlefield->getId()} doesn't exists");
         }
 
-        throw new PlayerException("Player: {$battlefield->getPlayer()} has unknown type {$battlefield->getPlayer()->getType()->getId()}");
+        throw new PlayerException("Player: {$battlefield->getPlayer()->getId()} has unknown type {$battlefield->getPlayer()->getType()->getId()}");
     }
 
     public function detectVictory(Battlefield $battlefield) : bool
@@ -160,8 +159,7 @@ class GameModel
             return false;
         }
 
-        $game = $battlefield->getGame();
-        foreach ($game->getBattlefields() as $_battlefield) {
+        foreach ($battlefield->getGame()->getBattlefields() as $_battlefield) {
             if ($battlefield->getPlayer() === $_battlefield->getPlayer()) {
                 continue;
             }
@@ -169,7 +167,7 @@ class GameModel
             $result = (new GameResult())
                 ->setPlayer($_battlefield->getPlayer());
 
-            $game->setResult($result);
+            $battlefield->getGame()->setResult($result);
         }
 
         return true;
