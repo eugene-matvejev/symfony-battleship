@@ -136,6 +136,7 @@ class GameModel
      * @param string      $playerCellCoordinate
      *
      * @return Cell
+     * @throws CellException
      * @throws PlayerException
      */
     public function playerTurn(Battlefield $battlefield, string $playerCellCoordinate) : Cell
@@ -144,7 +145,10 @@ class GameModel
             case PlayerModel::TYPE_HUMAN:
                 return $this->ai->processCPUTurn($battlefield);
             case PlayerModel::TYPE_CPU:
-                return $this->cellModel->switchState($battlefield->getCellByCoordinate($playerCellCoordinate));
+                if (null !== $cell = $battlefield->getCellByCoordinate($playerCellCoordinate)) {
+                    return $this->cellModel->switchState($cell);
+                }
+                throw new CellException("Cell with coordinate: {$playerCellCoordinate} in battlefield: {$battlefield->getId()} doesn't exists");
         }
 
         throw new PlayerException("Player: {$battlefield->getPlayer()} has unknown type {$battlefield->getPlayer()->getType()->getId()}");
