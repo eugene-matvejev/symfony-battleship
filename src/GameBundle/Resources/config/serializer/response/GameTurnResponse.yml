@@ -6,6 +6,7 @@ EM\GameBundle\Response\GameTurnResponse:
 
     properties:
         cells:
+            type: array<EM\GameBundle\Entity\Cell>
             xml_key_value_pairs: true
             xml_list:
                 inline: false
