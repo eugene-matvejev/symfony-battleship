@@ -1,22 +1,23 @@
 <?php
 
-namespace EM\GameBundle\Model;
+namespace EM\GameBundle\Service\GameSystem;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Entity\Game;
 use EM\GameBundle\Entity\GameResult;
-use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Exception\CellException;
 use EM\GameBundle\Exception\PlayerException;
+use EM\GameBundle\Model\BattlefieldModel;
+use EM\GameBundle\Model\CellModel;
+use EM\GameBundle\Model\PlayerModel;
 use EM\GameBundle\Response\GameTurnResponse;
 use EM\GameBundle\Service\AI\AIService;
 
 /**
- * @since 2.0
+ * @since 10.0
  */
-class GameModel
+class GameProcessor
 {
     /**
      * @var AIService
@@ -30,41 +31,36 @@ class GameModel
      * @var PlayerModel
      */
     private $playerModel;
-    /**
-     * @var ObjectManager
-     */
-    private $om;
 
-    public function __construct(AIService $ai, CellModel $cellModel, PlayerModel $playerModel, ObjectManager $om)
+    public function __construct(AIService $ai, CellModel $cellModel, PlayerModel $playerModel)
     {
         $this->ai = $ai;
         $this->cellModel = $cellModel;
         $this->playerModel = $playerModel;
-        $this->om = $om;
     }
 
-    public function init(string $json) : Game
+    private function initCPUBattlefield(Battlefield $battlefield)
+    {
+        $liveShipState = $this->cellModel->getAllStates()[CellModel::STATE_SHIP_LIVE];
+
+        $battlefield->getCellByCoordinate('B2')->setState($liveShipState);
+    }
+
+    public function processGameInitiation(string $json) : Game
     {
         $game = new Game();
-        $this->om->persist($game);
 
         foreach (json_decode($json)->data as $data) {
-            if (null === $player = $this->om->getRepository('GameBundle:Player')->findOneBy(['name' => $data->player->name])) {
-                $player = (new Player())
-                    ->setName($data->player->name)
-                    ->setType($this->playerModel->getTypes()[PlayerModel::TYPE_HUMAN]);
-            }
-
             $battlefield = (new Battlefield())
                 ->setGame($game)
-                ->setPlayer($player);
+                ->setPlayer($this->playerModel->createPlayerIfNotExists($data->player->name));
             $game->addBattlefield($battlefield);
 
-            foreach ($data->cells as $cellData) {
+            foreach ($data->cells as $_cell) {
                 $cell = (new Cell())
-                    ->setCoordinate($cellData->coordinate)
+                    ->setCoordinate($_cell->coordinate)
                     ->setState($battlefield->getPlayer()->getType()->getId() !== PlayerModel::TYPE_CPU
-                        ? $this->cellModel->getAllStates()[$cellData->state]
+                        ? $this->cellModel->getAllStates()[$_cell->state]
                         : $this->cellModel->getAllStates()[CellModel::STATE_WATER_LIVE]);
                 $battlefield->addCell($cell);
             }
@@ -73,34 +69,19 @@ class GameModel
                 $this->initCPUBattlefield($battlefield);
             }
         }
-        $this->om->flush();
 
         return $game;
     }
 
-    public function initCPUBattlefield(Battlefield $battlefield)
-    {
-        $liveShipState = $this->cellModel->getAllStates()[CellModel::STATE_SHIP_LIVE];
-
-        $battlefield->getCellByCoordinate('B2')->setState($liveShipState);
-    }
-
     /**
-     * @param int $cellId
+     * @param Cell $cell
      *
      * @return GameTurnResponse
      * @throws CellException
      * @throws PlayerException
      */
-    public function nextTurn(int $cellId) : GameTurnResponse
+    public function processGameTurn(Cell $cell) : GameTurnResponse
     {
-        if (null === $cell = $this->om->getRepository('GameBundle:Cell')->find($cellId)) {
-            throw new CellException("cell: {$cellId} doesn't exist");
-        }
-        if (!in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
-            throw new CellException("cell: {$cellId} doesn't have *LIVE* status");
-        }
-
         $game = $cell->getBattlefield()->getGame();
         $response = new GameTurnResponse();
 
@@ -111,19 +92,24 @@ class GameModel
         }
 
         foreach ($game->getBattlefields() as $battlefield) {
-            $cell = $this->playerTurn($battlefield, $cell->getCoordinate());
+            $cell = $this->processPlayerTurn($battlefield, $cell->getCoordinate());
             $this->cellModel->isShipDead($cell);
 
-            if ($this->detectVictory($battlefield)) {
-                $response->setGameResult($game->getResult());
-                break;
+            if (!BattlefieldModel::hasUnfinishedShips($battlefield)) {
+                foreach ($game->getBattlefields() as $_battlefield) {
+                    if ($battlefield->getPlayer() === $_battlefield->getPlayer()) {
+                        continue;
+                    }
+
+                    $result = (new GameResult())
+                        ->setPlayer($_battlefield->getPlayer());
+                    $game->setResult($result);
+                    $response->setGameResult($result);
+
+                    break 2;
+                }
             }
         }
-
-        foreach (CellModel::getChangedCells() as $cell) {
-            $this->om->persist($cell);
-        }
-        $this->om->flush();
 
         $response->setCells(CellModel::getChangedCells());
 
@@ -138,7 +124,7 @@ class GameModel
      * @throws CellException
      * @throws PlayerException
      */
-    private function playerTurn(Battlefield $battlefield, string $playerCellCoordinate) : Cell
+    private function processPlayerTurn(Battlefield $battlefield, string $playerCellCoordinate) : Cell
     {
         switch ($battlefield->getPlayer()->getType()->getId()) {
             case PlayerModel::TYPE_HUMAN:
@@ -151,25 +137,5 @@ class GameModel
         }
 
         throw new PlayerException("Player: {$battlefield->getPlayer()->getId()} has unknown type {$battlefield->getPlayer()->getType()->getId()}");
-    }
-
-    public function detectVictory(Battlefield $battlefield) : bool
-    {
-        if (BattlefieldModel::hasUnfinishedShips($battlefield)) {
-            return false;
-        }
-
-        foreach ($battlefield->getGame()->getBattlefields() as $_battlefield) {
-            if ($battlefield->getPlayer() === $_battlefield->getPlayer()) {
-                continue;
-            }
-
-            $result = (new GameResult())
-                ->setPlayer($_battlefield->getPlayer());
-
-            $battlefield->getGame()->setResult($result);
-        }
-
-        return true;
     }
 }

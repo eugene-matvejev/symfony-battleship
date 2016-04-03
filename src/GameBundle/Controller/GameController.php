@@ -2,6 +2,9 @@
 
 namespace EM\GameBundle\Controller;
 
+use EM\GameBundle\Exception\CellException;
+use EM\GameBundle\Exception\PlayerException;
+use EM\GameBundle\Model\CellModel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -26,10 +29,14 @@ class GameController extends AbstractAPIController
         if (!$this->validateInitRequest($request)) {
             throw new \Exception('expected format {data: %array%{player: {name: %string%}, cells: %array%{coordinate: %string%, state: %int%}}, ...}');
         }
+        $om = $this->getDoctrine()->getManager();
 
-        $data = $this->get('battleship.game.services.game.model')->init($request->getContent());
+        $game = $this->get('battleship.game.services.game.processor')->processGameInitiation($request->getContent());
 
-        return $this->prepareSerializedResponse($data, Response::HTTP_CREATED);
+        $om->persist($game);
+        $om->flush();
+
+        return $this->prepareSerializedResponse($game, Response::HTTP_CREATED);
     }
 
     /**
@@ -41,7 +48,20 @@ class GameController extends AbstractAPIController
      */
     public function turnAction(int $cellId) : Response
     {
-        $data = $this->get('battleship.game.services.game.model')->nextTurn($cellId);
+        if (null === $cell = $this->getDoctrine()->getRepository('GameBundle:Cell')->find($cellId)) {
+            throw new CellException("cell: {$cellId} doesn't exist");
+        }
+        if (!in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
+            throw new CellException("cell: {$cellId} doesn't have *LIVE* status");
+        }
+
+        $data = $this->get('battleship.game.services.game.processor')->processGameTurn($cell);
+        $om = $this->getDoctrine()->getManager();
+
+        foreach (CellModel::getChangedCells() as $cell) {
+            $om->persist($cell);
+        }
+        $om->flush();
 
         return $this->prepareSerializedResponse($data);
     }
