@@ -20,6 +20,14 @@ class GameTurnResponse
     private $result;
 
     /**
+     * @return Cell[]
+     */
+    public function getCells() : array
+    {
+        return $this->cells;
+    }
+
+    /**
      * @param Cell[] $cells
      *
      * @return GameTurnResponse
@@ -29,14 +37,6 @@ class GameTurnResponse
         $this->cells = $cells;
 
         return $this;
-    }
-
-    /**
-     * @return Cell[]
-     */
-    public function getCells() : array
-    {
-        return $this->cells;
     }
 
     /**
