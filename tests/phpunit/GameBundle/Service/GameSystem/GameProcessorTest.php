@@ -93,6 +93,28 @@ class GameProcessorTest extends ExtendedTestSuite
      *
      * @depends processGameTurnOnUnfinishedGame
      */
+    public function processGameTurnToWin()
+    {
+        $game = $this->getGameMock();
+        $shipLiveState = $this->getCellStateMock(CellModel::STATE_SHIP_LIVE);
+        /** to make sure CPU will never win from one turn. */
+        $game->getBattlefields()[0]->getCellByCoordinate('A1')->setState($shipLiveState);
+        $game->getBattlefields()[0]->getCellByCoordinate('A2')->setState($shipLiveState);
+
+        $game->getBattlefields()[1]->getCellByCoordinate('A1')->setState($shipLiveState);
+        $game->getBattlefields()[1]->setPlayer($this->getPlayerMock('', $this->getPlayerTypeMock(PlayerModel::TYPE_CPU)));
+
+        $cell = $game->getBattlefields()[0]->getCellByCoordinate('A1');
+        $response = $this->gameProcessor->processGameTurn($cell);
+
+        $this->assertNotNull($response->getResult());
+        $this->assertInstanceOf(GameResult::class, $response->getResult());
+    }
+
+    /**
+     * @see GameProcessor::processGameTurn
+     * @test
+     */
     public function processGameTurnOnFinishedGame()
     {
         $game = $this->getGameMock()->setResult($this->getGameResultMock());
