@@ -10,9 +10,9 @@ use EM\GameBundle\Model\PlayerModel;
  */
 trait PlayerTypeMockTrait
 {
-    protected function getPlayerTypeMock(int $type = null) : PlayerType
+    protected function getPlayerTypeMock(int $type = PlayerModel::TYPE_HUMAN) : PlayerType
     {
         return (new PlayerType())
-            ->setId($type ?? PlayerModel::TYPE_HUMAN);
+            ->setId($type);
     }
 }

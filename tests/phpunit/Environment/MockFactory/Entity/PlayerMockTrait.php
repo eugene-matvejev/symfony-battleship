@@ -16,6 +16,6 @@ trait PlayerMockTrait
     {
         return (new Player())
             ->setName($name)
-            ->setType($type ?? $this->getPlayerTypeMock($type));
+            ->setType($type ?? $this->getPlayerTypeMock());
     }
 }
