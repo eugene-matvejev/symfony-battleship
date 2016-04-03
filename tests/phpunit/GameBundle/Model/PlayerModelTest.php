@@ -62,4 +62,24 @@ class PlayerModelTest extends ExtendedTestSuite
 
         $this->assertCount(2, $this->playerModel->getTypes());
     }
+
+    /**
+     * @see PlayerModel::createOnRequest
+     * @test
+     */
+    public function createOnRequestOnExistingPlayer()
+    {
+        $player = $this->playerModel->createOnRequest('CPU');
+        $this->assertNotNull($player->getId());
+    }
+
+    /**
+     * @see PlayerModel::createOnRequest
+     * @test
+     */
+    public function createOnRequestOnNonExistingPlayer()
+    {
+        $player = $this->playerModel->createOnRequest('Not existing PlayerName');
+        $this->assertNull($player->getId());
+    }
 }

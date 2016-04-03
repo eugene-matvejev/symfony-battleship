@@ -19,12 +19,16 @@ class PlayerModel
      * @var PlayerType[]
      */
     private static $cachedTypes;
+    /**
+     * @var EntityRepository
+     */
+    private $playerRepository;
 
-    public function __construct(EntityRepository $playerRepository, PlayerTypeRepository $repository)
+    public function __construct(EntityRepository $playerRepository, PlayerTypeRepository $playerTypeRepository)
     {
         $this->playerRepository = $playerRepository;
         if (null === self::$cachedTypes) {
-            self::$cachedTypes = $repository->getAllIndexed();
+            self::$cachedTypes = $playerTypeRepository->getAllIndexed();
         }
     }
 
@@ -36,7 +40,7 @@ class PlayerModel
         return self::$cachedTypes;
     }
 
-    public function createPlayerIfNotExists(string $name, int $typeId = self::TYPE_HUMAN) : Player
+    public function createOnRequest(string $name, int $typeId = self::TYPE_HUMAN) : Player
     {
         if (null === $player = $this->playerRepository->findOneBy(['name' => $name])) {
             $player = (new Player())
