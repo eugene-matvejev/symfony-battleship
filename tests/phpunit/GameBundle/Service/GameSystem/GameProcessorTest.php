@@ -138,9 +138,8 @@ class GameProcessorTest extends ExtendedTestSuite
      */
     public function processPlayerTurnThrowsCellException()
     {
-        $player = $this->getPlayerMock('', $this->getPlayerTypeMock(PlayerModel::TYPE_CPU));
-        $battlefield = $this->getBattlefieldMock();
-        $battlefield->setPlayer($player);
+        $battlefield = $this->getBattlefieldMock()
+            ->setPlayer($this->getPlayerMock('', $this->getPlayerTypeMock(PlayerModel::TYPE_CPU)));
 
         $this->invokeProcessPlayerTurnMethod([$battlefield, 'A0']);
     }
@@ -155,9 +154,8 @@ class GameProcessorTest extends ExtendedTestSuite
      */
     public function processPlayerTurnThrowsPlayerException()
     {
-        $player = $this->getPlayerMock('', $this->getPlayerTypeMock(-1));
-        $battlefield = $this->getBattlefieldMock();
-        $battlefield->setPlayer($player);
+        $battlefield = $this->getBattlefieldMock()
+            ->setPlayer($this->getPlayerMock('', $this->getPlayerTypeMock(-1)));
 
         $this->invokeProcessPlayerTurnMethod([$battlefield, 'A0']);
     }
