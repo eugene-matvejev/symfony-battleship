@@ -154,7 +154,7 @@ class CellModelTest extends ExtendedTestSuite
     private function iterateCellStates(\Closure $function)
     {
         foreach ($this->cellModel->getAllStates() as $state) {
-            $cell = $this->getCellMock("A{$state->getId()}", $state->getId());
+            $cell = $this->getCellMock('A1', $state->getId())->setId($state->getId());
 
             $function($state->getId(), $cell);
         }
