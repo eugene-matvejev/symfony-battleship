@@ -9,7 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -42,10 +41,6 @@ abstract class ExtendedTestSuite extends ExtendedAssertionSuite
      */
     protected static $client;
     /**
-     * @var KernelInterface
-     */
-    protected static $kernel;
-    /**
      * @var bool
      */
     protected static $setUp;
@@ -56,10 +51,9 @@ abstract class ExtendedTestSuite extends ExtendedAssertionSuite
     protected function setUp()
     {
         if (null === static::$setUp) {
-            self::$client = static::createClient();
+            self::bootKernel();
 
-            self::$kernel = static::createKernel();
-            self::$kernel->boot();
+            self::$client = static::createClient();
 
             self::$container = static::$kernel->getContainer();
             self::$consoleApp = new Application(self::getClient()->getKernel());
