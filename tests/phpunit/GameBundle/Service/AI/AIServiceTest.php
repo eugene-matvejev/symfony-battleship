@@ -25,6 +25,7 @@ class AIServiceTest extends ExtendedTestSuite
         parent::setUp();
         $this->ai = $this->getContainer()->get('battleship.game.services.ai.core.service');
     }
+
     /**
      * @see     AIService::attackCell
      * @test
@@ -46,9 +47,8 @@ class AIServiceTest extends ExtendedTestSuite
         }
     }
 
-
     /**
-     * @see AIService::pickCellToAttack
+     * @see     AIService::pickCellToAttack
      * @test
      *
      * @depends attackCell
@@ -66,5 +66,65 @@ class AIServiceTest extends ExtendedTestSuite
         $cell = $this->invokePrivateMethod(AIService::class, $this->ai, 'pickCellToAttack', [$cells]);
         $this->assertInstanceOf(Cell::class, $cell);
         $this->assertContains($cell->getState()->getId(), CellModel::STATES_DIED);
+    }
+
+    /**
+     * @see AIService::attackCell
+     * @test
+     */
+    public function attackWaterLiveCell()
+    {
+        $this->simulateAttackCell(CellModel::STATE_WATER_LIVE, CellModel::STATE_WATER_DIED);
+    }
+
+    /**
+     * @see AIService::attackCell
+     * @test
+     *
+     * @expectedException \EM\GameBundle\Exception\AIException
+     */
+    public function exceptionOnAttackWaterDeadCell()
+    {
+        $this->simulateAttackCell(CellModel::STATE_WATER_DIED, CellModel::STATE_WATER_DIED);
+    }
+
+    /**
+     * @see AIService::attackCell
+     * @test
+     */
+    public function attackShipLiveCell()
+    {
+        $this->simulateAttackCell(CellModel::STATE_SHIP_LIVE, CellModel::STATE_SHIP_DIED);
+    }
+
+    /**
+     * @see AIService::attackCell
+     * @test
+     *
+     * @expectedException \EM\GameBundle\Exception\AIException
+     */
+    public function exceptionOnAttackShipDeadCell()
+    {
+        $this->simulateAttackCell(CellModel::STATE_SHIP_DIED, CellModel::STATE_SHIP_DIED);
+    }
+
+    /**
+     * @see AIService::attackCell
+     * @test
+     *
+     * @expectedException \EM\GameBundle\Exception\AIException
+     */
+    public function exceptionOnAttackCellWaterSkip()
+    {
+        $this->simulateAttackCell(CellModel::STATE_WATER_SKIP, CellModel::STATE_WATER_SKIP);
+    }
+
+    private function simulateAttackCell(int $origCellStateId, int $expectedCellStateId)
+    {
+        $cell = $this->getCellMock('A1', $origCellStateId);
+        $returnedCell = $this->invokePrivateMethod(AIService::class, $this->ai, 'attackCell', [$cell]);
+
+        $this->assertSame($cell, $returnedCell);
+        $this->assertEquals($expectedCellStateId, $cell->getState()->getId());
     }
 }

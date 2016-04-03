@@ -86,9 +86,9 @@ class CellModelTest extends ExtendedTestSuite
     }
 
     /**
-     * @see CellModel::getAllStates
+     * @see     CellModel::getAllStates
      * @test
-     * 
+     *
      * @depends waterStates
      * @depends shipStates
      * @depends liveStates
@@ -105,9 +105,9 @@ class CellModelTest extends ExtendedTestSuite
     }
 
     /**
-     * @see CellModel::switchState()
+     * @see     CellModel::switchState()
      * @test
-     * 
+     *
      * @depends getAllStates
      */
     public function switchState()
@@ -122,9 +122,9 @@ class CellModelTest extends ExtendedTestSuite
     }
 
     /**
-     * @see CellModel::switchStateToSkipped()
+     * @see     CellModel::switchStateToSkipped()
      * @test
-     * 
+     *
      * @depends switchState
      */
     public function switchStateToSkipped()
@@ -139,26 +139,24 @@ class CellModelTest extends ExtendedTestSuite
     }
 
     /**
-     * @see CellModel::getChangedCells()
+     * @see     CellModel::getChangedCells()
      * @test
-     * 
+     *
      * @depends switchState
      * @depends switchStateToSkipped
      */
     public function getChangedCells()
     {
-        $this->switchState();
         $this->assertContainsOnlyInstancesOf(Cell::class, CellModel::getChangedCells());
-        $this->assertGreaterThanOrEqual(5, count(CellModel::getChangedCells()));
+        $this->assertGreaterThanOrEqual(2, count(CellModel::getChangedCells()));
     }
 
     private function iterateCellStates(\Closure $function)
     {
         foreach ($this->cellModel->getAllStates() as $state) {
-            $oldStateId = $state->getId();
-            $cell = $this->getCellMock('A1', $state->getId());
+            $cell = $this->getCellMock("A{$state->getId()}", $state->getId());
 
-            $function($oldStateId, $cell);
+            $function($state->getId(), $cell);
         }
     }
 }
