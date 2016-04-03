@@ -64,10 +64,10 @@ class CellModel
     {
         switch ($cell->getState()->getId()) {
             case self::STATE_WATER_LIVE:
-                self::$changedCells[] = $cell->setState(self::$cachedStates[$customState ?? self::STATE_WATER_DIED]);
+                self::$changedCells[$cell->getCoordinate()] = $cell->setState(self::$cachedStates[$customState ?? self::STATE_WATER_DIED]);
                 break;
             case self::STATE_SHIP_LIVE:
-                self::$changedCells[] = $cell->setState(self::$cachedStates[self::STATE_SHIP_DIED]);
+                self::$changedCells[$cell->getCoordinate()] = $cell->setState(self::$cachedStates[self::STATE_SHIP_DIED]);
                 break;
         }
 
