@@ -15,6 +15,12 @@ class GameController extends AbstractAPIController
         return $this->render('@Game/index.html.twig');
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     * @throws \Exception
+     */
     public function initAction(Request $request) : Response
     {
         if (!$this->validateInitRequest($request)) {
@@ -26,6 +32,13 @@ class GameController extends AbstractAPIController
         return $this->prepareSerializedResponse($data, Response::HTTP_CREATED);
     }
 
+    /**
+     * @param int $cellId
+     *
+     * @return Response
+     * @throws CellException
+     * @throws PlayerException
+     */
     public function turnAction(int $cellId) : Response
     {
         $data = $this->get('battleship.game.services.game.model')->nextTurn($cellId);
