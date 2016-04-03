@@ -92,8 +92,8 @@ class GameProcessor
         }
 
         foreach ($game->getBattlefields() as $battlefield) {
-            $cell = $this->processPlayerTurn($battlefield, $cell->getCoordinate());
-            $this->cellModel->isShipDead($cell);
+            $_cell = $this->processPlayerTurn($battlefield, $cell->getCoordinate());
+            $this->cellModel->isShipDead($_cell);
 
             if (!BattlefieldModel::hasUnfinishedShips($battlefield)) {
                 foreach ($game->getBattlefields() as $_battlefield) {
