@@ -2,6 +2,8 @@
 
 namespace EM\GameBundle\Model;
 
+use Doctrine\ORM\EntityRepository;
+use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Entity\PlayerType;
 use EM\GameBundle\Repository\PlayerTypeRepository;
 
@@ -18,8 +20,9 @@ class PlayerModel
      */
     private static $cachedTypes;
 
-    public function __construct(PlayerTypeRepository $repository)
+    public function __construct(EntityRepository $playerRepository, PlayerTypeRepository $repository)
     {
+        $this->playerRepository = $playerRepository;
         if (null === self::$cachedTypes) {
             self::$cachedTypes = $repository->getAllIndexed();
         }
@@ -31,5 +34,16 @@ class PlayerModel
     public function getTypes() : array
     {
         return self::$cachedTypes;
+    }
+
+    public function createPlayerIfNotExists(string $name, int $typeId = self::TYPE_HUMAN) : Player
+    {
+        if (null === $player = $this->playerRepository->findOneBy(['name' => $name])) {
+            $player = (new Player())
+                ->setName($name)
+                ->setType(self::$cachedTypes[$typeId]);
+        }
+
+        return $player;
     }
 }
