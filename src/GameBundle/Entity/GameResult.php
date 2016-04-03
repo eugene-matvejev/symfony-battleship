@@ -9,6 +9,8 @@ use EM\GameBundle\ORM\PlayerTrait;
 use EM\GameBundle\ORM\TimestampedInterface;
 use EM\GameBundle\ORM\TimestampedTrait;
 
+use JMS\Serializer\Annotation as JMS;
+
 /**
  * @since 1.0
  *
@@ -21,7 +23,29 @@ use EM\GameBundle\ORM\TimestampedTrait;
  *     }
  * )
  * @ORM\HasLifecycleCallbacks
+ *
+ * @JMS\AccessorOrder(order = "custom", custom = {"id", "timestamp", "player"})
+ * @JMS\XmlRoot("gameResult")
  */
+//EM\GameBundle\Entity\GameResult:
+//    accessor_order: custom
+//    custom_accessor_order: [id, timestamp, player]
+//
+//    exclusion_policy: ALL
+//
+//    xml_root_name: gameResult
+//
+//    properties:
+//        id:
+//            type: integer
+//            expose: true
+//        timestamp:
+//            type: DateTime
+//            expose: true
+//        player:
+//            type: EM\GameBundle\Entity\Player
+//            expose: true
+
 class GameResult extends AbstractEntity implements PlayerInterface, TimestampedInterface
 {
     use PlayerTrait, TimestampedTrait;
@@ -29,6 +53,8 @@ class GameResult extends AbstractEntity implements PlayerInterface, TimestampedI
      * @ORM\OneToOne(targetEntity="EM\GameBundle\Entity\Game", inversedBy="result", fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)
      *
+     * @JMS\Exclude()
+     * 
      * @var Game
      */
     private $game;
@@ -44,4 +70,6 @@ class GameResult extends AbstractEntity implements PlayerInterface, TimestampedI
 
         return $this;
     }
+
+
 }

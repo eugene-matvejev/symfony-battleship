@@ -2,6 +2,8 @@
 
 namespace EM\GameBundle\Controller;
 
+use EM\GameBundle\Entity\Player;
+use EM\GameBundle\Entity\PlayerType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -12,6 +14,12 @@ class GameController extends AbstractAPIController
 {
     public function indexAction() : Response
     {
+        $data = (new Player())
+            ->setName('test')
+            ->setId(123)
+            ->setType((new PlayerType())->setId(123));
+
+        return $this->prepareSerializedResponse($data);
         return $this->render('@Game/index.html.twig');
     }
 

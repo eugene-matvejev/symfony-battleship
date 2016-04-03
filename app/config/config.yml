@@ -75,38 +75,38 @@ doctrine_migrations:
     name: Doctrine Migrations
 
 jms_serializer:
-    handlers:
-        datetime:
-            default_format: "c" # ISO8601
-            default_timezone: "UTC" # defaults to whatever timezone set in php.ini or via date_default_timezone_set
-
-    property_naming:
-        separator:  _
-        lower_case: true
-
+#    handlers:
+#        datetime:
+#            default_format: "c" # ISO8601
+#            default_timezone: "UTC" # defaults to whatever timezone set in php.ini or via date_default_timezone_set
+#
+#    property_naming:
+#        separator:  _
+#        lower_case: true
+#
     metadata:
         cache: file
         debug: "%kernel.debug%"
         file_cache:
             dir: "%kernel.cache_dir%/serializer"
-
-        # Using auto-detection, the mapping files for each bundle will be
-        # expected in the Resources/config/serializer directory.
-        #
-        # Example:
-        # class: My\FooBundle\Entity\User
-        # expected path: @MyFooBundle/Resources/config/serializer/Entity.User.(yml|xml|php)
-        auto_detection: false
-
-        # if you don't want to use auto-detection, you can also define the
-        # namespace prefix and the corresponding directory explicitly
-        directories:
-            game-bundle-entity:
-                namespace_prefix: "EM\\GameBundle\\Entity\\"
-                path: "@GameBundle/Resources/config/serializer/entity"
-            game-bundle-response:
-                namespace_prefix: "EM\\GameBundle\\Response\\"
-                path: "@GameBundle/Resources/config/serializer/response"
+#
+#        # Using auto-detection, the mapping files for each bundle will be
+#        # expected in the Resources/config/serializer directory.
+#        #
+#        # Example:
+#        # class: My\FooBundle\Entity\User
+#        # expected path: @MyFooBundle/Resources/config/serializer/Entity.User.(yml|xml|php)
+#        auto_detection: false
+#
+#        # if you don't want to use auto-detection, you can also define the
+#        # namespace prefix and the corresponding directory explicitly
+#        directories:
+#            game-bundle-entity:
+#                namespace_prefix: "EM\\GameBundle\\Entity\\"
+#                path: "@GameBundle/Resources/config/serializer/entity"
+#            game-bundle-response:
+#                namespace_prefix: "EM\\GameBundle\\Response\\"
+#                path: "@GameBundle/Resources/config/serializer/response"
 
 #  visitors:
 #    json:
