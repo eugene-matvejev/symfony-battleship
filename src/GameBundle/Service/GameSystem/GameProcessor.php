@@ -53,7 +53,7 @@ class GameProcessor
         foreach (json_decode($json)->data as $data) {
             $battlefield = (new Battlefield())
                 ->setGame($game)
-                ->setPlayer($this->playerModel->createPlayerIfNotExists($data->player->name));
+                ->setPlayer($this->playerModel->createOnRequest($data->player->name));
             $game->addBattlefield($battlefield);
 
             foreach ($data->cells as $_cell) {
