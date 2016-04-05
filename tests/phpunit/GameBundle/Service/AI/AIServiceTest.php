@@ -7,14 +7,14 @@ use EM\GameBundle\Exception\AIException;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIService;
 use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
-use EM\Tests\PHPUnit\Environment\MockFactory\Entity\CellMockTrait;
+use EM\Tests\PHPUnit\Environment\MockFactory\Entity\BattlefieldMockTrait;
 
 /**
  * @see AIService
  */
 class AIServiceTest extends ExtendedTestSuite
 {
-    use CellMockTrait;
+    use BattlefieldMockTrait;
     /**
      * @var AIService
      */
@@ -69,12 +69,128 @@ class AIServiceTest extends ExtendedTestSuite
     }
 
     /**
+     * @see     AIService::processCPUTurn
+     * @test
+     *
+     * @depends pickCellToAttack
+     */
+    public function processCPUTurnHorizontalStrategy()
+    {
+        $this->invokeProcessCPUTurnMethod(['A1', 'B1'], ['C1', 'D1'], [], [
+            'A1' => CellModel::STATE_SHIP_DIED,
+            'B1' => CellModel::STATE_SHIP_DIED,
+            'C1' => CellModel::STATE_SHIP_DIED,
+            'D1' => CellModel::STATE_SHIP_LIVE
+        ]);
+
+//        $battlefield = $this->getBattlefieldMock();
+//        $liveShipState = $this->getLiveShipCellStateMock();
+//        $deadShipState = $this->getDeadShipCellStateMock();
+//
+//        $battlefield->getCellByCoordinate('A1')->setState($deadShipState);
+//        $battlefield->getCellByCoordinate('B1')->setState($deadShipState);
+//        $battlefield->getCellByCoordinate('C1')->setState($liveShipState);
+//        $battlefield->getCellByCoordinate('D1')->setState($liveShipState);
+//
+//        $this->ai->processCPUTurn($battlefield);
+//
+//        $this->assertEquals(CellModel::STATE_SHIP_DIED, $battlefield->getCellByCoordinate('C1')->getState()->getId());
+    }
+
+    /**
+     * @see     AIService::processCPUTurn
+     * @test
+     *
+     * @depends pickCellToAttack
+     */
+    public function processCPUTurnVerticalStrategy()
+    {
+        $this->invokeProcessCPUTurnMethod(['A1', 'A2'], ['A3', 'A4'], [], [
+            'A1' => CellModel::STATE_SHIP_DIED,
+            'A2' => CellModel::STATE_SHIP_DIED,
+            'A3' => CellModel::STATE_SHIP_DIED,
+            'A4' => CellModel::STATE_SHIP_LIVE
+        ]);
+
+//        $battlefield = $this->getBattlefieldMock();
+//        $liveShipState = $this->getLiveShipCellStateMock();
+//        $deadShipState = $this->getDeadShipCellStateMock();
+//
+//        $battlefield->getCellByCoordinate('A1')->setState($deadShipState);
+//        $battlefield->getCellByCoordinate('A2')->setState($deadShipState);
+//        $battlefield->getCellByCoordinate('A3')->setState($liveShipState);
+//        $battlefield->getCellByCoordinate('A4')->setState($liveShipState);
+//
+//        $this->ai->processCPUTurn($battlefield);
+
+//        $this->assertEquals(CellModel::STATE_SHIP_DIED, $battlefield->getCellByCoordinate('A3')->getState()->getId());
+
+    }
+
+    /**
+     * @see     AIService::processCPUTurn
+     * @test
+     *
+     * @depends pickCellToAttack
+     */
+    public function processCPUTurnBothStrategy()
+    {
+        $this->invokeProcessCPUTurnMethod(['A1'], ['A2'], ['B1'], [
+            'A1' => CellModel::STATE_SHIP_DIED,
+            'A2' => CellModel::STATE_SHIP_DIED,
+            'B1' => CellModel::STATE_WATER_DIED
+        ]);
+
+//        $battlefield = $this->getBattlefieldMock();
+//        $liveShipState = $this->getLiveShipCellStateMock();
+//        $deadShipState = $this->getDeadShipCellStateMock();
+//        $deadWaterState = $this->getDeadWaterCellStateMock();
+//
+//        $battlefield->getCellByCoordinate('A1')->setState($deadShipState);
+//        $battlefield->getCellByCoordinate('B1')->setState($deadWaterState);
+//        $battlefield->getCellByCoordinate('A2')->setState($liveShipState);
+//
+//        $this->ai->processCPUTurn($battlefield);
+//
+//        $this->assertEquals(CellModel::STATE_SHIP_DIED, $battlefield->getCellByCoordinate('A2')->getState()->getId());
+    }
+
+    private function invokeProcessCPUTurnMethod(array $deadShipCoordinates, array $liveShipCoordinates, array $deadWaterCoordinates, array $expected)
+    {
+        $battlefield = $this->getBattlefieldMock();
+        $liveShipState = $this->getLiveShipCellStateMock();
+        $deadShipState = $this->getDeadShipCellStateMock();
+        $deadWaterState = $this->getDeadWaterCellStateMock();
+
+        foreach ($liveShipCoordinates as $coordinate) {
+            $battlefield->getCellByCoordinate($coordinate)->setState($liveShipState);
+        }
+        foreach ($deadShipCoordinates as $coordinate) {
+            $battlefield->getCellByCoordinate($coordinate)->setState($deadShipState);
+        }
+        foreach ($deadWaterCoordinates as $coordinate) {
+            $battlefield->getCellByCoordinate($coordinate)->setState($deadWaterState);
+        }
+
+        $this->ai->processCPUTurn($battlefield);
+
+        foreach ($battlefield->getCells() as $cell) {
+            $coordinate = $cell->getCoordinate();
+            $stateId = $cell->getState()->getId();
+
+            isset($expected[$coordinate])
+                ? $this->assertEquals($expected[$coordinate], $stateId, "cell {$coordinate} have unexpected state: {$stateId}")
+                : $this->assertEquals(CellModel::STATE_WATER_LIVE, $stateId, "cell {$coordinate} have unexpected state: {$stateId}");
+        }
+    }
+
+    /**
      * @see AIService::attackCell
      * @test
      */
     public function attackWaterLiveCell()
     {
-        $this->simulateAttackCell(CellModel::STATE_WATER_LIVE, CellModel::STATE_WATER_DIED);
+        $this->invokeAttackCellMethod(CellModel::STATE_WATER_LIVE, CellModel::STATE_WATER_DIED);
     }
 
     /**
@@ -85,7 +201,7 @@ class AIServiceTest extends ExtendedTestSuite
      */
     public function exceptionOnAttackWaterDeadCell()
     {
-        $this->simulateAttackCell(CellModel::STATE_WATER_DIED, CellModel::STATE_WATER_DIED);
+        $this->invokeAttackCellMethod(CellModel::STATE_WATER_DIED, CellModel::STATE_WATER_DIED);
     }
 
     /**
@@ -94,7 +210,7 @@ class AIServiceTest extends ExtendedTestSuite
      */
     public function attackShipLiveCell()
     {
-        $this->simulateAttackCell(CellModel::STATE_SHIP_LIVE, CellModel::STATE_SHIP_DIED);
+        $this->invokeAttackCellMethod(CellModel::STATE_SHIP_LIVE, CellModel::STATE_SHIP_DIED);
     }
 
     /**
@@ -105,7 +221,7 @@ class AIServiceTest extends ExtendedTestSuite
      */
     public function exceptionOnAttackShipDeadCell()
     {
-        $this->simulateAttackCell(CellModel::STATE_SHIP_DIED, CellModel::STATE_SHIP_DIED);
+        $this->invokeAttackCellMethod(CellModel::STATE_SHIP_DIED, CellModel::STATE_SHIP_DIED);
     }
 
     /**
@@ -116,10 +232,10 @@ class AIServiceTest extends ExtendedTestSuite
      */
     public function exceptionOnAttackCellWaterSkip()
     {
-        $this->simulateAttackCell(CellModel::STATE_WATER_SKIP, CellModel::STATE_WATER_SKIP);
+        $this->invokeAttackCellMethod(CellModel::STATE_WATER_SKIP, CellModel::STATE_WATER_SKIP);
     }
 
-    private function simulateAttackCell(int $origCellStateId, int $expectedCellStateId)
+    private function invokeAttackCellMethod(int $origCellStateId, int $expectedCellStateId)
     {
         $cell = $this->getCellMock('A1', $origCellStateId);
         $returnedCell = $this->invokePrivateMethod(AIService::class, $this->ai, 'attackCell', [$cell]);

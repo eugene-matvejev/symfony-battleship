@@ -4,6 +4,7 @@ namespace EM\Tests\PHPUnit\Environment\MockFactory\Entity;
 
 use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Entity\PlayerType;
+use EM\GameBundle\Model\PlayerModel;
 
 /**
  * @since 7.0
@@ -17,5 +18,10 @@ trait PlayerMockTrait
         return (new Player())
             ->setName($name)
             ->setType($type ?? $this->getPlayerTypeMock());
+    }
+
+    protected function getCPUPlayerMock(string $name) : Player
+    {
+        return $this->getPlayerMock($name, $this->getPlayerTypeMock(PlayerModel::TYPE_CPU));
     }
 }

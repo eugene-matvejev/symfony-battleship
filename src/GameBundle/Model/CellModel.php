@@ -12,17 +12,18 @@ use EM\GameBundle\Service\CoordinateSystem\CoordinateService;
  */
 class CellModel
 {
-    const STATE_WATER_LIVE = 1;
-    const STATE_WATER_DIED = 2;
-    const STATE_SHIP_LIVE  = 3;
-    const STATE_SHIP_DIED  = 4;
-    const STATE_WATER_SKIP = 5;
+    const STATE_WATER_LIVE  = 1;
+    const STATE_WATER_DIED  = 2;
+    const STATE_SHIP_LIVE   = 3;
+    const STATE_SHIP_DIED   = 4;
+    const STATE_WATER_SKIP  = 5;
     /** instead of functions, as const array is faster */
-    const STATES_WATER = [self::STATE_WATER_LIVE, self::STATE_WATER_DIED];
-    const STATES_SHIP  = [self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED];
-    const STATES_LIVE  = [self::STATE_WATER_LIVE, self::STATE_SHIP_LIVE];
-    const STATES_DIED  = [self::STATE_WATER_DIED, self::STATE_SHIP_DIED];
-    const STATES_ALL   = [self::STATE_WATER_LIVE, self::STATE_WATER_DIED, self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED, self::STATE_WATER_SKIP];
+    const STATES_WATER  = [self::STATE_WATER_LIVE, self::STATE_WATER_DIED];
+    const STATES_SHIP   = [self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED];
+    const STATES_LIVE   = [self::STATE_WATER_LIVE, self::STATE_SHIP_LIVE];
+    const STATES_DIED   = [self::STATE_WATER_DIED, self::STATE_SHIP_DIED];
+    const STATES_ALL    = [self::STATE_WATER_LIVE, self::STATE_WATER_DIED, self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED, self::STATE_WATER_SKIP];
+    const STATES_SKIP_STRATEGY_PROCESSING = [self::STATE_WATER_SKIP, self::STATE_WATER_DIED];
 
     /**
      * @var CellState[]

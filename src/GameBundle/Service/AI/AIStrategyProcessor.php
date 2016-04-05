@@ -58,7 +58,9 @@ class AIStrategyProcessor
         $cells = [];
         foreach ($coordinates as $coordinate) {
             while (null !== $cell = $battlefield->getCellByCoordinate($coordinate->getNextCoordinate())) {
-                if (in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
+                if (in_array($cell->getState()->getId(), CellModel::STATES_SKIP_STRATEGY_PROCESSING)) {
+                    break;
+                } elseif (in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
                     $cells[] = $cell;
                     break;
                 }
