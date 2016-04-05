@@ -30,10 +30,7 @@ class CellModelTest extends ExtendedTestSuite
      */
     public function waterStates()
     {
-        foreach (CellModel::STATES_WATER as $state) {
-            $this->assertContains($state, CellModel::STATES_ALL);
-            $this->assertNotContains($state, CellModel::STATES_SHIP);
-        }
+        $this->iterateCellStates(CellModel::STATES_WATER, CellModel::STATES_SHIP);
     }
 
     /**
@@ -42,10 +39,7 @@ class CellModelTest extends ExtendedTestSuite
      */
     public function shipStates()
     {
-        foreach (CellModel::STATES_SHIP as $state) {
-            $this->assertContains($state, CellModel::STATES_ALL);
-            $this->assertNotContains($state, CellModel::STATES_WATER);
-        }
+        $this->iterateCellStates(CellModel::STATES_SHIP, CellModel::STATES_WATER);
     }
 
     /**
@@ -54,10 +48,7 @@ class CellModelTest extends ExtendedTestSuite
      */
     public function liveStates()
     {
-        foreach (CellModel::STATES_LIVE as $state) {
-            $this->assertContains($state, CellModel::STATES_ALL);
-            $this->assertNotContains($state, CellModel::STATES_DIED);
-        }
+        $this->iterateCellStates(CellModel::STATES_LIVE, CellModel::STATES_DIED);
     }
 
     /**
@@ -66,42 +57,78 @@ class CellModelTest extends ExtendedTestSuite
      */
     public function diedStates()
     {
-        foreach (CellModel::STATES_DIED as $state) {
+        $this->iterateCellStates(CellModel::STATES_DIED, CellModel::STATES_LIVE);
+    }
+
+    /**
+     * @param int[] $statesToIterate
+     * @param int[] $stateSetShouldNotContainThisState
+     */
+    private function iterateCellStates(array $statesToIterate, array $stateSetShouldNotContainThisState)
+    {
+        foreach ($statesToIterate as $state) {
             $this->assertContains($state, CellModel::STATES_ALL);
-            $this->assertNotContains($state, CellModel::STATES_LIVE);
+            $this->assertNotContains($state, $stateSetShouldNotContainThisState);
         }
     }
 
     /**
-     * @see CellModel::STATES_ALL
-     * @test
-     */
-    public function allStates()
-    {
-        $diedStates = count(CellModel::STATES_DIED);
-        $liveStates = count(CellModel::STATES_LIVE);
-        $totalStates = count(CellModel::STATES_ALL);
-
-        $this->assertGreaterThanOrEqual($diedStates + $liveStates, $totalStates);
-    }
-
-    /**
-     * @see     CellModel::getAllStates
+     * @see     CellModel::STATE_WATER_SKIP
      * @test
      *
      * @depends waterStates
      * @depends shipStates
      * @depends liveStates
      * @depends diedStates
+     */
+    public function skipState()
+    {
+        $this->assertNotContains(CellModel::STATE_WATER_SKIP, CellModel::STATES_LIVE);
+        $this->assertNotContains(CellModel::STATE_WATER_SKIP, CellModel::STATES_DIED);
+    }
+
+    /**
+     * @see     CellModel::STATES_SKIP_STRATEGY_PROCESSING
+     * @test
+     *
+     * @depends skipState
+     */
+    public function skipStrategyProcessingStates()
+    {
+        $this->assertCount(2, CellModel::STATES_SKIP_STRATEGY_PROCESSING);
+        $this->assertContains(CellModel::STATE_WATER_SKIP, CellModel::STATES_SKIP_STRATEGY_PROCESSING);
+        $this->assertContains(CellModel::STATE_WATER_DIED, CellModel::STATES_SKIP_STRATEGY_PROCESSING);
+    }
+
+    /**
+     * @see     CellModel::STATES_ALL
+     * @test
+     *
+     * @depends skipStrategyProcessingStates
+     */
+    public function allStates()
+    {
+        $diedStates = count(CellModel::STATES_DIED);
+        $liveStates = count(CellModel::STATES_LIVE);
+        $totalActualStates = count(CellModel::STATES_ALL);
+        $totalExpectedStates = $diedStates + $liveStates + 1; /* including STATE_WATER_SKIP state */
+
+        $this->assertEquals($totalExpectedStates, $totalActualStates);
+    }
+
+    /**
+     * @see     CellModel::getAllStates
+     * @test
+     *
      * @depends allStates
      */
     public function getAllStates()
     {
+        $this->assertEquals(count($this->cellModel->getAllStates()), count(CellModel::STATES_ALL));
+
         foreach ($this->cellModel->getAllStates() as $state) {
             $this->assertContains($state->getId(), CellModel::STATES_ALL);
         }
-
-        $this->assertEquals(count($this->cellModel->getAllStates()), count(CellModel::STATES_ALL));
     }
 
     /**
@@ -112,7 +139,7 @@ class CellModelTest extends ExtendedTestSuite
      */
     public function switchState()
     {
-        $this->iterateCellStates(function ($oldStateId, Cell $cell) {
+        $this->iterateAllCellStatesOnCell(function ($oldStateId, Cell $cell) {
             $this->cellModel->switchState($cell);
 
             in_array($oldStateId, CellModel::STATES_LIVE)
@@ -129,7 +156,7 @@ class CellModelTest extends ExtendedTestSuite
      */
     public function switchStateToSkipped()
     {
-        $this->iterateCellStates(function ($oldStateId, Cell $cell) {
+        $this->iterateAllCellStatesOnCell(function ($oldStateId, Cell $cell) {
             $this->cellModel->switchStateToSkipped($cell);
 
             $oldStateId === CellModel::STATE_WATER_LIVE
@@ -151,7 +178,7 @@ class CellModelTest extends ExtendedTestSuite
         $this->assertGreaterThanOrEqual(2, count(CellModel::getChangedCells()));
     }
 
-    private function iterateCellStates(\Closure $function)
+    private function iterateAllCellStatesOnCell(\Closure $function)
     {
         foreach ($this->cellModel->getAllStates() as $state) {
             $cell = $this->getCellMock('A1', $state->getId())->setId($state->getId());

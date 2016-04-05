@@ -23,7 +23,7 @@ class BattlefieldModelTest extends ExtendedTestSuite
         $battlefield = $this->getBattlefieldMock();
         $this->assertCount(100, BattlefieldModel::getLiveCells($battlefield));
 
-        $battlefield->getCellByCoordinate('A1')->setState($this->getCellStateMock(CellModel::STATE_SHIP_DIED));
+        $battlefield->getCellByCoordinate('A1')->setState($this->getDeadShipCellStateMock());
         $this->assertCount(99, BattlefieldModel::getLiveCells($battlefield));
     }
 
@@ -36,10 +36,10 @@ class BattlefieldModelTest extends ExtendedTestSuite
         $battlefield = $this->getBattlefieldMock();
         $this->assertFalse(BattlefieldModel::hasUnfinishedShips($battlefield));
 
-        $battlefield->getCellByCoordinate('A1')->setState($this->getCellStateMock(CellModel::STATE_SHIP_LIVE));
+        $battlefield->getCellByCoordinate('A1')->setState($this->getLiveShipCellStateMock());
         $this->assertTrue(BattlefieldModel::hasUnfinishedShips($battlefield));
 
-        $battlefield->getCellByCoordinate('A1')->setState($this->getCellStateMock(CellModel::STATE_SHIP_DIED));
+        $battlefield->getCellByCoordinate('A1')->setState($this->getDeadShipCellStateMock());
         $this->assertFalse(BattlefieldModel::hasUnfinishedShips($battlefield));
     }
 }

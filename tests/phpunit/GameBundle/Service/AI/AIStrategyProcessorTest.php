@@ -57,11 +57,7 @@ class AIStrategyProcessorTest extends ExtendedTestSuite
         }
         /** left for explanation purposes */
 //        $battlefield->getCellByCoordinate('C2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
-//        $battlefield->getCellByCoordinate('D2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
-//        $battlefield->getCellByCoordinate('E2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
-//        $battlefield->getCellByCoordinate('F2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
-//        $battlefield->getCellByCoordinate('G2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
-//        $battlefield->getCellByCoordinate('H2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+//        ...
 //        $battlefield->getCellByCoordinate('I2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
         $battlefield->getCellByCoordinate('J2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
         $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
@@ -80,76 +76,11 @@ class AIStrategyProcessorTest extends ExtendedTestSuite
         }
         /** left for explanation purposes */
 //        $battlefield->getCellByCoordinate('B3')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
-//        $battlefield->getCellByCoordinate('B4')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
-//        $battlefield->getCellByCoordinate('B5')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
-//        $battlefield->getCellByCoordinate('B6')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
-//        $battlefield->getCellByCoordinate('B7')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
-//        $battlefield->getCellByCoordinate('B8')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+//        ...
 //        $battlefield->getCellByCoordinate('B9')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
         $battlefield->getCellByCoordinate('B10')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
         $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
         $this->assertEmpty($cells);
-    }
-
-    /**
-     * @see     AIStrategyProcessor::process
-     * @test
-     *
-     * @depends processCoordinates
-     */
-    public function processHorizontalStrategy()
-    {
-        $cells = $this->strategyProcessor->process(
-            $this->getBattlefieldMock()->getCellByCoordinate('B2'),
-            AIStrategyProcessor::STRATEGY_HORIZONTAL
-        );
-
-        $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
-        $this->assertCount(2, $cells);
-        $this->assertEquals('A2', $cells[0]->getCoordinate());
-        $this->assertEquals('C2', $cells[1]->getCoordinate());
-    }
-
-    /**
-     * @see     AIStrategyProcessor::process
-     * @test
-     *
-     * @depends processCoordinates
-     */
-    public function processVerticalStrategy()
-    {
-        $cells = $this->strategyProcessor->process(
-            $this->getBattlefieldMock()->getCellByCoordinate('B2'),
-            AIStrategyProcessor::STRATEGY_VERTICAL
-        );
-
-        $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
-        $this->assertCount(2, $cells);
-        $this->assertEquals('B1', $cells[0]->getCoordinate());
-        $this->assertEquals('B3', $cells[1]->getCoordinate());
-    }
-
-    /**
-     * @see     AIStrategyProcessor::process
-     * @test
-     *
-     * @depends processHorizontalStrategy
-     * @depends processVerticalStrategy
-     * @depends processCoordinates
-     */
-    public function processBothStrategy()
-    {
-        $cells = $this->strategyProcessor->process(
-            $this->getBattlefieldMock()->getCellByCoordinate('B2'),
-            AIStrategyProcessor::STRATEGY_BOTH
-        );
-
-        $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
-        $this->assertCount(4, $cells);
-        $this->assertEquals('A2', $cells[0]->getCoordinate());
-        $this->assertEquals('C2', $cells[1]->getCoordinate());
-        $this->assertEquals('B1', $cells[2]->getCoordinate());
-        $this->assertEquals('B3', $cells[3]->getCoordinate());
     }
 
     /**
@@ -170,5 +101,67 @@ class AIStrategyProcessorTest extends ExtendedTestSuite
     private function invokeStrategyMethod(array $args) : array
     {
         return $this->invokePrivateMethod(AIStrategyProcessor::class, $this->strategyProcessor, 'processCoordinates', $args);
+    }
+
+    /**
+     * @see     AIStrategyProcessor::process
+     * @test
+     *
+     * @depends processCoordinates
+     */
+    public function processHorizontalStrategy()
+    {
+        $cells = $this->invokeProcessMethod(AIStrategyProcessor::STRATEGY_HORIZONTAL);
+
+        $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
+        $this->assertCount(2, $cells);
+        $this->assertEquals('A2', $cells[0]->getCoordinate());
+        $this->assertEquals('C2', $cells[1]->getCoordinate());
+    }
+
+    /**
+     * @see     AIStrategyProcessor::process
+     * @test
+     *
+     * @depends processCoordinates
+     */
+    public function processVerticalStrategy()
+    {
+        $cells = $this->invokeProcessMethod(AIStrategyProcessor::STRATEGY_VERTICAL);
+
+        $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
+        $this->assertCount(2, $cells);
+        $this->assertEquals('B1', $cells[0]->getCoordinate());
+        $this->assertEquals('B3', $cells[1]->getCoordinate());
+    }
+
+    /**
+     * @see     AIStrategyProcessor::process
+     * @test
+     *
+     * @depends processHorizontalStrategy
+     * @depends processVerticalStrategy
+     * @depends processCoordinates
+     */
+    public function processBothStrategy()
+    {
+        $cells = $this->invokeProcessMethod(AIStrategyProcessor::STRATEGY_BOTH);
+
+        $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
+        $this->assertCount(4, $cells);
+        $this->assertEquals('A2', $cells[0]->getCoordinate());
+        $this->assertEquals('C2', $cells[1]->getCoordinate());
+        $this->assertEquals('B1', $cells[2]->getCoordinate());
+        $this->assertEquals('B3', $cells[3]->getCoordinate());
+    }
+
+    /**
+     * @param int $strategyId
+     *
+     * @return Cell[]
+     */
+    private function invokeProcessMethod(int $strategyId) : array
+    {
+        return $this->strategyProcessor->process($this->getBattlefieldMock()->getCellByCoordinate('B2'), $strategyId);
     }
 }
