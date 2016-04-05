@@ -76,7 +76,6 @@ class CoordinateServiceTest extends ExtendedTestSuite
      * @see     CoordinateService::getNextCoordinate
      * @test
      *
-     * @depends primaryWays
      * @depends extendedWays
      */
     public function getNextCoordinate()
