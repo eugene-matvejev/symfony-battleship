@@ -37,6 +37,7 @@ class GameProcessorTest extends ExtendedTestSuite
     {
         $battlefield = $this->getBattlefieldMock();
         $this->invokePrivateMethod(GameProcessor::class, $this->gameProcessor, 'initCPUBattlefield', [$battlefield]);
+
         $this->assertEquals(CellModel::STATE_SHIP_LIVE, $battlefield->getCellByCoordinate('B2')->getState()->getId());
         $this->assertTrue(BattlefieldModel::hasUnfinishedShips($battlefield));
         $this->assertCount(100, BattlefieldModel::getLiveCells($battlefield));
@@ -52,6 +53,7 @@ class GameProcessorTest extends ExtendedTestSuite
         $json = file_get_contents(__DIR__ . '/../../../Data/request.new.game.7x7.json');
 
         $game = $this->gameProcessor->processGameInitiation($json);
+
         $this->assertCount(2, $game->getBattlefields());
         foreach ($game->getBattlefields() as $battlefield) {
             $this->assertCount(49, $battlefield->getCells());
@@ -66,7 +68,8 @@ class GameProcessorTest extends ExtendedTestSuite
     public function processGameTurnOnUnfinishedGame()
     {
         $game = $this->getGameMock();
-        $shipLiveState = $this->getCellStateMock(CellModel::STATE_SHIP_LIVE);
+        $shipLiveState = $this->getLiveShipCellStateMock();
+
         foreach ($game->getBattlefields() as $battlefield) {
             $battlefield->getCellByCoordinate('A8')->setState($shipLiveState);
             $battlefield->getCellByCoordinate('A9')->setState($shipLiveState);
@@ -96,7 +99,7 @@ class GameProcessorTest extends ExtendedTestSuite
     public function processGameTurnToWin()
     {
         $game = $this->getGameMock();
-        $shipLiveState = $this->getCellStateMock(CellModel::STATE_SHIP_LIVE);
+        $shipLiveState = $this->getLiveShipCellStateMock();
         /** to make sure CPU will never win from one turn. */
         $game->getBattlefields()[0]->getCellByCoordinate('A1')->setState($shipLiveState);
         $game->getBattlefields()[0]->getCellByCoordinate('A2')->setState($shipLiveState);

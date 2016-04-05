@@ -44,6 +44,9 @@ class PlayerModelTest extends ExtendedTestSuite
     /**
      * @see PlayerModel::ALL_TYPES
      * @test
+     *
+     * @depends playerTypeCPU
+     * @depends playerTypeHuman
      */
     public function playerTypesAll()
     {
@@ -53,6 +56,8 @@ class PlayerModelTest extends ExtendedTestSuite
     /**
      * @see PlayerModel::getTypes
      * @test
+     *
+     * @depends playerTypesAll
      */
     public function getTypes()
     {
@@ -60,12 +65,14 @@ class PlayerModelTest extends ExtendedTestSuite
             $this->assertContains($playerType->getId(), PlayerModel::TYPES_ALL);
         }
 
-        $this->assertCount(2, $this->playerModel->getTypes());
+        $this->assertCount(count(PlayerModel::TYPES_ALL), $this->playerModel->getTypes());
     }
 
     /**
-     * @see PlayerModel::createOnRequest
+     * @see PlayerModel::createOnRequest()
      * @test
+     *
+     * @depends getTypes
      */
     public function createOnRequestOnExistingPlayer()
     {
@@ -74,12 +81,14 @@ class PlayerModelTest extends ExtendedTestSuite
     }
 
     /**
-     * @see PlayerModel::createOnRequest
+     * @see PlayerModel::createOnRequest()
      * @test
+     *
+     * @depends createOnRequestOnExistingPlayer
      */
     public function createOnRequestOnNonExistingPlayer()
     {
-        $player = $this->playerModel->createOnRequest('Not existing PlayerName');
+        $player = $this->playerModel->createOnRequest('NON_EXISTING_USER');
         $this->assertNull($player->getId());
     }
 }

@@ -90,11 +90,11 @@ class GameControllerTest extends ExtendedTestSuite
         );
         $this->assertUnsuccessfulResponse($client->getResponse());
 
-        foreach (func_get_arg(0)->battlefields as $battlefield) {
-            if ($battlefield->player->type->id === PlayerModel::TYPE_CPU) {
-                /** probably spotted bug in doctrine, or configured environment wrong, disabled for now */
-                foreach($battlefield->cells as $cell) {
-                    static::$om->clear();
+//        foreach (func_get_arg(0)->battlefields as $battlefield) {
+//            if ($battlefield->player->type->id === PlayerModel::TYPE_CPU) {
+//                /** probably spotted bug in doctrine, or configured environment wrong, disabled for now */
+//                foreach($battlefield->cells as $cell) {
+//                    static::$om->clear();
 //                    $client->request(
 //                        Request::METHOD_PATCH,
 //                        $this->getRouter()->generate('battleship.game.api.turn', ['cellId' => $cell->id]),
@@ -104,8 +104,8 @@ class GameControllerTest extends ExtendedTestSuite
 //                    );
 //
 //                    $this->assertSuccessfulJSONResponse($client->getResponse());
-                }
-            }
-        }
+//                }
+//            }
+//        }
     }
 }
