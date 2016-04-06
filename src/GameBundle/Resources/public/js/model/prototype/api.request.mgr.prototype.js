@@ -1,16 +1,10 @@
 'use strict';
 
-/**
- * @constructor
- */
-function APIRequestMgr() {
-    this.pageMgr = new PageMgr();
-}
+class APIRequestMgr {
+    constructor() {
+        this.pageMgr = new PageMgr();
+    }
 
-/**
- * @type {PageMgr} pageMgr
- */
-APIRequestMgr.prototype = {
     /**
      * @param {string}        requestMethod
      * @param {string}        requestURL
@@ -18,7 +12,7 @@ APIRequestMgr.prototype = {
      * @param {function}      [onSuccess]
      * @param {function}      [onError]
      */
-    request: function (requestMethod, requestURL, requestData, onSuccess, onError) {
+    request(requestMethod, requestURL, requestData, onSuccess, onError) {
         let self = this;
 
         if (requestData instanceof Object) {
@@ -45,7 +39,7 @@ APIRequestMgr.prototype = {
             error: onError
         });
     }
-};
+}
 
 APIRequestMgr.resources = {};
 APIRequestMgr.resources.config = {
