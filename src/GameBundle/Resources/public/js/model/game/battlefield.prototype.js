@@ -41,7 +41,7 @@ class Battlefield {
             $top.append(this.cellContainer.yAxisNav[y].$html.clone());
 
             for (let x = 0; x < this.size; x++) {
-                let cell = (new Cell(cellCoordinate.full(x, y), this)).setState(Cell.resources.config.state.sea.live);
+                let cell = (new Cell(cellCoordinate.full(x, y), this)).setState(Cell.resources.state.waterLive);
                 $row.append(cell.$html);
                 this.cellContainer.addCell(cell);
             }
@@ -74,7 +74,7 @@ class Battlefield {
     /** *** *** *** *** *** *** *** *** *** *** *** *** *** **/
     mockData() {
         let self  = this,
-            state = Cell.resources.config.state;
+            state = Cell.resources.state;
 
         ["A1"].forEach(function (coordinate) {
             self.findCell({ coordinate: coordinate }).setState(state.shipDead);

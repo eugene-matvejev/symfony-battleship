@@ -5,6 +5,7 @@ class Game extends APIRequestMgr {
      * @param {jQuery} $el
      */
     constructor($el) {
+        super();
         this.$html = $el;
 
         this.alertMgr = new AlertMgr();
