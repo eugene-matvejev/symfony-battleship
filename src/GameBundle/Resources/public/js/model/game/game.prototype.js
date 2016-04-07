@@ -262,7 +262,7 @@ Game.resources.validation = {
                 return battlefieldSize.min >= el.value <= battlefieldSize.max;
         }
     }
-}
+};
 Game.resources.html       = {
     /**
      * @returns {string}
