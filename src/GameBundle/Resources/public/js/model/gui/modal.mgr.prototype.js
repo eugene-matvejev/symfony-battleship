@@ -1,51 +1,48 @@
 'use strict';
 
-/**
- * @constructor
- */
-function ModalMgr() {
-    this.$html = $('#modal-area');
-}
+class ModalMgr {
+    constructor() {
+        this.$html = $('#modal-area');
+    }
 
-/**
- * @property {jQuery} $html
- */
-ModalMgr.prototype = {
     /**
      * @returns {ModalMgr}
      */
-    show: function() {
+    show() {
         this.$html.removeClass(PageMgr.resources.config.trigger.css.hidden)
-                  .find('.modal').modal({ keyboard: false });
+            .find('.modal').modal({ keyboard: false });
 
         return this;
-    },
+    }
+
     /**
      * @returns {ModalMgr}
      */
-    hide: function() {
+    hide() {
         this.$html.find('.modal').modal('hide');
         $('body').removeClass('modal-open');
         $('.modal-backdrop.fade.in').remove();
 
         return this;
-    },
+    }
+
     /**
      * @param {string} html
      *
      * @returns {ModalMgr}
      */
-    updateHTML: function(html) {
+    updateHTML(html) {
         this.$html.html(html);
 
         return this;
-    },
+    }
+
     /**
-     * @param {boolean} enable
+     * @param {boolean} [enable]
      *
      * @returns {ModalMgr}
      */
-    unlockSubmission: function(enable) {
+    unlockSubmission(enable) {
         let $button = this.$html.find('button.btn[type="button"]');
 
         undefined === enable || enable
@@ -54,4 +51,4 @@ ModalMgr.prototype = {
 
         return this;
     }
-};
+}
