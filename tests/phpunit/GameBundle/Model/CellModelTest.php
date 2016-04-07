@@ -178,7 +178,7 @@ class CellModelTest extends ExtendedTestSuite
         $this->assertGreaterThanOrEqual(2, count(CellModel::getChangedCells()));
     }
 
-    private function iterateAllCellStatesOnCell(\Closure $function)
+    private function iterateAllCellStatesOnCell(callable $function)
     {
         foreach ($this->cellModel->getAllStates() as $state) {
             $cell = $this->getCellMock('A1', $state->getId())->setId($state->getId());
