@@ -92,15 +92,6 @@ class Player {
     }
 }
 
-/**
- * @property {jQuery}     $html
- *
- * @property {int|string} id
- * @property {int}        type
- * @property {string}     name
- */
-Player.prototype = {};
-
 Player.resources        = {
     /**
      * @returns {string}
