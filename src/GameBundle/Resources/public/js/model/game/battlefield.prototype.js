@@ -72,7 +72,7 @@ class Battlefield {
     }
 
     /** *** *** *** *** *** *** *** *** *** *** *** *** *** **/
-    mockData() {
+    initPlayerCells() {
         let self  = this,
             state = Cell.resources.state;
 
