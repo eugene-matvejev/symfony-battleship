@@ -3,44 +3,36 @@
 /**
  * @constructor
  */
-function PageMgr() {
-    this.modalMgr = new ModalMgr();
-    this.alertMgr = new AlertMgr();
-    this.$docTitle = $('head>title');
-    this.$loading = $('.page-loading');
-    this.$sidebar = $('.page-sidebar');
-    this.$content = $('.page-content');
-    this.$pageTitle = this.$content.find('.page-section-title');
-}
+class PageMgr {
+    constructor() {
+        this.modalMgr   = new ModalMgr();
+        this.alertMgr   = new AlertMgr();
+        this.$docTitle  = $('head>title');
+        this.$loading   = $('.page-loading');
+        this.$sidebar   = $('.page-sidebar');
+        this.$content   = $('.page-content');
+        this.$pageTitle = this.$content.find('.page-section-title');
 
-/**
- * @property {ModalMgr} modalMgr
- * @property {AlertMgr} alertMgr
- *
- * @property {jQuery}   $docTitle
- * @property {jQuery}   $loading
- * @property {jQuery}   $sidebar
- * @property {jQuery}   $content
- * @property {jQuery}   $pageTitle
- */
-PageMgr.prototype = {
+    }
+
     /**
      * @returns {PageMgr}
      */
-    toggleSidebar: function () {
+    toggleSidebar() {
         let css = PageMgr.resources.config.trigger.css;
 
         this.$sidebar.toggleClass(css.toggle);
         this.$content.toggleClass(css.toggle);
 
         return this;
-    },
+    }
+
     /**
      * @param {Element} el
      *
      * @returns {PageMgr}
      */
-    switchSection: function (el) {
+    switchSection(el) {
         let config = PageMgr.resources.config;
 
         this.toggleTitle(el);
@@ -62,51 +54,55 @@ PageMgr.prototype = {
         }
 
         return this;
-    },
+    }
+
     /**
      * @returns {PageMgr}
      */
-    hideAll: function () {
+    hideAll() {
         let css = PageMgr.resources.config.trigger.css;
 
         this.$content.find('.container-fluid>.row>div:not(#notification-area)').addClass(css.hidden);
         this.$sidebar.find('li:not(.sidebar-brand)').removeClass(css.selected);
 
         return this;
-    },
+    }
+
     /**
      * @param {string} id
      *
      * @returns {PageMgr}
      */
-    show: function (id) {
+    show(id) {
         let css = PageMgr.resources.config.trigger.css;
 
         this.$content.find('div#' + id).removeClass(css.hidden);
         this.$sidebar.find('li[data-section="' + id + '"]').addClass(css.selected);
 
         return this;
-    },
+    }
+
     /**
      * @param {Element} el
      *
      * @returns {PageMgr}
      */
-    toggleTitle: function (el) {
+    toggleTitle(el) {
         let postfix = el.innerText,
-            prefix = this.$sidebar.find('.' + PageMgr.resources.config.trigger.css.title).text();
+            prefix  = this.$sidebar.find('.' + PageMgr.resources.config.trigger.css.title).text();
 
         this.$docTitle.text(prefix + ' :: ' + postfix);
         this.$pageTitle.text(postfix);
 
         return this;
-    },
+    }
+
     /**
      * @param {boolean} enable
      *
      * @returns {PageMgr}
      */
-    loadingMode: function (enable) {
+    loadingMode(enable) {
         let css = PageMgr.resources.config.trigger.css;
 
         this.modalMgr.updateHTML('');
@@ -121,9 +117,9 @@ PageMgr.prototype = {
 
         return this;
     }
-};
+}
 
-PageMgr.resources = {};
+PageMgr.resources        = {};
 PageMgr.resources.config = {
     action: {
         /** @enum {string} */
