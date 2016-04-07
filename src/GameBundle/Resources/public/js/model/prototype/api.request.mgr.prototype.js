@@ -41,8 +41,9 @@ class APIRequestMgr {
     }
 }
 
-APIRequestMgr.resources = {};
-APIRequestMgr.resources.config = {
-    /** @type {int} */
-    timeout: 5000 /** in milliseconds */
+APIRequestMgr.resources = {
+    config: {
+        /** @type {int} */
+        timeout: 5000 /** in milliseconds */
+    }
 };
