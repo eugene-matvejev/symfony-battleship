@@ -1,47 +1,39 @@
 'use strict';
 
-/**
- * @param {jQuery} $el
- * @param {int}    size
- * @param {Player} player
- *
- * @constructor
- */
-function Battlefield($el, size, player) {
-    this.$html = $el;
-    this.size = size;
-    this.player = player;
+class Battlefield {
+    /**
+     * @param {jQuery} $el
+     * @param {int}    size
+     * @param {Player} player
+     */
+    constructor($el, size, player) {
+        this.$html  = $el;
+        this.size   = size;
+        this.player = player;
 
-    this.init();
-}
+        this.init();
+    }
 
-/**
- * @property {jQuery}        $html
- *
- * @property {int}           size
- * @property {Player}        player
- * @property {cellContainer} cellContainer
- */
-Battlefield.prototype = {
     /**
      * @returns {Battlefield}
      */
-    init: function () {
+    init() {
         this.cellContainer = new CellContainer();
 
-        let cellHTML = Cell.resources.html.layout,
-            $cellRow = $(CellContainer.resources.html.layout),
-            $top = $cellRow
+        let cellLayout     = Cell.resources.layout,
+            cellCoordinate = Cell.resources.coordinate,
+            $cellContainer = $(CellContainer.resources.layout),
+            $top           = $cellContainer
                 .clone()
-                .append(cellHTML);
+                .append(cellLayout);
 
         this.$html.append($top);
 
         for (let y = 0; y < this.size; y++) {
-            let $row = $cellRow.clone();
+            let $row = $cellContainer.clone();
 
-            this.cellContainer.xAxisNav.push((new Cell(this.prepareCoordinate(0, y), this)).actAsAxisLabel('digit'));
-            this.cellContainer.yAxisNav.push((new Cell(this.prepareCoordinate(y, 0), this)).actAsAxisLabel('letter'));
+            this.cellContainer.xAxisNav.push((new Cell(cellCoordinate.full(0, y), this)).actAsAxisLabel('digit'));
+            this.cellContainer.yAxisNav.push((new Cell(cellCoordinate.full(y, 0), this)).actAsAxisLabel('letter'));
 
             this.$html.append($row);
 
@@ -49,7 +41,7 @@ Battlefield.prototype = {
             $top.append(this.cellContainer.yAxisNav[y].$html.clone());
 
             for (let x = 0; x < this.size; x++) {
-                let cell = (new Cell(this.prepareCoordinate(x, y), this)).setState(Cell.resources.config.state.sea.live);
+                let cell = (new Cell(cellCoordinate.full(x, y), this)).setState(Cell.resources.config.state.sea.live);
                 $row.append(cell.$html);
                 this.cellContainer.addCell(cell);
             }
@@ -57,44 +49,38 @@ Battlefield.prototype = {
             $row.append(this.cellContainer.xAxisNav[y].$html.clone());
         }
 
-        $top.append(cellHTML);
+        $top.append(cellLayout);
         this.$html.append($top.clone());
 
         return this;
-    },
+    }
+
     /**
      * @param {{id: {int}, coordinate: {string}}} criteria
      *
      * @returns {Cell}
      */
-    findCell: function (criteria) {
+    findCell(criteria) {
         return this.cellContainer.findCell(criteria);
-    },
+    }
+
     /**
      * @return {{id: {int|string}}
      */
-    getJSON: function () {
-        return {id: this.id}
-    },
-    /** *** *** *** *** *** *** *** *** *** *** *** *** *** **/
-    mockData: function () {
-        let ship = Cell.resources.config.state.ship,
-            self = this;
-
-        ["A2", "A3", "C3", "C4", "C5", "C1", "D1", "E1", "F1", "G5", "G6", "F3"].forEach(function (coordinate) {
-            self.findCell({coordinate: coordinate}).setState(ship.live);
-        });
-        ["A1"].forEach(function (coordinate) {
-            self.findCell({coordinate: coordinate}).setState(ship.dead);
-        })
-    },
-    /**
-     * @param {int} x
-     * @param {int} y
-     *
-     * @returns {string}
-     */
-    prepareCoordinate: function (x, y) {
-        return String.fromCharCode(97 + x).toUpperCase() + (1 + y);
+    getJSON() {
+        return { id: this.id }
     }
-};
+
+    /** *** *** *** *** *** *** *** *** *** *** *** *** *** **/
+    mockData() {
+        let self  = this,
+            state = Cell.resources.config.state;
+
+        ["A1"].forEach(function (coordinate) {
+            self.findCell({ coordinate: coordinate }).setState(state.shipDead);
+        });
+        ["A2", "A3", "C3", "C4", "C5", "C1", "D1", "E1", "F1", "G5", "G6", "F3"].forEach(function (coordinate) {
+            self.findCell({ coordinate: coordinate }).setState(state.shipLive);
+        });
+    }
+}
