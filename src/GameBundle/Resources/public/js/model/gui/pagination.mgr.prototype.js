@@ -1,24 +1,19 @@
 'use strict';
 
-/**
- * @param {jQuery} $el
- *
- * @constructor
- */
-function PaginationMgr($el) {
-    this.$area = $el;
-}
+class PaginationMgr {
+    /**
+     * @param {jQuery} $el
+     */
+    constructor($el) {
+        this.$area = $el;
+    }
 
-/**
- * @property {jQuery} $area
- */
-PaginationMgr.prototype = {
     /**
      * @param {int|string} currPage
      * @param {int|string} totalPages
      */
-    updateHTML: function (currPage, totalPages) {
-        let attr = PaginationMgr.resources.config.attr,
+    updateHTML(currPage, totalPages) {
+        let attr     = PaginationMgr.resources.config.attr,
             nextPage = currPage + 1 > totalPages ? totalPages : currPage + 1,
             prevPage = currPage - 1 <= 0 ? 1 : currPage - 1;
 
@@ -44,9 +39,9 @@ PaginationMgr.prototype = {
             }
         });
     }
-};
+}
 
-PaginationMgr.resources = {};
+PaginationMgr.resources        = {};
 PaginationMgr.resources.config = {
     attr: {
         /** @enum {string} */
@@ -60,28 +55,28 @@ PaginationMgr.resources.config = {
         page: 'data-page'
     }
 };
-PaginationMgr.resources.html = {
+PaginationMgr.resources.html   = {
     /**
      * @returns {string}
      */
     layout: function () {
         let attr = PaginationMgr.resources.config.attr;
 
-        return '' +
-            '<div class="pagination-area">' +
-                '<div class="btn-group btn-group-xs" role="group" aria-label="statistics-pagination">' +
-                    '<button id="' + attr.id.prev + '" type="button" class="btn btn-default">' +
-                        '<span class="glyphicon glyphicon-chevron-left"></span>' +
-                    '</button>' +
-                    '<button id="' + attr.id.curr + '" type="button" class="btn btn-default" disabled="disabled">' +
-                        '<span></span>' +
-                        '<span> of </span>' +
-                        '<span></span>' +
-                    '</button>' +
-                    '<button id="' + attr.id.next + '" type="button" class="btn btn-default">' +
-                        '<span class="glyphicon glyphicon-chevron-right"></span>' +
-                    '</button>' +
-                '</div>' +
-            '</div>';
+        return ' \
+            <div class="pagination-area"> \
+                <div class="btn-group btn-group-xs" role="group" aria-label="statistics-pagination"> \
+                    <button id="' + attr.id.prev + '" type="button" class="btn btn-default"> \
+                        <span class="glyphicon glyphicon-chevron-left"></span> \
+                    </button> \
+                    <button id="' + attr.id.curr + '" type="button" class="btn btn-default" disabled="disabled"> \
+                        <span></span> \
+                        <span> of </span> \
+                        <span></span> \
+                    </button> \
+                    <button id="' + attr.id.next + '" type="button" class="btn btn-default"> \
+                        <span class="glyphicon glyphicon-chevron-right"></span> \
+                    </button> \
+                </div> \
+            </div>';
     }
 };
