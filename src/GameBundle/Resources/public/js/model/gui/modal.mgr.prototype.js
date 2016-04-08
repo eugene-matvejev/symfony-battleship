@@ -9,8 +9,7 @@ class ModalMgr {
      * @returns {ModalMgr}
      */
     show() {
-        this.$html.removeClass(PageMgr.resources.config.trigger.css.hidden)
-            .find('.modal').modal({ keyboard: false });
+        this.$html.removeClass('hidden').find('.modal').modal({ keyboard: false });
 
         return this;
     }
@@ -21,7 +20,7 @@ class ModalMgr {
     hide() {
         this.$html.find('.modal').modal('hide');
         $('body').removeClass('modal-open');
-        $('.modal-backdrop.fade.in').remove();
+        $('.modal-backdrop').remove();
 
         return this;
     }
