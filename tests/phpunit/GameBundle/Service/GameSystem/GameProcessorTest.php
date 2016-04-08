@@ -30,7 +30,7 @@ class GameProcessorTest extends ExtendedTestSuite
     }
 
     /**
-     * @see GameProcessor::initCPUBattlefieldF
+     * @see GameProcessor::initCPUBattlefield
      * @test
      */
     public function initCPUBattlefield()
