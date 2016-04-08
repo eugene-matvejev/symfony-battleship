@@ -64,7 +64,7 @@ class Game extends APIRequestMgr {
             });
         });
 
-        this.request('POST', this.$html.attr(Game.resources.config.route.init), requestData, onSuccess);
+        this.request('POST', this.$html.attr('data-init-link'), requestData, onSuccess);
     }
 
     /**
@@ -136,7 +136,7 @@ class Game extends APIRequestMgr {
                 self.parseUpdateResponse(response);
             };
 
-        this.request('PATCH', this.$html.attr(Game.resources.config.route.turn) + cell.id, undefined, onSuccess);
+        this.request('PATCH', this.$html.attr('data-turn-link') + cell.id, undefined, onSuccess);
     }
 
     /**
@@ -208,11 +208,6 @@ class Game extends APIRequestMgr {
 Game.resources            = {};
 Game.resources.config     = {
     /** @enum {string} */
-    trigger: {
-        username: 'model-input-player-name',
-        game_size: 'model-input-battlefield-size'
-    },
-    /** @enum {string} */
     text: {
         win: 'you won',
         loss: 'you lost'
@@ -225,11 +220,6 @@ Game.resources.config     = {
         },
         /** @type {Object} */
         username: /^[a-zA-Z0-9\.\- @]{1,100}$/
-    },
-    /** @enum {string} */
-    route: {
-        turn: 'data-turn-link',
-        init: 'data-init-link'
     }
 };
 Game.resources.validation = {
