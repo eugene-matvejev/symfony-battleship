@@ -195,10 +195,9 @@ class Game extends APIRequestMgr {
     modalUnlockSubmission() {
         this.modalMgr.unlockSubmission(false);
 
-        let trigger                = Game.resources.config.trigger,
-            validation             = Game.resources.validation,
-            isUsernameValid        = validation.validateInput(document.getElementById('model-trigger-username')),
-            isBattlefieldSizeValid = validation.validateInput(document.getElementById('model-trigger-battlefield-size'));
+        let validation             = Game.resources.validation,
+            isUsernameValid        = validation.validateInput(document.getElementById('model-input-player-name')),
+            isBattlefieldSizeValid = validation.validateInput(document.getElementById('model-input-battlefield-size'));
 
         if (isUsernameValid && isBattlefieldSizeValid) {
             this.modalMgr.unlockSubmission(true);
@@ -210,8 +209,8 @@ Game.resources            = {};
 Game.resources.config     = {
     /** @enum {string} */
     trigger: {
-        username: 'model-trigger-username',
-        game_size: 'model-trigger-battlefield-size'
+        username: 'model-input-player-name',
+        game_size: 'model-input-battlefield-size'
     },
     /** @enum {string} */
     text: {
@@ -240,26 +239,22 @@ Game.resources.validation = {
      * @returns {boolean}
      */
     validateInput(el) {
-        let config          = Game.resources.config,
-            battlefieldSize = config.pattern.battlefield;
-
         switch (el.id) {
-            case config.trigger.player:
-                if (!config.pattern.username.test(el.value)) {
+            case 'model-input-player-name':
+                if (!Game.resources.config.pattern.username.test(el.value)) {
                     el.value = el.value.substr(0, el.value.length - 1);
 
                     return false;
                 }
                 return true;
-            case config.trigger.bfsize:
+            case 'model-input-battlefield-size':
+                let battlefieldSize = Game.resources.config.pattern.battlefield
                 if (isNaN(el.value))
                     el.value = el.value.substr(0, el.value.length - 1);
-                else if (el.value.length > 1 && el.value < battlefieldSize.min)
-                    el.value = battlefieldSize.min;
-                else if (el.value.length > 2 || el.value > battlefieldSize.max)
+                else if (el.value > battlefieldSize.max)
                     el.value = battlefieldSize.max;
 
-                return battlefieldSize.min >= el.value <= battlefieldSize.max;
+                return el.value >= battlefieldSize.min;
         }
     }
 };
@@ -282,17 +277,17 @@ Game.resources.html       = {
                         </div> \
                         <div class="modal-body"> \
                             <div class="form-group"> \
-                                <label for="model-trigger-username">nickname</label> \
-                                <input type="text" class="form-control" id="model-trigger-username" placeholder=""> \
+                                <label for="model-input-player-name">nickname</label> \
+                                <input type="text" class="form-control" id="model-input-player-name" placeholder=""> \
                             </div> \
                             <div class="form-group"> \
-                                <label for="model-trigger-battlefield-size">battlefield size</label> \
-                                <input type="test" class="form-control" id="model-trigger-battlefield-size" \
+                                <label for="model-input-battlefield-size">battlefield size</label> \
+                                <input type="test" class="form-control" id="model-input-battlefield-size" \
                                     placeholder="between ' + battlefield.min + ' and ' + battlefield.max + '"> \
                             </div> \
                         </div> \
                         <div class="modal-footer"> \
-                            <button type="button" id="new-game-btn" class="btn btn-primary" disabled="disabled">next step</button> \
+                            <button type="button" id="model-button-init-new-game" class="btn btn-primary" disabled="disabled">next step</button> \
                         </div> \
                     </div> \
                 </div> \
