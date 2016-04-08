@@ -16,7 +16,7 @@ class GameResults {
      */
     fetch(page) {
         let self       = this,
-            requestUrl = this.$html.attr(GameResults.resources.config.attribute.route) + page,
+            requestUrl = this.$html.attr('data-game-results-link') + page,
             onSuccess  = function (response) {
                 self.updateHTML(response);
             };
@@ -33,18 +33,12 @@ class GameResults {
 
         response.results.map(result => $table.append(html.row(result)));
 
-        this.$html.html($table).append(PaginationMgr.resources.html.layout());
+        this.$html.html($table).append(PaginationMgr.resources.html.layout);
         this.pagination.updateHTML(response.meta.currentPage, response.meta.totalPages);
     }
 }
 
-GameResults.resources        = {};
-GameResults.resources.config = {
-    /** @enum {string} */
-    attribute: {
-        route: 'data-game-results-link'
-    }
-};
+GameResults.resources = {};
 /** @enum {string} */
 GameResults.resources.text = {
     id: 'id',
