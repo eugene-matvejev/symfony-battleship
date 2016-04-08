@@ -6,7 +6,7 @@ parameters:
   database_user: root
   database_encoding: UTF8
   database_password: null
-# test DB
+# testing DB
   database_host_test: 127.0.0.1
   database_port_test: 3306
   database_name_test: symfony_game_test
