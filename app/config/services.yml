@@ -1,5 +1,5 @@
 parameters:
-#    parameter_name: value
+    battleship.game.config.game.results.per.page: 10
 
 imports:
     - { resource: "@GameBundle/Resources/config/services.yml" }
