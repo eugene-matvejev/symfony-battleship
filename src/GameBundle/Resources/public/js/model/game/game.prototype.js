@@ -224,7 +224,7 @@ Game.resources.config     = {
             max: 15
         },
         /** @type {Object} */
-        username: /^[a-zA-Z0-9\.\-\ \@]{1,100}$/
+        username: /^[a-zA-Z0-9\.\- @]{1,100}$/
     },
     /** @enum {string} */
     route: {
