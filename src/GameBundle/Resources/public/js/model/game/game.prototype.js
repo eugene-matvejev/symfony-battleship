@@ -215,8 +215,8 @@ Game.resources.config     = {
     pattern: {
         /** @enum {int} */
         battlefield: {
-            min: 5,
-            max: 15
+            min: 7,
+            max: 12
         },
         /** @type {Object} */
         username: /^[a-zA-Z0-9\.\- @]{1,100}$/
