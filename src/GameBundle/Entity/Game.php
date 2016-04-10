@@ -46,13 +46,6 @@ class Game extends AbstractEntity implements TimestampedInterface
         return $this;
     }
 
-    public function removeBattlefield(Battlefield $battlefield) : self
-    {
-        $this->battlefields->removeElement($battlefield);
-
-        return $this;
-    }
-
     /**
      * @return Collection|Battlefield[]
      */
