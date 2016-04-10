@@ -11,7 +11,6 @@ class GameResults extends APIRequestMgr {
         this.route      = $el.attr('data-game-results-link');
 
         this.$tableArea = $(this.constructor.resources.layout);
-        console.log(this.$tableArea);
         $el.append(this.$tableArea, this.pagination.$html);
     }
 
