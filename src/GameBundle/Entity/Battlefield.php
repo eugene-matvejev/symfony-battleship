@@ -62,13 +62,6 @@ class Battlefield extends AbstractEntity implements PlayerInterface
         return $this;
     }
 
-    public function removeCell(Cell $cell) : self
-    {
-        $this->cells->removeElement($cell);
-
-        return $this;
-    }
-
     /**
      * @return Collection|Cell[]
      */
