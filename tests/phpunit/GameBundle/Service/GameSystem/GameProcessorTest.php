@@ -69,6 +69,7 @@ class GameProcessorTest extends ExtendedTestSuite
     {
         $game = $this->getGameMock();
         $shipLiveState = $this->getLiveShipCellStateMock();
+        $game->getBattlefields()[0]->getPlayer()->setType($this->getPlayerTypeMock(PlayerModel::TYPE_CPU));
 
         foreach ($game->getBattlefields() as $battlefield) {
             $battlefield->getCellByCoordinate('A8')->setState($shipLiveState);
