@@ -5,17 +5,18 @@
 
 
 # Battleship Game API
-### Spare time project, Work in Progress! Highly experimental!!!
-#### Project aim
- * deliver some preview about my technical knowledge before job interview
-  * try 'cutting edge' technologies and approaches.
+### THIS IS SPARE TIME PROJECT, WORK IN PROGRESS! HIGHLY EXPERIMENTAL!!!
+#### Project purpose
+ * try 'cutting edge' technologies and approaches such as PHP7, SF3, ECMA6
+ * simulate database loading e.g. upto 500 insertions/request
+ * deliver preview about my technical knowledge before the job interview
 
 ### game cheat-code:
  * CPU have only one-cell ship which is hardcoded at __B2__ cell
-  * if you will hit it __B2__ cell - it will be instant win
-   * it is done to easier tests manual testing, as the project is far from 'finished' stage, as I keep trying polish it.
+  * if you will hit __B2__ cell - you will instantly win
+   * purpose: to easier manual testing (as the project is far from 'finished' stage, as I keep trying polish it)
 
-### plans for future:
+### future plans:
  * deliver back-end as OpenAPI using SF3, PHP7, Doctrine2, Various databases
   * try to create it later as well on Silex.
  * separate front-ent side using single-page-application model AngularJS 2 / Backbone / React
@@ -23,14 +24,14 @@
  * make simple and flexible database support e.g. MariaDB, MySQL, MongoDB
  * implement phpunit, behat tests, consider kahlan and phpspec as well
 
-# Software requirements
+# software requirements:
  * database: MySQL => 5.5 or MariaDB >= 9.*
   * MongoDB support WIP 
  * http server: apache/nginx with php >= 7.0.1
  * composer
 
-### Key Technologies
- * PHP 7.0.1 (because 7.0.0 had bugged primitive types)
+### key technologies:
+ * PHP7 (7.0.1, as 7.0.0 had bugged primitive types)
  * Symfony Framework 3 (SF3)
  * Doctrine 2
  * PHPUnit 5
@@ -144,6 +145,7 @@
  * Strategy
  * Factory
  * Singleton
+ * Delegation
  * Service Locator
  * Registry
  * Event Dispatcher
