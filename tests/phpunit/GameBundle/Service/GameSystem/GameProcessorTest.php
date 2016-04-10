@@ -136,6 +136,22 @@ class GameProcessorTest extends ExtendedTestSuite
      * @see     GameProcessor::processPlayerTurn
      * @test
      *
+     * @expectedException \EM\GameBundle\Exception\CellException
+     *
+     * @depends processGameTurnOnUnfinishedGame
+     */
+    public function processPlayerTurnThrowsCellException()
+    {
+        $battlefield = $this->getBattlefieldMock()
+            ->setPlayer($this->getPlayerMock('', $this->getPlayerTypeMock(PlayerModel::TYPE_CPU)));
+
+        $this->invokeProcessPlayerTurnMethod([$battlefield, 'A0']);
+    }
+
+    /**
+     * @see     GameProcessor::processPlayerTurn
+     * @test
+     *
      * @expectedException \EM\GameBundle\Exception\PlayerException
      *
      * @depends processGameTurnOnUnfinishedGame
