@@ -5,7 +5,7 @@ namespace EM\GameBundle\Model;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Entity\CellState;
 use EM\GameBundle\Repository\CellStateRepository;
-use EM\GameBundle\Service\CoordinateSystem\CoordinateService;
+use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 
 /**
  * @since 2.0
@@ -89,13 +89,13 @@ class CellModel
             return true;
         }
 
-        $coordinateService = new CoordinateService($cell);
+        $PathProcessor = new PathProcessor($cell);
         $cells = [$cell->getCoordinate() => $cell];
 
-        foreach (CoordinateService::PRIMARY_WAYS as $way) {
-            $coordinateService->setWay($way);
+        foreach (PathProcessor::PRIMARY_PATHS as $way) {
+            $PathProcessor->setPath($way);
 
-            while (null !== $_cell = $cell->getBattlefield()->getCellByCoordinate($coordinateService->getNextCoordinate())) {
+            while (null !== $_cell = $cell->getBattlefield()->getCellByCoordinate($PathProcessor->getNextCoordinate())) {
                 if (!in_array($_cell->getState()->getId(), self::STATES_SHIP)) {
                     break;
                 }
@@ -110,7 +110,7 @@ class CellModel
         foreach ($cells as $cell) {
             self::$checkedCells[$cell->getId()] = $cell;
 
-            foreach ((new CoordinateService($cell))->getAdjacentCells() as $_cell) {
+            foreach ((new PathProcessor($cell))->getAdjacentCells() as $_cell) {
                 $this->switchStateToSkipped($_cell);
             }
         }
