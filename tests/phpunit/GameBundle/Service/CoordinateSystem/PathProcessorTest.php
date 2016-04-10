@@ -94,7 +94,10 @@ class PathProcessorTest extends ExtendedTestSuite
 
         $service = $this->getPathProcessorMock($this->getCellMock('D4'));
         foreach ($expectedCoordinatesByWay as $wayId => $expectedCoordinate) {
-            $this->assertEquals($expectedCoordinate, $service->setPath($wayId)->getNextCoordinate());
+            $service->setPath($wayId);
+            $this->assertEquals('D4', $service->getCurrentCoordinate());
+            $this->assertEquals($expectedCoordinate, $service->getNextCoordinate());
+            $this->assertEquals($expectedCoordinate, $service->getCurrentCoordinate());
         }
     }
 }
