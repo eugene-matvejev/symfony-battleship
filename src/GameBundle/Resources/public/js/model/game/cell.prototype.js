@@ -7,7 +7,7 @@ class Cell {
      */
     constructor(coordinate, battlefield) {
         this.battlefield = battlefield;
-        this.$html       = $(Cell.resources.layout);
+        this.$html       = $(this.constructor.resources.layout);
         this.setId('undefined')
             .setCoordinate(coordinate)
             .setState('undefined');
@@ -20,7 +20,7 @@ class Cell {
      */
     setCoordinate(coordinate) {
         this.coordinate = coordinate;
-        this.updateHTML('data-coordinate', this.coordinate);
+        this.$html.attr('data-coordinate', this.coordinate);
 
         return this;
     }
@@ -32,7 +32,7 @@ class Cell {
      */
     setId(id) {
         this.id = id;
-        this.updateHTML('data-id', this.id);
+        this.$html.attr('data-id', this.id);
 
         return this;
     }
@@ -44,7 +44,7 @@ class Cell {
      */
     setState(state) {
         this.state = state;
-        this.updateHTML('data-state', this.state);
+        this.$html.attr('data-state', this.state);
 
         return this;
     }
@@ -55,7 +55,7 @@ class Cell {
      * @returns {Cell}
      */
     actAsAxisLabel(mode) {
-        let coordinate = Cell.resources.coordinate;
+        let coordinate = this.constructor.resources.coordinate;
 
         switch (mode) {
             case 'letter':
@@ -67,14 +67,6 @@ class Cell {
         }
 
         return this;
-    }
-
-    /**
-     * @param {string} attr
-     * @param {string} val
-     */
-    updateHTML(attr, val) {
-        this.$html.attr(attr, val);
     }
 
     /**
