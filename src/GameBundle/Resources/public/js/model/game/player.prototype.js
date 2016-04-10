@@ -7,8 +7,8 @@ class Player {
      * @param {int}     battlefieldSize
      */
     constructor(playerName, isCPUPlayer, battlefieldSize) {
-        this.$html = $(Player.resources.layout);
-        let type   = Player.resources.type;
+        this.$html = $(this.constructor.resources.layout);
+        let type   = this.constructor.resources.type;
 
         this.setId('undefined')
             .setName(playerName)
@@ -79,16 +79,6 @@ class Player {
 }
 
 Player.resources = {
-    /** @enum {string} */
-    attribute: {
-        id: 'data-player-id',
-        type: 'data-player-type'
-    },
-    /** @enum {string} */
-    class: {
-        name: 'player-name',
-        area: 'player-field'
-    },
     /** @enum {int} */
     type: {
         cpu: 1,
