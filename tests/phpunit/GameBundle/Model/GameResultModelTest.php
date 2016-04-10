@@ -33,8 +33,9 @@ class GameResultModelTest extends ExtendedTestSuite
      */
     public function prepareResponse()
     {
+        $resultsToPersist = 21;
         $player = static::$om->getRepository('GameBundle:Player')->find(1);
-        for ($i = 0; $i < 21; $i++) {
+        for ($i = 0; $i < $resultsToPersist; $i++) {
             $game = $this->getGameMock(0);
 
             $result = $this->getGameResultMock()
@@ -42,25 +43,19 @@ class GameResultModelTest extends ExtendedTestSuite
             $game->setResult($result);
             static::$om->persist($game);
         }
-
         static::$om->flush();
 
-        $response = $this->gameResultModel->prepareResponse(1);
-        $this->assertEquals(3, $response->getMeta()[GameResultsResponse::META_INDEX_TOTAL_PAGES]);
-        $this->assertEquals(1, $response->getMeta()[GameResultsResponse::META_INDEX_CURRENT_PAGE]);
-        $this->assertCount(10, $response->getResults());
-        $this->assertContainsOnlyInstancesOf(GameResult::class, $response->getResults());
+        $perPage = $this->getContainer()->getParameter('battleship_game.game_results_per_page');
+        $pages = ceil($resultsToPersist / $perPage);
+        for ($page = 1; $page < $pages; $page++) {
+            $response = $this->gameResultModel->prepareResponse($page);
 
-        $response = $this->gameResultModel->prepareResponse(2);
-        $this->assertEquals(3, $response->getMeta()[GameResultsResponse::META_INDEX_TOTAL_PAGES]);
-        $this->assertEquals(2, $response->getMeta()[GameResultsResponse::META_INDEX_CURRENT_PAGE]);
-        $this->assertCount(10, $response->getResults());
-        $this->assertContainsOnlyInstancesOf(GameResult::class, $response->getResults());
+            $this->assertEquals($pages, $response->getMeta()[GameResultsResponse::META_INDEX_TOTAL_PAGES]);
+            $this->assertEquals($page, $response->getMeta()[GameResultsResponse::META_INDEX_CURRENT_PAGE]);
 
-        $response = $this->gameResultModel->prepareResponse(3);
-        $this->assertEquals(3, $response->getMeta()[GameResultsResponse::META_INDEX_TOTAL_PAGES]);
-        $this->assertEquals(3, $response->getMeta()[GameResultsResponse::META_INDEX_CURRENT_PAGE]);
-        $this->assertCount(1, $response->getResults());
-        $this->assertContainsOnlyInstancesOf(GameResult::class, $response->getResults());
+            $this->assertInternalType('array', $response->getResults());
+            $this->assertContainsOnlyInstancesOf(GameResult::class, $response->getResults());
+            $this->assertLessThanOrEqual($perPage, count($response->getResults()));
+        }
     }
 }
