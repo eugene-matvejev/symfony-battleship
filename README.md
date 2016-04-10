@@ -5,7 +5,7 @@
 
 
 # Battleship Game API
-### THIS IS SPARE TIME PROJECT, WORK IN PROGRESS! HIGHLY EXPERIMENTAL!!!
+##### THIS IS SPARE TIME PROJECT, WORK IN PROGRESS! HIGHLY EXPERIMENTAL!!!
 #### Project purpose
  * try 'cutting edge' technologies and approaches such as PHP7, SF3, ECMA6
  * simulate database loading e.g. upto 500 insertions/request
