@@ -3,14 +3,12 @@
 namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\Model\BattlefieldModel;
-use EM\GameBundle\Model\CellModel;
-use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
 use EM\Tests\PHPUnit\Environment\MockFactory\Entity\BattlefieldMockTrait;
 
 /**
  * @see BattlefieldModel
  */
-class BattlefieldModelTest extends ExtendedTestSuite
+class BattlefieldModelTest extends \PHPUnit_Framework_TestCase
 {
     use BattlefieldMockTrait;
 
