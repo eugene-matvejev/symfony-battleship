@@ -5,7 +5,7 @@ namespace EM\GameBundle\Service\AI;
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Service\CoordinateSystem\CoordinateService;
+use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 
 /**
  * @since 8.0
@@ -24,32 +24,37 @@ class AIStrategyProcessor
      */
     public function process(Cell $cell, int $strategyId) : array
     {
-        $service = new CoordinateService($cell);
-
+        $pathProcessor = new PathProcessor($cell);
+        $pathProcessors = [];
         switch ($strategyId) {
             case self::STRATEGY_HORIZONTAL:
-                return $this->processCoordinates($cell->getBattlefield(), [
-                    clone $service->setWay(CoordinateService::WAY_LEFT),
-                    clone $service->setWay(CoordinateService::WAY_RIGHT)
-                ]);
+                $pathProcessors = [
+                    clone $pathProcessor->setPath(PathProcessor::PATH_LEFT),
+                    clone $pathProcessor->setPath(PathProcessor::PATH_RIGHT)
+                ];
+                break;
             case self::STRATEGY_VERTICAL:
-                return $this->processCoordinates($cell->getBattlefield(), [
-                    clone $service->setWay(CoordinateService::WAY_UP),
-                    clone $service->setWay(CoordinateService::WAY_DOWN)
-                ]);
+                $pathProcessors = [
+                    clone $pathProcessor->setPath(PathProcessor::PATH_UP),
+                    clone $pathProcessor->setPath(PathProcessor::PATH_DOWN)
+                ];
+                break;
             case self::STRATEGY_BOTH:
-                return $this->processCoordinates($cell->getBattlefield(), [
-                    clone $service->setWay(CoordinateService::WAY_LEFT),
-                    clone $service->setWay(CoordinateService::WAY_RIGHT),
-                    clone $service->setWay(CoordinateService::WAY_UP),
-                    clone $service->setWay(CoordinateService::WAY_DOWN)
-                ]);
+                $pathProcessors = [
+                    clone $pathProcessor->setPath(PathProcessor::PATH_LEFT),
+                    clone $pathProcessor->setPath(PathProcessor::PATH_RIGHT),
+                    clone $pathProcessor->setPath(PathProcessor::PATH_UP),
+                    clone $pathProcessor->setPath(PathProcessor::PATH_DOWN)
+                ];
+                break;
         }
+
+        return $this->processCoordinates($cell->getBattlefield(), $pathProcessors);
     }
 
     /**
      * @param Battlefield         $battlefield
-     * @param CoordinateService[] $coordinates
+     * @param PathProcessor[] $coordinates
      *
      * @return Cell[]
      */

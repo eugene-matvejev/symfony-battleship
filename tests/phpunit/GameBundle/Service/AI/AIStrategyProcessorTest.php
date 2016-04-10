@@ -5,17 +5,17 @@ namespace EM\Tests\PHPUnit\GameBundle\Service\AI;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIStrategyProcessor;
-use EM\GameBundle\Service\CoordinateSystem\CoordinateService;
+use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
 use EM\Tests\PHPUnit\Environment\MockFactory\Entity\BattlefieldMockTrait;
-use EM\Tests\PHPUnit\Environment\MockFactory\Service\CoordinateServiceMockTrait;
+use EM\Tests\PHPUnit\Environment\MockFactory\Service\PathProcessorMockTrait;
 
 /**
  * @see AIStrategy
  */
 class AIStrategyProcessorTest extends ExtendedTestSuite
 {
-    use BattlefieldMockTrait, CoordinateServiceMockTrait;
+    use BattlefieldMockTrait, PathProcessorMockTrait;
     /**
      * @var AIStrategyProcessor
      */
@@ -37,7 +37,7 @@ class AIStrategyProcessorTest extends ExtendedTestSuite
 
         $battlefield = $this->getBattlefieldMock();
         $battlefield->getCellByCoordinate('B2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
-        $service = $this->getCoordinateServiceMock($battlefield->getCellByCoordinate('B2'));
+        $service = $this->getPathProcessorMock($battlefield->getCellByCoordinate('B2'));
 
         $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
         /** as battlefield is mocked having all cells STATE_WATER_LIVE state */
@@ -84,17 +84,17 @@ class AIStrategyProcessorTest extends ExtendedTestSuite
     }
 
     /**
-     * @param CoordinateService $service
+     * @param PathProcessor $service
      *
-     * @return CoordinateService[]
+     * @return PathProcessor[]
      */
-    private function getBasicCoordinates(CoordinateService $service) : array
+    private function getBasicCoordinates(PathProcessor $service) : array
     {
         return [
-            clone $service->setWay(CoordinateService::WAY_UP),
-            clone $service->setWay(CoordinateService::WAY_DOWN),
-            clone $service->setWay(CoordinateService::WAY_LEFT),
-            clone $service->setWay(CoordinateService::WAY_RIGHT)
+            clone $service->setPath(PathProcessor::PATH_UP),
+            clone $service->setPath(PathProcessor::PATH_DOWN),
+            clone $service->setPath(PathProcessor::PATH_LEFT),
+            clone $service->setPath(PathProcessor::PATH_RIGHT)
         ];
     }
 
