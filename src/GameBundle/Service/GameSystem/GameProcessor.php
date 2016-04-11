@@ -6,7 +6,6 @@ use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Entity\Game;
 use EM\GameBundle\Entity\GameResult;
-use EM\GameBundle\Exception\CellException;
 use EM\GameBundle\Exception\PlayerException;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
@@ -77,7 +76,6 @@ class GameProcessor
      * @param Cell $cell
      *
      * @return GameTurnResponse
-     * @throws CellException
      * @throws PlayerException
      */
     public function processGameTurn(Cell $cell) : GameTurnResponse
@@ -121,21 +119,17 @@ class GameProcessor
      * @param string      $playerCellCoordinate
      *
      * @return Cell
-     * @throws CellException
      * @throws PlayerException
      */
     private function processPlayerTurn(Battlefield $battlefield, string $playerCellCoordinate) : Cell
     {
         switch ($battlefield->getPlayer()->getType()->getId()) {
+            case PlayerModel::TYPE_CPU:
+                return $this->cellModel->switchState($battlefield->getCellByCoordinate($playerCellCoordinate));
             case PlayerModel::TYPE_HUMAN:
                 return $this->ai->processCPUTurn($battlefield);
-            case PlayerModel::TYPE_CPU:
-                if (null !== $cell = $battlefield->getCellByCoordinate($playerCellCoordinate)) {
-                    return $this->cellModel->switchState($cell);
-                }
-                throw new CellException("Cell with coordinate: {$playerCellCoordinate} in battlefield: {$battlefield->getId()} doesn't exists");
         }
 
-        throw new PlayerException("Player: {$battlefield->getPlayer()->getId()} has unknown type {$battlefield->getPlayer()->getType()->getId()}");
+        throw new PlayerException("player: {$battlefield->getPlayer()->getId()} has unknown type {$battlefield->getPlayer()->getType()->getId()}");
     }
 }
