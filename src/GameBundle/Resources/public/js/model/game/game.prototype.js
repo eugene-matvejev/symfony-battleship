@@ -9,7 +9,6 @@ class Game extends APIRequestMgr {
         this.$html = $el;
 
         this.alertMgr = new AlertMgr();
-        this.pageMgr  = new PageMgr();
         this.modalMgr = new ModalMgr();
     }
 
@@ -36,7 +35,7 @@ class Game extends APIRequestMgr {
      * @param {int}                                  battlefieldSize
      */
     init(players, battlefieldSize) {
-        this.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="game-current-area"]'));
+        super.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="game-current-area"]'));
 
         this.setId('undefined');
         this.players = [];
