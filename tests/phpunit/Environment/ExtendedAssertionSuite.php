@@ -12,6 +12,7 @@ abstract class ExtendedAssertionSuite extends WebTestCase
 {
     public function assertSuccessfulResponse(Response $response)
     {
+        $this->assertTrue(false);
         $this->assertGreaterThanOrEqual(Response::HTTP_OK, $response->getStatusCode());
         $this->assertLessThan(Response::HTTP_MULTIPLE_CHOICES, $response->getStatusCode());
     }
