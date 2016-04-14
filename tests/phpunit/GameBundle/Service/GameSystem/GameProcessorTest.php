@@ -36,7 +36,7 @@ class GameProcessorTest extends ExtendedTestSuite
     public function initCPUBattlefield()
     {
         $battlefield = $this->getBattlefieldMock();
-        $this->invokePrivateMethod(GameProcessor::class, $this->gameProcessor, 'initCPUBattlefield', [$battlefield]);
+        $this->invokePrivateMethod($this->gameProcessor, 'initCPUBattlefield', [$battlefield]);
 
         $this->assertEquals(CellModel::STATE_SHIP_LIVE, $battlefield->getCellByCoordinate('B2')->getState()->getId());
         $this->assertTrue(BattlefieldModel::hasUnfinishedShips($battlefield));
@@ -166,6 +166,6 @@ class GameProcessorTest extends ExtendedTestSuite
 
     private function invokeProcessPlayerTurnMethod(array $args)
     {
-        $this->invokePrivateMethod(GameProcessor::class, $this->gameProcessor, 'processPlayerTurn', $args);
+        $this->invokePrivateMethod($this->gameProcessor, 'processPlayerTurn', $args);
     }
 }
