@@ -12,9 +12,11 @@
     border-top: 1px solid #000;
     border-left: 1px solid #000;
 }
+
 .battlefield-cell-container:not(:first-child):not(:last-child) > .battlefield-cell[data-coordinate]:nth-last-child(2) {
     border-right: 1px solid #000;
 }
+
 .battlefield-cell-container:nth-last-child(2) > .battlefield-cell[data-coordinate]:not(:first-child):not(:last-child) {
     border-bottom: 1px solid #000;
 }
@@ -23,36 +25,45 @@
     background: rgba(225, 255, 255, 0.75);
     cursor: pointer;
 }
+
 .history-element[data-state="1"],
 .battlefield-cell[data-state="1"] {
     background: #e1ffff;
 }
+
 .history-element[data-state="2"],
 .battlefield-cell[data-state="2"] {
     background: #1e5799;
 }
+
 .history-element[data-state="3"],
 .battlefield-cell[data-state="3"] {
     background: #000;
 }
+
 .history-element[data-state="4"],
 .battlefield-cell[data-state="4"] {
     background: #6d0019;
 }
+
 .history-element[data-state="5"],
 .battlefield-cell[data-state="5"] {
     background: #556980;
 }
 
-.player-area>.player-name {
+.player-area > .player-name {
     font-size: 32px;
 }
+
 .player-area {
     margin-top: 25px;
+    display: inline-block;
 }
+
 .player-area .battlefield-cell:not([data-state="undefined"]):hover {
     cursor: no-drop;
 }
+
 .player-area[data-player-type="1"] .battlefield-cell:not([data-state="2"]):not([data-state="4"]):not([data-state="5"]):hover {
     cursor: pointer;
 }
@@ -70,20 +81,24 @@ div#game-results-area {
 li.history-container {
     margin-top: 75px;
 }
+
 li.history-container ul {
     list-style-type: none;
 }
+
 li.history-container li {
     font-size: 12px;
     vertical-align: middle;
-    margin: 5px 0px;
+    margin: 5px 0;
 }
+
 li.history-container .history-title {
     display: block;
     text-align: center;
     border-bottom: 1px dashed #fff;
     margin-bottom: 10px;
 }
+
 li.history-container .history-element {
     height: 28px;
     width: 28px;
