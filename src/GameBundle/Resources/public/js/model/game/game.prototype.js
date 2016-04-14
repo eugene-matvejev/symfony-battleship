@@ -35,7 +35,7 @@ class Game extends APIRequestMgr {
      * @param {int}                                  battlefieldSize
      */
     init(players, battlefieldSize) {
-        super.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="game-current-area"]'));
+        this.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="game-current-area"]'));
 
         this.setId('undefined');
         this.players = [];
