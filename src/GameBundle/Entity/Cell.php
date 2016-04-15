@@ -12,10 +12,10 @@ use EM\GameBundle\ORM\AbstractEntity;
  * @ORM\Table(
  *      name="cells",
  *      indexes={
- *          @ORM\Index(name="INDEX_CELL_BATTLEFIELD", columns={"battlefield"})
+ *          @ORM\Index(name="INDEX_CELLS_BATTLEFIELD", columns={"battlefield"})
  *      },
  *      uniqueConstraints={
- *          @ORM\UniqueConstraint(name="INDEX_BATTLEFIELD_UNIQUE_CELL", columns={"battlefield", "coordinate"})
+ *          @ORM\UniqueConstraint(name="UNIQUE_CELL_PER_BATTLEFIELD", columns={"battlefield", "coordinate"})
  *      }
  * )
  */
