@@ -4,13 +4,13 @@ namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
-use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
-use EM\Tests\PHPUnit\Environment\MockFactory\Entity\CellMockTrait;
+use EM\Tests\Environment\ContainerAwareTestSuite;
+use EM\Tests\Environment\MockFactory\Entity\CellMockTrait;
 
 /**
  * @see CellModel
  */
-class CellModelTest extends ExtendedTestSuite
+class CellModelTest extends ContainerAwareTestSuite
 {
     use CellMockTrait;
     /**
@@ -21,7 +21,7 @@ class CellModelTest extends ExtendedTestSuite
     protected function setUp()
     {
         parent::setUp();
-        $this->cellModel = $this->getContainer()->get('battleship.game.services.cell.model');
+        $this->cellModel = static::$container->get('battleship.game.services.cell.model');
     }
 
     /**

@@ -1,14 +1,14 @@
 <?php
 
-namespace EM\Tests\PHPUnit\Environment;
+namespace EM\Tests\Environment;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @since 7.2
+ * @since 11.3
  */
-abstract class ExtendedAssertionSuite extends WebTestCase
+abstract class ClientResponsesAssertionSuite extends WebTestCase
 {
     public function assertSuccessfulResponse(Response $response)
     {

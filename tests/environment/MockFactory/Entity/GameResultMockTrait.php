@@ -1,6 +1,6 @@
 <?php
 
-namespace EM\Tests\PHPUnit\Environment\MockFactory\Entity;
+namespace EM\Tests\Environment\MockFactory\Entity;
 
 use EM\GameBundle\Entity\GameResult;
 
