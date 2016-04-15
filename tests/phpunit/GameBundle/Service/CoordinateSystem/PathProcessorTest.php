@@ -3,14 +3,13 @@
 namespace EM\Tests\PHPUnit\GameBundle\Service\CoordinateSystem;
 
 use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
-use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
 use EM\Tests\PHPUnit\Environment\MockFactory\Entity\BattlefieldMockTrait;
 use EM\Tests\PHPUnit\Environment\MockFactory\Service\PathProcessorMockTrait;
 
 /**
  * @see PathProcessor
  */
-class PathProcessorTest extends ExtendedTestSuite
+class PathProcessorTest extends \PHPUnit_Framework_TestCase
 {
     use PathProcessorMockTrait, BattlefieldMockTrait;
 
