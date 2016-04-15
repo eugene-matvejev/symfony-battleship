@@ -8,14 +8,14 @@ use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Model\PlayerModel;
 use EM\GameBundle\Response\GameTurnResponse;
 use EM\GameBundle\Service\GameSystem\GameProcessor;
-use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
-use EM\Tests\PHPUnit\Environment\MockFactory\Entity\GameMockTrait;
-use EM\Tests\PHPUnit\Environment\MockFactory\Entity\GameResultMockTrait;
+use EM\Tests\Environment\ContainerAwareTestSuite;
+use EM\Tests\Environment\MockFactory\Entity\GameMockTrait;
+use EM\Tests\Environment\MockFactory\Entity\GameResultMockTrait;
 
 /**
  * @see GameProcessor
  */
-class GameProcessorTest extends ExtendedTestSuite
+class GameProcessorTest extends ContainerAwareTestSuite
 {
     use GameMockTrait, GameResultMockTrait;
     /**
@@ -26,7 +26,7 @@ class GameProcessorTest extends ExtendedTestSuite
     protected function setUp()
     {
         parent::setUp();
-        $this->gameProcessor = $this->getContainer()->get('battleship.game.services.game.processor');
+        $this->gameProcessor = static::$container->get('battleship.game.services.game.processor');
     }
 
     /**
@@ -36,7 +36,7 @@ class GameProcessorTest extends ExtendedTestSuite
     public function initCPUBattlefield()
     {
         $battlefield = $this->getBattlefieldMock();
-        $this->invokePrivateMethod($this->gameProcessor, 'initCPUBattlefield', [$battlefield]);
+        $this->invokeNonPublicMethod($this->gameProcessor, 'initCPUBattlefield', [$battlefield]);
 
         $this->assertEquals(CellModel::STATE_SHIP_LIVE, $battlefield->getCellByCoordinate('B2')->getState()->getId());
         $this->assertTrue(BattlefieldModel::hasUnfinishedShips($battlefield));
@@ -50,7 +50,7 @@ class GameProcessorTest extends ExtendedTestSuite
      */
     public function processGameInitiation()
     {
-        $json = file_get_contents(__DIR__ . '/../../../Data/request.new.game.7x7.json');
+        $json = file_get_contents(__DIR__ . '/../../../../data/new.game.2.players.7x7.json.request.json');
 
         $game = $this->gameProcessor->processGameInitiation($json);
 
@@ -166,6 +166,6 @@ class GameProcessorTest extends ExtendedTestSuite
 
     private function invokeProcessPlayerTurnMethod(array $args)
     {
-        $this->invokePrivateMethod($this->gameProcessor, 'processPlayerTurn', $args);
+        $this->invokeNonPublicMethod($this->gameProcessor, 'processPlayerTurn', $args);
     }
 }

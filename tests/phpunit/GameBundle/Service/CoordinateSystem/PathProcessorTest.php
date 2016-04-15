@@ -3,8 +3,8 @@
 namespace EM\Tests\PHPUnit\GameBundle\Service\CoordinateSystem;
 
 use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
-use EM\Tests\PHPUnit\Environment\MockFactory\Entity\BattlefieldMockTrait;
-use EM\Tests\PHPUnit\Environment\MockFactory\Service\PathProcessorMockTrait;
+use EM\Tests\Environment\MockFactory\Entity\BattlefieldMockTrait;
+use EM\Tests\Environment\MockFactory\Service\PathProcessorMockTrait;
 
 /**
  * @see PathProcessor

@@ -6,14 +6,14 @@ use EM\GameBundle\Entity\GameResult;
 use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Model\GameResultModel;
 use EM\GameBundle\Response\GameResultsResponse;
-use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
-use EM\Tests\PHPUnit\Environment\MockFactory\Entity\GameMockTrait;
-use EM\Tests\PHPUnit\Environment\MockFactory\Entity\GameResultMockTrait;
+use EM\Tests\Environment\ContainerAwareTestSuite;
+use EM\Tests\Environment\MockFactory\Entity\GameMockTrait;
+use EM\Tests\Environment\MockFactory\Entity\GameResultMockTrait;
 
 /**
  * @see GameResultModel
  */
-class GameResultModelTest extends ExtendedTestSuite
+class GameResultModelTest extends ContainerAwareTestSuite
 {
     use GameMockTrait, GameResultMockTrait;
     /**
@@ -24,7 +24,7 @@ class GameResultModelTest extends ExtendedTestSuite
     protected function setUp()
     {
         parent::setUp();
-        $this->gameResultModel = $this->getContainer()->get('battleship.game.services.game.result.model');
+        $this->gameResultModel = static::$container->get('battleship.game.services.game.result.model');
     }
 
     /**
@@ -45,7 +45,7 @@ class GameResultModelTest extends ExtendedTestSuite
         }
         static::$om->flush();
 
-        $perPage = $this->getContainer()->getParameter('battleship_game.game_results_per_page');
+        $perPage = static::$container->getParameter('battleship_game.game_results_per_page');
         $pages = ceil($resultsToPersist / $perPage);
         for ($page = 1; $page < $pages; $page++) {
             $response = $this->gameResultModel->prepareResponse($page);

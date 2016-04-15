@@ -4,13 +4,13 @@ namespace EM\Tests\PHPUnit\GameBundle\Service\AI;
 
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIStrategyService;
-use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
-use EM\Tests\PHPUnit\Environment\MockFactory\Entity\BattlefieldMockTrait;
+use EM\Tests\Environment\ContainerAwareTestSuite;
+use EM\Tests\Environment\MockFactory\Entity\BattlefieldMockTrait;
 
 /**
  * @see AIStrategyService
  */
-class AIStrategyServiceTest extends ExtendedTestSuite
+class AIStrategyServiceTest extends ContainerAwareTestSuite
 {
     use BattlefieldMockTrait;
     /**
@@ -21,7 +21,7 @@ class AIStrategyServiceTest extends ExtendedTestSuite
     protected function setUp()
     {
         parent::setUp();
-        $this->strategyService = $this->getContainer()->get('battleship.game.services.ai.strategy.service');
+        $this->strategyService = static::$container->get('battleship.game.services.ai.strategy.service');
     }
 
     /**
@@ -31,7 +31,7 @@ class AIStrategyServiceTest extends ExtendedTestSuite
     public function chooseCells()
     {
         $battlefield = $this->getBattlefieldMock();
-        $cellStates = $this->getContainer()->get('battleship.game.services.cell.model')->getAllStates();
+        $cellStates = self::$container->get('battleship.game.services.cell.model')->getAllStates();
 
         $cells = $this->strategyService->chooseCells($battlefield);
         $this->assertCount(0, $cells);

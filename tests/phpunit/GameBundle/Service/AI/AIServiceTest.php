@@ -6,13 +6,13 @@ use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Exception\AIException;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIService;
-use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
-use EM\Tests\PHPUnit\Environment\MockFactory\Entity\BattlefieldMockTrait;
+use EM\Tests\Environment\ContainerAwareTestSuite;
+use EM\Tests\Environment\MockFactory\Entity\BattlefieldMockTrait;
 
 /**
  * @see AIService
  */
-class AIServiceTest extends ExtendedTestSuite
+class AIServiceTest extends ContainerAwareTestSuite
 {
     use BattlefieldMockTrait;
     /**
@@ -23,7 +23,7 @@ class AIServiceTest extends ExtendedTestSuite
     protected function setUp()
     {
         parent::setUp();
-        $this->ai = $this->getContainer()->get('battleship.game.services.ai.core.service');
+        $this->ai = static::$container->get('battleship.game.services.ai.core.service');
     }
 
     /**
@@ -38,7 +38,7 @@ class AIServiceTest extends ExtendedTestSuite
             $cell = $this->getCellMock($cellStateId);
             try {
                 $previousCellStateId = $cell->getState()->getId();
-                $this->invokePrivateMethod($this->ai, 'attackCell', [$cell]);
+                $this->invokeNonPublicMethod($this->ai, 'attackCell', [$cell]);
                 $this->assertContains($cell->getState()->getId(), CellModel::STATES_DIED);
                 $this->assertNotContains($previousCellStateId, $statesWithExpectedException);
             } catch (AIException $e) {
@@ -56,14 +56,14 @@ class AIServiceTest extends ExtendedTestSuite
     public function pickCellToAttack()
     {
         $cells = [];
-        $cell = $this->invokePrivateMethod($this->ai, 'pickCellToAttack', [$cells]);
+        $cell = $this->invokeNonPublicMethod($this->ai, 'pickCellToAttack', [$cells]);
         $this->assertNull($cell);
 
         $cells = [
             $this->getCellMock('A1'),
             $this->getCellMock('A2')
         ];
-        $cell = $this->invokePrivateMethod($this->ai, 'pickCellToAttack', [$cells]);
+        $cell = $this->invokeNonPublicMethod($this->ai, 'pickCellToAttack', [$cells]);
         $this->assertInstanceOf(Cell::class, $cell);
         $this->assertContains($cell->getState()->getId(), CellModel::STATES_DIED);
     }
@@ -198,7 +198,7 @@ class AIServiceTest extends ExtendedTestSuite
     private function invokeAttackCellMethod(int $origCellStateId, int $expectedCellStateId)
     {
         $cell = $this->getCellMock('A1', $origCellStateId);
-        $returnedCell = $this->invokePrivateMethod($this->ai, 'attackCell', [$cell]);
+        $returnedCell = $this->invokeNonPublicMethod($this->ai, 'attackCell', [$cell]);
 
         $this->assertSame($cell, $returnedCell);
         $this->assertEquals($expectedCellStateId, $cell->getState()->getId());

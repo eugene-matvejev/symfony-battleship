@@ -1,6 +1,6 @@
 <?php
 
-namespace EM\Tests\PHPUnit\Environment\MockFactory\Service;
+namespace EM\Tests\Environment\MockFactory\Service;
 
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Service\CoordinateSystem\PathProcessor;

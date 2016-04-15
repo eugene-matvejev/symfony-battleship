@@ -3,12 +3,12 @@
 namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\Model\PlayerModel;
-use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
+use EM\Tests\Environment\ContainerAwareTestSuite;
 
 /**
  * @see PlayerModel
  */
-class PlayerModelTest extends ExtendedTestSuite
+class PlayerModelTest extends ContainerAwareTestSuite
 {
     /**
      * @var PlayerModel
@@ -18,7 +18,7 @@ class PlayerModelTest extends ExtendedTestSuite
     protected function setUp()
     {
         parent::setUp();
-        $this->playerModel = $this->getContainer()->get('battleship.game.services.player.model');
+        $this->playerModel = static::$container->get('battleship.game.services.player.model');
     }
 
     /**

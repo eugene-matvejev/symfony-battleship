@@ -6,14 +6,14 @@ use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIStrategyProcessor;
 use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
-use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
-use EM\Tests\PHPUnit\Environment\MockFactory\Entity\BattlefieldMockTrait;
-use EM\Tests\PHPUnit\Environment\MockFactory\Service\PathProcessorMockTrait;
+use EM\Tests\Environment\ContainerAwareTestSuite;
+use EM\Tests\Environment\MockFactory\Entity\BattlefieldMockTrait;
+use EM\Tests\Environment\MockFactory\Service\PathProcessorMockTrait;
 
 /**
  * @see AIStrategy
  */
-class AIStrategyProcessorTest extends ExtendedTestSuite
+class AIStrategyProcessorTest extends ContainerAwareTestSuite
 {
     use BattlefieldMockTrait, PathProcessorMockTrait;
     /**
@@ -24,7 +24,7 @@ class AIStrategyProcessorTest extends ExtendedTestSuite
     protected function setUp()
     {
         parent::setUp();
-        $this->strategyProcessor = $this->getContainer()->get('battleship.game.services.ai.strategy.processor');
+        $this->strategyProcessor = static::$container->get('battleship.game.services.ai.strategy.processor');
     }
 
     /**
@@ -33,7 +33,7 @@ class AIStrategyProcessorTest extends ExtendedTestSuite
      */
     public function processCoordinates()
     {
-        $cellStates = $this->getContainer()->get('battleship.game.services.cell.model')->getAllStates();
+        $cellStates = static::$container->get('battleship.game.services.cell.model')->getAllStates();
 
         $battlefield = $this->getBattlefieldMock();
         $battlefield->getCellByCoordinate('B2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
@@ -100,7 +100,7 @@ class AIStrategyProcessorTest extends ExtendedTestSuite
 
     private function invokeStrategyMethod(array $args) : array
     {
-        return $this->invokePrivateMethod($this->strategyProcessor, 'processCoordinates', $args);
+        return $this->invokeNonPublicMethod($this->strategyProcessor, 'processCoordinates', $args);
     }
 
     /**
