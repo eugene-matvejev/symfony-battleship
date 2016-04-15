@@ -38,7 +38,7 @@ class AIServiceTest extends ExtendedTestSuite
             $cell = $this->getCellMock($cellStateId);
             try {
                 $previousCellStateId = $cell->getState()->getId();
-                $this->invokePrivateMethod(AIService::class, $this->ai, 'attackCell', [$cell]);
+                $this->invokePrivateMethod($this->ai, 'attackCell', [$cell]);
                 $this->assertContains($cell->getState()->getId(), CellModel::STATES_DIED);
                 $this->assertNotContains($previousCellStateId, $statesWithExpectedException);
             } catch (AIException $e) {
@@ -56,14 +56,14 @@ class AIServiceTest extends ExtendedTestSuite
     public function pickCellToAttack()
     {
         $cells = [];
-        $cell = $this->invokePrivateMethod(AIService::class, $this->ai, 'pickCellToAttack', [$cells]);
+        $cell = $this->invokePrivateMethod($this->ai, 'pickCellToAttack', [$cells]);
         $this->assertNull($cell);
 
         $cells = [
             $this->getCellMock('A1'),
             $this->getCellMock('A2')
         ];
-        $cell = $this->invokePrivateMethod(AIService::class, $this->ai, 'pickCellToAttack', [$cells]);
+        $cell = $this->invokePrivateMethod($this->ai, 'pickCellToAttack', [$cells]);
         $this->assertInstanceOf(Cell::class, $cell);
         $this->assertContains($cell->getState()->getId(), CellModel::STATES_DIED);
     }
@@ -198,7 +198,7 @@ class AIServiceTest extends ExtendedTestSuite
     private function invokeAttackCellMethod(int $origCellStateId, int $expectedCellStateId)
     {
         $cell = $this->getCellMock('A1', $origCellStateId);
-        $returnedCell = $this->invokePrivateMethod(AIService::class, $this->ai, 'attackCell', [$cell]);
+        $returnedCell = $this->invokePrivateMethod($this->ai, 'attackCell', [$cell]);
 
         $this->assertSame($cell, $returnedCell);
         $this->assertEquals($expectedCellStateId, $cell->getState()->getId());

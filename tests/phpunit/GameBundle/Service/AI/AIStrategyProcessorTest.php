@@ -100,7 +100,7 @@ class AIStrategyProcessorTest extends ExtendedTestSuite
 
     private function invokeStrategyMethod(array $args) : array
     {
-        return $this->invokePrivateMethod(AIStrategyProcessor::class, $this->strategyProcessor, 'processCoordinates', $args);
+        return $this->invokePrivateMethod($this->strategyProcessor, 'processCoordinates', $args);
     }
 
     /**

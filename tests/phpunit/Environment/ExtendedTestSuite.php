@@ -167,7 +167,6 @@ abstract class ExtendedTestSuite extends ExtendedAssertionSuite
     }
 
     /**
-     * @param string $className
      * @param mixed  $classInstance
      * @param string $methodName
      * @param array  $methodArguments
@@ -175,9 +174,9 @@ abstract class ExtendedTestSuite extends ExtendedAssertionSuite
      * @return mixed
      * @throws \Exception
      */
-    protected function invokePrivateMethod(string $className, $classInstance, string $methodName, array $methodArguments = [])
+    protected function invokePrivateMethod($classInstance, string $methodName, array $methodArguments = [])
     {
-        $method = (new \ReflectionClass($className))->getMethod($methodName);
+        $method = (new \ReflectionClass(get_class($classInstance)))->getMethod($methodName);
         $method->setAccessible(true);
 
         return $method->invokeArgs($classInstance, $methodArguments);
