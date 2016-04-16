@@ -3,32 +3,19 @@
 namespace EM\GameBundle\Model;
 
 use EM\GameBundle\Entity\Cell;
-use EM\GameBundle\Entity\CellState;
-use EM\GameBundle\Repository\CellStateRepository;
 use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 
 /**
- * @since 2.0
+ * @since 12.0
  */
 class CellModel
 {
-    const STATE_WATER_LIVE  = 1;
-    const STATE_WATER_DIED  = 2;
-    const STATE_SHIP_LIVE   = 3;
-    const STATE_SHIP_DIED   = 4;
-    const STATE_WATER_SKIP  = 5;
-    /** instead of functions, as const array is faster */
-    const STATES_WATER  = [self::STATE_WATER_LIVE, self::STATE_WATER_DIED];
-    const STATES_SHIP   = [self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED];
-    const STATES_LIVE   = [self::STATE_WATER_LIVE, self::STATE_SHIP_LIVE];
-    const STATES_DIED   = [self::STATE_WATER_DIED, self::STATE_SHIP_DIED];
-    const STATES_ALL    = [self::STATE_WATER_LIVE, self::STATE_WATER_DIED, self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED, self::STATE_WATER_SKIP];
-    const STATES_SKIP_STRATEGY_PROCESSING = [self::STATE_WATER_SKIP, self::STATE_WATER_DIED];
+    const MASK_NONE = 0x0000;
+    const MASK_DEAD = 0x0001;
+    const MASK_SHIP = 0x0002;
+    const MASK_SKIP = 0x0004 | self::MASK_DEAD;
+    const MASK_DEAD_SHIP = self::MASK_SHIP | self::MASK_DEAD;
 
-    /**
-     * @var CellState[]
-     */
-    private static $cachedStates;
     /**
      * @var Cell[]
      */
@@ -38,20 +25,6 @@ class CellModel
      */
     private static $checkedCells = [];
 
-    public function __construct(CellStateRepository $repository)
-    {
-        if (null === self::$cachedStates) {
-            self::$cachedStates = $repository->getAllIndexed();
-        }
-    }
-
-    /**
-     * @return CellState[]
-     */
-    public function getAllStates() : array
-    {
-        return self::$cachedStates;
-    }
 
     /**
      * @return Cell[]
@@ -61,15 +34,10 @@ class CellModel
         return self::$changedCells;
     }
 
-    public function switchState(Cell $cell, int $customState = null) : Cell
+    public function switchState(Cell $cell, int $customMask = null) : Cell
     {
-        switch ($cell->getState()->getId()) {
-            case self::STATE_WATER_LIVE:
-                self::$changedCells[$cell->getId()] = $cell->setState(self::$cachedStates[$customState ?? self::STATE_WATER_DIED]);
-                break;
-            case self::STATE_SHIP_LIVE:
-                self::$changedCells[$cell->getId()] = $cell->setState(self::$cachedStates[self::STATE_SHIP_DIED]);
-                break;
+        if (!$cell->hasMask(CellModel::MASK_DEAD)) {
+            self::$changedCells[$cell->getId()] = $cell->addMask($customMask ?? CellModel::MASK_DEAD);
         }
 
         return $cell;
@@ -77,12 +45,12 @@ class CellModel
 
     public function switchStateToSkipped(Cell $cell) : Cell
     {
-        return $this->switchState($cell, self::STATE_WATER_SKIP);
+        return $this->switchState($cell, self::MASK_SKIP);
     }
 
     public function isShipDead(Cell $cell) : bool
     {
-        if ($cell->getState()->getId() !== self::STATE_SHIP_DIED) {
+        if (!$cell->hasMask(self::MASK_DEAD_SHIP)) {
             return false;
         }
         if (isset(self::$checkedCells[$cell->getId()])) {
@@ -96,10 +64,10 @@ class CellModel
             $PathProcessor->setPath($way);
 
             while (null !== $_cell = $cell->getBattlefield()->getCellByCoordinate($PathProcessor->getNextCoordinate())) {
-                if (!in_array($_cell->getState()->getId(), self::STATES_SHIP)) {
+                if (!$_cell->hasMask(self::MASK_SHIP)) {
                     break;
                 }
-                if ($_cell->getState()->getId() !== self::STATE_SHIP_DIED) {
+                if (!$_cell->hasMask(self::MASK_DEAD)) {
                     return false;
                 }
 

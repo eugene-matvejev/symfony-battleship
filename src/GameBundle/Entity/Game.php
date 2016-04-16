@@ -14,7 +14,7 @@ use EM\GameBundle\ORM\TimestampedTrait;
  *
  * @ORM\Entity()
  * @ORM\Table(name="games")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Game extends AbstractEntity implements TimestampedInterface
 {

@@ -54,8 +54,8 @@ class AIService
      */
     private function attackCell(Cell $cell) : Cell
     {
-        if (!in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
-            throw new AIException("cell: {$cell->getId()} have wrong state: {$cell->getState()->getId()}");
+        if ($cell->hasMask(CellModel::MASK_DEAD)) {
+            throw new AIException("cell: {$cell->getId()} have wrong mask: {$cell->getMask()}");
         }
 
         return $this->cellModel->switchState($cell);

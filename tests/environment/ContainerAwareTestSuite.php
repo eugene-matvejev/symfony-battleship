@@ -131,10 +131,18 @@ abstract class ContainerAwareTestSuite extends ClientResponsesAssertionSuite
 //        return $commandTester->getDisplay();
 //    }
 //
-//    public function getClient() : Client
-//    {
-//        return self::$client;
-//    }
+    public function getClient() : Client
+    {
+
+        $arr = static::$om->getUnitOfWork()->getScheduledEntityInsertions();
+
+        $arr ;
+        $asd = 'asd';
+
+        static::$om->clear();
+
+        return clone static::$client;
+    }
 //
 //    public function getContainer() : ContainerInterface
 //    {

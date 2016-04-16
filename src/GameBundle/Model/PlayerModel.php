@@ -12,9 +12,9 @@ use EM\GameBundle\Repository\PlayerTypeRepository;
  */
 class PlayerModel
 {
-    const TYPE_CPU   = 1;
+    const TYPE_CPU = 1;
     const TYPE_HUMAN = 2;
-    const TYPES_ALL  = [self::TYPE_CPU, self::TYPE_HUMAN];
+    const TYPES_ALL = [self::TYPE_CPU, self::TYPE_HUMAN];
     /**
      * @var PlayerType[]
      */
@@ -49,5 +49,10 @@ class PlayerModel
         }
 
         return $player;
+    }
+
+    public function isCPU(Player $player) : bool
+    {
+        return $player->getType()->getId() === self::TYPE_CPU;
     }
 }

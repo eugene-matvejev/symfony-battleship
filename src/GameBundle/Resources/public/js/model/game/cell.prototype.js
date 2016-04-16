@@ -79,12 +79,12 @@ class Cell {
 
 Cell.resources = {
     /** @enum {int} */
-    state: {
-        waterLive: 1,
-        waterDead: 2,
-        waterSkip: 5,
-        shipLive: 3,
-        shipDead: 4
+    mask: {
+        none: 0x0000,
+        dead: 0x0001,
+        ship: 0x0002,
+        skip: 0x0004,
+        deadShip: 0x0002|0x0001
     },
     /**
      * @type {string}
@@ -118,4 +118,4 @@ Cell.resources = {
         }
 
     }
-}
+};

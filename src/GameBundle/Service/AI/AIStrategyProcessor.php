@@ -63,9 +63,9 @@ class AIStrategyProcessor
         $cells = [];
         foreach ($coordinates as $coordinate) {
             while (null !== $cell = $battlefield->getCellByCoordinate($coordinate->getNextCoordinate())) {
-                if (in_array($cell->getState()->getId(), CellModel::STATES_SKIP_STRATEGY_PROCESSING)) {
+                if ($cell->hasMask(CellModel::MASK_SKIP) || ($cell->hasMask(CellModel::MASK_DEAD) && !$cell->hasMask(CellModel::MASK_SHIP))) {
                     break;
-                } elseif (in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
+                } elseif (!$cell->hasMask(CellModel::MASK_DEAD)) {
                     $cells[] = $cell;
                     break;
                 }

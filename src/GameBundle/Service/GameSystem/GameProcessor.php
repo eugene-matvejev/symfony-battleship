@@ -39,11 +39,21 @@ class GameProcessor
         $this->playerModel = $playerModel;
     }
 
-    private function initCPUBattlefield(Battlefield $battlefield)
+    /**
+     * @param Game $game
+     *
+     * @return Cell[]
+     */
+    public function processCPUBattlefieldsInitiation(Game $game) : array
     {
-        $liveShipState = $this->cellModel->getAllStates()[CellModel::STATE_SHIP_LIVE];
+        $cells = [];
+        foreach ($game->getBattlefields() as $battlefield) {
+            if ($this->playerModel->isCPU($battlefield->getPlayer())) {
+                $cells[] = $battlefield->getCellByCoordinate('B2')->addMask(CellModel::MASK_SHIP);
+            }
+        }
 
-        $battlefield->getCellByCoordinate('B2')->setState($liveShipState);
+        return $cells;
     }
 
     public function processGameInitiation(string $json) : Game
@@ -51,22 +61,21 @@ class GameProcessor
         $game = new Game();
 
         foreach (json_decode($json)->data as $data) {
+            $player = $this->playerModel->createOnRequest($data->player->name);
             $battlefield = (new Battlefield())
                 ->setGame($game)
-                ->setPlayer($this->playerModel->createOnRequest($data->player->name));
+                ->setPlayer($player);
             $game->addBattlefield($battlefield);
 
             foreach ($data->cells as $_cell) {
+                $mask = $this->playerModel->isCPU($player)
+                    ? CellModel::MASK_NONE
+                    : (0 !== $_cell->state ? CellModel::MASK_SHIP : CellModel::MASK_NONE);
+
                 $cell = (new Cell())
                     ->setCoordinate($_cell->coordinate)
-                    ->setState($battlefield->getPlayer()->getType()->getId() !== PlayerModel::TYPE_CPU
-                        ? $this->cellModel->getAllStates()[$_cell->state]
-                        : $this->cellModel->getAllStates()[CellModel::STATE_WATER_LIVE]);
+                    ->addMask($mask);
                 $battlefield->addCell($cell);
-            }
-
-            if ($battlefield->getPlayer()->getType()->getId() === PlayerModel::TYPE_CPU) {
-                $this->initCPUBattlefield($battlefield);
             }
         }
 
