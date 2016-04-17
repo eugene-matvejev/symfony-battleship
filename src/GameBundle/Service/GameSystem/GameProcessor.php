@@ -131,22 +131,19 @@ class GameProcessor
 
     /**
      * @param Battlefield $battlefield
-     * @param Cell        $playerCell
+     * @param Cell        $cell
      *
      * @return Cell
      * @throws CellException
      * @throws PlayerException
      */
-    private function processPlayerTurn(Battlefield $battlefield, Cell $playerCell) : Cell
+    private function processPlayerTurn(Battlefield $battlefield, Cell $cell) : Cell
     {
         switch ($battlefield->getPlayer()->getType()->getId()) {
             case PlayerModel::TYPE_HUMAN:
                 return $this->ai->processCPUTurn($battlefield);
             case PlayerModel::TYPE_CPU:
-                if (null !== $cell = $battlefield->getCellByCoordinate($playerCell->getCoordinate())) {
-                    return $this->cellModel->switchPhase($cell);
-                }
-                throw new CellException("cell with coordinate: {$playerCell->getCoordinate()} in battlefield: {$battlefield->getId()} doesn't exists");
+                return $this->cellModel->switchPhase($cell);
         }
 
         throw new PlayerException("player: {$battlefield->getPlayer()->getId()} has unknown type {$battlefield->getPlayer()->getType()->getId()}");

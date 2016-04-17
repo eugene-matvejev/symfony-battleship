@@ -71,7 +71,7 @@ class CellModelTest extends ContainerAwareTestSuite
      * @test
      *
      * @depends switchPhase
-     * @depends switchPhaseToSkipped
+     * @depends switchPhaseToCustomState
      */
     public function getChangedCells()
     {

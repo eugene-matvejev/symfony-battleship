@@ -33,10 +33,8 @@ class AIStrategyProcessorTest extends ContainerAwareTestSuite
      */
     public function processCoordinates()
     {
-        $cellStates = static::$container->get('battleship.game.services.cell.model')->getAllStates();
-
         $battlefield = $this->getBattlefieldMock();
-        $battlefield->getCellByCoordinate('B2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+        $battlefield->getCellByCoordinate('B2')->setMask(CellModel::MASK_DEAD_SHIP);
         $service = $this->getPathProcessorMock($battlefield->getCellByCoordinate('B2'));
 
         $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
@@ -45,40 +43,40 @@ class AIStrategyProcessorTest extends ContainerAwareTestSuite
         $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
 
         /** as LEFT (A1) cell is dead */
-        $battlefield->getCellByCoordinate('A2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+        $battlefield->getCellByCoordinate('A2')->setMask(CellModel::MASK_DEAD_SHIP);
         $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
         $this->assertCount(3, $cells);
 
         /** as entire horizontal row is dead (A1-J10) cell is dead */
-        for ($letter = 'C'; $letter < 'J'; $letter++) {
-            $battlefield->getCellByCoordinate("{$letter}2")->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+        for ($letter = 'C'; $letter < 'G'; $letter++) {
+            $battlefield->getCellByCoordinate("{$letter}2")->setMask(CellModel::MASK_DEAD_SHIP);
             $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
             $this->assertCount(3, $cells);
         }
         /** left for explanation purposes */
 //        $battlefield->getCellByCoordinate('C2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
 //        ...
-//        $battlefield->getCellByCoordinate('I2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
-        $battlefield->getCellByCoordinate('J2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+//        $battlefield->getCellByCoordinate('F2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+        $battlefield->getCellByCoordinate('G2')->setMask(CellModel::MASK_DEAD_SHIP);
         $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
         $this->assertCount(2, $cells);
 
         /** as top (B1) cell is dead also */
-        $battlefield->getCellByCoordinate('B1')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+        $battlefield->getCellByCoordinate('B1')->setMask(CellModel::MASK_DEAD_SHIP);
         $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
         $this->assertCount(1, $cells);
 
         /** as vertical (B1-B10) and horizontal (A1-J10) rows contains only dead cells */
-        for ($digit = 3; $digit < 10; $digit++) {
-            $battlefield->getCellByCoordinate("B{$digit}")->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+        for ($digit = 3; $digit < 7; $digit++) {
+            $battlefield->getCellByCoordinate("B{$digit}")->setMask(CellModel::MASK_DEAD_SHIP);
             $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
             $this->assertCount(1, $cells);
         }
         /** left for explanation purposes */
 //        $battlefield->getCellByCoordinate('B3')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
 //        ...
-//        $battlefield->getCellByCoordinate('B9')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
-        $battlefield->getCellByCoordinate('B10')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+//        $battlefield->getCellByCoordinate('B6')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+        $battlefield->getCellByCoordinate('B7')->setMask(CellModel::MASK_DEAD_SHIP);
         $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
         $this->assertEmpty($cells);
     }
