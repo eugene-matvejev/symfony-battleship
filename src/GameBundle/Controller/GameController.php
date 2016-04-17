@@ -27,17 +27,9 @@ class GameController extends AbstractAPIController
     public function initAction(Request $request) : Response
     {
         if (!$this->validateInitRequest($request)) {
-            throw new \Exception('expected format:
-            {
-                data: %array of% {
-                    player: {name: %string%},
-                    cells: %array of% {
-                        coordinate: %string%,
-                        state: %int%
-                    }
-                }
-            }');
+            throw new \Exception('bad format expected format: { data: {player: {name: %string%}, cells: {coordinate: %string%, state: %int%}[]}[]}');
         }
+
         $om = $this->getDoctrine()->getManager();
         $gameProcessor = $this->get('battleship.game.services.game.processor');
         $game = $gameProcessor->processGameInitiation($request->getContent());
