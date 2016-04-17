@@ -104,14 +104,6 @@ abstract class ContainerAwareTestSuite extends ClientResponsesAssertionSuite
 
 //
 //    /**
-//     * @since 3.5
-//     */
-//    protected function getConsoleApp() : Application
-//    {
-//        return self::$consoleApp;
-//    }
-//
-//    /**
 //     * Gets the display returned by the last execution of the command.
 //     *
 //     * @param ContainerAwareCommand $command
@@ -131,47 +123,6 @@ abstract class ContainerAwareTestSuite extends ClientResponsesAssertionSuite
 //        return $commandTester->getDisplay();
 //    }
 //
-    public function getClient() : Client
-    {
-
-        $arr = static::$om->getUnitOfWork()->getScheduledEntityInsertions();
-
-        $arr ;
-        $asd = 'asd';
-
-        static::$om->clear();
-
-        return clone static::$client;
-    }
-//
-//    public function getContainer() : ContainerInterface
-//    {
-//        return self::$container;
-//    }
-//
-//    /**
-//     * @since 2.0
-//     */
-//    public function getRouter() : Router
-//    {
-//        return self::$router;
-//    }
-//
-//    /**
-//     * @since 3.4
-//     */
-//    public function getDoctrine() : RegistryInterface
-//    {
-//        return self::$doctrine;
-//    }
-//
-//    /**
-//     * @since 3.4
-//     */
-//    public function getObjectManager() : ObjectManager
-//    {
-//        return self::$om;
-//    }
 
     /**
      * invokes non-public method of the class and returns invoke result as well as throws Exception if it happen.

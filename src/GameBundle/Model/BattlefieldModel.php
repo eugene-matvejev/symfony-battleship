@@ -30,10 +30,8 @@ class BattlefieldModel
     public static function hasUnfinishedShips(Battlefield $battlefield) : bool
     {
         foreach ($battlefield->getCells() as $cell) {
-            if ($cell->hasMask(CellModel::MASK_SHIP)) {
-                if (!$cell->hasMask(CellModel::MASK_DEAD)) {
-                    return true;
-                }
+            if ($cell->hasMask(CellModel::MASK_SHIP) && !$cell->hasMask(CellModel::MASK_DEAD)) {
+                return true;
             }
         }
 
