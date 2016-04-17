@@ -86,12 +86,18 @@ class AIServiceTest extends ContainerAwareTestSuite
      */
     public function processCPUTurnHorizontalStrategy()
     {
-        $this->invokeProcessCPUTurnMethod(['A1', 'B1'], ['C1', 'D1'], [], [
-            'A1' => CellModel::MASK_DEAD_SHIP,
-            'B1' => CellModel::MASK_DEAD_SHIP,
-            'C1' => CellModel::MASK_DEAD_SHIP,
-            'D1' => CellModel::MASK_SHIP
-        ]);
+        $this->invokeProcessCPUTurnMethod(
+            [
+                CellModel::MASK_DEAD_SHIP => ['A1', 'B1'],
+                CellModel::MASK_SHIP => ['C1', 'D1']
+            ],
+            [
+                'A1' => CellModel::MASK_DEAD_SHIP,
+                'B1' => CellModel::MASK_DEAD_SHIP,
+                'C1' => CellModel::MASK_DEAD_SHIP,
+                'D1' => CellModel::MASK_SHIP
+            ]
+        );
     }
 
     /**
@@ -102,12 +108,18 @@ class AIServiceTest extends ContainerAwareTestSuite
      */
     public function processCPUTurnVerticalStrategy()
     {
-        $this->invokeProcessCPUTurnMethod(['A1', 'A2'], ['A3', 'A4'], [], [
-            'A1' => CellModel::MASK_DEAD_SHIP,
-            'A2' => CellModel::MASK_DEAD_SHIP,
-            'A3' => CellModel::MASK_DEAD_SHIP,
-            'A4' => CellModel::MASK_SHIP
-        ]);
+        $this->invokeProcessCPUTurnMethod(
+            [
+                CellModel::MASK_DEAD_SHIP => ['A1', 'A2'],
+                CellModel::MASK_SHIP => ['A3', 'A4']
+            ],
+            [
+                'A1' => CellModel::MASK_DEAD_SHIP,
+                'A2' => CellModel::MASK_DEAD_SHIP,
+                'A3' => CellModel::MASK_DEAD_SHIP,
+                'A4' => CellModel::MASK_SHIP
+            ]
+        );
     }
 
     /**
@@ -118,35 +130,33 @@ class AIServiceTest extends ContainerAwareTestSuite
      */
     public function processCPUTurnBothStrategy()
     {
-        $this->invokeProcessCPUTurnMethod(['A1'], ['A2'], ['B1'], [
-            'A1' => CellModel::MASK_DEAD_SHIP,
-            'A2' => CellModel::MASK_DEAD_SHIP,
-            'B1' => CellModel::MASK_DEAD
-        ]);
+        $this->invokeProcessCPUTurnMethod(
+            [
+                CellModel::MASK_DEAD_SHIP => ['A1'],
+                CellModel::MASK_SHIP => ['A2'],
+                CellModel::MASK_DEAD => ['B1']
+            ],
+            [
+                'A1' => CellModel::MASK_DEAD_SHIP,
+                'A2' => CellModel::MASK_DEAD_SHIP,
+                'B1' => CellModel::MASK_DEAD
+            ]
+        );
     }
 
-    private function invokeProcessCPUTurnMethod(array $deadShipCoordinates, array $liveShipCoordinates, array $deadWaterCoordinates, array $expected)
+    private function invokeProcessCPUTurnMethod(array $cellsToAlter, array $expectedMasksPerCoordinate)
     {
         $battlefield = $this->getBattlefieldMock();
-//        foreach ($cellsToAlter as $coordinate => $mask) {
-//
-//        }
-
-        foreach ($liveShipCoordinates as $coordinate) {
-            $battlefield->getCellByCoordinate($coordinate)->setMask(CellModel::MASK_SHIP);
-        }
-        foreach ($deadShipCoordinates as $coordinate) {
-            $battlefield->getCellByCoordinate($coordinate)->setMask(CellModel::MASK_DEAD_SHIP);
-        }
-        foreach ($deadWaterCoordinates as $coordinate) {
-            $battlefield->getCellByCoordinate($coordinate)->setMask(CellModel::MASK_DEAD);
+        foreach ($cellsToAlter as $mask => $coordinates) {
+            foreach ($coordinates as $coordinate) {
+                $battlefield->getCellByCoordinate($coordinate)->setMask($mask);
+            }
         }
 
         $this->ai->processCPUTurn($battlefield);
-
         foreach ($battlefield->getCells() as $cell) {
             $this->assertEquals(
-                ($expected[$cell->getCoordinate()] ?? CellModel::MASK_NONE),
+                ($expectedMasksPerCoordinate[$cell->getCoordinate()] ?? CellModel::MASK_NONE),
                 $cell->getMask(),
                 "cell {$cell->getCoordinate()} have unexpected state: {$cell->getMask()}"
             );
