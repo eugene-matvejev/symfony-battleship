@@ -41,11 +41,6 @@ class CellModel
         return $cell;
     }
 
-//    public function switchToSkipPhase(Cell $cell) : Cell
-//    {
-//        return $this->switchPhase($cell, self::MASK_SKIP);
-//    }
-
     public function isShipDead(Cell $cell) : bool
     {
         if (isset(self::$checkedCells[$cell->getId()])) {
@@ -57,12 +52,13 @@ class CellModel
         }
 
         $PathProcessor = new PathProcessor($cell);
+        $battlefield = $cell->getBattlefield();
         $cells = [$cell->getCoordinate() => $cell];
 
         foreach (PathProcessor::PRIMARY_PATHS as $way) {
             $PathProcessor->setPath($way);
 
-            while (null !== $_cell = $cell->getBattlefield()->getCellByCoordinate($PathProcessor->getNextCoordinate())) {
+            while (null !== $_cell = $battlefield->getCellByCoordinate($PathProcessor->getNextCoordinate())) {
                 if (!$_cell->hasMask(self::MASK_SHIP)) {
                     break;
                 }
@@ -79,7 +75,6 @@ class CellModel
 
             foreach ((new PathProcessor($cell))->getAdjacentCells() as $_cell) {
                 $this->switchPhase($_cell, self::MASK_SKIP);
-//                $this->switchToSkipPhase($_cell);
             }
         }
 
