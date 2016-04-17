@@ -3,6 +3,7 @@
 namespace EM\Tests\PHPUnit\GameBundle\Service\AI;
 
 use EM\GameBundle\Entity\Cell;
+use EM\GameBundle\Exception\AIException;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIService;
 use EM\Tests\Environment\ContainerAwareTestSuite;
@@ -26,28 +27,31 @@ class AIServiceTest extends ContainerAwareTestSuite
     }
 
     /**
-     * @see     AIService::attackCell
+     * @see AIService::attackCell
      * @test
      */
     public function attackCell()
     {
-        $statesWithExpectedException = array_merge(CellModel::STATES_DIED, [CellModel::STATE_WATER_SKIP]);
         $masks = [
             CellModel::MASK_NONE,
             CellModel::MASK_DEAD,
             CellModel::MASK_SHIP,
             CellModel::MASK_DEAD_SHIP,
             CellModel::MASK_SKIP
-        ]
+        ];
+
         foreach ($masks as $mask) {
             $cell = $this->getCellMock('A1', $mask);
             try {
-                $previousCellStateId = $cell->getState()->getId();
                 $this->invokeNonPublicMethod($this->ai, 'attackCell', [$cell]);
-                $this->assertContains($cell->getState()->getId(), CellModel::STATES_DIED);
-                $this->assertNotContains($previousCellStateId, $statesWithExpectedException);
+                $this->assertTrue($cell->hasMask(CellModel::MASK_DEAD));
             } catch (AIException $e) {
-                $this->assertContains($cell->getState()->getId(), $statesWithExpectedException);
+                $this->assertContains($cell->getMask(), [
+                    CellModel::MASK_DEAD,
+                    CellModel::MASK_DEAD_SHIP,
+                    CellModel::MASK_SKIP
+                ]);
+                $this->assertEquals($mask, $cell->getMask());
             }
         }
     }
@@ -83,10 +87,10 @@ class AIServiceTest extends ContainerAwareTestSuite
     public function processCPUTurnHorizontalStrategy()
     {
         $this->invokeProcessCPUTurnMethod(['A1', 'B1'], ['C1', 'D1'], [], [
-            'A1' => CellModel::STATE_SHIP_DIED,
-            'B1' => CellModel::STATE_SHIP_DIED,
-            'C1' => CellModel::STATE_SHIP_DIED,
-            'D1' => CellModel::STATE_SHIP_LIVE
+            'A1' => CellModel::MASK_DEAD_SHIP,
+            'B1' => CellModel::MASK_DEAD_SHIP,
+            'C1' => CellModel::MASK_DEAD_SHIP,
+            'D1' => CellModel::MASK_SHIP
         ]);
     }
 
@@ -99,10 +103,10 @@ class AIServiceTest extends ContainerAwareTestSuite
     public function processCPUTurnVerticalStrategy()
     {
         $this->invokeProcessCPUTurnMethod(['A1', 'A2'], ['A3', 'A4'], [], [
-            'A1' => CellModel::STATE_SHIP_DIED,
-            'A2' => CellModel::STATE_SHIP_DIED,
-            'A3' => CellModel::STATE_SHIP_DIED,
-            'A4' => CellModel::STATE_SHIP_LIVE
+            'A1' => CellModel::MASK_DEAD_SHIP,
+            'A2' => CellModel::MASK_DEAD_SHIP,
+            'A3' => CellModel::MASK_DEAD_SHIP,
+            'A4' => CellModel::MASK_SHIP
         ]);
     }
 
@@ -115,15 +119,18 @@ class AIServiceTest extends ContainerAwareTestSuite
     public function processCPUTurnBothStrategy()
     {
         $this->invokeProcessCPUTurnMethod(['A1'], ['A2'], ['B1'], [
-            'A1' => CellModel::STATE_SHIP_DIED,
-            'A2' => CellModel::STATE_SHIP_DIED,
-            'B1' => CellModel::STATE_WATER_DIED
+            'A1' => CellModel::MASK_DEAD_SHIP,
+            'A2' => CellModel::MASK_DEAD_SHIP,
+            'B1' => CellModel::MASK_DEAD
         ]);
     }
 
     private function invokeProcessCPUTurnMethod(array $deadShipCoordinates, array $liveShipCoordinates, array $deadWaterCoordinates, array $expected)
     {
         $battlefield = $this->getBattlefieldMock();
+//        foreach ($cellsToAlter as $coordinate => $mask) {
+//
+//        }
 
         foreach ($liveShipCoordinates as $coordinate) {
             $battlefield->getCellByCoordinate($coordinate)->setMask(CellModel::MASK_SHIP);
@@ -138,12 +145,11 @@ class AIServiceTest extends ContainerAwareTestSuite
         $this->ai->processCPUTurn($battlefield);
 
         foreach ($battlefield->getCells() as $cell) {
-            $coordinate = $cell->getCoordinate();
-            $stateId = $cell->getState()->getId();
-
-            isset($expected[$coordinate])
-                ? $this->assertEquals($expected[$coordinate], $stateId, "cell {$coordinate} have unexpected state: {$stateId}")
-                : $this->assertEquals(CellModel::STATE_WATER_LIVE, $stateId, "cell {$coordinate} have unexpected state: {$stateId}");
+            $this->assertEquals(
+                ($expected[$cell->getCoordinate()] ?? CellModel::MASK_NONE),
+                $cell->getMask(),
+                "cell {$cell->getCoordinate()} have unexpected state: {$cell->getMask()}"
+            );
         }
     }
 
@@ -153,7 +159,7 @@ class AIServiceTest extends ContainerAwareTestSuite
      */
     public function attackWaterLiveCell()
     {
-        $this->invokeAttackCellMethod(CellModel::STATE_WATER_LIVE, CellModel::STATE_WATER_DIED);
+        $this->invokeAttackCellMethod(CellModel::MASK_NONE, CellModel::MASK_DEAD);
     }
 
     /**
@@ -164,7 +170,7 @@ class AIServiceTest extends ContainerAwareTestSuite
      */
     public function exceptionOnAttackWaterDeadCell()
     {
-        $this->invokeAttackCellMethod(CellModel::STATE_WATER_DIED, CellModel::STATE_WATER_DIED);
+        $this->invokeAttackCellMethod(CellModel::MASK_DEAD, CellModel::MASK_DEAD);
     }
 
     /**
@@ -173,7 +179,7 @@ class AIServiceTest extends ContainerAwareTestSuite
      */
     public function attackShipLiveCell()
     {
-        $this->invokeAttackCellMethod(CellModel::STATE_SHIP_LIVE, CellModel::STATE_SHIP_DIED);
+        $this->invokeAttackCellMethod(CellModel::MASK_SHIP, CellModel::MASK_DEAD_SHIP);
     }
 
     /**
@@ -184,7 +190,7 @@ class AIServiceTest extends ContainerAwareTestSuite
      */
     public function exceptionOnAttackShipDeadCell()
     {
-        $this->invokeAttackCellMethod(CellModel::STATE_SHIP_DIED, CellModel::STATE_SHIP_DIED);
+        $this->invokeAttackCellMethod(CellModel::MASK_DEAD_SHIP, CellModel::MASK_DEAD_SHIP);
     }
 
     /**
@@ -195,15 +201,15 @@ class AIServiceTest extends ContainerAwareTestSuite
      */
     public function exceptionOnAttackCellWaterSkip()
     {
-        $this->invokeAttackCellMethod(CellModel::STATE_WATER_SKIP, CellModel::STATE_WATER_SKIP);
+        $this->invokeAttackCellMethod(CellModel::MASK_SKIP, CellModel::MASK_SKIP);
     }
 
-    private function invokeAttackCellMethod(int $origCellStateId, int $expectedCellStateId)
+    private function invokeAttackCellMethod(int $cellMask, int $expectedMask)
     {
-        $cell = $this->getCellMock('A1', $origCellStateId);
+        $cell = $this->getCellMock('A1', $cellMask);
         $returnedCell = $this->invokeNonPublicMethod($this->ai, 'attackCell', [$cell]);
 
         $this->assertSame($cell, $returnedCell);
-        $this->assertEquals($expectedCellStateId, $cell->getState()->getId());
+        $this->assertEquals($expectedMask, $cell->getMask());
     }
 }
