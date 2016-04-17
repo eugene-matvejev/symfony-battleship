@@ -139,13 +139,14 @@ class GameProcessor
      */
     private function processPlayerTurn(Battlefield $battlefield, Cell $cell) : Cell
     {
-        switch ($battlefield->getPlayer()->getType()->getId()) {
+        $player = $battlefield->getPlayer();
+        switch ($player->getType()->getId()) {
             case PlayerModel::TYPE_HUMAN:
                 return $this->ai->processCPUTurn($battlefield);
             case PlayerModel::TYPE_CPU:
                 return $this->cellModel->switchPhase($cell);
         }
 
-        throw new PlayerException("player: {$battlefield->getPlayer()->getId()} has unknown type {$battlefield->getPlayer()->getType()->getId()}");
+        throw new PlayerException("player: {$player->getId()} has unknown type {$player->getType()->getId()}");
     }
 }

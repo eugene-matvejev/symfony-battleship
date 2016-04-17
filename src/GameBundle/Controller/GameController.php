@@ -38,7 +38,7 @@ class GameController extends AbstractAPIController
         $response = $this->prepareSerializedResponse($game, Response::HTTP_CREATED);
 
         foreach ($gameProcessor->processCPUBattlefieldsInitiation($game) as $cell) {
-            
+
             $om->persist($cell);
         }
         $om->flush();
