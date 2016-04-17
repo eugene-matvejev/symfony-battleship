@@ -26,14 +26,14 @@ class LoadPlayerTypeData extends AbstractFixture implements OrderedFixtureInterf
         $om->persist($playerTypeCPU);
         $om->persist($playerTypeHuman);
 
-        $playerCPU = (new Player())
-            ->setName('CPU')
-            ->setType($playerTypeCPU);
-        $playerHuman = (new Player())
-            ->setName('Human')
-            ->setType($playerTypeHuman);
-        $om->persist($playerCPU);
-        $om->persist($playerHuman);
+//        $playerCPU = (new Player())
+//            ->setName('CPU')
+//            ->setType($playerTypeCPU);
+//        $playerHuman = (new Player())
+//            ->setName('Human')
+//            ->setType($playerTypeHuman);
+//        $om->persist($playerCPU);
+//        $om->persist($playerHuman);
 
         $om->flush();
     }

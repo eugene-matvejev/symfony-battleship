@@ -95,6 +95,7 @@ class Cell extends AbstractEntity
     public function hasMask(int $mask) : bool
     {
         $asd = ($this->mask & $mask) === $mask;
+
         return $asd;
     }
 }

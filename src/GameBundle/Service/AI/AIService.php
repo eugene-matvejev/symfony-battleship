@@ -55,10 +55,10 @@ class AIService
     private function attackCell(Cell $cell) : Cell
     {
         if ($cell->hasMask(CellModel::MASK_DEAD)) {
-            throw new AIException("cell: {$cell->getId()} have wrong mask: {$cell->getMask()}");
+            throw new AIException("cell: {$cell->getId()} have wrong phase: {$cell->getMask()}");
         }
 
-        return $this->cellModel->switchState($cell);
+        return $this->cellModel->switchPhase($cell);
     }
 
     /**

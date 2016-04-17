@@ -15,7 +15,6 @@ class CellModel
     const MASK_SHIP = 0x0002;
     const MASK_SKIP = 0x0004 | self::MASK_DEAD;
     const MASK_DEAD_SHIP = self::MASK_SHIP | self::MASK_DEAD;
-
     /**
      * @var Cell[]
      */
@@ -25,7 +24,6 @@ class CellModel
      */
     private static $checkedCells = [];
 
-
     /**
      * @return Cell[]
      */
@@ -34,7 +32,7 @@ class CellModel
         return self::$changedCells;
     }
 
-    public function switchState(Cell $cell, int $customMask = null) : Cell
+    public function switchPhase(Cell $cell, int $customMask = null) : Cell
     {
         if (!$cell->hasMask(CellModel::MASK_DEAD)) {
             self::$changedCells[$cell->getId()] = $cell->addMask($customMask ?? CellModel::MASK_DEAD);
@@ -43,18 +41,19 @@ class CellModel
         return $cell;
     }
 
-    public function switchStateToSkipped(Cell $cell) : Cell
-    {
-        return $this->switchState($cell, self::MASK_SKIP);
-    }
+//    public function switchToSkipPhase(Cell $cell) : Cell
+//    {
+//        return $this->switchPhase($cell, self::MASK_SKIP);
+//    }
 
     public function isShipDead(Cell $cell) : bool
     {
-        if (!$cell->hasMask(self::MASK_DEAD_SHIP)) {
-            return false;
-        }
         if (isset(self::$checkedCells[$cell->getId()])) {
             return true;
+        }
+
+        if (!$cell->hasMask(self::MASK_DEAD_SHIP)) {
+            return false;
         }
 
         $PathProcessor = new PathProcessor($cell);
@@ -79,7 +78,8 @@ class CellModel
             self::$checkedCells[$cell->getId()] = $cell;
 
             foreach ((new PathProcessor($cell))->getAdjacentCells() as $_cell) {
-                $this->switchStateToSkipped($_cell);
+                $this->switchPhase($_cell, self::MASK_SKIP);
+//                $this->switchToSkipPhase($_cell);
             }
         }
 

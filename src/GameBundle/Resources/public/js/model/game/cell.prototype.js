@@ -83,8 +83,8 @@ Cell.resources = {
         none: 0x0000,
         dead: 0x0001,
         ship: 0x0002,
-        skip: 0x0004,
-        deadShip: 0x0002|0x0001
+        deadShip: 0x0002 | 0x0001,
+        skip: 0x0004 | 0x0001
     },
     /**
      * @type {string}

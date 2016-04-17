@@ -33,7 +33,8 @@ class BattlefieldModelTest extends \PHPUnit_Framework_TestCase
     public function hasUnfinishedShips()
     {
         $battlefield = $this->getBattlefieldMock();
-//        $this->assertFalse(BattlefieldModel::hasUnfinishedShips($battlefield));
+        /** by default all cells are mocked as 'live water' */
+        $this->assertFalse(BattlefieldModel::hasUnfinishedShips($battlefield));
 
         $battlefield->getCellByCoordinate('A1')->setMask(CellModel::MASK_SHIP);
         $this->assertTrue(BattlefieldModel::hasUnfinishedShips($battlefield));

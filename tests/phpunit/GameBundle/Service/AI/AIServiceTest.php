@@ -3,7 +3,6 @@
 namespace EM\Tests\PHPUnit\GameBundle\Service\AI;
 
 use EM\GameBundle\Entity\Cell;
-use EM\GameBundle\Exception\AIException;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIService;
 use EM\Tests\Environment\ContainerAwareTestSuite;
@@ -33,9 +32,15 @@ class AIServiceTest extends ContainerAwareTestSuite
     public function attackCell()
     {
         $statesWithExpectedException = array_merge(CellModel::STATES_DIED, [CellModel::STATE_WATER_SKIP]);
-
-        foreach (CellModel::STATES_ALL as $cellStateId) {
-            $cell = $this->getCellMock($cellStateId);
+        $masks = [
+            CellModel::MASK_NONE,
+            CellModel::MASK_DEAD,
+            CellModel::MASK_SHIP,
+            CellModel::MASK_DEAD_SHIP,
+            CellModel::MASK_SKIP
+        ]
+        foreach ($masks as $mask) {
+            $cell = $this->getCellMock('A1', $mask);
             try {
                 $previousCellStateId = $cell->getState()->getId();
                 $this->invokeNonPublicMethod($this->ai, 'attackCell', [$cell]);
@@ -63,9 +68,10 @@ class AIServiceTest extends ContainerAwareTestSuite
             $this->getCellMock('A1'),
             $this->getCellMock('A2')
         ];
+        /** @var Cell $cell */
         $cell = $this->invokeNonPublicMethod($this->ai, 'pickCellToAttack', [$cells]);
         $this->assertInstanceOf(Cell::class, $cell);
-        $this->assertContains($cell->getState()->getId(), CellModel::STATES_DIED);
+        $this->assertTrue($cell->hasMask(CellModel::MASK_DEAD));
     }
 
     /**
@@ -118,18 +124,15 @@ class AIServiceTest extends ContainerAwareTestSuite
     private function invokeProcessCPUTurnMethod(array $deadShipCoordinates, array $liveShipCoordinates, array $deadWaterCoordinates, array $expected)
     {
         $battlefield = $this->getBattlefieldMock();
-        $liveShipState = $this->getLiveShipCellStateMock();
-        $deadShipState = $this->getDeadShipCellStateMock();
-        $deadWaterState = $this->getDeadWaterCellStateMock();
 
         foreach ($liveShipCoordinates as $coordinate) {
-            $battlefield->getCellByCoordinate($coordinate)->setState($liveShipState);
+            $battlefield->getCellByCoordinate($coordinate)->setMask(CellModel::MASK_SHIP);
         }
         foreach ($deadShipCoordinates as $coordinate) {
-            $battlefield->getCellByCoordinate($coordinate)->setState($deadShipState);
+            $battlefield->getCellByCoordinate($coordinate)->setMask(CellModel::MASK_DEAD_SHIP);
         }
         foreach ($deadWaterCoordinates as $coordinate) {
-            $battlefield->getCellByCoordinate($coordinate)->setState($deadWaterState);
+            $battlefield->getCellByCoordinate($coordinate)->setMask(CellModel::MASK_DEAD);
         }
 
         $this->ai->processCPUTurn($battlefield);
