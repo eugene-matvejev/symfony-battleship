@@ -27,16 +27,32 @@ class GameController extends AbstractAPIController
     public function initAction(Request $request) : Response
     {
         if (!$this->validateInitRequest($request)) {
-            throw new \Exception('expected format {data: %array%{player: {name: %string%}, cells: %array%{coordinate: %string%, state: %int%}}, ...}');
+            throw new \Exception('expected format:
+            {
+                data: %array of% {
+                    player: {name: %string%},
+                    cells: %array of% {
+                        coordinate: %string%,
+                        state: %int%
+                    }
+                }
+            }');
         }
         $om = $this->getDoctrine()->getManager();
-
-        $game = $this->get('battleship.game.services.game.processor')->processGameInitiation($request->getContent());
+        $gameProcessor = $this->get('battleship.game.services.game.processor');
+        $game = $gameProcessor->processGameInitiation($request->getContent());
 
         $om->persist($game);
         $om->flush();
+        $response = $this->prepareSerializedResponse($game, Response::HTTP_CREATED);
 
-        return $this->prepareSerializedResponse($game, Response::HTTP_CREATED);
+        foreach ($gameProcessor->processCPUBattlefieldsInitiation($game) as $cell) {
+
+            $om->persist($cell);
+        }
+        $om->flush();
+
+        return $response;
     }
 
     /**
@@ -51,7 +67,7 @@ class GameController extends AbstractAPIController
         if (null === $cell = $this->getDoctrine()->getRepository('GameBundle:Cell')->find($cellId)) {
             throw new CellException("cell: {$cellId} doesn't exist");
         }
-        if (!in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
+        if ($cell->hasMask(CellModel::MASK_DEAD)) {
             throw new CellException("cell: {$cellId} doesn't have *LIVE* status");
         }
 

@@ -17,9 +17,10 @@ trait BattlefieldMockTrait
             ->setPlayer($this->getPlayerMock(''));
 
         /** cell's coordinate pattern: /[A-Z][1-9][0-9]/ */
-        for ($x = 1, $letter = 'A'; $x < 11; $letter++, $x++) {
-            for ($digit = 1; $digit < 11; $digit++) {
-                $battlefield->addCell($this->getCellMock($letter . $digit));
+        for ($x = 0, $letter = 'A'; $x < 7; $letter++, $x++) {
+            for ($digit = 1; $digit < 8; $digit++) {
+                $cell = $this->getCellMock($letter . $digit);
+                $battlefield->addCell($cell);
             }
         }
 

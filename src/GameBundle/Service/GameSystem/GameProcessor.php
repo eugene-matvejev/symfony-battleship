@@ -39,11 +39,21 @@ class GameProcessor
         $this->playerModel = $playerModel;
     }
 
-    private function initCPUBattlefield(Battlefield $battlefield)
+    /**
+     * @param Game $game
+     *
+     * @return Cell[]
+     */
+    public function processCPUBattlefieldsInitiation(Game $game) : array
     {
-        $liveShipState = $this->cellModel->getAllStates()[CellModel::STATE_SHIP_LIVE];
+        $cells = [];
+        foreach ($game->getBattlefields() as $battlefield) {
+            if ($this->playerModel->isCPU($battlefield->getPlayer())) {
+                $cells[] = $battlefield->getCellByCoordinate('B2')->addMask(CellModel::MASK_SHIP);
+            }
+        }
 
-        $battlefield->getCellByCoordinate('B2')->setState($liveShipState);
+        return $cells;
     }
 
     public function processGameInitiation(string $json) : Game
@@ -51,22 +61,25 @@ class GameProcessor
         $game = new Game();
 
         foreach (json_decode($json)->data as $data) {
+            $player = $this->playerModel->createOnRequest($data->player->name);
             $battlefield = (new Battlefield())
                 ->setGame($game)
-                ->setPlayer($this->playerModel->createOnRequest($data->player->name));
+                ->setPlayer($player);
             $game->addBattlefield($battlefield);
 
             foreach ($data->cells as $_cell) {
+                $mask = $this->playerModel->isCPU($player)
+                    ? CellModel::MASK_NONE
+                    : (0 !== $_cell->state ? CellModel::MASK_SHIP : CellModel::MASK_NONE);
+
                 $cell = (new Cell())
                     ->setCoordinate($_cell->coordinate)
-                    ->setState($battlefield->getPlayer()->getType()->getId() !== PlayerModel::TYPE_CPU
-                        ? $this->cellModel->getAllStates()[$_cell->state]
-                        : $this->cellModel->getAllStates()[CellModel::STATE_WATER_LIVE]);
+                    ->addMask($mask);
                 $battlefield->addCell($cell);
             }
 
-            if ($battlefield->getPlayer()->getType()->getId() === PlayerModel::TYPE_CPU) {
-                $this->initCPUBattlefield($battlefield);
+            if (!$this->playerModel->isCPU($player)) {
+                $battlefield->getCellByCoordinate('A1')->setMask(CellModel::MASK_DEAD_SHIP);
             }
         }
 
@@ -92,7 +105,7 @@ class GameProcessor
         }
 
         foreach ($game->getBattlefields() as $battlefield) {
-            $_cell = $this->processPlayerTurn($battlefield, $cell->getCoordinate());
+            $_cell = $this->processPlayerTurn($battlefield, $cell);
             $this->cellModel->isShipDead($_cell);
 
             if (!BattlefieldModel::hasUnfinishedShips($battlefield)) {
@@ -118,24 +131,22 @@ class GameProcessor
 
     /**
      * @param Battlefield $battlefield
-     * @param string      $playerCellCoordinate
+     * @param Cell        $cell
      *
      * @return Cell
      * @throws CellException
      * @throws PlayerException
      */
-    private function processPlayerTurn(Battlefield $battlefield, string $playerCellCoordinate) : Cell
+    private function processPlayerTurn(Battlefield $battlefield, Cell $cell) : Cell
     {
-        switch ($battlefield->getPlayer()->getType()->getId()) {
+        $player = $battlefield->getPlayer();
+        switch ($player->getType()->getId()) {
             case PlayerModel::TYPE_HUMAN:
                 return $this->ai->processCPUTurn($battlefield);
             case PlayerModel::TYPE_CPU:
-                if (null !== $cell = $battlefield->getCellByCoordinate($playerCellCoordinate)) {
-                    return $this->cellModel->switchState($cell);
-                }
-                throw new CellException("Cell with coordinate: {$playerCellCoordinate} in battlefield: {$battlefield->getId()} doesn't exists");
+                return $this->cellModel->switchPhase($cell);
         }
 
-        throw new PlayerException("Player: {$battlefield->getPlayer()->getId()} has unknown type {$battlefield->getPlayer()->getType()->getId()}");
+        throw new PlayerException("player: {$player->getId()} has unknown type {$player->getType()->getId()}");
     }
 }

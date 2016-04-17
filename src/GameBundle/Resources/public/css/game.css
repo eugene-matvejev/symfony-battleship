@@ -21,28 +21,28 @@
     border-bottom: 1px solid #000;
 }
 
-.battlefield-cell[data-state="1"]:hover {
+.battlefield-cell[data-state="0"]:hover {
     background: rgba(225, 255, 255, 0.75);
     cursor: pointer;
 }
 
+.history-element[data-state="0"],
+.battlefield-cell[data-state="0"] {
+    background: #e1ffff;
+}
+
 .history-element[data-state="1"],
 .battlefield-cell[data-state="1"] {
-    background: #e1ffff;
+    background: #1e5799;
 }
 
 .history-element[data-state="2"],
 .battlefield-cell[data-state="2"] {
-    background: #1e5799;
+    background: #000;
 }
 
 .history-element[data-state="3"],
 .battlefield-cell[data-state="3"] {
-    background: #000;
-}
-
-.history-element[data-state="4"],
-.battlefield-cell[data-state="4"] {
     background: #6d0019;
 }
 
@@ -64,7 +64,7 @@
     cursor: no-drop;
 }
 
-.player-area[data-player-type="1"] .battlefield-cell:not([data-state="2"]):not([data-state="4"]):not([data-state="5"]):hover {
+.player-area[data-player-type="1"] .battlefield-cell:not([data-state="1"]):not([data-state="3"]):not([data-state="4"]):hover {
     cursor: pointer;
 }
 

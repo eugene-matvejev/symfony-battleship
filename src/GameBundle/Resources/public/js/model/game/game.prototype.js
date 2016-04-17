@@ -91,7 +91,8 @@ class Game extends APIRequestMgr {
                         cell  = self.findCell({ playerId: player.id, coordinate: _cell.coordinate });
 
                     if (undefined !== cell) {
-                        cell.setId(_cell.id);
+                        cell.setId(_cell.id)
+                            .setState(_cell.mask);
                     }
                 });
             }
@@ -139,7 +140,7 @@ class Game extends APIRequestMgr {
     }
 
     /**
-     * @param {{cells: {id: {int}, state: {id: {int}}}[], result: {player: {Object}}}} response
+     * @param {{cells: {id: {int}, mask: {int}}[], result: {player: {Object}}}} response
      */
     parseUpdateResponse(response) {
         let self = this;
@@ -148,7 +149,7 @@ class Game extends APIRequestMgr {
             let cell = self.findCell({ id: _cell.id });
 
             if (undefined !== cell) {
-                cell.setState(_cell.state.id);
+                cell.setState(_cell.mask);
             }
         });
 

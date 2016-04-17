@@ -41,7 +41,7 @@ class Battlefield {
             $top.append(this.cellContainer.yAxisNav[y].$html.clone());
 
             for (let x = 0; x < this.size; x++) {
-                let cell = (new Cell(cellCoordinate.full(x, y), this)).setState(Cell.resources.state.waterLive);
+                let cell = (new Cell(cellCoordinate.full(x, y), this)).setState(Cell.resources.mask.none);
                 $row.append(cell.$html);
                 this.cellContainer.addCell(cell);
             }
@@ -73,14 +73,17 @@ class Battlefield {
 
     /** *** *** *** *** *** *** *** *** *** *** *** *** *** **/
     initPlayerCells() {
-        let self  = this,
-            state = Cell.resources.state;
+        let self = this,
+            mask = Cell.resources.mask;
 
-        ['A1'].forEach(function (coordinate) {
-            self.findCell({ coordinate: coordinate }).setState(state.shipDead);
-        });
-        ['A2', 'A3', 'C3', 'C4', 'C5', 'C1', 'D1', 'E1', 'F1', 'G5', 'G6', 'F3'].forEach(function (coordinate) {
-            self.findCell({ coordinate: coordinate }).setState(state.shipLive);
+        // ['A1'].forEach(function (coordinate) {
+        //     self.findCell({ coordinate: coordinate }).setState(mask.deadShip);
+        // });
+        // ['A2', 'A3', 'C3', 'C4', 'C5', 'C1', 'D1', 'E1', 'F1', 'G5', 'G6', 'F3'].forEach(function (coordinate) {
+        //     self.findCell({ coordinate: coordinate }).setState(mask.ship);
+        // });
+        ['A1', 'A2', 'A3', 'C3', 'C4', 'C5', 'C1', 'D1', 'E1', 'F1', 'G5', 'G6', 'F3'].forEach(function (coordinate) {
+            self.findCell({ coordinate: coordinate }).setState(mask.ship);
         });
     }
 }

@@ -19,7 +19,16 @@ abstract class ClientResponsesAssertionSuite extends WebTestCase
     public function assertSuccessfulJSONResponse(Response $response)
     {
         $this->assertSuccessfulResponse($response);
+
         $this->assertJson($response->getContent());
+    }
+
+    public function assertSuccessfulXMLResponse(Response $response)
+    {
+        $this->assertSuccessfulResponse($response);
+
+        $xmlElement = simplexml_load_string($response->getContent());
+        $this->assertInstanceOf(\SimpleXMLElement::class, $xmlElement);
     }
 
     public function assertUnsuccessfulResponse(Response $response)

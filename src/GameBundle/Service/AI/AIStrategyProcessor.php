@@ -13,8 +13,8 @@ use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 class AIStrategyProcessor
 {
     const STRATEGY_HORIZONTAL = 0;
-    const STRATEGY_VERTICAL   = 1;
-    const STRATEGY_BOTH       = 2;
+    const STRATEGY_VERTICAL = 1;
+    const STRATEGY_BOTH = 2;
 
     /**
      * @param Cell $cell
@@ -53,7 +53,7 @@ class AIStrategyProcessor
     }
 
     /**
-     * @param Battlefield         $battlefield
+     * @param Battlefield     $battlefield
      * @param PathProcessor[] $coordinates
      *
      * @return Cell[]
@@ -63,9 +63,12 @@ class AIStrategyProcessor
         $cells = [];
         foreach ($coordinates as $coordinate) {
             while (null !== $cell = $battlefield->getCellByCoordinate($coordinate->getNextCoordinate())) {
-                if (in_array($cell->getState()->getId(), CellModel::STATES_SKIP_STRATEGY_PROCESSING)) {
+                if ($cell->hasMask(CellModel::MASK_SKIP)
+                    || (!$cell->hasMask(CellModel::MASK_SHIP) && $cell->hasMask(CellModel::MASK_DEAD))
+                ) {
                     break;
-                } elseif (in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
+                }
+                if (!$cell->hasMask(CellModel::MASK_DEAD)) {
                     $cells[] = $cell;
                     break;
                 }

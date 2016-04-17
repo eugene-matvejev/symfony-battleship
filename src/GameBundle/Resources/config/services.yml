@@ -2,8 +2,6 @@ services:
     # Models
     battleship.game.services.cell.model:
         class: EM\GameBundle\Model\CellModel
-        arguments:
-            - "@battleship.game.services.cell.state.repository"
     battleship.game.services.player.model:
         class: EM\GameBundle\Model\PlayerModel
         arguments:

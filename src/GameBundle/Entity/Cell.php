@@ -3,6 +3,7 @@
 namespace EM\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\ORM\AbstractEntity;
 
 /**
@@ -29,18 +30,17 @@ class Cell extends AbstractEntity
      */
     private $battlefield;
     /**
-     * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\CellState", fetch="EAGER")
-     * @ORM\JoinColumn(name="state", referencedColumnName="id", nullable=false)
-     *
-     * @var CellState
-     */
-    private $state;
-    /**
-     * @ORM\Column(name="coordinate", type="string", nullable=false, length=3)
+     * @ORM\Column(name="coordinate", type="string", length=3)
      *
      * @var string
      */
     private $coordinate;
+    /**
+     * @ORM\Column(name="mask", type="integer")
+     *
+     * @var int
+     */
+    private $mask = CellModel::MASK_NONE;
 
     public function getBattlefield() : Battlefield
     {
@@ -66,15 +66,36 @@ class Cell extends AbstractEntity
         return $this;
     }
 
-    public function getState() : CellState
+    public function addMask(int $mask) : self
     {
-        return $this->state;
-    }
-
-    public function setState(CellState $state) : self
-    {
-        $this->state = $state;
+        $this->mask |= $mask;
 
         return $this;
+    }
+
+    public function removeMask(int $mask) : self
+    {
+        $this->mask &= ~$mask;
+
+        return $this;
+    }
+
+    public function setMask(int $mask) : self
+    {
+        $this->mask = $mask;
+
+        return $this;
+    }
+
+    public function getMask() : int
+    {
+        return $this->mask;
+    }
+
+    public function hasMask(int $mask) : bool
+    {
+        $asd = ($this->mask & $mask) === $mask;
+
+        return $asd;
     }
 }

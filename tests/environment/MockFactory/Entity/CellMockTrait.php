@@ -10,12 +10,10 @@ use EM\GameBundle\Model\CellModel;
  */
 trait CellMockTrait
 {
-    use CellStateMockTrait;
-
-    protected function getCellMock(string $coordinate, int $stateId = CellModel::STATE_WATER_LIVE) : Cell
+    protected function getCellMock(string $coordinate, int $mask = CellModel::MASK_NONE) : Cell
     {
         return (new Cell())
             ->setCoordinate($coordinate)
-            ->setState($this->getCellStateMock($stateId));
+            ->addMask($mask);
     }
 }

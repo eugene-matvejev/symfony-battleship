@@ -19,7 +19,6 @@ class GameControllerTest extends ContainerAwareTestSuite
     {
         $client = clone static::$client;
         $client->request(Request::METHOD_GET, static::$router->generate('battleship.game.gui.index'));
-
         $this->assertSuccessfulResponse($client->getResponse());
     }
 
@@ -29,28 +28,30 @@ class GameControllerTest extends ContainerAwareTestSuite
      */
     public function unsuccessfulInitAction()
     {
-        $client = clone static::$client;
-        $client->request(
-            Request::METHOD_POST,
-            static::$router->generate('battleship.game.api.init'),
-            [],
-            [],
-            ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
-        );
-        $this->assertUnsuccessfulResponse($client->getResponse());
+        foreach (['application/xml', 'application/json'] as $acceptHeader) {
+            $client = clone static::$client;
+            $client->request(
+                Request::METHOD_POST,
+                static::$router->generate('battleship.game.api.init'),
+                [],
+                [],
+                ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => $acceptHeader]
+            );
+            $this->assertUnsuccessfulResponse($client->getResponse());
+        }
     }
 
     /**
-     * @see GameController::initAction
+     * @see     GameController::initAction
      * @test
      *
      * @depends unsuccessfulInitAction
      */
-    public function successfulInitAction()
+    public function successfulInitAction_JSON()
     {
-        $client = clone static::$client;
-
         $json = json_decode(file_get_contents(__DIR__ . '/../../../data/new.game.2.players.7x7.json.request.json'));
+
+        $client = clone static::$client;
         $client->request(
             Request::METHOD_POST,
             static::$router->generate('battleship.game.api.init'),
@@ -77,27 +78,71 @@ class GameControllerTest extends ContainerAwareTestSuite
             $this->assertInternalType('int', $player->type->id);
             $this->assertCount(49, (array)$battlefield->cells);
         }
+    }
 
-        return $response;
+    /**
+     * @see     GameController::initAction
+     * @test
+     *
+     * @depends unsuccessfulInitAction
+     */
+    public function successfulInitAction_XML()
+    {
+//        $client = clone static::$client;
+//
+//        $json = json_decode(file_get_contents(__DIR__ . '/../../../data/new.game.2.players.7x7.json.request.json'));
+//        $client->request(
+//            Request::METHOD_POST,
+//            static::$router->generate('battleship.game.api.init'),
+//            [],
+//            [],
+//            ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/xml'],
+//            json_encode($json)
+//        );
+//        $arr = static::$om->getUnitOfWork()->getScheduledEntityInsertions();
+//
+//        $arr;
+//        $asd = 'asd';
+//
+//        $this->assertSuccessfulXMLResponse($client->getResponse());
+
+//        $this->assertInternalType('int', $response->id);
+//        $this->assertInternalType('string', $response->timestamp);
+//        $this->assertInternalType('array', $response->battlefields);
+//        foreach ($response->battlefields as $battlefield) {
+//            $this->assertInternalType('int', $battlefield->id);
+//
+//            $this->assertInstanceOf(\stdClass::class, $battlefield->player);
+//            $player = $battlefield->player;
+//            $this->assertInternalType('int', $player->id);
+//            $this->assertInternalType('string', $player->name);
+//
+//            $this->assertInstanceOf(\stdClass::class, $player->type);
+//            $this->assertInternalType('int', $player->type->id);
+//            $this->assertCount(49, (array)$battlefield->cells);
+//        }
     }
 
     /**
      * @see     GameController::turnAction
      * @test
      *
-     * @depends successfulInitAction
+     * @depends successfulInitAction_JSON
+     * @depends successfulInitAction_XML
      */
     public function unsuccessfulTurnAction()
     {
-        $client = clone static::$client;
-        $client->request(
-            Request::METHOD_PATCH,
-            static::$router->generate('battleship.game.api.turn', ['cellId' => 0]),
-            [],
-            [],
-            ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
-        );
-        $this->assertUnsuccessfulResponse($client->getResponse());
+        foreach (['application/xml', 'application/json'] as $acceptHeader) {
+            $client = clone static::$client;
+            $client->request(
+                Request::METHOD_PATCH,
+                static::$router->generate('battleship.game.api.turn', ['cellId' => 0]),
+                [],
+                [],
+                ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => $acceptHeader]
+            );
+            $this->assertUnsuccessfulResponse($client->getResponse());
+        }
     }
 
 //    /**

@@ -31,12 +31,11 @@ class AIStrategyServiceTest extends ContainerAwareTestSuite
     public function chooseCells()
     {
         $battlefield = $this->getBattlefieldMock();
-        $cellStates = self::$container->get('battleship.game.services.cell.model')->getAllStates();
 
         $cells = $this->strategyService->chooseCells($battlefield);
         $this->assertCount(0, $cells);
 
-        $battlefield->getCellByCoordinate('B2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+        $battlefield->getCellByCoordinate('B2')->setMask(CellModel::MASK_DEAD_SHIP);
 
 //        $cells = $this->strategyService->chooseCells($battlefield);
 //        $this->assertCount(4, $cells);
