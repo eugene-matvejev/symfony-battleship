@@ -72,7 +72,12 @@ class GameProcessorTest extends ContainerAwareTestSuite
         $this->assertCount(2, $game->getBattlefields());
         foreach ($game->getBattlefields() as $battlefield) {
             $this->assertCount(49, $battlefield->getCells());
-            $this->assertTrue(BattlefieldModel::hasUnfinishedShips($battlefield));
+
+            if ($battlefield->getPlayer()->getType()->getId() === PlayerModel::TYPE_CPU) {
+                $this->assertFalse(BattlefieldModel::hasUnfinishedShips($battlefield));
+            } else {
+                $this->assertTrue(BattlefieldModel::hasUnfinishedShips($battlefield));
+            }
         }
     }
 
