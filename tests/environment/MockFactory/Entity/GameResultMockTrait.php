@@ -9,8 +9,14 @@ use EM\GameBundle\Entity\GameResult;
  */
 trait GameResultMockTrait
 {
-    protected function getGameResultMock() : GameResult
+    use GameMockTrait;
+
+    protected function getGameResultMock(int $players = 2, int $battlefieldSize = 7) : GameResult
     {
-        return new GameResult();
+        $game = $this->getGameMock($players, $battlefieldSize);
+        $gameResult = (new GameResult());
+        $game->setResult($gameResult);
+
+        return $gameResult;
     }
 }

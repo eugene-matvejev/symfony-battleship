@@ -9,7 +9,6 @@ use EM\GameBundle\Model\PlayerModel;
 use EM\GameBundle\Response\GameTurnResponse;
 use EM\GameBundle\Service\GameSystem\GameProcessor;
 use EM\Tests\Environment\ContainerAwareTestSuite;
-use EM\Tests\Environment\MockFactory\Entity\GameMockTrait;
 use EM\Tests\Environment\MockFactory\Entity\GameResultMockTrait;
 
 /**
@@ -17,7 +16,7 @@ use EM\Tests\Environment\MockFactory\Entity\GameResultMockTrait;
  */
 class GameProcessorTest extends ContainerAwareTestSuite
 {
-    use GameMockTrait, GameResultMockTrait;
+    use GameResultMockTrait;
     /**
      * @var GameProcessor
      */
