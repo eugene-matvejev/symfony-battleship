@@ -3,11 +3,9 @@
 namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\Entity\GameResult;
-use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Model\GameResultModel;
 use EM\GameBundle\Response\GameResultsResponse;
 use EM\Tests\Environment\ContainerAwareTestSuite;
-use EM\Tests\Environment\MockFactory\Entity\GameMockTrait;
 use EM\Tests\Environment\MockFactory\Entity\GameResultMockTrait;
 
 /**
@@ -15,7 +13,7 @@ use EM\Tests\Environment\MockFactory\Entity\GameResultMockTrait;
  */
 class GameResultModelTest extends ContainerAwareTestSuite
 {
-    use GameMockTrait, GameResultMockTrait;
+    use GameResultMockTrait;
     /**
      * @var GameResultModel
      */
@@ -34,18 +32,23 @@ class GameResultModelTest extends ContainerAwareTestSuite
     public function prepareResponse()
     {
         $resultsToPersist = 21;
-        $player = static::$om->getRepository('GameBundle:Player')->find(1);
+        $playerType = static::$om->getRepository('GameBundle:PlayerType')->find(1);
         for ($i = 0; $i < $resultsToPersist; $i++) {
-            $game = $this->getGameMock(0);
+            $result = $this->getGameResultMock(2, 0);
 
-            $result = $this->getGameResultMock()
-                ->setPlayer($player);
-            $game->setResult($result);
-            static::$om->persist($game);
+            foreach ($result->getGame()->getBattlefields() as $battlefield) {
+                $battlefield->getPlayer()->setType($playerType);
+            }
+
+            $player = $result->getGame()->getBattlefields()[0]->getPlayer();
+            $result->setPlayer($player);
+
+            static::$om->persist($result->getGame());
         }
         static::$om->flush();
 
         $perPage = static::$container->getParameter('battleship_game.game_results_per_page');
+
         $pages = ceil($resultsToPersist / $perPage);
         for ($page = 1; $page < $pages; $page++) {
             $response = $this->gameResultModel->prepareResponse($page);
