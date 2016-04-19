@@ -42,7 +42,7 @@ class PlayerModelTest extends ContainerAwareTestSuite
     }
 
     /**
-     * @see PlayerModel::ALL_TYPES
+     * @see     PlayerModel::ALL_TYPES
      * @test
      *
      * @depends playerTypeCPU
@@ -54,7 +54,7 @@ class PlayerModelTest extends ContainerAwareTestSuite
     }
 
     /**
-     * @see PlayerModel::getTypes
+     * @see     PlayerModel::getTypes
      * @test
      *
      * @depends playerTypesAll
@@ -69,7 +69,7 @@ class PlayerModelTest extends ContainerAwareTestSuite
     }
 
     /**
-     * @see PlayerModel::createOnRequest()
+     * @see     PlayerModel::createOnRequest()
      * @test
      *
      * @depends getTypes
@@ -81,7 +81,7 @@ class PlayerModelTest extends ContainerAwareTestSuite
     }
 
     /**
-     * @see PlayerModel::createOnRequest()
+     * @see     PlayerModel::createOnRequest()
      * @test
      *
      * @depends createOnRequestOnExistingPlayer
