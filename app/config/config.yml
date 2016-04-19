@@ -108,10 +108,3 @@ jms_serializer:
             game-bundle-response:
                 namespace_prefix: "EM\\GameBundle\\Response\\"
                 path: "@GameBundle/Resources/config/serializer/response"
-
-#  visitors:
-#    json:
-#      options: 0 # json_encode options bitmask
-#    xml:
-#      doctype_whitelist:
-#        - '<!DOCTYPE authorized SYSTEM "http://some_url">' # an authorized document type for xml deserialization
