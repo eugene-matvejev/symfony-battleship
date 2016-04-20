@@ -1,12 +1,12 @@
 imports:
-    - { resource: parameters.common.yml }
     - { resource: parameters.yml }
-    - { resource: security.yml }
+#    - { resource: security.yml }
     - { resource: services.yml }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    battleship_game.game_results_per_page: 5
     locale: en
 
 framework:
@@ -27,6 +27,7 @@ framework:
     trusted_hosts:   ~
     trusted_proxies: ~
     session:
+        name:        'battleship-game'
         # handler_id set to null will use default session handler from php.ini
         handler_id:  ~
         save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
@@ -36,19 +37,19 @@ framework:
 
 # Twig Configuration
 twig:
-    debug:            %kernel.debug%
-    strict_variables: %kernel.debug%
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
 
 # Doctrine Configuration
 doctrine:
     dbal:
         driver:   pdo_mysql
-        host:     %database_host%
-        port:     %database_port%
-        dbname:   %database_name%
-        user:     %database_user%
-        password: %database_password%
-        charset:  %database_encoding%
+        host:     "%database_host%"
+        port:     "%database_port%"
+        dbname:   "%database_name%"
+        user:     "%database_user%"
+        password: "%database_password%"
+        charset:  "%database_encoding%"
         # if using pdo_sqlite as your database driver:
         #   1. add the path in parameters.yml
         #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
@@ -89,7 +90,6 @@ jms_serializer:
         debug: "%kernel.debug%"
         file_cache:
             dir: "%kernel.cache_dir%/serializer"
-#
 #        # Using auto-detection, the mapping files for each bundle will be
 #        # expected in the Resources/config/serializer directory.
 #        #
@@ -107,10 +107,3 @@ jms_serializer:
 #            game-bundle-response:
 #                namespace_prefix: "EM\\GameBundle\\Response\\"
 #                path: "@GameBundle/Resources/config/serializer/response"
-
-#  visitors:
-#    json:
-#      options: 0 # json_encode options bitmask
-#    xml:
-#      doctype_whitelist:
-#        - '<!DOCTYPE authorized SYSTEM "http://some_url">' # an authorized document type for xml deserialization

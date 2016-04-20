@@ -1,0 +1,23 @@
+engines:
+  phpmd:
+    enabled: true
+  eslint:
+    enabled: true
+  csslint:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+        - php
+        - javascript
+        - css
+ratings:
+  paths:
+  - "**.php"
+  - "**.js"
+  - "**.css"
+exclude_paths:
+  - "*/vendor/*"
+  - "*app/DoctrineMigrations/*"
+  - "*/public/vendor/*"

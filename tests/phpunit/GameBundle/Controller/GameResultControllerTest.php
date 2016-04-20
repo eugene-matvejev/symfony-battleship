@@ -3,14 +3,14 @@
 namespace EM\Tests\PHPUnit\GameBundle\Controller;
 
 use EM\GameBundle\Controller\GameResultController;
-use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
+use EM\Tests\Environment\ContainerAwareTestSuite;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Tests\Controller;
 
 /**
  * @see GameResultController
  */
-class GameResultControllerTest extends ExtendedTestSuite
+class GameResultControllerTest extends ContainerAwareTestSuite
 {
     /**
      * @see GameResultController::orderedByDateAction()
@@ -18,10 +18,10 @@ class GameResultControllerTest extends ExtendedTestSuite
      */
     public function orderedByDateAction()
     {
-        $client = $this->getClient();
+        $client = clone static::$client;
         $client->request(
             Request::METHOD_GET,
-            $this->getRouter()->generate('battleship.game.api.game.results', ['page' => 1]),
+            static::$router->generate('battleship.game.api.game.results', ['page' => 1]),
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']

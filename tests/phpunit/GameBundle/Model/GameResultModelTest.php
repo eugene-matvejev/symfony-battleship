@@ -3,19 +3,17 @@
 namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\Entity\GameResult;
-use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Model\GameResultModel;
 use EM\GameBundle\Response\GameResultsResponse;
-use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
-use EM\Tests\PHPUnit\Environment\MockFactory\Entity\GameMockTrait;
-use EM\Tests\PHPUnit\Environment\MockFactory\Entity\GameResultMockTrait;
+use EM\Tests\Environment\ContainerAwareTestSuite;
+use EM\Tests\Environment\MockFactory\Entity\GameResultMockTrait;
 
 /**
  * @see GameResultModel
  */
-class GameResultModelTest extends ExtendedTestSuite
+class GameResultModelTest extends ContainerAwareTestSuite
 {
-    use GameMockTrait, GameResultMockTrait;
+    use GameResultMockTrait;
     /**
      * @var GameResultModel
      */
@@ -24,7 +22,7 @@ class GameResultModelTest extends ExtendedTestSuite
     protected function setUp()
     {
         parent::setUp();
-        $this->gameResultModel = $this->getContainer()->get('battleship.game.services.game.result.model');
+        $this->gameResultModel = static::$container->get('battleship.game.services.game.result.model');
     }
 
     /**
@@ -33,34 +31,34 @@ class GameResultModelTest extends ExtendedTestSuite
      */
     public function prepareResponse()
     {
-        $player = static::$om->getRepository('GameBundle:Player')->find(1);
-        for ($i = 0; $i < 21; $i++) {
-            $game = $this->getGameMock(0);
+        $resultsToPersist = 21;
+        $playerType = static::$om->getRepository('GameBundle:PlayerType')->find(1);
+        for ($i = 0; $i < $resultsToPersist; $i++) {
+            $result = $this->getGameResultMock(2, 0);
 
-            $result = $this->getGameResultMock()
-                ->setPlayer($player);
-            $game->setResult($result);
-            static::$om->persist($game);
+            foreach ($result->getGame()->getBattlefields() as $battlefield) {
+                $battlefield->getPlayer()->setType($playerType);
+            }
+
+            $player = $result->getGame()->getBattlefields()[0]->getPlayer();
+            $result->setPlayer($player);
+
+            static::$om->persist($result->getGame());
         }
-
         static::$om->flush();
 
-        $response = $this->gameResultModel->prepareResponse(1);
-        $this->assertEquals(3, $response->getMeta()[GameResultsResponse::META_INDEX_TOTAL_PAGES]);
-        $this->assertEquals(1, $response->getMeta()[GameResultsResponse::META_INDEX_CURRENT_PAGE]);
-        $this->assertCount(10, $response->getResults());
-        $this->assertContainsOnlyInstancesOf(GameResult::class, $response->getResults());
+        $perPage = static::$container->getParameter('battleship_game.game_results_per_page');
 
-        $response = $this->gameResultModel->prepareResponse(2);
-        $this->assertEquals(3, $response->getMeta()[GameResultsResponse::META_INDEX_TOTAL_PAGES]);
-        $this->assertEquals(2, $response->getMeta()[GameResultsResponse::META_INDEX_CURRENT_PAGE]);
-        $this->assertCount(10, $response->getResults());
-        $this->assertContainsOnlyInstancesOf(GameResult::class, $response->getResults());
+        $pages = ceil($resultsToPersist / $perPage);
+        for ($page = 1; $page < $pages; $page++) {
+            $response = $this->gameResultModel->prepareResponse($page);
 
-        $response = $this->gameResultModel->prepareResponse(3);
-        $this->assertEquals(3, $response->getMeta()[GameResultsResponse::META_INDEX_TOTAL_PAGES]);
-        $this->assertEquals(3, $response->getMeta()[GameResultsResponse::META_INDEX_CURRENT_PAGE]);
-        $this->assertCount(1, $response->getResults());
-        $this->assertContainsOnlyInstancesOf(GameResult::class, $response->getResults());
+            $this->assertEquals($pages, $response->getMeta()[GameResultsResponse::META_INDEX_TOTAL_PAGES]);
+            $this->assertEquals($page, $response->getMeta()[GameResultsResponse::META_INDEX_CURRENT_PAGE]);
+
+            $this->assertInternalType('array', $response->getResults());
+            $this->assertContainsOnlyInstancesOf(GameResult::class, $response->getResults());
+            $this->assertLessThanOrEqual($perPage, count($response->getResults()));
+        }
     }
 }

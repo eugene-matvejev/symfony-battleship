@@ -50,7 +50,7 @@ class GameResult extends AbstractEntity implements PlayerInterface, TimestampedI
 {
     use PlayerTrait, TimestampedTrait;
     /**
-     * @ORM\OneToOne(targetEntity="EM\GameBundle\Entity\Game", inversedBy="result", fetch="EXTRA_LAZY")
+     * @ORM\OneToOne(targetEntity="EM\GameBundle\Entity\Game", inversedBy="result")
      * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)
      *
      * @JMS\Exclude()

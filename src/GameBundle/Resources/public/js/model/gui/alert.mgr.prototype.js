@@ -1,46 +1,41 @@
 'use strict';
 
-/**
- * @constructor
- */
-function AlertMgr() {
-    this.$html = $('#notification-area');
-    this.$content = this.$html.find('.notification-content');
-}
+class AlertMgr {
+    constructor() {
+        this.$html = $('#notification-area');
+        this.$content = this.$html.find('.notification-content');
+    }
 
-/**
- * @property {jQuery} $html
- * @property {jQuery} $content
- */
-AlertMgr.prototype = {
     /**
      * @param {string} txt
      * @param {string} type
      *
      * @returns {AlertMgr}
      */
-    show: function (txt, type) {
+    show(txt, type) {
         this.colorByType(type);
         this.$content.html(txt);
 
         this.$html.removeClass(PageMgr.resources.config.trigger.css.hidden);
 
         return this;
-    },
+    }
+
     /**
      * @returns {AlertMgr}
      */
-    hide: function () {
+    hide() {
         this.$html.addClass(PageMgr.resources.config.trigger.css.hidden);
 
         return this;
-    },
+    }
+
     /**
      * @param {string} _type
      *
      * @returns {AlertMgr}
      */
-    colorByType: function (_type) {
+    colorByType(_type) {
         let type = AlertMgr.resources.config.type;
 
         switch (_type) {
@@ -54,7 +49,8 @@ AlertMgr.prototype = {
 
         return this;
     }
-};
+}
+
 
 AlertMgr.resources = {};
 AlertMgr.resources.config = {

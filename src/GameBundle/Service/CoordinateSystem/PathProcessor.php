@@ -5,34 +5,34 @@ namespace EM\GameBundle\Service\CoordinateSystem;
 use EM\GameBundle\Entity\Cell;
 
 /**
- * @since 7.0
+ * @since 11.0
  */
-class CoordinateService
+class PathProcessor
 {
-    const WAY_NONE       = 0;
-    const WAY_LEFT       = 1;
-    const WAY_RIGHT      = 2;
-    const WAY_UP         = 3;
-    const WAY_DOWN       = 4;
-    const WAY_LEFT_UP    = 5;
-    const WAY_LEFT_DOWN  = 6;
-    const WAY_RIGHT_UP   = 7;
-    const WAY_RIGHT_DOWN = 8;
-    const PRIMARY_WAYS   = [
-        self::WAY_LEFT,
-        self::WAY_RIGHT,
-        self::WAY_UP,
-        self::WAY_DOWN
+    const PATH_NONE       = 0;
+    const PATH_LEFT       = 1;
+    const PATH_RIGHT      = 2;
+    const PATH_UP         = 3;
+    const PATH_DOWN       = 4;
+    const PATH_LEFT_UP    = 5;
+    const PATH_LEFT_DOWN  = 6;
+    const PATH_RIGHT_UP   = 7;
+    const PATH_RIGHT_DOWN = 8;
+    const PRIMARY_PATHS   = [
+        self::PATH_LEFT,
+        self::PATH_RIGHT,
+        self::PATH_UP,
+        self::PATH_DOWN
     ];
-    const EXTENDED_WAYS  = [
-        self::WAY_LEFT,
-        self::WAY_RIGHT,
-        self::WAY_UP,
-        self::WAY_DOWN,
-        self::WAY_LEFT_UP,
-        self::WAY_LEFT_DOWN,
-        self::WAY_RIGHT_UP,
-        self::WAY_RIGHT_DOWN
+    const EXTENDED_PATHS  = [
+        self::PATH_LEFT,
+        self::PATH_RIGHT,
+        self::PATH_UP,
+        self::PATH_DOWN,
+        self::PATH_LEFT_UP,
+        self::PATH_LEFT_DOWN,
+        self::PATH_RIGHT_UP,
+        self::PATH_RIGHT_DOWN
     ];
     /**
      * @var Cell
@@ -45,7 +45,7 @@ class CoordinateService
     /**
      * @var int
      */
-    private $way = self::WAY_NONE;
+    private $way = self::PATH_NONE;
 
     public function __construct(Cell $cell)
     {
@@ -53,7 +53,7 @@ class CoordinateService
         $this->coordinate = $cell->getCoordinate();
     }
 
-    public function setWay(int $way) : self
+    public function setPath(int $way) : self
     {
         $this->way = $way;
         $this->coordinate = $this->cell->getCoordinate();
@@ -68,31 +68,31 @@ class CoordinateService
 
     public function getNextCoordinate() : string
     {
-        /**
-         *                    UP (digit -- )
-         * LEFT (letter -- )     current     RIGHT (letter ++ )
-         *                   DOWN (digit ++ )
-         */
+        $number = substr($this->coordinate, 1);
         $letter = substr($this->coordinate, 0, 1);
         $prevLetter = chr(ord($letter) - 1);
-        $number = substr($this->coordinate, 1);
 
+        /**
+         * LEFT-UP   (--letter, --digit)  UP (--digit)  RIGHT-UP   (++letter, --digit)
+         * LEFT      (--letter)             current     RIGHT      (++letter)
+         * LEFT-DOWN (--letter, ++digit) DOWN (++digit) RIGHT-DOWN (++letter, ++digit)
+         */
         switch ($this->way) {
-            case self::WAY_UP:
+            case self::PATH_UP:
                 return $this->coordinate = $letter . --$number;
-            case self::WAY_DOWN:
+            case self::PATH_DOWN:
                 return $this->coordinate = $letter . ++$number;
-            case self::WAY_LEFT:
+            case self::PATH_LEFT:
                 return $this->coordinate = $prevLetter . $number;
-            case self::WAY_LEFT_UP:
+            case self::PATH_LEFT_UP:
                 return $this->coordinate = $prevLetter . --$number;
-            case self::WAY_LEFT_DOWN:
+            case self::PATH_LEFT_DOWN:
                 return $this->coordinate = $prevLetter . ++$number;
-            case self::WAY_RIGHT:
+            case self::PATH_RIGHT:
                 return $this->coordinate = ++$letter . $number;
-            case self::WAY_RIGHT_UP:
+            case self::PATH_RIGHT_UP:
                 return $this->coordinate = ++$letter . --$number;
-            case self::WAY_RIGHT_DOWN:
+            case self::PATH_RIGHT_DOWN:
                 return $this->coordinate = ++$letter . ++$number;
         }
 
@@ -105,8 +105,8 @@ class CoordinateService
     public function getAdjacentCells() : array
     {
         $cells = [];
-        foreach (self::EXTENDED_WAYS as $way) {
-            $this->setWay($way);
+        foreach (self::EXTENDED_PATHS as $way) {
+            $this->setPath($way);
 
             if (null !== $cell = $this->cell->getBattlefield()->getCellByCoordinate($this->getNextCoordinate())) {
                 $cells[] = $cell;

@@ -20,23 +20,24 @@ class GameTurnResponse
     private $result;
 
     /**
+     * @return Cell[]
+     */
+    public function getCells() : array
+    {
+        return $this->cells;
+    }
+
+    /**
      * @param Cell[] $cells
      *
      * @return GameTurnResponse
      */
     public function setCells(array $cells) : self
     {
-        $this->cells = $cells;
+        /** because JMS serializer don't work properly without array_values */
+        $this->cells = array_values($cells);
 
         return $this;
-    }
-
-    /**
-     * @return Cell[]
-     */
-    public function getCells() : array
-    {
-        return $this->cells;
     }
 
     /**

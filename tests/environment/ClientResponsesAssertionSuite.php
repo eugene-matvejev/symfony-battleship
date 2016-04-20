@@ -1,14 +1,14 @@
 <?php
 
-namespace EM\Tests\PHPUnit\Environment;
+namespace EM\Tests\Environment;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @since 7.2
+ * @since 11.3
  */
-abstract class ExtendedAssertionSuite extends WebTestCase
+abstract class ClientResponsesAssertionSuite extends WebTestCase
 {
     public function assertSuccessfulResponse(Response $response)
     {
@@ -19,7 +19,16 @@ abstract class ExtendedAssertionSuite extends WebTestCase
     public function assertSuccessfulJSONResponse(Response $response)
     {
         $this->assertSuccessfulResponse($response);
+
         $this->assertJson($response->getContent());
+    }
+
+    public function assertSuccessfulXMLResponse(Response $response)
+    {
+        $this->assertSuccessfulResponse($response);
+
+        $xmlElement = simplexml_load_string($response->getContent());
+        $this->assertInstanceOf(\SimpleXMLElement::class, $xmlElement);
     }
 
     public function assertUnsuccessfulResponse(Response $response)

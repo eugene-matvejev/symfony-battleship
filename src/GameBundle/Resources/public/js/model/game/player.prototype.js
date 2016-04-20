@@ -1,135 +1,95 @@
 'use strict';
 
-/**
- * @param {string}  playerName
- * @param {boolean} isCPUPlayer
- * @param {int}     battlefieldSize
- *
- * @constructor
- */
-function Player(playerName, isCPUPlayer, battlefieldSize) {
-    let resources = Player.resources,
-        type = resources.config.type;
+class Player {
+    /**
+     * @param {string}  playerName
+     * @param {boolean} isCPUPlayer
+     * @param {int}     battlefieldSize
+     */
+    constructor(playerName, isCPUPlayer, battlefieldSize) {
+        this.$html = $(this.constructor.resources.layout);
+        let type   = this.constructor.resources.type;
 
-    this.$html = $(resources.html.layout());
+        this.setId('undefined')
+            .setName(playerName)
+            .setType(isCPUPlayer ? type.cpu : type.human);
 
-    this.setId('undefined')
-        .setName(playerName)
-        .setType(isCPUPlayer ? type.cpu : type.human);
-
-    this.battlefield = (new Battlefield(this.$html.find('.player-field'), battlefieldSize, this));
-    if (this.isHuman()) {
-        this.battlefield.mockData();
+        this.battlefield = (new Battlefield(this.$html.find('.player-field'), battlefieldSize, this));
+        if (this.isHuman()) {
+            this.battlefield.initPlayerCells();
+        }
     }
-}
 
-/**
- * @property {jQuery}     $html
- *
- * @property {int|string} id
- * @property {int}        type
- * @property {string}     name
- */
-Player.prototype = {
     /**
      * @param {int|string} id
      *
      * @returns {Player}
      */
-    setId: function (id) {
+    setId(id) {
         this.id = id;
-        this.updateHTML(Player.resources.config.attribute.id, id);
+        this.$html.attr('data-player-id', id)
 
         return this;
-    },
+    }
+
     /**
      * @param {string} name
      *
      * @returns {Player}
      */
-    setName: function (name) {
+    setName(name) {
         this.name = name;
-        this.updateHTML(Player.resources.config.class.name, name);
+        this.$html.find('>.player-name').text(name);
 
         return this;
-    },
+    }
+
     /**
      * @param {int} type
      *
      * @returns {Player}
      */
-    setType: function (type) {
+    setType(type) {
         this.type = type;
-        this.updateHTML(Player.resources.config.attribute.type, type);
+        this.$html.attr('data-player-type', type);
 
         return this;
-    },
+    }
+
     /**
      * @returns {boolean}
      */
-    isCPU: function () {
-        return this.type === Player.resources.config.type.cpu
-    },
+    isCPU() {
+        return this.type === Player.resources.type.cpu
+    }
+
     /**
      * @returns {boolean}
      */
-    isHuman: function () {
+    isHuman() {
         return !this.isCPU();
-    },
+    }
+
     /**
      * @returns {{id: {int}, name: {string}, type: {int}}}
      */
-    getJSON: function () {
-        return {id: this.id, name: this.name, type: this.type};
-    },
-    /**
-     * @param {string}     field
-     * @param {string|int} value
-     */
-    updateHTML: function (field, value) {
-        let config = Player.resources.config;
-
-        switch (field) {
-            case config.attribute.id:
-            case config.attribute.type:
-                this.$html.attr(field, value);
-                break;
-            case config.class.name:
-                this.$html.find('>.' + field).text(value);
-                break;
-        }
+    getJSON() {
+        return { id: this.id, name: this.name, type: this.type };
     }
-};
+}
 
-Player.resources = {};
-Player.resources.config = {
-    /** @enum {string} */
-    attribute: {
-        id: 'data-player-id',
-        type: 'data-player-type'
-    },
-    /** @enum {string} */
-    class: {
-        name: 'player-name',
-        area: 'player-field'
-    },
+Player.resources = {
     /** @enum {int} */
     type: {
         cpu: 1,
         human: 2
-    }
-};
-Player.resources.html = {
+    },
     /**
      * @returns {string}
      */
-    layout: function () {
-        let config = Player.resources.config;
-
-        return '' +
-            '<div class="col-md-6 player-area" ' + config.attribute.id + '="unk" ' + config.attribute.type + '="unk">' +
-                '<div class="' + config.class.name + '">undefined</div>' +
-                '<div class="' + config.class.area +'"></div>' +
-            '</div>';
-    }
+    layout: '\
+        <div class="col-md-6 player-area" data-player-id="unk" data-player-type="unk"> \
+            <div class="player-name">undefined</div> \
+            <div class="player-field"></div> \
+        </div>'
 };

@@ -27,9 +27,11 @@ class GameResultModel
 
     public function prepareResponse(int $currentPage) : GameResultsResponse
     {
+        $totalPages = ceil($this->repository->countTotal() / $this->resultsPerPage);
+
         return (new GameResultsResponse())
             ->setResults($this->repository->getAllOrderByDate($currentPage, $this->resultsPerPage))
             ->setCurrentPage($currentPage)
-            ->setTotalPages(ceil($this->repository->countTotal() / $this->resultsPerPage));
+            ->setTotalPages($totalPages ?: 1);
     }
 }

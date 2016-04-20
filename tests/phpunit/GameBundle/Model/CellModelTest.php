@@ -4,13 +4,13 @@ namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
-use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
-use EM\Tests\PHPUnit\Environment\MockFactory\Entity\CellMockTrait;
+use EM\Tests\Environment\ContainerAwareTestSuite;
+use EM\Tests\Environment\MockFactory\Entity\CellMockTrait;
 
 /**
  * @see CellModel
  */
-class CellModelTest extends ExtendedTestSuite
+class CellModelTest extends ContainerAwareTestSuite
 {
     use CellMockTrait;
     /**
@@ -21,144 +21,75 @@ class CellModelTest extends ExtendedTestSuite
     protected function setUp()
     {
         parent::setUp();
-        $this->cellModel = $this->getContainer()->get('battleship.game.services.cell.model');
+        $this->cellModel = static::$container->get('battleship.game.services.cell.model');
     }
 
     /**
-     * @see CellModel::STATES_WATER
+     * @see     CellModel::switchPhase()
      * @test
      */
-    public function waterStates()
+    public function switchPhase()
     {
-        foreach (CellModel::STATES_WATER as $state) {
-            $this->assertContains($state, CellModel::STATES_ALL);
-            $this->assertNotContains($state, CellModel::STATES_SHIP);
-        }
+        $this->iterateCellMasks(
+            [
+                CellModel::MASK_NONE => CellModel::MASK_DEAD,
+                CellModel::MASK_DEAD => CellModel::MASK_DEAD,
+                CellModel::MASK_SHIP => CellModel::MASK_DEAD_SHIP,
+                CellModel::MASK_DEAD_SHIP => CellModel::MASK_DEAD_SHIP,
+                CellModel::MASK_SKIP => CellModel::MASK_SKIP
+            ],
+            function ($cell) {
+                return $this->cellModel->switchPhase($cell);
+            }
+        );
     }
 
     /**
-     * @see CellModel::STATES_SHIP
+     * @see     CellModel::switchPhaseToSkipped()
      * @test
+     *
+     * @depends switchPhase
      */
-    public function shipStates()
+    public function switchPhaseToCustomState()
     {
-        foreach (CellModel::STATES_SHIP as $state) {
-            $this->assertContains($state, CellModel::STATES_ALL);
-            $this->assertNotContains($state, CellModel::STATES_WATER);
-        }
+        $this->iterateCellMasks(
+            [
+                CellModel::MASK_NONE => CellModel::MASK_SKIP,
+                CellModel::MASK_DEAD => CellModel::MASK_DEAD,
+                CellModel::MASK_SHIP => (CellModel::MASK_SKIP | CellModel::MASK_SHIP),
+                CellModel::MASK_DEAD_SHIP => CellModel::MASK_DEAD_SHIP,
+                CellModel::MASK_SKIP => CellModel::MASK_SKIP
+            ],
+            function ($cell) {
+                return $this->cellModel->switchPhase($cell, CellModel::MASK_SKIP);
+            }
+        );
     }
 
     /**
-     * @see CellModel::STATES_LIVE
+     * @see     CellModel::getChangedCells()
      * @test
-     */
-    public function liveStates()
-    {
-        foreach (CellModel::STATES_LIVE as $state) {
-            $this->assertContains($state, CellModel::STATES_ALL);
-            $this->assertNotContains($state, CellModel::STATES_DIED);
-        }
-    }
-
-    /**
-     * @see CellModel::STATES_DIED
-     * @test
-     */
-    public function diedStates()
-    {
-        foreach (CellModel::STATES_DIED as $state) {
-            $this->assertContains($state, CellModel::STATES_ALL);
-            $this->assertNotContains($state, CellModel::STATES_LIVE);
-        }
-    }
-
-    /**
-     * @see CellModel::STATES_ALL
-     * @test
-     */
-    public function allStates()
-    {
-        $diedStates = count(CellModel::STATES_DIED);
-        $liveStates = count(CellModel::STATES_LIVE);
-        $totalStates = count(CellModel::STATES_ALL);
-
-        $this->assertGreaterThanOrEqual($diedStates + $liveStates, $totalStates);
-    }
-
-    /**
-     * @see CellModel::getAllStates
-     * @test
-     * 
-     * @depends waterStates
-     * @depends shipStates
-     * @depends liveStates
-     * @depends diedStates
-     * @depends allStates
-     */
-    public function getAllStates()
-    {
-        foreach ($this->cellModel->getAllStates() as $state) {
-            $this->assertContains($state->getId(), CellModel::STATES_ALL);
-        }
-
-        $this->assertEquals(count($this->cellModel->getAllStates()), count(CellModel::STATES_ALL));
-    }
-
-    /**
-     * @see CellModel::switchState()
-     * @test
-     * 
-     * @depends getAllStates
-     */
-    public function switchState()
-    {
-        $this->iterateCellStates(function ($oldStateId, Cell $cell) {
-            $this->cellModel->switchState($cell);
-
-            in_array($oldStateId, CellModel::STATES_LIVE)
-                ? $this->assertContains($cell->getState()->getId(), CellModel::STATES_DIED)
-                : $this->assertEquals($oldStateId, $cell->getState()->getId());
-        });
-    }
-
-    /**
-     * @see CellModel::switchStateToSkipped()
-     * @test
-     * 
-     * @depends switchState
-     */
-    public function switchStateToSkipped()
-    {
-        $this->iterateCellStates(function ($oldStateId, Cell $cell) {
-            $this->cellModel->switchStateToSkipped($cell);
-
-            $oldStateId === CellModel::STATE_WATER_LIVE
-                ? $this->assertEquals(CellModel::STATE_WATER_SKIP, $cell->getState()->getId())
-                : $this->assertNotContains($cell->getState()->getId(), CellModel::STATES_LIVE);
-        });
-    }
-
-    /**
-     * @see CellModel::getChangedCells()
-     * @test
-     * 
-     * @depends switchState
-     * @depends switchStateToSkipped
+     *
+     * @depends switchPhase
+     * @depends switchPhaseToCustomState
      */
     public function getChangedCells()
     {
-        $this->switchState();
         $this->assertContainsOnlyInstancesOf(Cell::class, CellModel::getChangedCells());
-        $this->assertGreaterThanOrEqual(5, count(CellModel::getChangedCells()));
+        $this->assertGreaterThanOrEqual(1, count(CellModel::getChangedCells()));
     }
 
-    private function iterateCellStates(\Closure $function)
+    /**
+     * @param int[]    $masks
+     * @param callable $closure
+     */
+    private function iterateCellMasks(array $masks, callable $closure)
     {
-        foreach ($this->cellModel->getAllStates() as $state) {
-            $oldStateId = $state->getId();
-            $cell = $this->getCellMock('A1', $state->getId());
+        foreach ($masks as $originalMask => $expectedMask) {
+            /** @var Cell $cell */
+            $cell = $closure($this->getCellMock('A1')->setMask($originalMask));
 
-            $function($oldStateId, $cell);
+            $this->assertEquals($expectedMask, $cell->getMask());
         }
     }
 }

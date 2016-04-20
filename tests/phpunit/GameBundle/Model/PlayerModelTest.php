@@ -3,12 +3,12 @@
 namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\Model\PlayerModel;
-use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
+use EM\Tests\Environment\ContainerAwareTestSuite;
 
 /**
  * @see PlayerModel
  */
-class PlayerModelTest extends ExtendedTestSuite
+class PlayerModelTest extends ContainerAwareTestSuite
 {
     /**
      * @var PlayerModel
@@ -18,7 +18,7 @@ class PlayerModelTest extends ExtendedTestSuite
     protected function setUp()
     {
         parent::setUp();
-        $this->playerModel = $this->getContainer()->get('battleship.game.services.player.model');
+        $this->playerModel = static::$container->get('battleship.game.services.player.model');
     }
 
     /**
@@ -42,8 +42,11 @@ class PlayerModelTest extends ExtendedTestSuite
     }
 
     /**
-     * @see PlayerModel::ALL_TYPES
+     * @see     PlayerModel::ALL_TYPES
      * @test
+     *
+     * @depends playerTypeCPU
+     * @depends playerTypeHuman
      */
     public function playerTypesAll()
     {
@@ -51,8 +54,10 @@ class PlayerModelTest extends ExtendedTestSuite
     }
 
     /**
-     * @see PlayerModel::getTypes
+     * @see     PlayerModel::getTypes
      * @test
+     *
+     * @depends playerTypesAll
      */
     public function getTypes()
     {
@@ -60,6 +65,30 @@ class PlayerModelTest extends ExtendedTestSuite
             $this->assertContains($playerType->getId(), PlayerModel::TYPES_ALL);
         }
 
-        $this->assertCount(2, $this->playerModel->getTypes());
+        $this->assertCount(count(PlayerModel::TYPES_ALL), $this->playerModel->getTypes());
+    }
+
+    /**
+     * @see     PlayerModel::createOnRequest()
+     * @test
+     *
+     * @depends getTypes
+     */
+    public function createOnRequestOnExistingPlayer()
+    {
+        $player = $this->playerModel->createOnRequest('CPU');
+        $this->assertNotNull($player->getId());
+    }
+
+    /**
+     * @see     PlayerModel::createOnRequest()
+     * @test
+     *
+     * @depends createOnRequestOnExistingPlayer
+     */
+    public function createOnRequestOnNonExistingPlayer()
+    {
+        $player = $this->playerModel->createOnRequest('NON_EXISTING_USER');
+        $this->assertNull($player->getId());
     }
 }

@@ -16,8 +16,8 @@ use EM\GameBundle\ORM\PlayerTrait;
  * @ORM\Table(
  *     name="battlefields",
  *     indexes={
- *          @ORM\Index(name="INDEX_BATTLEFIELD_GAME", columns={"game"}),
- *          @ORM\Index(name="INDEX_BATTLEFIELD_PLAYER", columns={"player"})
+ *          @ORM\Index(name="INDEX_BATTLEFIELDS_GAME", columns={"game"}),
+ *          @ORM\Index(name="INDEX_BATTLEFIELDS_PLAYER", columns={"player"})
  *     })
  */
 class Battlefield extends AbstractEntity implements PlayerInterface
@@ -58,13 +58,6 @@ class Battlefield extends AbstractEntity implements PlayerInterface
     {
         $cell->setBattlefield($this);
         $this->cells->set($cell->getCoordinate(), $cell);
-
-        return $this;
-    }
-
-    public function removeCell(Cell $cell) : self
-    {
-        $this->cells->removeElement($cell);
 
         return $this;
     }
