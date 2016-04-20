@@ -5,6 +5,7 @@ namespace EM\GameBundle\Service\AI;
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Exception\AIException;
+use EM\GameBundle\Exception\CellException;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
 
@@ -33,17 +34,35 @@ class AIService
      *
      * @return Cell
      * @throws AIException
+     * @throws CellException
      */
     public function processCPUTurn(Battlefield $battlefield) : Cell
     {
         $cells = $this->strategyService->chooseCells($battlefield);
 
-        if (null === $cell = $this->pickCellToAttack($cells)) {
+        try {
+            return $this->pickCellToAttack($cells);
+        } catch (CellException $e) {
             $cells = BattlefieldModel::getLiveCells($battlefield);
-            $cell = $this->pickCellToAttack($cells);
+
+            return $this->pickCellToAttack($cells);
+        }
+    }
+
+    /**
+     * @param Cell[] $cells
+     *
+     * @return Cell
+     * @throws AIException
+     * @throws CellException
+     */
+    private function pickCellToAttack(array $cells) : Cell
+    {
+        if (empty($cells)) {
+            throw new CellException('no cells provided');
         }
 
-        return $cell;
+        return $this->attackCell($cells[array_rand($cells, 1)]);
     }
 
     /**
@@ -55,20 +74,9 @@ class AIService
     private function attackCell(Cell $cell) : Cell
     {
         if ($cell->hasMask(CellModel::MASK_DEAD)) {
-            throw new AIException("cell: {$cell->getId()} have wrong phase: {$cell->getMask()}");
+            throw new AIException("cell: {$cell->getId()} already have have CellModel::MASK_DEAD mask");
         }
 
         return $this->cellModel->switchPhase($cell);
-    }
-
-    /**
-     * @param Cell[] $cells
-     *
-     * @return Cell|null
-     * @throws AIException
-     */
-    private function pickCellToAttack(array $cells)
-    {
-        return empty($cells) ? null : $this->attackCell($cells[array_rand($cells, 1)]);
     }
 }
