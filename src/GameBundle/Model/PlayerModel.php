@@ -4,53 +4,37 @@ namespace EM\GameBundle\Model;
 
 use Doctrine\ORM\EntityRepository;
 use EM\GameBundle\Entity\Player;
-use EM\GameBundle\Entity\PlayerType;
-use EM\GameBundle\Repository\PlayerTypeRepository;
 
 /**
  * @since 2.0
  */
 class PlayerModel
 {
-    const TYPE_CPU = 1;
-    const TYPE_HUMAN = 2;
-    const TYPES_ALL = [self::TYPE_CPU, self::TYPE_HUMAN];
-    /**
-     * @var PlayerType[]
-     */
-    private static $cachedTypes;
+    const MASK_NONE = 0x0000;
+    const MASK_AI_CONTROLLED = 0x0001;
     /**
      * @var EntityRepository
      */
     private $playerRepository;
 
-    public function __construct(EntityRepository $playerRepository, PlayerTypeRepository $playerTypeRepository)
+    public function __construct(EntityRepository $playerRepository)
     {
         $this->playerRepository = $playerRepository;
-        if (null === self::$cachedTypes) {
-            self::$cachedTypes = $playerTypeRepository->getAllIndexed();
+    }
+
+    public function createOnRequest(string $name, bool $cpuControlled = false) : Player
+    {
+        if (null === $player = $this->playerRepository->findOneBy(['name' => $name])) {
+            $player = (new Player())
+                ->setName($name)
+                ->setMask($cpuControlled ? self::MASK_AI_CONTROLLED : self::MASK_NONE);
         }
+
+        return $player;
     }
 
-    /**
-     * @return PlayerType[]
-     */
-    public function getTypes() : array
+    public function isAIControlled(Player $player) : bool
     {
-        return self::$cachedTypes;
-    }
-
-    public function createOnRequest(string $name, int $typeId = self::TYPE_HUMAN) : Player
-    {
-        $player = $this->playerRepository->findOneBy(['name' => $name]);
-
-        return $player ?? (new Player())
-            ->setName($name)
-            ->setType(self::$cachedTypes[$typeId]);
-    }
-
-    public function isCPU(Player $player) : bool
-    {
-        return $player->getType()->getId() === self::TYPE_CPU;
+        return $player->hasMask(self::MASK_AI_CONTROLLED);
     }
 }
