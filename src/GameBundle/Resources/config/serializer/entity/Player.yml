@@ -8,7 +8,7 @@ EM\GameBundle\Entity\Player:
         id:
             type: integer
         type:
-            type: EM\GameBundle\Entity\PlayerType
+            type: integer
         name:
             type: string
             xml_element:
