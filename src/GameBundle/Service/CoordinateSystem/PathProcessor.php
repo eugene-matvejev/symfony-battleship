@@ -73,9 +73,9 @@ class PathProcessor
         $prevLetter = chr(ord($letter) - 1);
 
         /**
-         * LEFT-UP   (--letter, --digit)  UP (--digit)  RIGHT-UP   (++letter, --digit)
-         * LEFT      (--letter)             current     RIGHT      (++letter)
-         * LEFT-DOWN (--letter, ++digit) DOWN (++digit) RIGHT-DOWN (++letter, ++digit)
+         * LEFT-UP   (--letter, --number)  UP (--number)  RIGHT-UP   (++letter, --number)
+         * LEFT      (--letter)               current     RIGHT      (++letter)
+         * LEFT-DOWN (--letter, ++number) DOWN (++number) RIGHT-DOWN (++letter, ++number)
          */
         switch ($this->way) {
             case self::PATH_UP:
