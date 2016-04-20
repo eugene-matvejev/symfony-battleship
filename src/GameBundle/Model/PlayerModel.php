@@ -42,13 +42,11 @@ class PlayerModel
 
     public function createOnRequest(string $name, int $typeId = self::TYPE_HUMAN) : Player
     {
-        if (null === $player = $this->playerRepository->findOneBy(['name' => $name])) {
-            $player = (new Player())
-                ->setName($name)
-                ->setType(self::$cachedTypes[$typeId]);
-        }
-
-        return $player;
+        $player = $this->playerRepository->findOneBy(['name' => $name]);
+            
+        return $player ?? (new Player())
+            ->setName($name)
+            ->setType(self::$cachedTypes[$typeId]);
     }
 
     public function isCPU(Player $player) : bool
