@@ -27,55 +27,20 @@ class AIServiceTest extends ContainerAwareTestSuite
     }
 
     /**
-     * @see AIService::attackCell
-     * @test
-     */
-    public function attackCell()
-    {
-        $masks = [
-            CellModel::MASK_NONE,
-            CellModel::MASK_DEAD,
-            CellModel::MASK_SHIP,
-            CellModel::MASK_DEAD_SHIP,
-            CellModel::MASK_SKIP
-        ];
-
-        foreach ($masks as $mask) {
-            $cell = $this->getCellMock('A1', $mask);
-            try {
-                $this->invokeNonPublicMethod($this->ai, 'attackCell', [$cell]);
-                $this->assertTrue($cell->hasMask(CellModel::MASK_DEAD));
-            } catch (AIException $e) {
-                $this->assertContains($cell->getMask(), [
-                    CellModel::MASK_DEAD,
-                    CellModel::MASK_DEAD_SHIP,
-                    CellModel::MASK_SKIP
-                ]);
-                $this->assertEquals($mask, $cell->getMask());
-            }
-        }
-    }
-
-    /**
      * @see     AIService::pickCellToAttack
      * @test
-     *
-     * @expectedException
      *
      * @expectedException \EM\GameBundle\Exception\CellException
      */
     public function pickCellToAttackExpectedException()
     {
         $cells = [];
-        $cell = $this->invokeNonPublicMethod($this->ai, 'pickCellToAttack', [$cells]);
-        $this->assertNull($cell);
+        $this->invokeNonPublicMethod($this->ai, 'pickCellToAttack', [$cells]);
     }
 
     /**
      * @see     AIService::pickCellToAttack
      * @test
-     *
-     * @depends attackCell
      */
     public function pickCellToAttack()
     {
@@ -155,7 +120,7 @@ class AIServiceTest extends ContainerAwareTestSuite
         );
     }
 
-    private function invokeProcessCPUTurnMethod(array $cellsToAlter, array $expectedMasksPerCoordinate)
+    private function invokeProcessCPUTurnMethod(array $cellsToAlter, array $expectedMasks)
     {
         $battlefield = $this->getBattlefieldMock();
         foreach ($cellsToAlter as $mask => $coordinates) {
@@ -167,7 +132,7 @@ class AIServiceTest extends ContainerAwareTestSuite
         $this->ai->processCPUTurn($battlefield);
         foreach ($battlefield->getCells() as $cell) {
             $this->assertEquals(
-                ($expectedMasksPerCoordinate[$cell->getCoordinate()] ?? CellModel::MASK_NONE),
+                ($expectedMasks[$cell->getCoordinate()] ?? CellModel::MASK_NONE),
                 $cell->getMask(),
                 "cell {$cell->getCoordinate()} have unexpected state: {$cell->getMask()}"
             );
@@ -178,7 +143,7 @@ class AIServiceTest extends ContainerAwareTestSuite
      * @see AIService::attackCell
      * @test
      */
-    public function attackWaterLiveCell()
+    public function attackCell_MASK_NONE()
     {
         $this->invokeAttackCellMethod(CellModel::MASK_NONE, CellModel::MASK_DEAD);
     }
@@ -189,7 +154,7 @@ class AIServiceTest extends ContainerAwareTestSuite
      *
      * @expectedException \EM\GameBundle\Exception\AIException
      */
-    public function exceptionOnAttackWaterDeadCell()
+    public function exceptionOnAttackCell_MASK_DEAD()
     {
         $this->invokeAttackCellMethod(CellModel::MASK_DEAD, CellModel::MASK_DEAD);
     }
@@ -198,7 +163,7 @@ class AIServiceTest extends ContainerAwareTestSuite
      * @see AIService::attackCell
      * @test
      */
-    public function attackShipLiveCell()
+    public function attackCell_MASK_SHIP()
     {
         $this->invokeAttackCellMethod(CellModel::MASK_SHIP, CellModel::MASK_DEAD_SHIP);
     }
@@ -209,7 +174,7 @@ class AIServiceTest extends ContainerAwareTestSuite
      *
      * @expectedException \EM\GameBundle\Exception\AIException
      */
-    public function exceptionOnAttackShipDeadCell()
+    public function exceptionOnAttackCell_MASK_DEAD_SHIP()
     {
         $this->invokeAttackCellMethod(CellModel::MASK_DEAD_SHIP, CellModel::MASK_DEAD_SHIP);
     }
@@ -220,7 +185,7 @@ class AIServiceTest extends ContainerAwareTestSuite
      *
      * @expectedException \EM\GameBundle\Exception\AIException
      */
-    public function exceptionOnAttackCellWaterSkip()
+    public function exceptionOnAttackCell_MASK_SKIP()
     {
         $this->invokeAttackCellMethod(CellModel::MASK_SKIP, CellModel::MASK_SKIP);
     }
