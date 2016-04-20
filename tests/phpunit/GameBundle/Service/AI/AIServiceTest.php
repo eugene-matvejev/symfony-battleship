@@ -60,14 +60,25 @@ class AIServiceTest extends ContainerAwareTestSuite
      * @see     AIService::pickCellToAttack
      * @test
      *
-     * @depends attackCell
+     * @expectedException
+     *
+     * @expectedException \EM\GameBundle\Exception\CellException
      */
-    public function pickCellToAttack()
+    public function pickCellToAttackExpectedException()
     {
         $cells = [];
         $cell = $this->invokeNonPublicMethod($this->ai, 'pickCellToAttack', [$cells]);
         $this->assertNull($cell);
+    }
 
+    /**
+     * @see     AIService::pickCellToAttack
+     * @test
+     *
+     * @depends attackCell
+     */
+    public function pickCellToAttack()
+    {
         $cells = [
             $this->getCellMock('A1'),
             $this->getCellMock('A2')
