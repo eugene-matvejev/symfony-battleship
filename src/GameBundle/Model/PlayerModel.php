@@ -43,7 +43,7 @@ class PlayerModel
     public function createOnRequest(string $name, int $typeId = self::TYPE_HUMAN) : Player
     {
         $player = $this->playerRepository->findOneBy(['name' => $name]);
-            
+
         return $player ?? (new Player())
             ->setName($name)
             ->setType(self::$cachedTypes[$typeId]);
