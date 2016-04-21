@@ -6,7 +6,6 @@ services:
         class: EM\GameBundle\Model\PlayerModel
         arguments:
             - "@battleship.game.services.player.repository"
-            - "@battleship.game.services.player.type.repository"
     battleship.game.services.game.result.model:
         class: EM\GameBundle\Model\GameResultModel
         arguments:
@@ -33,21 +32,11 @@ services:
             - "@battleship.game.services.cell.model"
             - "@battleship.game.services.player.model"
     # Repositories
-    battleship.game.services.cell.state.repository:
-        class: EM\GameBundle\Repository\CellStateRepository
-        factory: ["@doctrine.orm.entity_manager", getRepository]
-        arguments:
-            - EM\GameBundle\Entity\CellState
     battleship.game.services.player.repository:
         class: Doctrine\ORM\EntityRepository
         factory: ["@doctrine.orm.entity_manager", getRepository]
         arguments:
             - EM\GameBundle\Entity\Player
-    battleship.game.services.player.type.repository:
-        class: EM\GameBundle\Repository\PlayerTypeRepository
-        factory: ["@doctrine.orm.entity_manager", getRepository]
-        arguments:
-            - EM\GameBundle\Entity\PlayerType
     battleship.game.services.game.result.repository:
         class: EM\GameBundle\Repository\GameResultRepository
         factory: ["@doctrine.orm.entity_manager", getRepository]

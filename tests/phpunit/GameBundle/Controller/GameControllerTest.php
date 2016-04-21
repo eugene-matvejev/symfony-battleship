@@ -74,8 +74,7 @@ class GameControllerTest extends ContainerAwareTestSuite
             $this->assertInternalType('int', $player->id);
             $this->assertInternalType('string', $player->name);
 
-            $this->assertInstanceOf(\stdClass::class, $player->type);
-            $this->assertInternalType('int', $player->type->id);
+            $this->assertInternalType('int', $player->mask);
             $this->assertCount(49, (array)$battlefield->cells);
         }
     }

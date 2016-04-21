@@ -32,13 +32,12 @@ class GameResultModelTest extends ContainerAwareTestSuite
     public function prepareResponse()
     {
         $resultsToPersist = 21;
-        $playerType = static::$om->getRepository('GameBundle:PlayerType')->find(1);
         for ($i = 0; $i < $resultsToPersist; $i++) {
             $result = $this->getGameResultMock(2, 0);
 
-            foreach ($result->getGame()->getBattlefields() as $battlefield) {
-                $battlefield->getPlayer()->setType($playerType);
-            }
+//            foreach ($result->getGame()->getBattlefields() as $battlefield) {
+//                $battlefield->getPlayer()->setMask($playerType);
+//            }
 
             $player = $result->getGame()->getBattlefields()[0]->getPlayer();
             $result->setPlayer($player);

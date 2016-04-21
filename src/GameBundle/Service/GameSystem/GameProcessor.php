@@ -6,6 +6,7 @@ use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Entity\Game;
 use EM\GameBundle\Entity\GameResult;
+use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Exception\CellException;
 use EM\GameBundle\Exception\PlayerException;
 use EM\GameBundle\Model\BattlefieldModel;
@@ -48,7 +49,7 @@ class GameProcessor
     {
         $cells = [];
         foreach ($game->getBattlefields() as $battlefield) {
-            if ($this->playerModel->isCPU($battlefield->getPlayer())) {
+            if (PlayerModel::isAIControlled($battlefield->getPlayer())) {
                 $cells[] = $battlefield->getCellByCoordinate('B2')->addMask(CellModel::MASK_SHIP);
             }
         }
@@ -61,14 +62,16 @@ class GameProcessor
         $game = new Game();
 
         foreach (json_decode($json)->data as $data) {
-            $player = $this->playerModel->createOnRequest($data->player->name);
+            $shouldBeControllerByAI = (($data->player->type ?? PlayerModel::MASK_NONE) & PlayerModel::MASK_AI_CONTROLLED) === PlayerModel::MASK_AI_CONTROLLED;
+
+            $player = $this->playerModel->createOnRequest($data->player->name, $shouldBeControllerByAI);
             $battlefield = (new Battlefield())
                 ->setGame($game)
                 ->setPlayer($player);
             $game->addBattlefield($battlefield);
 
             foreach ($data->cells as $_cell) {
-                $mask = $this->playerModel->isCPU($player)
+                $mask = PlayerModel::isAIControlled($player)
                     ? CellModel::MASK_NONE
                     : (0 !== $_cell->state ? CellModel::MASK_SHIP : CellModel::MASK_NONE);
 
@@ -78,7 +81,7 @@ class GameProcessor
                 $battlefield->addCell($cell);
             }
 
-            if (!$this->playerModel->isCPU($player)) {
+            if (!PlayerModel::isAIControlled($player)) {
                 $battlefield->getCellByCoordinate('A1')->setMask(CellModel::MASK_DEAD_SHIP);
             }
         }
@@ -104,18 +107,20 @@ class GameProcessor
             return $response;
         }
 
-        foreach ($game->getBattlefields() as $battlefield) {
-            $_cell = $this->processPlayerTurn($battlefield, $cell);
-            $this->cellModel->isShipDead($_cell);
+        foreach ($game->getBattlefields() as $playerBattlefield) {
+            $player = $playerBattlefield->getPlayer();
 
-            if (!BattlefieldModel::hasUnfinishedShips($battlefield)) {
-                foreach ($game->getBattlefields() as $_battlefield) {
-                    if ($battlefield->getPlayer() === $_battlefield->getPlayer()) {
-                        continue;
-                    }
+            foreach ($game->getBattlefields() as $battlefield) {
+                if ($playerBattlefield === $battlefield) {
+                    continue;
+                }
 
+                $_cell = $this->processPlayerTurn($player, $battlefield, $cell);
+                $this->cellModel->isShipDead($_cell);
+
+                if (!BattlefieldModel::hasUnfinishedShips($battlefield)) {
                     $result = (new GameResult())
-                        ->setPlayer($_battlefield->getPlayer());
+                        ->setPlayer($player);
                     $game->setResult($result);
                     $response->setGameResult($result);
 
@@ -130,23 +135,16 @@ class GameProcessor
     }
 
     /**
+     * @param Player      $player
      * @param Battlefield $battlefield
      * @param Cell        $cell
      *
      * @return Cell
-     * @throws CellException
-     * @throws PlayerException
      */
-    private function processPlayerTurn(Battlefield $battlefield, Cell $cell) : Cell
+    private function processPlayerTurn(Player $player, Battlefield $battlefield, Cell $cell) : Cell
     {
-        $player = $battlefield->getPlayer();
-        switch ($player->getType()->getId()) {
-            case PlayerModel::TYPE_HUMAN:
-                return $this->ai->processCPUTurn($battlefield);
-            case PlayerModel::TYPE_CPU:
-                return $this->cellModel->switchPhase($cell);
-        }
-
-        throw new PlayerException("player: {$player->getId()} has unknown type {$player->getType()->getId()}");
+        return PlayerModel::isAIControlled($player)
+            ? $this->ai->processCPUTurn($battlefield)
+            : $this->cellModel->switchPhase($cell);
     }
 }
