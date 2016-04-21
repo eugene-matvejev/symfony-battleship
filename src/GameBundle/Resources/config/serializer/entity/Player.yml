@@ -1,13 +1,13 @@
 EM\GameBundle\Entity\Player:
     accessor_order: custom
-    custom_accessor_order: [id, type, name]
+    custom_accessor_order: [id, mask, name]
 
     xml_root_name: player
 
     properties:
         id:
             type: integer
-        type:
+        mask:
             type: integer
         name:
             type: string

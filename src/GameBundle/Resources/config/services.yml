@@ -6,7 +6,6 @@ services:
         class: EM\GameBundle\Model\PlayerModel
         arguments:
             - "@battleship.game.services.player.repository"
-            - "@battleship.game.services.player.type.repository"
     battleship.game.services.game.result.model:
         class: EM\GameBundle\Model\GameResultModel
         arguments:
