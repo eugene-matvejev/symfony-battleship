@@ -46,8 +46,6 @@ abstract class AbstractMaskAwareEntity extends AbstractEntity implements MaskAwa
 
     public function hasMask(int $mask) : bool
     {
-        $asd = ($this->mask & $mask) === $mask;
-
-        return $asd;
+        return ($this->mask & $mask) === $mask;
     }
 }

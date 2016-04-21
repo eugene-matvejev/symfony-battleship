@@ -24,16 +24,14 @@ class PlayerModel
 
     public function createOnRequest(string $name, bool $cpuControlled = false) : Player
     {
-        if (null === $player = $this->playerRepository->findOneBy(['name' => $name])) {
-            $player = (new Player())
-                ->setName($name)
-                ->setMask($cpuControlled ? self::MASK_AI_CONTROLLED : self::MASK_NONE);
-        }
+        $player = $this->playerRepository->findOneBy(['name' => $name]);
 
-        return $player;
+        return $player ?? (new Player())
+            ->setName($name)
+            ->setMask($cpuControlled ? self::MASK_AI_CONTROLLED : self::MASK_NONE);
     }
 
-    public function isAIControlled(Player $player) : bool
+    public static function isAIControlled(Player $player) : bool
     {
         return $player->hasMask(self::MASK_AI_CONTROLLED);
     }
