@@ -32,11 +32,11 @@ class CellModelTest extends ContainerAwareTestSuite
     {
         $this->iterateCellMasks(
             [
-                CellModel::MASK_NONE => CellModel::MASK_DEAD,
-                CellModel::MASK_DEAD => CellModel::MASK_DEAD,
-                CellModel::MASK_SHIP => CellModel::MASK_DEAD_SHIP,
-                CellModel::MASK_DEAD_SHIP => CellModel::MASK_DEAD_SHIP,
-                CellModel::MASK_SKIP => CellModel::MASK_SKIP
+                CellModel::FLAG_NONE => CellModel::FLAG_DEAD,
+                CellModel::FLAG_DEAD => CellModel::FLAG_DEAD,
+                CellModel::FLAG_SHIP => CellModel::FLAG_DEAD_SHIP,
+                CellModel::FLAG_DEAD_SHIP => CellModel::FLAG_DEAD_SHIP,
+                CellModel::FLAG_SKIP => CellModel::FLAG_SKIP
             ],
             function ($cell) {
                 return $this->cellModel->switchPhase($cell);
@@ -54,14 +54,14 @@ class CellModelTest extends ContainerAwareTestSuite
     {
         $this->iterateCellMasks(
             [
-                CellModel::MASK_NONE => CellModel::MASK_SKIP,
-                CellModel::MASK_DEAD => CellModel::MASK_DEAD,
-                CellModel::MASK_SHIP => (CellModel::MASK_SKIP | CellModel::MASK_SHIP),
-                CellModel::MASK_DEAD_SHIP => CellModel::MASK_DEAD_SHIP,
-                CellModel::MASK_SKIP => CellModel::MASK_SKIP
+                CellModel::FLAG_NONE => CellModel::FLAG_SKIP,
+                CellModel::FLAG_DEAD => CellModel::FLAG_DEAD,
+                CellModel::FLAG_SHIP => (CellModel::FLAG_SKIP | CellModel::FLAG_SHIP),
+                CellModel::FLAG_DEAD_SHIP => CellModel::FLAG_DEAD_SHIP,
+                CellModel::FLAG_SKIP => CellModel::FLAG_SKIP
             ],
             function ($cell) {
-                return $this->cellModel->switchPhase($cell, CellModel::MASK_SKIP);
+                return $this->cellModel->switchPhase($cell, CellModel::FLAG_SKIP);
             }
         );
     }
@@ -87,9 +87,9 @@ class CellModelTest extends ContainerAwareTestSuite
     {
         foreach ($masks as $originalMask => $expectedMask) {
             /** @var Cell $cell */
-            $cell = $closure($this->getCellMock('A1')->setMask($originalMask));
+            $cell = $closure($this->getCellMock('A1')->setFlag($originalMask));
 
-            $this->assertEquals($expectedMask, $cell->getMask());
+            $this->assertEquals($expectedMask, $cell->getFlag());
         }
     }
 }

@@ -36,7 +36,7 @@ class GameResultModelTest extends ContainerAwareTestSuite
             $result = $this->getGameResultMock(2, 0);
 
 //            foreach ($result->getGame()->getBattlefields() as $battlefield) {
-//                $battlefield->getPlayer()->setMask($playerType);
+//                $battlefield->getPlayer()->setFlag($playerType);
 //            }
 
             $player = $result->getGame()->getBattlefields()[0]->getPlayer();

@@ -105,10 +105,11 @@ class PathProcessor
     public function getAdjacentCells() : array
     {
         $cells = [];
+        $battlefield = $this->cell->getBattlefield();
         foreach (self::EXTENDED_PATHS as $way) {
             $this->setPath($way);
 
-            if (null !== $cell = $this->cell->getBattlefield()->getCellByCoordinate($this->getNextCoordinate())) {
+            if (null !== $cell = $battlefield->getCellByCoordinate($this->getNextCoordinate())) {
                 $cells[] = $cell;
             }
         }

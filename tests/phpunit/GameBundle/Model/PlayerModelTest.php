@@ -49,9 +49,9 @@ class PlayerModelTest extends ContainerAwareTestSuite
      * @see  PlayerModel::isAIControlled()
      * @test
      */
-    public function isAIControlledOn_MASK_NONE()
+    public function isAIControlledOn_FLAG_NONE()
     {
-        $player = $this->getPlayerMock('', PlayerModel::MASK_NONE);
+        $player = $this->getPlayerMock('', PlayerModel::FLAG_NONE);
         $this->assertFalse(PlayerModel::isAIControlled($player));
     }
 
@@ -59,9 +59,9 @@ class PlayerModelTest extends ContainerAwareTestSuite
      * @see  PlayerModel::isAIControlled()
      * @test
      */
-    public function isAIControlledOn_MASK_AI_CONTROLLED()
+    public function isAIControlledOn_FLAG_AI_CONTROLLED()
     {
-        $player = $this->getPlayerMock('', PlayerModel::MASK_AI_CONTROLLED);
+        $player = $this->getPlayerMock('', PlayerModel::FLAG_AI_CONTROLLED);
         $this->assertTrue(PlayerModel::isAIControlled($player));
     }
 }

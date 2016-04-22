@@ -19,15 +19,15 @@ class CellTest extends \PHPUnit_Framework_TestCase
      *
      * @test
      */
-    public function addMask()
+    public function addFlag()
     {
         $cell = $this->getCellMock('A1');
 
-        $cell->addMask(CellModel::MASK_SHIP);
-        $this->assertEquals(CellModel::MASK_SHIP, $cell->getMask());
+        $cell->addFlag(CellModel::FLAG_SHIP);
+        $this->assertEquals(CellModel::FLAG_SHIP, $cell->getFlag());
 
-        $cell->addMask(CellModel::MASK_DEAD);
-        $this->assertEquals(CellModel::MASK_DEAD_SHIP, $cell->getMask());
+        $cell->addFlag(CellModel::FLAG_DEAD);
+        $this->assertEquals(CellModel::FLAG_DEAD_SHIP, $cell->getFlag());
     }
 
     /**
@@ -35,13 +35,13 @@ class CellTest extends \PHPUnit_Framework_TestCase
      *
      * @test
      */
-    public function removeMask()
+    public function removeFlag()
     {
         $cell = $this->getCellMock('A1');
-        $cell->setMask(CellModel::MASK_DEAD_SHIP);
-        $cell->removeMask(CellModel::MASK_DEAD);
+        $cell->setFlag(CellModel::FLAG_DEAD_SHIP);
+        $cell->removeFlag(CellModel::FLAG_DEAD);
 
-        $this->assertEquals(CellModel::MASK_SHIP, $cell->getMask());
+        $this->assertEquals(CellModel::FLAG_SHIP, $cell->getFlag());
     }
 
     /**
@@ -49,17 +49,17 @@ class CellTest extends \PHPUnit_Framework_TestCase
      *
      * @test
      */
-    public function hasMask()
+    public function hasFlag()
     {
         $cell = $this->getCellMock('A1');
-        $cell->setMask(CellModel::MASK_DEAD_SHIP);
+        $cell->setFlag(CellModel::FLAG_DEAD_SHIP);
 
-        $this->assertTrue($cell->hasMask(CellModel::MASK_DEAD_SHIP));
-        $this->assertTrue($cell->hasMask(CellModel::MASK_DEAD));
-        $this->assertTrue($cell->hasMask(CellModel::MASK_SHIP));
+        $this->assertTrue($cell->hasFlag(CellModel::FLAG_DEAD_SHIP));
+        $this->assertTrue($cell->hasFlag(CellModel::FLAG_DEAD));
+        $this->assertTrue($cell->hasFlag(CellModel::FLAG_SHIP));
 
-        $cell->removeMask(CellModel::MASK_DEAD);
-        $this->assertFalse($cell->hasMask(CellModel::MASK_DEAD_SHIP));
-        $this->assertFalse($cell->hasMask(CellModel::MASK_DEAD));
+        $cell->removeFlag(CellModel::FLAG_DEAD);
+        $this->assertFalse($cell->hasFlag(CellModel::FLAG_DEAD_SHIP));
+        $this->assertFalse($cell->hasFlag(CellModel::FLAG_DEAD));
     }
 }

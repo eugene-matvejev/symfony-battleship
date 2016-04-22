@@ -3,7 +3,7 @@
 namespace EM\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use EM\GameBundle\ORM\AbstractMaskAwareEntity;
+use EM\GameBundle\ORM\AbstractFlaggedEntity;
 
 /**
  * @since 1.0
@@ -19,7 +19,7 @@ use EM\GameBundle\ORM\AbstractMaskAwareEntity;
  *      }
  * )
  */
-class Cell extends AbstractMaskAwareEntity
+class Cell extends AbstractFlaggedEntity
 {
     /**
      * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\Battlefield", inversedBy="cells", fetch="EAGER")

@@ -5,46 +5,46 @@ namespace EM\GameBundle\ORM;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @since 12.1
+ * @since 13.1
  *
  * @ORM\MappedSuperclass()
  */
-abstract class AbstractMaskAwareEntity extends AbstractEntity implements MaskAwareInterface
+abstract class AbstractFlaggedEntity extends AbstractEntity implements FlaggedInterface
 {
     /**
-     * @ORM\Column(name="mask", type="integer")
+     * @ORM\Column(name="flag", type="integer")
      *
      * @var int
      */
     protected $mask;
 
-    public function addMask(int $mask) : self
+    public function addFlag(int $mask) : self
     {
         $this->mask |= $mask;
 
         return $this;
     }
 
-    public function removeMask(int $mask) : self
+    public function removeFlag(int $mask) : self
     {
         $this->mask &= ~$mask;
 
         return $this;
     }
 
-    public function setMask(int $mask) : self
+    public function setFlag(int $mask) : self
     {
         $this->mask = $mask;
 
         return $this;
     }
 
-    public function getMask() : int
+    public function getFlag() : int
     {
         return $this->mask;
     }
 
-    public function hasMask(int $mask) : bool
+    public function hasFlag(int $mask) : bool
     {
         return ($this->mask & $mask) === $mask;
     }

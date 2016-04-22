@@ -3,8 +3,7 @@
 namespace EM\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use EM\GameBundle\ORM\AbstractEntity;
-use EM\GameBundle\ORM\AbstractMaskAwareEntity;
+use EM\GameBundle\ORM\AbstractFlaggedEntity;
 use EM\GameBundle\ORM\NameableInterface;
 use EM\GameBundle\ORM\NameableTrait;
 
@@ -14,7 +13,7 @@ use EM\GameBundle\ORM\NameableTrait;
  * @ORM\Entity()
  * @ORM\Table(name="players")
  */
-class Player extends AbstractMaskAwareEntity implements NameableInterface
+class Player extends AbstractFlaggedEntity implements NameableInterface
 {
     use NameableTrait;
 }

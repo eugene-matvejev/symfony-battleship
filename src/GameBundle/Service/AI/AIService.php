@@ -73,8 +73,8 @@ class AIService
      */
     private function attackCell(Cell $cell) : Cell
     {
-        if ($cell->hasMask(CellModel::MASK_DEAD)) {
-            throw new AIException("cell: {$cell->getId()} already have have CellModel::MASK_DEAD mask");
+        if ($cell->hasFlag(CellModel::FLAG_DEAD)) {
+            throw new AIException("cell: {$cell->getId()} already have have CellModel::FLAG_DEAD");
         }
 
         return $this->cellModel->switchPhase($cell);

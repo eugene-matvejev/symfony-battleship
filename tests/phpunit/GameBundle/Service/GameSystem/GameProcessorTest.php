@@ -46,12 +46,12 @@ class GameProcessorTest extends ContainerAwareTestSuite
 
         foreach ($game->getBattlefields() as $battlefield) {
             if (PlayerModel::isAIControlled($battlefield->getPlayer())) {
-                $this->assertEquals(CellModel::MASK_SHIP, $battlefield->getCellByCoordinate('B2')->getMask());
+                $this->assertEquals(CellModel::FLAG_SHIP, $battlefield->getCellByCoordinate('B2')->getFlag());
                 $this->assertTrue(BattlefieldModel::hasUnfinishedShips($battlefield));
                 $this->assertCount(49, BattlefieldModel::getLiveCells($battlefield));
             } else {
                 foreach ($battlefield->getCells() as $cell) {
-                    $this->assertEquals(CellModel::MASK_NONE, $cell->getMask());
+                    $this->assertEquals(CellModel::FLAG_NONE, $cell->getFlag());
                 }
             }
         }
@@ -86,7 +86,7 @@ class GameProcessorTest extends ContainerAwareTestSuite
     public function processGameTurnOnUnfinishedGame()
     {
         $game = $this->getGameMock();
-        $game->getBattlefields()[0]->getPlayer()->setMask(PlayerModel::MASK_AI_CONTROLLED);
+        $game->getBattlefields()[0]->getPlayer()->setFlag(PlayerModel::FLAG_AI_CONTROLLED);
 
         $i = 0;
         foreach ($game->getBattlefields() as $battlefield) {
@@ -94,9 +94,9 @@ class GameProcessorTest extends ContainerAwareTestSuite
                 $cell->setId(++$i);
             }
 
-            $battlefield->getCellByCoordinate('A5')->addMask(CellModel::MASK_SHIP);
-            $battlefield->getCellByCoordinate('A6')->addMask(CellModel::MASK_SHIP);
-            $battlefield->getCellByCoordinate('A7')->addMask(CellModel::MASK_SHIP);
+            $battlefield->getCellByCoordinate('A5')->addFlag(CellModel::FLAG_SHIP);
+            $battlefield->getCellByCoordinate('A6')->addFlag(CellModel::FLAG_SHIP);
+            $battlefield->getCellByCoordinate('A7')->addFlag(CellModel::FLAG_SHIP);
         }
 
         foreach ($game->getBattlefields() as $battlefield) {
@@ -123,11 +123,11 @@ class GameProcessorTest extends ContainerAwareTestSuite
     {
         $game = $this->getGameMock();
         /** to make sure CPU will never win from one turn. */
-        $game->getBattlefields()[0]->getCellByCoordinate('A1')->addMask(CellModel::MASK_SHIP);
-        $game->getBattlefields()[0]->getCellByCoordinate('A2')->addMask(CellModel::MASK_SHIP);
+        $game->getBattlefields()[0]->getCellByCoordinate('A1')->addFlag(CellModel::FLAG_SHIP);
+        $game->getBattlefields()[0]->getCellByCoordinate('A2')->addFlag(CellModel::FLAG_SHIP);
 
         $game->getBattlefields()[1]->setPlayer($this->getCPUPlayerMock(''));
-        $game->getBattlefields()[1]->getCellByCoordinate('A1')->addMask(CellModel::MASK_SHIP);
+        $game->getBattlefields()[1]->getCellByCoordinate('A1')->addFlag(CellModel::FLAG_SHIP);
 
         $cell = $game->getBattlefields()[1]->getCellByCoordinate('A1');
 
@@ -172,7 +172,7 @@ class GameProcessorTest extends ContainerAwareTestSuite
 //                $battlefield->getCellByCoordinate('A1')
 //            ]
 //        );
-//        $this->assertTrue($battlefield->getCellByCoordinate('A1')->hasMask(CellModel::MASK_DEAD));
+//        $this->assertTrue($battlefield->getCellByCoordinate('A1')->hasFlag(CellModel::FLAG_DEAD));
 //    }
 
 //    /**

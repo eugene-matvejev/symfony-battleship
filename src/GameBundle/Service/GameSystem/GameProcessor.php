@@ -50,7 +50,7 @@ class GameProcessor
         $cells = [];
         foreach ($game->getBattlefields() as $battlefield) {
             if (PlayerModel::isAIControlled($battlefield->getPlayer())) {
-                $cells[] = $battlefield->getCellByCoordinate('B2')->addMask(CellModel::MASK_SHIP);
+                $cells[] = $battlefield->getCellByCoordinate('B2')->addFlag(CellModel::FLAG_SHIP);
             }
         }
 
@@ -62,7 +62,7 @@ class GameProcessor
         $game = new Game();
 
         foreach (json_decode($json)->data as $data) {
-            $shouldBeControllerByAI = (($data->player->type ?? PlayerModel::MASK_NONE) & PlayerModel::MASK_AI_CONTROLLED) === PlayerModel::MASK_AI_CONTROLLED;
+            $shouldBeControllerByAI = (($data->player->type ?? PlayerModel::FLAG_NONE) & PlayerModel::FLAG_AI_CONTROLLED) === PlayerModel::FLAG_AI_CONTROLLED;
 
             $player = $this->playerModel->createOnRequest($data->player->name, $shouldBeControllerByAI);
             $battlefield = (new Battlefield())
@@ -72,17 +72,17 @@ class GameProcessor
 
             foreach ($data->cells as $_cell) {
                 $mask = PlayerModel::isAIControlled($player)
-                    ? CellModel::MASK_NONE
-                    : (0 !== $_cell->state ? CellModel::MASK_SHIP : CellModel::MASK_NONE);
+                    ? CellModel::FLAG_NONE
+                    : (0 !== $_cell->state ? CellModel::FLAG_SHIP : CellModel::FLAG_NONE);
 
                 $cell = (new Cell())
                     ->setCoordinate($_cell->coordinate)
-                    ->addMask($mask);
+                    ->addFlag($mask);
                 $battlefield->addCell($cell);
             }
 
             if (!PlayerModel::isAIControlled($player)) {
-                $battlefield->getCellByCoordinate('A1')->setMask(CellModel::MASK_DEAD_SHIP);
+                $battlefield->getCellByCoordinate('A1')->setFlag(CellModel::FLAG_DEAD_SHIP);
             }
         }
 
