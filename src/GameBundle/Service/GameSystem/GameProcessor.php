@@ -66,13 +66,13 @@ class GameProcessor
             $game->addBattlefield($battlefield);
 
             foreach ($data->cells as $_cell) {
-                $mask = PlayerModel::isAIControlled($player)
+                $flag = PlayerModel::isAIControlled($player)
                     ? CellModel::FLAG_NONE
                     : (0 !== $_cell->state ? CellModel::FLAG_SHIP : CellModel::FLAG_NONE);
 
                 $cell = (new Cell())
                     ->setCoordinate($_cell->coordinate)
-                    ->addFlag($mask);
+                    ->setFlags($flag);
                 $battlefield->addCell($cell);
             }
 

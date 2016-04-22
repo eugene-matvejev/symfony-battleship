@@ -21,11 +21,11 @@ class AIStrategyService
     /**
      * @var AIStrategyProcessor
      */
-    private $strategyProcessor;
+    private $processor;
 
-    public function __construct(AIStrategyProcessor $strategyProcessor)
+    public function __construct(AIStrategyProcessor $processor)
     {
-        $this->strategyProcessor = $strategyProcessor;
+        $this->processor = $processor;
     }
 
     /**
@@ -40,7 +40,7 @@ class AIStrategyService
                 continue;
             }
 
-            return $this->strategyProcessor->process($cell, $this->chooseStrategy($cell));
+            return $this->processor->process($cell, $this->chooseStrategy($cell));
         }
 
         return [];
@@ -61,9 +61,11 @@ class AIStrategyService
         foreach (self::STRATEGY_MAP as $way => $strategyId) {
             $service->setPath($way);
 
-            $cell = $battlefield->getCellByCoordinate($service->getNextCoordinate());
-            if (null !== $cell && $cell->hasFlag(CellModel::FLAG_DEAD_SHIP)) {
-                return $strategyId;
+            /** @var Cell $cell */
+            if (null !== $cell = $battlefield->getCellByCoordinate($service->getNextCoordinate())) {
+                if ($cell->hasFlag(CellModel::FLAG_DEAD_SHIP)) {
+                    return $strategyId;
+                }
             }
         }
 

@@ -58,15 +58,16 @@ class CellModel
         foreach (PathProcessor::PRIMARY_PATHS as $way) {
             $PathProcessor->setPath($way);
 
-            while (null !== $_cell = $battlefield->getCellByCoordinate($PathProcessor->getNextCoordinate())) {
-                if (!$_cell->hasFlag(self::FLAG_SHIP)) {
+            /** @var Cell $cell */
+            while (null !== $cell = $battlefield->getCellByCoordinate($PathProcessor->getNextCoordinate())) {
+                if (!$cell->hasFlag(self::FLAG_SHIP)) {
                     break;
                 }
-                if (!$_cell->hasFlag(self::FLAG_DEAD)) {
+                if (!$cell->hasFlag(self::FLAG_DEAD)) {
                     return false;
                 }
 
-                $cells[$_cell->getCoordinate()] = $_cell;
+                $cells[$cell->getCoordinate()] = $cell;
             }
         }
 
