@@ -2,34 +2,37 @@
 
 namespace EM\GameBundle\Model;
 
-use EM\GameBundle\Entity\PlayerType;
-use EM\GameBundle\Repository\PlayerTypeRepository;
+use Doctrine\ORM\EntityRepository;
+use EM\GameBundle\Entity\Player;
 
 /**
  * @since 2.0
  */
 class PlayerModel
 {
-    const TYPE_CPU   = 1;
-    const TYPE_HUMAN = 2;
-    const TYPES_ALL  = [self::TYPE_CPU, self::TYPE_HUMAN];
+    const FLAG_NONE          = 0x0000;
+    const FLAG_AI_CONTROLLED = 0x0001;
     /**
-     * @var PlayerType[]
+     * @var EntityRepository
      */
-    private static $cachedTypes;
+    private $playerRepository;
 
-    public function __construct(PlayerTypeRepository $repository)
+    public function __construct(EntityRepository $playerRepository)
     {
-        if (null === self::$cachedTypes) {
-            self::$cachedTypes = $repository->getAllIndexed();
-        }
+        $this->playerRepository = $playerRepository;
     }
 
-    /**
-     * @return PlayerType[]
-     */
-    public function getTypes() : array
+    public function createOnRequest(string $name, bool $cpuControlled = false) : Player
     {
-        return self::$cachedTypes;
+        $player = $this->playerRepository->findOneBy(['name' => $name]);
+
+        return $player ?? (new Player())
+            ->setName($name)
+            ->setFlags($cpuControlled ? self::FLAG_AI_CONTROLLED : self::FLAG_NONE);
+    }
+
+    public static function isAIControlled(Player $player) : bool
+    {
+        return $player->hasFlag(self::FLAG_AI_CONTROLLED);
     }
 }

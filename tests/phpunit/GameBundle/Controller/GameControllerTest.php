@@ -3,48 +3,58 @@
 namespace EM\Tests\PHPUnit\GameBundle\Controller;
 
 use EM\GameBundle\Controller\GameController;
-use EM\GameBundle\Model\PlayerModel;
-use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
+use EM\Tests\Environment\ContainerAwareTestSuite;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @see GameController
  */
-class GameControllerTest extends ExtendedTestSuite
+class GameControllerTest extends ContainerAwareTestSuite
 {
     /**
-     * @see GameController::indexAction()
+     * @see GameController::indexAction
      * @test
      */
     public function indexAction()
     {
-        $client = $this->getClient();
-        $client->request(Request::METHOD_GET, $this->getRouter()->generate('battleship.game.gui.index'));
-
+        $client = clone static::$client;
+        $client->request(Request::METHOD_GET, static::$router->generate('battleship.game.gui.index'));
         $this->assertSuccessfulResponse($client->getResponse());
     }
 
     /**
-     * @see GameController::initAction()
+     * @see GameController::initAction
      * @test
      */
-    public function initAction()
+    public function unsuccessfulInitAction()
     {
-        $client = $this->getClient();
-        $client->request(
-            Request::METHOD_POST,
-            $this->getRouter()->generate('battleship.game.api.init'),
-            [],
-            [],
-            ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
-        );
-        $this->assertUnsuccessfulResponse($client->getResponse());
+        foreach (['application/xml', 'application/json'] as $acceptHeader) {
+            $client = clone static::$client;
+            $client->request(
+                Request::METHOD_POST,
+                static::$router->generate('battleship.game.api.init'),
+                [],
+                [],
+                ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => $acceptHeader]
+            );
+            $this->assertUnsuccessfulResponse($client->getResponse());
+        }
+    }
 
-        $json = json_decode(file_get_contents(__DIR__ . '/../../Data/request.new.game.7x7.json'));
-        $client = $this->getClient();
+    /**
+     * @see     GameController::initAction
+     * @test
+     *
+     * @depends unsuccessfulInitAction
+     */
+    public function successfulInitAction_JSON()
+    {
+        $json = json_decode(file_get_contents(__DIR__ . '/../../../data/new.game.2.players.7x7.json.request.json'));
+
+        $client = clone static::$client;
         $client->request(
             Request::METHOD_POST,
-            $this->getRouter()->generate('battleship.game.api.init'),
+            static::$router->generate('battleship.game.api.init'),
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json'],
@@ -58,54 +68,113 @@ class GameControllerTest extends ExtendedTestSuite
         $this->assertInternalType('array', $response->battlefields);
         foreach ($response->battlefields as $battlefield) {
             $this->assertInternalType('int', $battlefield->id);
-
             $this->assertInstanceOf(\stdClass::class, $battlefield->player);
-            $player = $battlefield->player;
-            $this->assertInternalType('int', $player->id);
-            $this->assertInternalType('string', $player->name);
 
-            $this->assertInstanceOf(\stdClass::class, $player->type);
-            $this->assertInternalType('int', $player->type->id);
+            $this->assertInternalType('int', $battlefield->player->id);
+            $this->assertInternalType('int', $battlefield->player->flags);
+            $this->assertInternalType('string', $battlefield->player->name);
+
             $this->assertCount(49, (array)$battlefield->cells);
-        }
+            foreach ($battlefield->cells as $coordinate => $cell) {
+                $this->assertInternalType('string', $coordinate);
 
-        return $response;
+                $this->assertInternalType('int', $cell->id);
+                $this->assertInternalType('int', $cell->flags);
+                $this->assertInternalType('string', $cell->coordinate);
+            }
+        }
     }
 
     /**
-     * @see     GameController::turnAction()
+     * @see     GameController::initAction
      * @test
      *
-     * @depends initAction
+     * @depends unsuccessfulInitAction
      */
-    public function TurnAction()
+    public function successfulInitAction_XML()
     {
-        $client = $this->getClient();
-        $client->request(
-            Request::METHOD_PATCH,
-            $this->getRouter()->generate('battleship.game.api.turn', ['cellId' => 0]),
-            [],
-            [],
-            ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
-        );
-        $this->assertUnsuccessfulResponse($client->getResponse());
+//        $client = clone static::$client;
+//
+//        $json = json_decode(file_get_contents(__DIR__ . '/../../../data/new.game.2.players.7x7.json.request.json'));
+//        $client->request(
+//            Request::METHOD_POST,
+//            static::$router->generate('battleship.game.api.init'),
+//            [],
+//            [],
+//            ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/xml'],
+//            json_encode($json)
+//        );
+//        $arr = static::$om->getUnitOfWork()->getScheduledEntityInsertions();
+//
+//        $arr;
+//        $asd = 'asd';
+//
+//        $this->assertSuccessfulXMLResponse($client->getResponse());
 
-        foreach (func_get_arg(0)->battlefields as $battlefield) {
-            if ($battlefield->player->type->id === PlayerModel::TYPE_CPU) {
-                /** probably spotted bug in doctrine, or configured environment wrong, disabled for now */
+//        $this->assertInternalType('int', $response->id);
+//        $this->assertInternalType('string', $response->timestamp);
+//        $this->assertInternalType('array', $response->battlefields);
+//        foreach ($response->battlefields as $battlefield) {
+//            $this->assertInternalType('int', $battlefield->id);
+//
+//            $this->assertInstanceOf(\stdClass::class, $battlefield->player);
+//            $player = $battlefield->player;
+//            $this->assertInternalType('int', $player->id);
+//            $this->assertInternalType('string', $player->name);
+//
+//            $this->assertInstanceOf(\stdClass::class, $player->type);
+//            $this->assertInternalType('int', $player->type->id);
+//            $this->assertCount(49, (array)$battlefield->cells);
+//        }
+    }
+
+    /**
+     * @see     GameController::turnAction
+     * @test
+     *
+     * @depends successfulInitAction_JSON
+     * @depends successfulInitAction_XML
+     */
+    public function unsuccessfulTurnAction()
+    {
+        foreach (['application/xml', 'application/json'] as $acceptHeader) {
+            $client = clone static::$client;
+            $client->request(
+                Request::METHOD_PATCH,
+                static::$router->generate('battleship.game.api.turn', ['cellId' => 0]),
+                [],
+                [],
+                ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => $acceptHeader]
+            );
+            $this->assertUnsuccessfulResponse($client->getResponse());
+        }
+    }
+
+//    /**
+//     * @see     GameController::turnAction
+//     * @test
+//     *
+//     * @depends unsuccessfulTurnAction
+//     */
+//    public function successfulTurnAction()
+//    {
+//        $client = clone static::$client;
+//        foreach (func_get_arg(0)->battlefields as $battlefield) {
+//            if ($battlefield->player->type->id === PlayerModel::TYPE_CPU) {
+//                /** probably spotted bug in doctrine, or configured environment wrong, disabled for now */
 //                foreach($battlefield->cells as $cell) {
+//                    static::$om->clear();
 //                    $client->request(
 //                        Request::METHOD_PATCH,
 //                        $this->getRouter()->generate('battleship.game.api.turn', ['cellId' => $cell->id]),
 //                        [],
 //                        [],
-//                        ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json'],
-//                        json_encode($cell)
+//                        ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
 //                    );
 //
 //                    $this->assertSuccessfulJSONResponse($client->getResponse());
 //                }
-            }
-        }
-    }
+//            }
+//        }
+//    }
 }

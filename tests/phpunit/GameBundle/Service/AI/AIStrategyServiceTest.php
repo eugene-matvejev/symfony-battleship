@@ -4,13 +4,13 @@ namespace EM\Tests\PHPUnit\GameBundle\Service\AI;
 
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIStrategyService;
-use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
-use EM\Tests\PHPUnit\Environment\MockFactory\Entity\BattlefieldMockTrait;
+use EM\Tests\Environment\ContainerAwareTestSuite;
+use EM\Tests\Environment\MockFactory\Entity\BattlefieldMockTrait;
 
 /**
  * @see AIStrategyService
  */
-class AIStrategyServiceTest extends ExtendedTestSuite
+class AIStrategyServiceTest extends ContainerAwareTestSuite
 {
     use BattlefieldMockTrait;
     /**
@@ -21,7 +21,7 @@ class AIStrategyServiceTest extends ExtendedTestSuite
     protected function setUp()
     {
         parent::setUp();
-        $this->strategyService = $this->getContainer()->get('battleship.game.services.ai.strategy.service');
+        $this->strategyService = static::$container->get('battleship.game.services.ai.strategy.service');
     }
 
     /**
@@ -30,14 +30,14 @@ class AIStrategyServiceTest extends ExtendedTestSuite
      */
     public function chooseCells()
     {
-        $cellStates = $this->getContainer()->get('battleship.game.services.cell.model')->getAllStates();
         $battlefield = $this->getBattlefieldMock();
+
         $cells = $this->strategyService->chooseCells($battlefield);
         $this->assertCount(0, $cells);
 
-        $battlefield->getCellByCoordinate('B2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
+        $battlefield->getCellByCoordinate('B2')->setFlags(CellModel::FLAG_DEAD_SHIP);
 
-//        $cells = $this->strategyService->attack($battlefield);
+//        $cells = $this->strategyService->chooseCells($battlefield);
 //        $this->assertCount(4, $cells);
 //
 //        foreach ($battlefield->getCells() as $cell) {

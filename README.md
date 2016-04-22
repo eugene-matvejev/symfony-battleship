@@ -1,20 +1,23 @@
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
 [![Build Status](https://travis-ci.org/eugene-matvejev/battleship-game-api.svg?branch=master)](https://travis-ci.org/eugene-matvejev/battleship-game-api)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
+[![Code Climate](https://codeclimate.com/github/eugene-matvejev/battleship-game-api/badges/gpa.svg)](https://codeclimate.com/github/eugene-matvejev/battleship-game-api)
+[![codecov.io](https://codecov.io/github/eugene-matvejev/battleship-game-api/coverage.svg?branch=master)](https://codecov.io/github/eugene-matvejev/battleship-game-api?branch=master)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc/mini.png)](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc)
 
 
 # Battleship Game API
-### Spare time project, Work in Progress! Highly experimental!!!
-#### Project aim
- * deliver some preview about my technical knowledge before job interview
-  * try 'cutting edge' technologies and approaches.
+##### THIS IS SPARE TIME PROJECT, WORK IN PROGRESS! HIGHLY EXPERIMENTAL!!!
+#### Project purpose
+ * try 'cutting edge' technologies and approaches such as PHP7, SF3, ECMA6
+ * simulate database loading e.g. upto 500 insertions/request
+ * deliver preview about my technical knowledge before the job interview
 
 ### game cheat-code:
  * CPU have only one-cell ship which is hardcoded at __B2__ cell
-  * if you will hit it __B2__ cell - it will be instant win
-   * it is done to easier tests manual testing, as the project is far from 'finished' stage, as I keep trying polish it.
+  * if you will hit __B2__ cell - you will instantly win
+   * purpose: to easier manual testing (as the project is far from 'finished' stage, as I keep trying polish it)
 
-### plans for future:
+### future plans:
  * deliver back-end as OpenAPI using SF3, PHP7, Doctrine2, Various databases
   * try to create it later as well on Silex.
  * separate front-ent side using single-page-application model AngularJS 2 / Backbone / React
@@ -22,14 +25,14 @@
  * make simple and flexible database support e.g. MariaDB, MySQL, MongoDB
  * implement phpunit, behat tests, consider kahlan and phpspec as well
 
-# Software requirements
+# software requirements:
  * database: MySQL => 5.5 or MariaDB >= 9.*
   * MongoDB support WIP 
  * http server: apache/nginx with php >= 7.0.1
  * composer
 
-### Key Technologies
- * PHP 7.0.1 (because 7.0.0 had bugged primitive types)
+### key technologies:
+ * PHP7 (7.0.1, as 7.0.0 had bugged primitive types)
  * Symfony Framework 3 (SF3)
  * Doctrine 2
  * PHPUnit 5
@@ -42,7 +45,7 @@
 # How to install
  * copy *app/config/parameters.yml.dist* to *app/config/parameters.yml* and amend database settings
  * *composer install* (will create databases as well as run migrations)
- * *php bin/console battleship:database:seed --env=prod* (to seed database with necessary data e.g. cell states, player types)
+ * *php bin/console doctrine:fixtures:load --env=prod* (to seed database with necessary data e.g. cell states, player types)
  * *php bin/console assets:install* (as need dump assets once)
  * apache virtual host config:
  ```
@@ -143,6 +146,7 @@
  * Strategy
  * Factory
  * Singleton
+ * Delegation
  * Service Locator
  * Registry
  * Event Dispatcher

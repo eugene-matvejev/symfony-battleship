@@ -4,13 +4,12 @@ namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
-use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
-use EM\Tests\PHPUnit\Environment\MockFactory\Entity\BattlefieldMockTrait;
+use EM\Tests\Environment\MockFactory\Entity\BattlefieldMockTrait;
 
 /**
  * @see BattlefieldModel
  */
-class BattlefieldModelTest extends ExtendedTestSuite
+class BattlefieldModelTest extends \PHPUnit_Framework_TestCase
 {
     use BattlefieldMockTrait;
 
@@ -21,10 +20,10 @@ class BattlefieldModelTest extends ExtendedTestSuite
     public function getLiveCells()
     {
         $battlefield = $this->getBattlefieldMock();
-        $this->assertCount(100, BattlefieldModel::getLiveCells($battlefield));
+        $this->assertCount(49, BattlefieldModel::getLiveCells($battlefield));
 
-        $battlefield->getCellByCoordinate('A1')->setState($this->getCellStateMock(CellModel::STATE_SHIP_DIED));
-        $this->assertCount(99, BattlefieldModel::getLiveCells($battlefield));
+        $battlefield->getCellByCoordinate('A1')->addFlag(CellModel::FLAG_DEAD);
+        $this->assertCount(48, BattlefieldModel::getLiveCells($battlefield));
     }
 
     /**
@@ -34,12 +33,13 @@ class BattlefieldModelTest extends ExtendedTestSuite
     public function hasUnfinishedShips()
     {
         $battlefield = $this->getBattlefieldMock();
+        /** by default all cells are mocked as 'live water' */
         $this->assertFalse(BattlefieldModel::hasUnfinishedShips($battlefield));
 
-        $battlefield->getCellByCoordinate('A1')->setState($this->getCellStateMock(CellModel::STATE_SHIP_LIVE));
+        $battlefield->getCellByCoordinate('A1')->setFlags(CellModel::FLAG_SHIP);
         $this->assertTrue(BattlefieldModel::hasUnfinishedShips($battlefield));
 
-        $battlefield->getCellByCoordinate('A1')->setState($this->getCellStateMock(CellModel::STATE_SHIP_DIED));
+        $battlefield->getCellByCoordinate('A1')->setFlags(CellModel::FLAG_DEAD_SHIP);
         $this->assertFalse(BattlefieldModel::hasUnfinishedShips($battlefield));
     }
 }

@@ -1,79 +1,69 @@
 'use strict';
 
-/**
- * @param {jQuery} $el
- *
- * @constructor
- */
-function GameResults($el) {
-    this.$html = $el;
-    this.apiMgr = new APIRequestMgr();
-    this.pageMgr = new PageMgr();
-    this.pagination = new PaginationMgr(this.$html);
-}
+class GameResults extends APIRequestMgr {
+    /**
+     * @param {jQuery} $el
+     */
+    constructor($el) {
+        super();
 
-/**
- * @property {APIRequestMgr} apiMgr
- * @property {PageMgr}       PageMgr
- * @property {PaginationMgr} pagination
- *
- * @property {jQuery}        $html
- */
-GameResults.prototype = {
+        this.pagination = new PaginationMgr();
+        this.route      = $el.attr('data-game-results-link');
+
+        this.$tableArea = $(this.constructor.resources.layout);
+        $el.append(this.$tableArea, this.pagination.$html);
+    }
+
     /**
      * @param {int|string} page
      */
-    fetch: function (page) {
-        let self = this,
-            requestUrl = this.$html.attr(GameResults.resources.config.attribute.route) + page,
+    fetch(page) {
+        let self      = this,
             onSuccess = function (response) {
-                self.updateHTML(response);
+                self.update(response);
             };
 
-        this.apiMgr.request('GET', requestUrl, undefined, onSuccess);
-    },
+        super.request('GET', this.route + page, undefined, onSuccess);
+    }
+
     /**
      * @param {{meta: {currentPage: {int}, totalPages: {int}}, results: []}} response
      */
-    updateHTML: function (response) {
-        let html = GameResults.resources.html,
-            $table = $(html.layout());
+    update(response) {
+        let html   = this.constructor.resources.html,
+            $table = $(html.table()),
+            $tBody = $table.find('tbody');
 
-        response.results.map(result => $table.append(html.row(result)));
+        response.results.forEach(result => $tBody.append(html.row(result)));
 
-        this.$html.html($table).append(PaginationMgr.resources.html.layout());
-        this.pagination.updateHTML(response.meta.currentPage, response.meta.totalPages);
+        this.$tableArea.html($table);
+        this.pagination.update(response.meta.currentPage, response.meta.totalPages);
     }
-};
+}
 
 GameResults.resources = {};
-GameResults.resources.config = {
-    /** @enum {string} */
-    attribute: {
-        route: 'data-game-results-link'
-    }
-};
 /** @enum {string} */
-GameResults.resources.text = {
-    id: 'id',
-    player: 'winner',
-    time: 'finished at'
+GameResults.resources.tableHeader = {
+    resultId: '#',
+    playerName: 'winner',
+    finishTime: 'finished at'
 };
-GameResults.resources.html = {
+GameResults.resources.layout = '<div class="results-area"></div>';
+GameResults.resources.html   = {
     /**
      * @returns {string}
      */
-    layout: function () {
-        let text = GameResults.resources.text;
+    table: function () {
+        let header = GameResults.resources.tableHeader;
 
-        return '' +
-            '<table class="table">' +
-                '<tr>' +
-                    '<th>' + text.id + '</th>' +
-                    '<th>' + text.time + '</th>' +
-                    '<th>' + text.player + '</th>' +
-                '</tr>' +
-            '</table>';
+        return ' \
+            <table class="table"> \
+                <tr> \
+                    <th>' + header.resultId + '</th> \
+                    <th>' + header.playerName + '</th> \
+                    <th>' + header.finishTime + '</th> \
+                </tr> \
+            </table>';
     },
     /**
      * @param {{id: {int}, player: {id: {int}}, timestamp: {string}}} obj
@@ -81,13 +71,11 @@ GameResults.resources.html = {
      * @returns {string}
      */
     row: function (obj) {
-        let date = new Date(obj.timestamp);
-
-        return '' +
-            '<tr>' +
-                '<td>' + obj.id + '</td>' +
-                '<td>' + date.toLocaleString() + '</td>' +
-                '<td>' + obj.player.name + '</td>' +
-            '</tr>';
+        return ' \
+            <tr> \
+                <td>' + obj.id + '</td> \
+                <td>' + (new Date(obj.timestamp)).toLocaleString() + '</td> \
+                <td>' + obj.player.name + '</td> \
+            </tr>';
     }
 };

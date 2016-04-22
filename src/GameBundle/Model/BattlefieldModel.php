@@ -19,7 +19,7 @@ class BattlefieldModel
     {
         $cells = [];
         foreach ($battlefield->getCells() as $cell) {
-            if (in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
+            if (!$cell->hasFlag(CellModel::FLAG_DEAD)) {
                 $cells[] = $cell;
             }
         }
@@ -30,7 +30,7 @@ class BattlefieldModel
     public static function hasUnfinishedShips(Battlefield $battlefield) : bool
     {
         foreach ($battlefield->getCells() as $cell) {
-            if ($cell->getState()->getId() === CellModel::STATE_SHIP_LIVE) {
+            if ($cell->hasFlag(CellModel::FLAG_SHIP) && !$cell->hasFlag(CellModel::FLAG_DEAD)) {
                 return true;
             }
         }

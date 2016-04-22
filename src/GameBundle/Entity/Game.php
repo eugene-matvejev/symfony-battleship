@@ -12,9 +12,9 @@ use EM\GameBundle\ORM\TimestampedTrait;
 /**
  * @since 1.0
  *
- * @ORM\Entity(readOnly=true)
+ * @ORM\Entity()
  * @ORM\Table(name="games")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Game extends AbstractEntity implements TimestampedInterface
 {
@@ -42,13 +42,6 @@ class Game extends AbstractEntity implements TimestampedInterface
     {
         $battlefield->setGame($this);
         $this->battlefields->add($battlefield);
-
-        return $this;
-    }
-
-    public function removeBattlefield(Battlefield $battlefield) : self
-    {
-        $this->battlefields->removeElement($battlefield);
 
         return $this;
     }

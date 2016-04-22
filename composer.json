@@ -14,6 +14,7 @@
     },
     "autoload-dev": {
         "psr-4": {
+            "EM\\Tests\\Environment\\": "tests/environment",
             "EM\\Tests\\PHPUnit\\": "tests/phpunit"
         }
     },
@@ -22,13 +23,12 @@
     ],
     "require": {
         "php": ">=7.0.1",
-        "doctrine/doctrine-bundle": "~1.6.1",
-        "doctrine/doctrine-migrations-bundle": "~1.1.1",
-        "doctrine/orm": "~2.5.4",
+        "doctrine/doctrine-bundle": "~1.6",
+        "doctrine/doctrine-migrations-bundle": "~1.1",
+        "doctrine/orm": "~2.5",
         "sensio/distribution-bundle": "^5.0",
-        "sensio/framework-extra-bundle": "~3.0",
-        "symfony/symfony": "~3.0.1",
-        "symfony/monolog-bundle": "~2.8.2",
+        "symfony/symfony": "3.0.3",
+        "symfony/monolog-bundle": "~2.8",
         "jms/serializer-bundle": "^1.1"
     },
     "require-dev": {
@@ -40,7 +40,8 @@
     "scripts": {
         "post-install-cmd": [
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "EM\\FoundationBundle\\Command\\DatabaseProvisionCommand::initDatabases",
+            "php bin/console doctrine:database:create --if-not-exists",
+            "php bin/console doctrine:migrations:migrate --no-interaction",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
@@ -48,7 +49,8 @@
         ],
         "post-update-cmd": [
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "EM\\FoundationBundle\\Command\\DatabaseProvisionCommand::initDatabases",
+            "php bin/console doctrine:database:create --if-not-exists",
+            "php bin/console doctrine:migrations:migrate --no-interaction",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",

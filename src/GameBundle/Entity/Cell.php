@@ -3,7 +3,7 @@
 namespace EM\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use EM\GameBundle\ORM\AbstractEntity;
+use EM\GameBundle\ORM\AbstractFlaggedEntity;
 
 /**
  * @since 1.0
@@ -12,14 +12,14 @@ use EM\GameBundle\ORM\AbstractEntity;
  * @ORM\Table(
  *      name="cells",
  *      indexes={
- *          @ORM\Index(name="INDEX_CELL_BATTLEFIELD", columns={"battlefield"})
+ *          @ORM\Index(name="INDEX_CELLS_BATTLEFIELD", columns={"battlefield"})
  *      },
  *      uniqueConstraints={
- *          @ORM\UniqueConstraint(name="INDEX_BATTLEFIELD_UNIQUE_CELL", columns={"battlefield", "coordinate"})
+ *          @ORM\UniqueConstraint(name="UNIQUE_CELL_PER_BATTLEFIELD", columns={"battlefield", "coordinate"})
  *      }
  * )
  */
-class Cell extends AbstractEntity
+class Cell extends AbstractFlaggedEntity
 {
     /**
      * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\Battlefield", inversedBy="cells", fetch="EAGER")
@@ -29,14 +29,7 @@ class Cell extends AbstractEntity
      */
     private $battlefield;
     /**
-     * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\CellState", fetch="EAGER")
-     * @ORM\JoinColumn(name="state", referencedColumnName="id", nullable=false)
-     *
-     * @var CellState
-     */
-    private $state;
-    /**
-     * @ORM\Column(name="coordinate", type="string", nullable=false, length=3)
+     * @ORM\Column(name="coordinate", type="string", length=3)
      *
      * @var string
      */
@@ -62,18 +55,6 @@ class Cell extends AbstractEntity
     public function setCoordinate(string $coordinate) : self
     {
         $this->coordinate = $coordinate;
-
-        return $this;
-    }
-
-    public function getState() : CellState
-    {
-        return $this->state;
-    }
-
-    public function setState(CellState $state) : self
-    {
-        $this->state = $state;
 
         return $this;
     }

@@ -3,31 +3,18 @@
 namespace EM\GameBundle\Model;
 
 use EM\GameBundle\Entity\Cell;
-use EM\GameBundle\Entity\CellState;
-use EM\GameBundle\Repository\CellStateRepository;
-use EM\GameBundle\Service\CoordinateSystem\CoordinateService;
+use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 
 /**
- * @since 2.0
+ * @since 12.0
  */
 class CellModel
 {
-    const STATE_WATER_LIVE = 1;
-    const STATE_WATER_DIED = 2;
-    const STATE_SHIP_LIVE  = 3;
-    const STATE_SHIP_DIED  = 4;
-    const STATE_WATER_SKIP = 5;
-    /** instead of functions, as const array is faster */
-    const STATES_WATER = [self::STATE_WATER_LIVE, self::STATE_WATER_DIED];
-    const STATES_SHIP  = [self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED];
-    const STATES_LIVE  = [self::STATE_WATER_LIVE, self::STATE_SHIP_LIVE];
-    const STATES_DIED  = [self::STATE_WATER_DIED, self::STATE_SHIP_DIED];
-    const STATES_ALL   = [self::STATE_WATER_LIVE, self::STATE_WATER_DIED, self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED, self::STATE_WATER_SKIP];
-
-    /**
-     * @var CellState[]
-     */
-    private static $cachedStates;
+    const FLAG_NONE = 0x0000;
+    const FLAG_DEAD = 0x0001;
+    const FLAG_SHIP = 0x0002;
+    const FLAG_SKIP = 0x0004 | self::FLAG_DEAD;
+    const FLAG_DEAD_SHIP = self::FLAG_SHIP | self::FLAG_DEAD;
     /**
      * @var Cell[]
      */
@@ -37,21 +24,6 @@ class CellModel
      */
     private static $checkedCells = [];
 
-    public function __construct(CellStateRepository $repository)
-    {
-        if (null === self::$cachedStates) {
-            self::$cachedStates = $repository->getAllIndexed();
-        }
-    }
-
-    /**
-     * @return CellState[]
-     */
-    public function getAllStates() : array
-    {
-        return self::$cachedStates;
-    }
-
     /**
      * @return Cell[]
      */
@@ -60,60 +32,50 @@ class CellModel
         return self::$changedCells;
     }
 
-    public function switchState(Cell $cell, int $customState = null) : Cell
+    public static function switchPhase(Cell $cell, int $customMask = null) : Cell
     {
-        switch ($cell->getState()->getId()) {
-            case self::STATE_WATER_LIVE:
-                $cell->setState(self::$cachedStates[$customState ?? self::STATE_WATER_DIED]);
-                self::$changedCells[] = $cell;
-                break;
-            case self::STATE_SHIP_LIVE:
-                $cell->setState(self::$cachedStates[self::STATE_SHIP_DIED]);
-                self::$changedCells[] = $cell;
-                break;
+        if (!$cell->hasFlag(CellModel::FLAG_DEAD)) {
+            self::$changedCells[$cell->getId()] = $cell->addFlag($customMask ?? CellModel::FLAG_DEAD);
         }
 
         return $cell;
     }
 
-    public function switchStateToSkipped(Cell $cell) : Cell
+    public static function isShipDead(Cell $cell) : bool
     {
-        return $this->switchState($cell, self::STATE_WATER_SKIP);
-    }
-
-    public function isShipDead(Cell $cell) : bool
-    {
-        if ($cell->getState()->getId() !== self::STATE_SHIP_DIED) {
-            return false;
-        }
         if (isset(self::$checkedCells[$cell->getId()])) {
             return true;
         }
 
-        $cells = [$cell];
-        self::$checkedCells[$cell->getId()] = $cell;
+        if (!$cell->hasFlag(self::FLAG_DEAD_SHIP)) {
+            return false;
+        }
 
-        $service = new CoordinateService($cell);
-        foreach (CoordinateService::ALL_BASIC_WAYS as $way) {
-            $service->setWay($way)->calculateNextCoordinate();
+        $PathProcessor = new PathProcessor($cell);
+        $battlefield = $cell->getBattlefield();
+        $cells = [$cell->getCoordinate() => $cell];
 
-            while (null !== $_cell = $cell->getBattlefield()->getCellByCoordinate($service->getValue())) {
-                if (!in_array($_cell->getState()->getId(), self::STATES_SHIP)) {
+        foreach (PathProcessor::PRIMARY_PATHS as $way) {
+            $PathProcessor->setPath($way);
+
+            /** @var Cell $cell */
+            while (null !== $cell = $battlefield->getCellByCoordinate($PathProcessor->getNextCoordinate())) {
+                if (!$cell->hasFlag(self::FLAG_SHIP)) {
                     break;
                 }
-                if ($_cell->getState()->getId() !== self::STATE_SHIP_DIED) {
+                if (!$cell->hasFlag(self::FLAG_DEAD)) {
                     return false;
                 }
 
-                self::$checkedCells[$cell->getId()] = $cell;
-                $service->calculateNextCoordinate();
-                $cells[] = $cell;
+                $cells[$cell->getCoordinate()] = $cell;
             }
         }
 
         foreach ($cells as $cell) {
-            foreach ((new CoordinateService($cell))->getAdjacentCells() as $_cell) {
-                $this->switchStateToSkipped($_cell);
+            self::$checkedCells[$cell->getId()] = $cell;
+
+            foreach ((new PathProcessor($cell))->getAdjacentCells() as $_cell) {
+                self::switchPhase($_cell, self::FLAG_SKIP);
             }
         }
 

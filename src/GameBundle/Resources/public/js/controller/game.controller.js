@@ -5,14 +5,14 @@ $(document).ready(function () {
 
     game.init(
         [
-            {name: 'CPU', isCPU: true},
-            {name: 'Human'}
+            { name: 'CPU', isCPU: true },
+            { name: 'Human' }
         ],
         7
     );
 
     $('#game-current-area')
-        .on('click', '.player-area[data-player-type="1"] .battlefield-cell[data-state="1"]', function (e) {
+        .on('click', '.player-area[data-player-type="1"] .battlefield-cell[data-state="0"]', function (e) {
             e.stopPropagation();
 
             game.update(this);
@@ -24,20 +24,20 @@ $(document).ready(function () {
             game.modalGameInitiation();
         });
     $('#modal-area')
-        .on('input', '#model-trigger-username, #model-trigger-battlefield-size', function (e) {
+        .on('input', '#model-input-player-name, #model-input-battlefield-size', function (e) {
             e.stopPropagation();
 
             game.modalUnlockSubmission();
         })
-        .on('click', '#new-game-btn', function (e) {
+        .on('click', '#model-button-init-new-game', function (e) {
             e.stopPropagation();
 
             game.init(
                 [
-                    {name: 'CPU', isCPU: true},
-                    {name: document.getElementById('model-trigger-username').value}
+                    { name: 'CPU', isCPU: true },
+                    { name: document.getElementById('model-input-player-name').value }
                 ],
-                document.getElementById('model-trigger-battlefield-size').value
+                document.getElementById('model-input-battlefield-size').value
             );
         });
 });

@@ -5,7 +5,7 @@ namespace EM\GameBundle\Service\AI;
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Service\CoordinateSystem\CoordinateService;
+use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 
 /**
  * @since 3.0
@@ -13,24 +13,19 @@ use EM\GameBundle\Service\CoordinateSystem\CoordinateService;
 class AIStrategyService
 {
     const STRATEGY_MAP = [
-        CoordinateService::WAY_LEFT  => AIStrategyProcessor::STRATEGY_HORIZONTAL,
-        CoordinateService::WAY_RIGHT => AIStrategyProcessor::STRATEGY_HORIZONTAL,
-        CoordinateService::WAY_UP    => AIStrategyProcessor::STRATEGY_VERTICAL,
-        CoordinateService::WAY_DOWN  => AIStrategyProcessor::STRATEGY_VERTICAL
+        PathProcessor::PATH_LEFT  => AIStrategyProcessor::STRATEGY_HORIZONTAL,
+        PathProcessor::PATH_RIGHT => AIStrategyProcessor::STRATEGY_HORIZONTAL,
+        PathProcessor::PATH_UP    => AIStrategyProcessor::STRATEGY_VERTICAL,
+        PathProcessor::PATH_DOWN  => AIStrategyProcessor::STRATEGY_VERTICAL
     ];
     /**
      * @var AIStrategyProcessor
      */
-    private $strategyProcessor;
-    /**
-     * @var CellModel
-     */
-    private $cellModel;
+    private $processor;
 
-    public function __construct(CellModel $model, AIStrategyProcessor $strategyProcessor)
+    public function __construct(AIStrategyProcessor $processor)
     {
-        $this->cellModel = $model;
-        $this->strategyProcessor = $strategyProcessor;
+        $this->processor = $processor;
     }
 
     /**
@@ -41,11 +36,11 @@ class AIStrategyService
     public function chooseCells(Battlefield $battlefield) : array
     {
         foreach ($battlefield->getCells() as $cell) {
-            if ($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED || $this->cellModel->isShipDead($cell)) {
+            if (!$cell->hasFlag(CellModel::FLAG_DEAD_SHIP) || CellModel::isShipDead($cell)) {
                 continue;
             }
 
-            return $this->strategyProcessor->process($cell, $this->chooseStrategy($cell));
+            return $this->processor->process($cell, $this->chooseStrategy($cell));
         }
 
         return [];
@@ -60,13 +55,15 @@ class AIStrategyService
      */
     private function chooseStrategy(Cell $cell) : int
     {
-        $service = new CoordinateService($cell);
+        $processor = new PathProcessor($cell);
 
+        $battlefield = $cell->getBattlefield();
         foreach (self::STRATEGY_MAP as $way => $strategyId) {
-            $service->setWay($way)->calculateNextCoordinate();
+            $processor->setPath($way);
 
-            if (null !== $_cell = $cell->getBattlefield()->getCellByCoordinate($service->getValue())) {
-                if ($_cell->getState()->getId() === CellModel::STATE_SHIP_DIED) {
+            /** @var Cell $cell */
+            if (null !== $cell = $battlefield->getCellByCoordinate($processor->getNextCoordinate())) {
+                if ($cell->hasFlag(CellModel::FLAG_DEAD_SHIP)) {
                     return $strategyId;
                 }
             }

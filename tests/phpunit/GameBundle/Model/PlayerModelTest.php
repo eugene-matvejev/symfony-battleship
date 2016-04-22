@@ -3,13 +3,15 @@
 namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\Model\PlayerModel;
-use EM\Tests\PHPUnit\Environment\ExtendedTestSuite;
+use EM\Tests\Environment\ContainerAwareTestSuite;
+use EM\Tests\Environment\MockFactory\Entity\PlayerMockTrait;
 
 /**
  * @see PlayerModel
  */
-class PlayerModelTest extends ExtendedTestSuite
+class PlayerModelTest extends ContainerAwareTestSuite
 {
+    use PlayerMockTrait;
     /**
      * @var PlayerModel
      */
@@ -18,48 +20,48 @@ class PlayerModelTest extends ExtendedTestSuite
     protected function setUp()
     {
         parent::setUp();
-        $this->playerModel = $this->getContainer()->get('battleship.game.services.player.model');
+        $this->playerModel = static::$container->get('battleship.game.services.player.model');
     }
 
     /**
-     * @see PlayerModel::TYPE_CPU
+     * @see PlayerModel::createOnRequest()
      * @test
      */
-    public function playerTypeCPU()
+    public function createOnRequestOnExistingPlayer()
     {
-        $this->assertNotEquals(PlayerModel::TYPE_HUMAN, PlayerModel::TYPE_CPU);
-        $this->assertContains(PlayerModel::TYPE_CPU, PlayerModel::TYPES_ALL);
+        $player = $this->playerModel->createOnRequest('CPU');
+        $this->assertNotNull($player->getId());
     }
 
     /**
-     * @see PlayerModel::TYPE_HUMAN
+     * @see     PlayerModel::createOnRequest()
      * @test
+     *
+     * @depends createOnRequestOnExistingPlayer
      */
-    public function playerTypeHuman()
+    public function createOnRequestOnNonExistingPlayer()
     {
-        $this->assertNotEquals(PlayerModel::TYPE_CPU, PlayerModel::TYPE_HUMAN);
-        $this->assertContains(PlayerModel::TYPE_HUMAN, PlayerModel::TYPES_ALL);
+        $player = $this->playerModel->createOnRequest('NON_EXISTING_USER');
+        $this->assertNull($player->getId());
     }
 
     /**
-     * @see PlayerModel::ALL_TYPES
+     * @see  PlayerModel::isAIControlled()
      * @test
      */
-    public function playerTypesAll()
+    public function isAIControlledOn_FLAG_NONE()
     {
-        $this->assertCount(2, PlayerModel::TYPES_ALL);
+        $player = $this->getPlayerMock('', PlayerModel::FLAG_NONE);
+        $this->assertFalse(PlayerModel::isAIControlled($player));
     }
 
     /**
-     * @see PlayerModel::getTypes
+     * @see  PlayerModel::isAIControlled()
      * @test
      */
-    public function getTypes()
+    public function isAIControlledOn_FLAG_AI_CONTROLLED()
     {
-        foreach ($this->playerModel->getTypes() as $playerType) {
-            $this->assertContains($playerType->getId(), PlayerModel::TYPES_ALL);
-        }
-
-        $this->assertCount(2, $this->playerModel->getTypes());
+        $player = $this->getPlayerMock('', PlayerModel::FLAG_AI_CONTROLLED);
+        $this->assertTrue(PlayerModel::isAIControlled($player));
     }
 }

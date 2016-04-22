@@ -1,64 +1,52 @@
 'use strict';
 
-/**
- * @param {jQuery} $el
- *
- * @constructor
- */
-function Game($el) {
-    this.$html = $el;
+class Game extends APIRequestMgr {
+    /**
+     * @param {jQuery} $el
+     */
+    constructor($el) {
+        super();
+        this.$html = $el;
 
-    this.apiMgr = new APIRequestMgr();
-    this.alertMgr = new AlertMgr();
-    this.pageMgr = new PageMgr();
-    this.modalMgr = new ModalMgr();
-}
+        this.alertMgr = new AlertMgr();
+        this.modalMgr = new ModalMgr();
+    }
 
-/**
- * @property {APIRequestMgr} apiMgr
- * @property {AlertMgr}      alertMgr
- * @property {PageMgr}       pageMgr
- * @property {ModalMgr}      modalMgr
- *
- * @property {jQuery}        $html
- *
- * @property {int}           id
- * @property {Player[]}      players
- */
-Game.prototype = {
     /**
      * @param {int|string} id
      *
      * @returns {Game}
      */
-    setId: function (id) {
+    setId(id) {
         this.id = id;
 
         return this;
-    },
+    }
+
     /**
      * @returns {{id: {int}}}
      */
-    getJSON: function () {
-        return {id: this.id};
-    },
+    getJSON() {
+        return { id: this.id };
+    }
+
     /**
      * @param {{name: {string}, isCPU: {boolean}}[]} players
      * @param {int}                                  battlefieldSize
      */
-    init: function (players, battlefieldSize) {
+    init(players, battlefieldSize) {
         this.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="game-current-area"]'));
 
         this.setId('undefined');
         this.players = [];
         this.$html.html('');
 
-        let self = this,
+        let self        = this,
             requestData = {
                 game: this.getJSON(),
                 data: []
             },
-            onSuccess = function (response) {
+            onSuccess   = function (response) {
                 self.parseInitResponse(response);
             };
 
@@ -75,19 +63,20 @@ Game.prototype = {
             });
         });
 
-        this.apiMgr.request('POST', this.$html.attr(Game.resources.config.route.init), requestData, onSuccess);
-    },
+        this.request('POST', this.$html.attr('data-init-link'), requestData, onSuccess);
+    }
+
     /**
      * @param {{
-     *          id: {int},
-     *          battlefields: {
-     *              id: {int},
-     *              player: {id: {int}, name: {string}},
-     *              cells: {id: {int}, coordinate: {string}, state: {id: {int}}}
-     *          }[]
-     *        }} response
+     *     id: {int},
+     *     battlefields: {
+     *         id: {int},
+     *         player: {id: {int}, name: {string}},
+     *         cells: {id: {int}, coordinate: {string}, flags: {int}}[]
+     *     }[]
+     * }} response
      */
-    parseInitResponse: function (response) {
+    parseInitResponse(response) {
         this.setId(response.id);
         let self = this;
 
@@ -99,68 +88,74 @@ Game.prototype = {
 
                 Object.keys(battlefield.cells).forEach(function (index) {
                     let _cell = battlefield.cells[index],
-                        cell = self.findCell({playerId: player.id, coordinate: _cell.coordinate});
+                        cell  = self.findCell({ playerId: player.id, coordinate: _cell.coordinate });
 
                     if (undefined !== cell) {
-                        cell.setId(_cell.id);
+                        cell.setId(_cell.id)
+                            .setState(_cell.flags);
                     }
                 });
             }
         });
-    },
+    }
+
     /**
      * @param {Element} el
      */
-    update: function (el) {
-        let cell = this.findCell({id: el.getAttribute('data-id')});
+    update(el) {
+        let cell = this.findCell({ id: el.getAttribute('data-id') });
         if (undefined !== cell) {
             this.cellSend(cell);
         }
-    },
+    }
+
     /**
      * @param id {int}
      *
      * @returns {Player|undefined}
      */
-    findPlayerById: function (id) {
+    findPlayerById(id) {
         return this.players.find(player => player.id == id);
-    },
+    }
+
     /**
      * @param name {string}
      *
      * @returns {Player|undefined}
      */
-    findPlayerByName: function (name) {
+    findPlayerByName(name) {
         return this.players.find(player => player.name == name);
-    },
+    }
+
     /**
      * @param {Cell} cell
      */
-    cellSend: function (cell) {
-        var self = this,
+    cellSend(cell) {
+        var self      = this,
             onSuccess = function (response) {
                 self.parseUpdateResponse(response);
             };
 
-        this.apiMgr.request('PATCH', this.$html.attr(Game.resources.config.route.turn) + cell.id, undefined, onSuccess);
-    },
+        this.request('PATCH', this.$html.attr('data-turn-link') + cell.id, undefined, onSuccess);
+    }
+
     /**
-     * @param {{cells: {id: {int}, state: {id: {int}}}[], result: {player: {Object}}}} response
+     * @param {{cells: {id: {int}, flags: {int}}[], result: {player: {Object}}}} response
      */
-    parseUpdateResponse: function (response) {
+    parseUpdateResponse(response) {
         let self = this;
 
         response.cells.forEach(function (_cell) {
-            let cell = self.findCell({id: _cell.id});
+            let cell = self.findCell({ id: _cell.id });
 
             if (undefined !== cell) {
-                cell.setState(_cell.state.id);
+                cell.setState(_cell.flags);
             }
         });
 
         if (undefined !== response.result) {
-            let text = Game.resources.config.text,
-                type = AlertMgr.resources.config.type,
+            let text   = Game.resources.config.text,
+                type   = AlertMgr.resources.config.type,
                 player = this.findPlayerById(response.result.player.id);
 
             if (undefined !== player) {
@@ -169,13 +164,14 @@ Game.prototype = {
                     : this.alertMgr.show(text.loss, type.error);
             }
         }
-    },
+    }
+
     /**
      * @param {{playerId: {int}, id: {int}, coordinate: {string}}} criteria
      *
      * @returns {Cell}
      */
-    findCell: function (criteria) {
+    findCell(criteria) {
         for (let i = 0; i < this.players.length; i++) {
             if (undefined !== criteria.playerId && criteria.playerId !== this.players[i].id) {
                 continue;
@@ -187,61 +183,30 @@ Game.prototype = {
                 return cell;
             }
         }
-    },
-    modalGameInitiation: function () {
+    }
+
+    modalGameInitiation() {
         this.alertMgr.hide();
         this.modalMgr.updateHTML(Game.resources.html.modal).show();
 
         return this;
-    },
-    /**
-     * @param {Element} el
-     *
-     * @returns {boolean}
-     */
-    modalValidateInput: function (el) {
-        let config = Game.resources.config,
-            battlefieldSize = config.pattern.battlefield;
+    }
 
-        switch (el.id) {
-            case config.trigger.player:
-                if (!config.pattern.username.test(el.value)) {
-                    el.value = el.value.substr(0, el.value.length - 1);
-
-                    return false;
-                }
-                return true;
-            case config.trigger.bfsize:
-                if (isNaN(el.value))
-                    el.value = el.value.substr(0, el.value.length - 1);
-                else if (el.value.length > 1 && el.value < battlefieldSize.min)
-                    el.value = battlefieldSize.min;
-                else if (el.value.length > 2 || el.value > battlefieldSize.max)
-                    el.value = battlefieldSize.max;
-
-                return battlefieldSize.min >= el.value <= battlefieldSize.max;
-        }
-    },
-    modalUnlockSubmission: function () {
+    modalUnlockSubmission() {
         this.modalMgr.unlockSubmission(false);
 
-        let trigger = Game.resources.config.trigger,
-            isUsernameValid = this.modalValidateInput(document.getElementById('model-trigger-username')),
-            isBattlefieldSizeValid = this.modalValidateInput(document.getElementById('model-trigger-battlefield-size'));
+        let validation             = Game.resources.validation,
+            isUsernameValid        = validation.validateInput(document.getElementById('model-input-player-name')),
+            isBattlefieldSizeValid = validation.validateInput(document.getElementById('model-input-battlefield-size'));
 
         if (isUsernameValid && isBattlefieldSizeValid) {
             this.modalMgr.unlockSubmission(true);
         }
     }
-};
+}
 
-Game.resources = {};
-Game.resources.config = {
-    /** @enum {string} */
-    trigger: {
-        username: 'model-trigger-username',
-        game_size: 'model-trigger-battlefield-size'
-    },
+Game.resources            = {};
+Game.resources.config     = {
     /** @enum {string} */
     text: {
         win: 'you won',
@@ -250,51 +215,72 @@ Game.resources.config = {
     pattern: {
         /** @enum {int} */
         battlefield: {
-            min: 5,
-            max: 15
+            min: 7,
+            max: 12
         },
         /** @type {Object} */
-        username: /^[a-zA-Z0-9\.\-\ \@]{1,100}$/
-    },
-    /** @enum {string} */
-    route: {
-        turn: 'data-turn-link',
-        init: 'data-init-link'
+        username: /^[a-zA-Z0-9\.\- @]{1,100}$/
     }
 };
-Game.resources.html = {
+Game.resources.validation = {
+    /**
+     * @param {Element} el
+     *
+     * @returns {boolean}
+     */
+    validateInput(el) {
+        switch (el.id) {
+            case 'model-input-player-name':
+                if (!Game.resources.config.pattern.username.test(el.value)) {
+                    el.value = el.value.substr(0, el.value.length - 1);
+
+                    return false;
+                }
+                return true;
+            case 'model-input-battlefield-size':
+                let battlefieldSize = Game.resources.config.pattern.battlefield
+                if (isNaN(el.value))
+                    el.value = el.value.substr(0, el.value.length - 1);
+                else if (el.value > battlefieldSize.max)
+                    el.value = battlefieldSize.max;
+
+                return el.value >= battlefieldSize.min;
+        }
+    }
+};
+Game.resources.html       = {
     /**
      * @returns {string}
      */
     modal: function () {
         let battlefield = Game.resources.config.pattern.battlefield;
 
-        return '' +
-            '<div class="modal fade">' +
-                '<div class="modal-dialog">' +
-                    '<div class="modal-content">' +
-                        '<div class="modal-header">' +
-                            '<button type="button" class="close" data-dismiss="modal">' +
-                                '<span aria-hidden="true">&times;</span>' +
-                            '</button>' +
-                            '<h4 class="modal-title">your details</h4>' +
-                        '</div>' +
-                        '<div class="modal-body">' +
-                            '<div class="form-group">' +
-                                '<label for="model-trigger-username">nickname</label>' +
-                                '<input type="text" class="form-control" id="model-trigger-username" placeholder="">' +
-                            '</div>' +
-                            '<div class="form-group">' +
-                                '<label for="model-trigger-battlefield-size">battlefield size</label>' +
-                                '<input type="test" class="form-control" id="model-trigger-battlefield-size"' +
-                                    ' placeholder="between ' + battlefield.min + ' and ' + battlefield.max + '">' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="modal-footer">' +
-                            '<button type="button" id="new-game-btn" class="btn btn-primary" disabled="disabled">next step</button>' +
-                        '</div>' +
-                    '</div>' +
-                '</div>' +
-            '</div>';
+        return ' \
+            <div class="modal fade"> \
+                <div class="modal-dialog"> \
+                    <div class="modal-content"> \
+                        <div class="modal-header"> \
+                            <button type="button" class="close" data-dismiss="modal"> \
+                                <span aria-hidden="true">&times;</span> \
+                            </button> \
+                            <h4 class="modal-title">your details</h4> \
+                        </div> \
+                        <div class="modal-body"> \
+                            <div class="form-group"> \
+                                <label for="model-input-player-name">nickname</label> \
+                                <input type="text" class="form-control" id="model-input-player-name" placeholder=""> \
+                            </div> \
+                            <div class="form-group"> \
+                                <label for="model-input-battlefield-size">battlefield size</label> \
+                                <input type="test" class="form-control" id="model-input-battlefield-size" \
+                                    placeholder="between ' + battlefield.min + ' and ' + battlefield.max + '"> \
+                            </div> \
+                        </div> \
+                        <div class="modal-footer"> \
+                            <button type="button" id="model-button-init-new-game" class="btn btn-primary" disabled="disabled">next step</button> \
+                        </div> \
+                    </div> \
+                </div> \
+            </div>';
     }
 };
