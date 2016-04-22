@@ -77,7 +77,7 @@ class GameProcessor
             }
 
             if (!PlayerModel::isAIControlled($player)) {
-                $battlefield->getCellByCoordinate('A1')->setFlag(CellModel::FLAG_DEAD_SHIP);
+                $battlefield->getCellByCoordinate('A1')->setFlags(CellModel::FLAG_DEAD_SHIP);
             }
         }
 
@@ -111,7 +111,7 @@ class GameProcessor
                 }
 
                 $_cell = $this->processPlayerTurn($player, $battlefield, $cell);
-                $this->cellModel->isShipDead($_cell);
+                CellModel::isShipDead($_cell);
 
                 if (!BattlefieldModel::hasUnfinishedShips($battlefield)) {
                     $result = (new GameResult())

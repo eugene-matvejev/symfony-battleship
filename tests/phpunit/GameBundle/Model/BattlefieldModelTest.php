@@ -36,10 +36,10 @@ class BattlefieldModelTest extends \PHPUnit_Framework_TestCase
         /** by default all cells are mocked as 'live water' */
         $this->assertFalse(BattlefieldModel::hasUnfinishedShips($battlefield));
 
-        $battlefield->getCellByCoordinate('A1')->setFlag(CellModel::FLAG_SHIP);
+        $battlefield->getCellByCoordinate('A1')->setFlags(CellModel::FLAG_SHIP);
         $this->assertTrue(BattlefieldModel::hasUnfinishedShips($battlefield));
 
-        $battlefield->getCellByCoordinate('A1')->setFlag(CellModel::FLAG_DEAD_SHIP);
+        $battlefield->getCellByCoordinate('A1')->setFlags(CellModel::FLAG_DEAD_SHIP);
         $this->assertFalse(BattlefieldModel::hasUnfinishedShips($battlefield));
     }
 }

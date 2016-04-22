@@ -46,12 +46,12 @@ class GameProcessorTest extends ContainerAwareTestSuite
 
         foreach ($game->getBattlefields() as $battlefield) {
             if (PlayerModel::isAIControlled($battlefield->getPlayer())) {
-                $this->assertEquals(CellModel::FLAG_SHIP, $battlefield->getCellByCoordinate('B2')->getFlag());
+                $this->assertEquals(CellModel::FLAG_SHIP, $battlefield->getCellByCoordinate('B2')->getFlags());
                 $this->assertTrue(BattlefieldModel::hasUnfinishedShips($battlefield));
                 $this->assertCount(49, BattlefieldModel::getLiveCells($battlefield));
             } else {
                 foreach ($battlefield->getCells() as $cell) {
-                    $this->assertEquals(CellModel::FLAG_NONE, $cell->getFlag());
+                    $this->assertEquals(CellModel::FLAG_NONE, $cell->getFlags());
                 }
             }
         }
@@ -86,7 +86,7 @@ class GameProcessorTest extends ContainerAwareTestSuite
     public function processGameTurnOnUnfinishedGame()
     {
         $game = $this->getGameMock();
-        $game->getBattlefields()[0]->getPlayer()->setFlag(PlayerModel::FLAG_AI_CONTROLLED);
+        $game->getBattlefields()[0]->getPlayer()->setFlags(PlayerModel::FLAG_AI_CONTROLLED);
 
         $i = 0;
         foreach ($game->getBattlefields() as $battlefield) {
