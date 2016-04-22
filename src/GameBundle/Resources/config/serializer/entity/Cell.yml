@@ -1,6 +1,6 @@
 EM\GameBundle\Entity\Cell:
     accessor_order: custom
-    custom_accessor_order: [id, coordinate, state]
+    custom_accessor_order: [id, coordinate, flag]
 
     exclusion_policy: ALL
 
@@ -14,6 +14,6 @@ EM\GameBundle\Entity\Cell:
             type: string
             xml_element:
                 cdata: false
-        mask:
+        flag:
             type: integer
             expose: true
