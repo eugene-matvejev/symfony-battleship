@@ -10,8 +10,8 @@ use EM\GameBundle\Entity\Player;
  */
 class PlayerModel
 {
-    const MASK_NONE = 0x0000;
-    const MASK_AI_CONTROLLED = 0x0001;
+    const FLAG_NONE          = 0x0000;
+    const FLAG_AI_CONTROLLED = 0x0001;
     /**
      * @var EntityRepository
      */
@@ -28,11 +28,11 @@ class PlayerModel
 
         return $player ?? (new Player())
             ->setName($name)
-            ->setMask($cpuControlled ? self::MASK_AI_CONTROLLED : self::MASK_NONE);
+            ->setFlag($cpuControlled ? self::FLAG_AI_CONTROLLED : self::FLAG_NONE);
     }
 
     public static function isAIControlled(Player $player) : bool
     {
-        return $player->hasMask(self::MASK_AI_CONTROLLED);
+        return $player->hasFlag(self::FLAG_AI_CONTROLLED);
     }
 }

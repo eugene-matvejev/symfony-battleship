@@ -41,7 +41,7 @@ class AIStrategyService
     public function chooseCells(Battlefield $battlefield) : array
     {
         foreach ($battlefield->getCells() as $cell) {
-            if (!$cell->hasMask(CellModel::MASK_DEAD_SHIP) || $this->cellModel->isShipDead($cell)) {
+            if (!$cell->hasFlag(CellModel::FLAG_DEAD_SHIP) || $this->cellModel->isShipDead($cell)) {
                 continue;
             }
 
@@ -66,7 +66,7 @@ class AIStrategyService
             $service->setPath($way);
 
             if (null !== $_cell = $cell->getBattlefield()->getCellByCoordinate($service->getNextCoordinate())) {
-                if ($_cell->hasMask(CellModel::MASK_DEAD_SHIP)) {
+                if ($_cell->hasFlag(CellModel::FLAG_DEAD_SHIP)) {
                     return $strategyId;
                 }
             }

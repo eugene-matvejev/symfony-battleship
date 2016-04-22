@@ -58,7 +58,7 @@ class GameController extends AbstractAPIController
         if (null === $cell = $this->getDoctrine()->getRepository('GameBundle:Cell')->find($cellId)) {
             throw new CellException("cell: {$cellId} doesn't exist");
         }
-        if ($cell->hasMask(CellModel::MASK_DEAD)) {
+        if ($cell->hasFlag(CellModel::FLAG_DEAD)) {
             throw new CellException("cell: {$cellId} doesn't have *LIVE* status");
         }
 

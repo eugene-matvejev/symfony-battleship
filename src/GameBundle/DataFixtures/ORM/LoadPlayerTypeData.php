@@ -20,10 +20,10 @@ class LoadPlayerTypeData extends AbstractFixture implements OrderedFixtureInterf
     {
         $playerCPU = (new Player())
             ->setName('CPU')
-            ->setMask(PlayerModel::MASK_AI_CONTROLLED);
+            ->setMask(PlayerModel::FLAG_AI_CONTROLLED);
         $playerHuman = (new Player())
             ->setName('Human')
-            ->setMask(PlayerModel::MASK_NONE);
+            ->setMask(PlayerModel::FLAG_NONE);
         $om->persist($playerCPU);
         $om->persist($playerHuman);
 
