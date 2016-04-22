@@ -19,10 +19,10 @@ class GameResultModel
      */
     private $resultsPerPage;
 
-    public function __construct(int $recordsPerPage, GameResultRepository $repository)
+    public function __construct(GameResultRepository $repository, int $recordsPerPage)
     {
-        $this->resultsPerPage = $recordsPerPage;
         $this->repository = $repository;
+        $this->resultsPerPage = $recordsPerPage;
     }
 
     public function prepareResponse(int $currentPage) : GameResultsResponse

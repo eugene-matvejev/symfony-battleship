@@ -7,8 +7,8 @@ services:
     battleship.game.services.game.result.model:
         class: EM\GameBundle\Model\GameResultModel
         arguments:
-            - "%battleship_game.game_results_per_page%"
             - "@battleship.game.services.game.result.repository"
+            - "%battleship_game.game_results_per_page%"
     # AI
     battleship.game.services.ai.core.service:
         class: EM\GameBundle\Service\AI\AIService
