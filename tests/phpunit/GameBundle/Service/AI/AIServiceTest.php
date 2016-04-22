@@ -124,7 +124,7 @@ class AIServiceTest extends ContainerAwareTestSuite
         $battlefield = $this->getBattlefieldMock();
         foreach ($cellsToAlter as $mask => $coordinates) {
             foreach ($coordinates as $coordinate) {
-                $battlefield->getCellByCoordinate($coordinate)->setFlag($mask);
+                $battlefield->getCellByCoordinate($coordinate)->setFlags($mask);
             }
         }
 
@@ -132,8 +132,8 @@ class AIServiceTest extends ContainerAwareTestSuite
         foreach ($battlefield->getCells() as $cell) {
             $this->assertEquals(
                 ($expectedMasks[$cell->getCoordinate()] ?? CellModel::FLAG_NONE),
-                $cell->getFlag(),
-                "cell {$cell->getCoordinate()} have unexpected state: {$cell->getFlag()}"
+                $cell->getFlags(),
+                "cell {$cell->getCoordinate()} have unexpected state: {$cell->getFlags()}"
             );
         }
     }
@@ -195,6 +195,6 @@ class AIServiceTest extends ContainerAwareTestSuite
         $returnedCell = $this->invokeNonPublicMethod($this->ai, 'attackCell', [$cell]);
 
         $this->assertSame($cell, $returnedCell);
-        $this->assertEquals($expectedMask, $cell->getFlag());
+        $this->assertEquals($expectedMask, $cell->getFlags());
     }
 }

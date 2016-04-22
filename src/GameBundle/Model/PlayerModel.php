@@ -28,7 +28,7 @@ class PlayerModel
 
         return $player ?? (new Player())
             ->setName($name)
-            ->setFlag($cpuControlled ? self::FLAG_AI_CONTROLLED : self::FLAG_NONE);
+            ->setFlags($cpuControlled ? self::FLAG_AI_CONTROLLED : self::FLAG_NONE);
     }
 
     public static function isAIControlled(Player $player) : bool

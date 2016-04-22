@@ -76,9 +76,9 @@ class CellModelTest extends \PHPUnit_Framework_TestCase
     {
         foreach ($masks as $originalMask => $expectedMask) {
             /** @var Cell $cell */
-            $cell = $closure($this->getCellMock('A1')->setFlag($originalMask));
+            $cell = $closure($this->getCellMock('A1')->setFlags($originalMask));
 
-            $this->assertEquals($expectedMask, $cell->getFlag());
+            $this->assertEquals($expectedMask, $cell->getFlags());
         }
     }
 }

@@ -11,9 +11,9 @@ interface FlaggedInterface
 
     public function removeFlag(int $mask);
 
-    public function setFlag(int $mask);
+    public function setFlags(int $mask);
 
-    public function getFlag();
+    public function getFlags();
 
     public function hasFlag(int $mask);
 }

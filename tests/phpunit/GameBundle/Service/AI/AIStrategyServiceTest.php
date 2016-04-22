@@ -35,7 +35,7 @@ class AIStrategyServiceTest extends ContainerAwareTestSuite
         $cells = $this->strategyService->chooseCells($battlefield);
         $this->assertCount(0, $cells);
 
-        $battlefield->getCellByCoordinate('B2')->setFlag(CellModel::FLAG_DEAD_SHIP);
+        $battlefield->getCellByCoordinate('B2')->setFlags(CellModel::FLAG_DEAD_SHIP);
 
 //        $cells = $this->strategyService->chooseCells($battlefield);
 //        $this->assertCount(4, $cells);

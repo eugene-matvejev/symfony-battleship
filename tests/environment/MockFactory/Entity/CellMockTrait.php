@@ -14,6 +14,6 @@ trait CellMockTrait
     {
         return (new Cell())
             ->setCoordinate($coordinate)
-            ->setFlag($mask);
+            ->setFlags($mask);
     }
 }

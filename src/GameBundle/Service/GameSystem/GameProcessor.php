@@ -72,12 +72,12 @@ class GameProcessor
 
                 $cell = (new Cell())
                     ->setCoordinate($_cell->coordinate)
-                    ->setFlag($flag);
+                    ->setFlags($flag);
                 $battlefield->addCell($cell);
             }
 
             if (!PlayerModel::isAIControlled($player)) {
-                $battlefield->getCellByCoordinate('A1')->setFlag(CellModel::FLAG_DEAD_SHIP);
+                $battlefield->getCellByCoordinate('A1')->setFlags(CellModel::FLAG_DEAD_SHIP);
             }
         }
 
