@@ -9,15 +9,15 @@ use EM\GameBundle\Entity\Cell;
  */
 class PathProcessor
 {
-    const PATH_NONE       = 0;
-    const PATH_LEFT       = 1;
-    const PATH_RIGHT      = 2;
-    const PATH_UP         = 3;
-    const PATH_DOWN       = 4;
-    const PATH_LEFT_UP    = 5;
-    const PATH_LEFT_DOWN  = 6;
-    const PATH_RIGHT_UP   = 7;
-    const PATH_RIGHT_DOWN = 8;
+    const PATH_NONE       = 0x00;
+    const PATH_LEFT       = 0x01;
+    const PATH_RIGHT      = 0x02;
+    const PATH_UP         = 0x10;
+    const PATH_DOWN       = 0x20;
+    const PATH_LEFT_UP    = self::PATH_LEFT|self::PATH_UP;
+    const PATH_LEFT_DOWN  = self::PATH_LEFT|self::PATH_DOWN;
+    const PATH_RIGHT_UP   = self::PATH_RIGHT|self::PATH_UP;
+    const PATH_RIGHT_DOWN = self::PATH_RIGHT|self::PATH_DOWN;
     const PRIMARY_PATHS   = [
         self::PATH_LEFT,
         self::PATH_RIGHT,
