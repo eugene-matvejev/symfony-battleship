@@ -1,7 +1,5 @@
 services:
     # Models
-    battleship.game.services.cell.model:
-        class: EM\GameBundle\Model\CellModel
     battleship.game.services.player.model:
         class: EM\GameBundle\Model\PlayerModel
         arguments:
@@ -15,12 +13,10 @@ services:
     battleship.game.services.ai.core.service:
         class: EM\GameBundle\Service\AI\AIService
         arguments:
-            - "@battleship.game.services.cell.model"
             - "@battleship.game.services.ai.strategy.service"
     battleship.game.services.ai.strategy.service:
         class: EM\GameBundle\Service\AI\AIStrategyService
         arguments:
-            - "@battleship.game.services.cell.model"
             - "@battleship.game.services.ai.strategy.processor"
     # Processors
     battleship.game.services.ai.strategy.processor:
@@ -29,7 +25,6 @@ services:
         class: EM\GameBundle\Service\GameSystem\GameProcessor
         arguments:
             - "@battleship.game.services.ai.core.service"
-            - "@battleship.game.services.cell.model"
             - "@battleship.game.services.player.model"
     # Repositories
     battleship.game.services.player.repository:

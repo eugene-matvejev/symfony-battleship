@@ -25,18 +25,13 @@ class GameProcessor
      */
     private $ai;
     /**
-     * @var CellModel
-     */
-    private $cellModel;
-    /**
      * @var PlayerModel
      */
     private $playerModel;
 
-    public function __construct(AIService $ai, CellModel $cellModel, PlayerModel $playerModel)
+    public function __construct(AIService $ai, PlayerModel $playerModel)
     {
         $this->ai = $ai;
-        $this->cellModel = $cellModel;
         $this->playerModel = $playerModel;
     }
 
@@ -71,13 +66,13 @@ class GameProcessor
             $game->addBattlefield($battlefield);
 
             foreach ($data->cells as $_cell) {
-                $mask = PlayerModel::isAIControlled($player)
+                $flag = PlayerModel::isAIControlled($player)
                     ? CellModel::FLAG_NONE
                     : (0 !== $_cell->state ? CellModel::FLAG_SHIP : CellModel::FLAG_NONE);
 
                 $cell = (new Cell())
                     ->setCoordinate($_cell->coordinate)
-                    ->addFlag($mask);
+                    ->setFlag($flag);
                 $battlefield->addCell($cell);
             }
 
@@ -116,7 +111,7 @@ class GameProcessor
                 }
 
                 $_cell = $this->processPlayerTurn($player, $battlefield, $cell);
-                $this->cellModel->isShipDead($_cell);
+                CellModel::isShipDead($_cell);
 
                 if (!BattlefieldModel::hasUnfinishedShips($battlefield)) {
                     $result = (new GameResult())
@@ -145,6 +140,6 @@ class GameProcessor
     {
         return PlayerModel::isAIControlled($player)
             ? $this->ai->processCPUTurn($battlefield)
-            : $this->cellModel->switchPhase($cell);
+            : CellModel::switchPhase($cell);
     }
 }
