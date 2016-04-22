@@ -13,10 +13,10 @@ use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 class AIStrategyService
 {
     const STRATEGY_MAP = [
-        PathProcessor::PATH_LEFT => AIStrategyProcessor::STRATEGY_HORIZONTAL,
+        PathProcessor::PATH_LEFT  => AIStrategyProcessor::STRATEGY_HORIZONTAL,
         PathProcessor::PATH_RIGHT => AIStrategyProcessor::STRATEGY_HORIZONTAL,
-        PathProcessor::PATH_UP => AIStrategyProcessor::STRATEGY_VERTICAL,
-        PathProcessor::PATH_DOWN => AIStrategyProcessor::STRATEGY_VERTICAL
+        PathProcessor::PATH_UP    => AIStrategyProcessor::STRATEGY_VERTICAL,
+        PathProcessor::PATH_DOWN  => AIStrategyProcessor::STRATEGY_VERTICAL
     ];
     /**
      * @var AIStrategyProcessor
@@ -62,11 +62,12 @@ class AIStrategyService
     {
         $service = new PathProcessor($cell);
 
+        $battlefield = $cell->getBattlefield();
         foreach (self::STRATEGY_MAP as $way => $strategyId) {
             $service->setPath($way);
 
-            if (null !== $_cell = $cell->getBattlefield()->getCellByCoordinate($service->getNextCoordinate())) {
-                if ($_cell->hasFlag(CellModel::FLAG_DEAD_SHIP)) {
+            if (null !== $cell = $battlefield->getCellByCoordinate($service->getNextCoordinate())) {
+                if ($cell->hasFlag(CellModel::FLAG_DEAD_SHIP)) {
                     return $strategyId;
                 }
             }
