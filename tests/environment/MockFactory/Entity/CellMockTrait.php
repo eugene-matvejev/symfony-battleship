@@ -10,10 +10,10 @@ use EM\GameBundle\Model\CellModel;
  */
 trait CellMockTrait
 {
-    protected function getCellMock(string $coordinate, int $mask = CellModel::MASK_NONE) : Cell
+    protected function getCellMock(string $coordinate, int $mask = CellModel::FLAG_NONE) : Cell
     {
         return (new Cell())
             ->setCoordinate($coordinate)
-            ->addMask($mask);
+            ->setFlag($mask);
     }
 }
