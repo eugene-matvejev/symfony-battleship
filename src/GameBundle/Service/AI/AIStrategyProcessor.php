@@ -24,32 +24,32 @@ class AIStrategyProcessor
      */
     public function process(Cell $cell, int $strategyId) : array
     {
-        $pathProcessor = new PathProcessor($cell);
-        $pathProcessors = [];
+        $processor = new PathProcessor($cell);
+        $processors = [];
         switch ($strategyId) {
             case self::STRATEGY_HORIZONTAL:
-                $pathProcessors = [
-                    clone $pathProcessor->setPath(PathProcessor::PATH_LEFT),
-                    clone $pathProcessor->setPath(PathProcessor::PATH_RIGHT)
+                $processors = [
+                    clone $processor->setPath(PathProcessor::PATH_LEFT),
+                    clone $processor->setPath(PathProcessor::PATH_RIGHT)
                 ];
                 break;
             case self::STRATEGY_VERTICAL:
-                $pathProcessors = [
-                    clone $pathProcessor->setPath(PathProcessor::PATH_UP),
-                    clone $pathProcessor->setPath(PathProcessor::PATH_DOWN)
+                $processors = [
+                    clone $processor->setPath(PathProcessor::PATH_UP),
+                    clone $processor->setPath(PathProcessor::PATH_DOWN)
                 ];
                 break;
             case self::STRATEGY_BOTH:
-                $pathProcessors = [
-                    clone $pathProcessor->setPath(PathProcessor::PATH_LEFT),
-                    clone $pathProcessor->setPath(PathProcessor::PATH_RIGHT),
-                    clone $pathProcessor->setPath(PathProcessor::PATH_UP),
-                    clone $pathProcessor->setPath(PathProcessor::PATH_DOWN)
+                $processors = [
+                    clone $processor->setPath(PathProcessor::PATH_LEFT),
+                    clone $processor->setPath(PathProcessor::PATH_RIGHT),
+                    clone $processor->setPath(PathProcessor::PATH_UP),
+                    clone $processor->setPath(PathProcessor::PATH_DOWN)
                 ];
                 break;
         }
 
-        return $this->processCoordinates($cell->getBattlefield(), $pathProcessors);
+        return $this->processCoordinates($cell->getBattlefield(), $processors);
     }
 
     /**
