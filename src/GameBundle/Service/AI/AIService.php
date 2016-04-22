@@ -36,11 +36,11 @@ class AIService
         $cells = $this->strategyService->chooseCells($battlefield);
 
         try {
-            return $this->pickCellToAttack($cells);
+            return self::pickCellToAttack($cells);
         } catch (CellException $e) {
             $cells = BattlefieldModel::getLiveCells($battlefield);
 
-            return $this->pickCellToAttack($cells);
+            return self::pickCellToAttack($cells);
         }
     }
 
@@ -51,13 +51,13 @@ class AIService
      * @throws AIException
      * @throws CellException
      */
-    private function pickCellToAttack(array $cells) : Cell
+    private static function pickCellToAttack(array $cells) : Cell
     {
         if (empty($cells)) {
             throw new CellException('no cells provided');
         }
 
-        return $this->attackCell($cells[array_rand($cells, 1)]);
+        return self::attackCell($cells[array_rand($cells, 1)]);
     }
 
     /**
@@ -66,7 +66,7 @@ class AIService
      * @return Cell
      * @throws AIException
      */
-    private function attackCell(Cell $cell) : Cell
+    private static function attackCell(Cell $cell) : Cell
     {
         if ($cell->hasFlag(CellModel::FLAG_DEAD)) {
             throw new AIException("cell: {$cell->getId()} already flagged as *DEAD*");
