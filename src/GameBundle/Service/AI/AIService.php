@@ -74,7 +74,7 @@ class AIService
     private function attackCell(Cell $cell) : Cell
     {
         if ($cell->hasFlag(CellModel::FLAG_DEAD)) {
-            throw new AIException("cell: {$cell->getId()} already have have CellModel::FLAG_DEAD");
+            throw new AIException("cell: {$cell->getId()} already flagged as *DEAD*");
         }
 
         return $this->cellModel->switchPhase($cell);
