@@ -43,11 +43,13 @@ class GameProcessor
     public function processCPUBattlefieldsInitiation(Game $game) : array
     {
         $cells = [];
+        /** for test purposes only */
         foreach ($game->getBattlefields() as $battlefield) {
             if (PlayerModel::isAIControlled($battlefield->getPlayer())) {
                 $cells[] = $battlefield->getCellByCoordinate('B2')->addFlag(CellModel::FLAG_SHIP);
             }
         }
+        /** ********************** */
 
         return $cells;
     }
@@ -76,9 +78,11 @@ class GameProcessor
                 $battlefield->addCell($cell);
             }
 
+            /** for test purposes only */
             if (!PlayerModel::isAIControlled($player)) {
                 $battlefield->getCellByCoordinate('A1')->setFlags(CellModel::FLAG_DEAD_SHIP);
             }
+            /** ********************** */
         }
 
         return $game;
