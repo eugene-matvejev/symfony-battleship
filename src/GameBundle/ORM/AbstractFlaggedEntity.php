@@ -16,36 +16,36 @@ abstract class AbstractFlaggedEntity extends AbstractEntity implements FlaggedIn
      *
      * @var int
      */
-    protected $mask;
+    protected $flag;
 
-    public function addFlag(int $mask) : self
+    public function addFlag(int $flag) : self
     {
-        $this->mask |= $mask;
+        $this->flag |= $flag;
 
         return $this;
     }
 
-    public function removeFlag(int $mask) : self
+    public function removeFlag(int $flag) : self
     {
-        $this->mask &= ~$mask;
+        $this->flag &= ~$flag;
 
         return $this;
     }
 
-    public function setFlag(int $mask) : self
+    public function setFlag(int $flag) : self
     {
-        $this->mask = $mask;
+        $this->flag = $flag;
 
         return $this;
     }
 
     public function getFlag() : int
     {
-        return $this->mask;
+        return $this->flag;
     }
 
-    public function hasFlag(int $mask) : bool
+    public function hasFlag(int $flag) : bool
     {
-        return ($this->mask & $mask) === $mask;
+        return ($this->flag & $flag) === $flag;
     }
 }
