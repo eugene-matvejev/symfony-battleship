@@ -55,14 +55,14 @@ class AIStrategyService
      */
     private function chooseStrategy(Cell $cell) : int
     {
-        $service = new PathProcessor($cell);
+        $processor = new PathProcessor($cell);
 
         $battlefield = $cell->getBattlefield();
         foreach (self::STRATEGY_MAP as $way => $strategyId) {
-            $service->setPath($way);
+            $processor->setPath($way);
 
             /** @var Cell $cell */
-            if (null !== $cell = $battlefield->getCellByCoordinate($service->getNextCoordinate())) {
+            if (null !== $cell = $battlefield->getCellByCoordinate($processor->getNextCoordinate())) {
                 if ($cell->hasFlag(CellModel::FLAG_DEAD_SHIP)) {
                     return $strategyId;
                 }
