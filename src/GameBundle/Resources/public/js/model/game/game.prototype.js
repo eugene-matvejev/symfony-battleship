@@ -72,7 +72,7 @@ class Game extends APIRequestMgr {
      *     battlefields: {
      *         id: {int},
      *         player: {id: {int}, name: {string}},
-     *         cells: {id: {int}, coordinate: {string}, state: {id: {int}}}
+     *         cells: {id: {int}, coordinate: {string}, flag: {int}}[]
      *     }[]
      * }} response
      */
@@ -92,7 +92,7 @@ class Game extends APIRequestMgr {
 
                     if (undefined !== cell) {
                         cell.setId(_cell.id)
-                            .setState(_cell.mask);
+                            .setState(_cell.flag);
                     }
                 });
             }
@@ -140,7 +140,7 @@ class Game extends APIRequestMgr {
     }
 
     /**
-     * @param {{cells: {id: {int}, mask: {int}}[], result: {player: {Object}}}} response
+     * @param {{cells: {id: {int}, flag: {int}}[], result: {player: {Object}}}} response
      */
     parseUpdateResponse(response) {
         let self = this;
@@ -149,7 +149,7 @@ class Game extends APIRequestMgr {
             let cell = self.findCell({ id: _cell.id });
 
             if (undefined !== cell) {
-                cell.setState(_cell.mask);
+                cell.setState(_cell.flag);
             }
         });
 
