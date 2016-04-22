@@ -15,17 +15,12 @@ use EM\GameBundle\Model\CellModel;
 class AIService
 {
     /**
-     * @var CellModel
-     */
-    private $cellModel;
-    /**
      * @var AIStrategyService
      */
     private $strategyService;
 
-    public function __construct(CellModel $model, AIStrategyService $service)
+    public function __construct(AIStrategyService $service)
     {
-        $this->cellModel = $model;
         $this->strategyService = $service;
     }
 
@@ -77,6 +72,6 @@ class AIService
             throw new AIException("cell: {$cell->getId()} already flagged as *DEAD*");
         }
 
-        return $this->cellModel->switchPhase($cell);
+        return CellModel::switchPhase($cell);
     }
 }

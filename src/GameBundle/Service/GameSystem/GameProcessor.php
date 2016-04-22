@@ -25,18 +25,13 @@ class GameProcessor
      */
     private $ai;
     /**
-     * @var CellModel
-     */
-    private $cellModel;
-    /**
      * @var PlayerModel
      */
     private $playerModel;
 
-    public function __construct(AIService $ai, CellModel $cellModel, PlayerModel $playerModel)
+    public function __construct(AIService $ai, PlayerModel $playerModel)
     {
         $this->ai = $ai;
-        $this->cellModel = $cellModel;
         $this->playerModel = $playerModel;
     }
 
@@ -145,6 +140,6 @@ class GameProcessor
     {
         return PlayerModel::isAIControlled($player)
             ? $this->ai->processCPUTurn($battlefield)
-            : $this->cellModel->switchPhase($cell);
+            : CellModel::switchPhase($cell);
     }
 }

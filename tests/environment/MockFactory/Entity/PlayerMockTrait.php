@@ -15,7 +15,7 @@ trait PlayerMockTrait
     {
         return (new Player())
             ->setName($name)
-            ->setFlag($mask);
+            ->setFlags($mask);
     }
 
     protected function getCPUPlayerMock(string $name) : Player

@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 abstract class AbstractFlaggedEntity extends AbstractEntity implements FlaggedInterface
 {
     /**
-     * @ORM\Column(name="flag", type="integer")
+     * @ORM\Column(name="flags", type="integer")
      *
      * @var int
      */
@@ -32,14 +32,14 @@ abstract class AbstractFlaggedEntity extends AbstractEntity implements FlaggedIn
         return $this;
     }
 
-    public function setFlag(int $flag) : self
+    public function setFlags(int $flag) : self
     {
         $this->flag = $flag;
 
         return $this;
     }
 
-    public function getFlag() : int
+    public function getFlags() : int
     {
         return $this->flag;
     }
