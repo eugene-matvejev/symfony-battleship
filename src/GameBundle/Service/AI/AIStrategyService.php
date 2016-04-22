@@ -21,16 +21,11 @@ class AIStrategyService
     /**
      * @var AIStrategyProcessor
      */
-    private $strategyProcessor;
-    /**
-     * @var CellModel
-     */
-    private $cellModel;
+    private $processor;
 
-    public function __construct(CellModel $model, AIStrategyProcessor $strategyProcessor)
+    public function __construct(AIStrategyProcessor $processor)
     {
-        $this->cellModel = $model;
-        $this->strategyProcessor = $strategyProcessor;
+        $this->processor = $processor;
     }
 
     /**
@@ -41,11 +36,11 @@ class AIStrategyService
     public function chooseCells(Battlefield $battlefield) : array
     {
         foreach ($battlefield->getCells() as $cell) {
-            if (!$cell->hasFlag(CellModel::FLAG_DEAD_SHIP) || $this->cellModel->isShipDead($cell)) {
+            if (!$cell->hasFlag(CellModel::FLAG_DEAD_SHIP) || CellModel::isShipDead($cell)) {
                 continue;
             }
 
-            return $this->strategyProcessor->process($cell, $this->chooseStrategy($cell));
+            return $this->processor->process($cell, $this->chooseStrategy($cell));
         }
 
         return [];
@@ -66,6 +61,7 @@ class AIStrategyService
         foreach (self::STRATEGY_MAP as $way => $strategyId) {
             $service->setPath($way);
 
+            /** @var Cell $cell */
             if (null !== $cell = $battlefield->getCellByCoordinate($service->getNextCoordinate())) {
                 if ($cell->hasFlag(CellModel::FLAG_DEAD_SHIP)) {
                     return $strategyId;
