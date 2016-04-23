@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "30a6608580da4f930e33b126c28daf3e",
-    "content-hash": "6d7f14110a2c60978c9b1b18c1249312",
+    "hash": "ee52c2ca6d0ed8f1b63667da0989ce8e",
+    "content-hash": "32c099ad602ffa23daf5e038ccf52569",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1612,6 +1612,68 @@
             "time": "2016-03-15 16:21:41"
         },
         {
+            "name": "sensio/framework-extra-bundle",
+            "version": "v3.0.16",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sensiolabs/SensioFrameworkExtraBundle.git",
+                "reference": "507a15f56fa7699f6cc8c2c7de4080b19ce22546"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/507a15f56fa7699f6cc8c2c7de4080b19ce22546",
+                "reference": "507a15f56fa7699f6cc8c2c7de4080b19ce22546",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/common": "~2.2",
+                "symfony/dependency-injection": "~2.3|~3.0",
+                "symfony/framework-bundle": "~2.3|~3.0"
+            },
+            "require-dev": {
+                "symfony/browser-kit": "~2.3|~3.0",
+                "symfony/dom-crawler": "~2.3|~3.0",
+                "symfony/expression-language": "~2.4|~3.0",
+                "symfony/finder": "~2.3|~3.0",
+                "symfony/phpunit-bridge": "~2.7|~3.0",
+                "symfony/security-bundle": "~2.4|~3.0",
+                "symfony/twig-bundle": "~2.3|~3.0",
+                "twig/twig": "~1.11|~2.0"
+            },
+            "suggest": {
+                "symfony/expression-language": "",
+                "symfony/psr-http-message-bridge": "To use the PSR-7 converters",
+                "symfony/security-bundle": ""
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Sensio\\Bundle\\FrameworkExtraBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "This bundle provides a way to configure your controllers with annotations",
+            "keywords": [
+                "annotations",
+                "controllers"
+            ],
+            "time": "2016-03-25 17:08:27"
+        },
+        {
             "name": "sensiolabs/security-checker",
             "version": "v3.0.2",
             "source": {
@@ -2191,20 +2253,20 @@
         },
         {
             "name": "zendframework/zend-code",
-            "version": "3.0.1",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-code.git",
-                "reference": "09405eb04b7199733219cbf1f0803883a7bab842"
+                "reference": "57cfbcf794a79985278d6308325bc86060af588c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-code/zipball/09405eb04b7199733219cbf1f0803883a7bab842",
-                "reference": "09405eb04b7199733219cbf1f0803883a7bab842",
+                "url": "https://api.github.com/repos/zendframework/zend-code/zipball/57cfbcf794a79985278d6308325bc86060af588c",
+                "reference": "57cfbcf794a79985278d6308325bc86060af588c",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.5 || ^7.0",
+                "php": "^5.5 || 7.0.0 - 7.0.4 || ^7.0.6",
                 "zendframework/zend-eventmanager": "^2.6 || ^3.0"
             },
             "require-dev": {
@@ -2212,7 +2274,7 @@
                 "ext-phar": "*",
                 "phpunit/phpunit": "^4.8.21",
                 "squizlabs/php_codesniffer": "^2.5",
-                "zendframework/zend-stdlib": "~2.7"
+                "zendframework/zend-stdlib": "^2.7 || ^3.0"
             },
             "suggest": {
                 "doctrine/annotations": "Doctrine\\Common\\Annotations >=1.0 for annotation features",
@@ -2240,7 +2302,7 @@
                 "code",
                 "zf2"
             ],
-            "time": "2016-01-26 17:57:25"
+            "time": "2016-04-20 17:34:49"
         },
         {
             "name": "zendframework/zend-eventmanager",
@@ -3146,16 +3208,16 @@
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "3.1.2",
+            "version": "3.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "7c34c9bdde4131b824086457a3145e27dba10ca1"
+                "reference": "151c96874bff6fe61a25039df60e776613a61489"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/7c34c9bdde4131b824086457a3145e27dba10ca1",
-                "reference": "7c34c9bdde4131b824086457a3145e27dba10ca1",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/151c96874bff6fe61a25039df60e776613a61489",
+                "reference": "151c96874bff6fe61a25039df60e776613a61489",
                 "shasum": ""
             },
             "require": {
@@ -3198,7 +3260,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2016-03-24 05:58:25"
+            "time": "2016-04-20 14:39:26"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -3714,16 +3776,16 @@
         },
         {
             "name": "seld/cli-prompt",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/cli-prompt.git",
-                "reference": "b27db1514f7d7bb7a366ad95d4eb2b17140a0691"
+                "reference": "8cbe10923cae5bcd7c5a713f6703fc4727c8c1b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/cli-prompt/zipball/b27db1514f7d7bb7a366ad95d4eb2b17140a0691",
-                "reference": "b27db1514f7d7bb7a366ad95d4eb2b17140a0691",
+                "url": "https://api.github.com/repos/Seldaek/cli-prompt/zipball/8cbe10923cae5bcd7c5a713f6703fc4727c8c1b4",
+                "reference": "8cbe10923cae5bcd7c5a713f6703fc4727c8c1b4",
                 "shasum": ""
             },
             "require": {
@@ -3758,7 +3820,7 @@
                 "input",
                 "prompt"
             ],
-            "time": "2016-01-09 17:55:27"
+            "time": "2016-04-18 09:31:41"
         },
         {
             "name": "seld/jsonlint",

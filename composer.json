@@ -1,5 +1,5 @@
 {
-    "name": "eugenematvejev/battleship-game-api",
+    "name": "eugene-matvejev/battleship-game-api",
     "description": "spare time project (API part), highly experimental! more info in readme.",
     "license": "MIT",
     "type": "project",
@@ -27,6 +27,7 @@
         "doctrine/doctrine-migrations-bundle": "~1.1",
         "doctrine/orm": "~2.5",
         "sensio/distribution-bundle": "^5.0",
+        "sensio/framework-extra-bundle": "^3.0",
         "symfony/symfony": "3.0.3",
         "symfony/monolog-bundle": "~2.8",
         "jms/serializer-bundle": "^1.1"
