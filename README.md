@@ -18,16 +18,19 @@
    * purpose: to easier manual testing (as the project is far from 'finished' stage, as I keep trying polish it)
 
 ### future plans:
- * deliver back-end as OpenAPI using SF3, PHP7, Doctrine2, Various databases
-  * try to create it later as well on Silex.
- * separate front-ent side using single-page-application model AngularJS 2 / Backbone / React
-  * front-end already behave as single-page-application (SPA)
+ * deliver back-end as OpenAPI using SF3, PHP7, Doctrine2 with various databases
+  * try to create it later as well on Silex
+ * separate front-end into separate repository and rewrite it using AngularJS 2
+  * front-end already is done as single-page-application (SPA)
  * make simple and flexible database support e.g. MariaDB, MySQL, MongoDB
- * implement phpunit, behat tests, consider kahlan and phpspec as well
+ * implement behat tests, consider kahlan as well
 
 # software requirements:
- * database: MySQL => 5.5 or MariaDB >= 9.*
-  * MongoDB support WIP 
+ * supported databases:
+  * MySQL => 5.5
+  * MariaDB >= 9.*
+ * WIP:
+  * MongoDB
  * http server: apache/nginx with php >= 7.0.1
  * composer
 
@@ -37,16 +40,18 @@
  * Doctrine 2
  * PHPUnit 5
  * Composer
+ * JMS Serializer
  * Twig
  * Twitter Bootstrap 3
- * Monolog
  * EMCAScript6 (JavaScript ES6)
 
 # How to install
  * copy *app/config/parameters.yml.dist* to *app/config/parameters.yml* and amend database settings
- * *composer install* (will create databases as well as run migrations)
- * *php bin/console doctrine:fixtures:load --env=prod* (to seed database with necessary data e.g. cell states, player types)
+ * *composer install* (will create databases if they are not exists and execute migrations)
+ * *php bin/console doctrine:fixtures:load --env=test* (optional, for testing purposes only)
  * *php bin/console assets:install* (as need dump assets once)
+ * *composer dump-autoload --optimize* (optimized 'hash-map' autoloader)
+  * production uses APC autoloader
  * apache virtual host config:
  ```
 <VirtualHost 127.0.0.1:80 ::1:80>
@@ -134,8 +139,8 @@
 </VirtualHost>
  ```
 
-### How to launch tests
- * *phpunit -c app* or *php bin/phpunit -c tests* (fixtures will wipe and populate database)
+### How to execute tests
+ * *phpunit -c test* or *php bin/phpunit -c tests* (fixtures will wipe and populate database before execute tests)
 
 ### used patterns
  * Front Controller
@@ -147,8 +152,8 @@
  * Factory
  * Singleton
  * Delegation
- * Service Locator
  * Registry
+ * Service Locator
  * Event Dispatcher
  * Dependency Injection
 
