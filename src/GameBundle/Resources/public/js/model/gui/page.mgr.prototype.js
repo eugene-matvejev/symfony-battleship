@@ -12,7 +12,6 @@ class PageMgr {
         this.$sidebar   = $('.page-sidebar');
         this.$content   = $('.page-content');
         this.$pageTitle = this.$content.find('.page-section-title');
-
     }
 
     /**

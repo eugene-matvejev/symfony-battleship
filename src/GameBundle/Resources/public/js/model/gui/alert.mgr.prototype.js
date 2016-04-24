@@ -2,7 +2,7 @@
 
 class AlertMgr {
     constructor() {
-        this.$html = $('#notification-area');
+        this.$html    = $('#notification-area');
         this.$content = this.$html.find('.notification-content');
     }
 
@@ -51,8 +51,7 @@ class AlertMgr {
     }
 }
 
-
-AlertMgr.resources = {};
+AlertMgr.resources        = {};
 AlertMgr.resources.config = {
     /** @enum {string} */
     type: {
