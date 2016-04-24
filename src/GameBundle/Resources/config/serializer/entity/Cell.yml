@@ -12,8 +12,6 @@ EM\GameBundle\Entity\Cell:
             expose: true
         coordinate:
             type: string
-            xml_element:
-                cdata: false
         flags:
             type: integer
             expose: true
