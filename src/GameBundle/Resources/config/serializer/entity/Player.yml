@@ -11,5 +11,3 @@ EM\GameBundle\Entity\Player:
             type: integer
         name:
             type: string
-            xml_element:
-                cdata: false

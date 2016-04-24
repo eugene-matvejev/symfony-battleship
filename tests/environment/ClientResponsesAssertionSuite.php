@@ -27,7 +27,7 @@ abstract class ClientResponsesAssertionSuite extends WebTestCase
     {
         $this->assertSuccessfulResponse($response);
 
-        $xmlElement = simplexml_load_string($response->getContent());
+        $xmlElement = simplexml_load_string($response->getContent(), 'SimpleXMLElement', LIBXML_NOCDATA);
         $this->assertInstanceOf(\SimpleXMLElement::class, $xmlElement);
     }
 
