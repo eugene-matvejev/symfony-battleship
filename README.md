@@ -42,8 +42,9 @@
  * Composer
  * JMS Serializer
  * Twig
- * Twitter Bootstrap 3
  * EMCAScript6 (JavaScript ES6)
+ * CSS3
+ * Twitter Bootstrap 3
 
 # How to install
  * copy *app/config/parameters.yml.dist* to *app/config/parameters.yml* and amend database settings
