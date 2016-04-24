@@ -56,14 +56,14 @@ GameResults.resources.html   = {
     table: function () {
         let header = GameResults.resources.tableHeader;
 
-        return ' \
+        return ` \
             <table class="table"> \
                 <tr> \
-                    <th>' + header.resultId + '</th> \
-                    <th>' + header.playerName + '</th> \
-                    <th>' + header.finishTime + '</th> \
+                    <th>${header.resultId}</th> \
+                    <th>${header.playerName}</th> \
+                    <th>${header.finishTime}</th> \
                 </tr> \
-            </table>';
+            </table>`;
     },
     /**
      * @param {{id: {int}, player: {id: {int}}, timestamp: {string}}} obj
@@ -71,11 +71,11 @@ GameResults.resources.html   = {
      * @returns {string}
      */
     row: function (obj) {
-        return ' \
+        return ` \
             <tr> \
-                <td>' + obj.id + '</td> \
-                <td>' + (new Date(obj.timestamp)).toLocaleString() + '</td> \
-                <td>' + obj.player.name + '</td> \
-            </tr>';
+                <td>${obj.id}</td> \
+                <td>${(new Date(obj.timestamp)).toLocaleString()}</td> \
+                <td>${obj.player.name}</td> \
+            </tr>`;
     }
 };

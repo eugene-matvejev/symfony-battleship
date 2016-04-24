@@ -73,7 +73,7 @@ PaginationMgr.resources = {
                 <button type="button" class="btn btn-default" disabled="disabled"> \
                     <span id="data-page-current"></span> \
                     <span> of </span> \
-                    <span id="data-page-total""></span> \
+                    <span id="data-page-total"></span> \
                 </button> \
                 <button type="button" id="next-page-btn" data-page="" class="btn btn-default"> \
                     <span id="data-page-next" class="glyphicon glyphicon-chevron-right"></span> \

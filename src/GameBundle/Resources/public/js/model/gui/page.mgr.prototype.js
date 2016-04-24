@@ -142,7 +142,6 @@ PageMgr.resources.config = {
             toggle: 'toggled',
             hidden: 'hidden'
         },
-
         /** @type {string} */
         action: 'data-action',
         /** @type {string} */
