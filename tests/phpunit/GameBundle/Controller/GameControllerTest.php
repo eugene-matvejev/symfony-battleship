@@ -181,7 +181,6 @@ class GameControllerTest extends ContainerAwareTestSuite
             if ($battlefield->player->flags === PlayerModel::FLAG_AI_CONTROLLED) {
                 foreach ($battlefield->cells as $cell) {
                     $client = clone static::$client;
-                    $client->restart();
                     $client->request(
                         Request::METHOD_PATCH,
                         static::$router->generate('battleship.game.api.turn', ['cellId' => $cell->id]),
