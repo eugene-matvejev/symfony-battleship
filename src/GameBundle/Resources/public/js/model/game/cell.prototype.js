@@ -116,6 +116,5 @@ Cell.resources = {
         digitOnly: function (cell) {
             return cell.coordinate.substring(1);
         }
-
     }
 };

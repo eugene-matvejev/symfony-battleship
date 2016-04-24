@@ -255,7 +255,7 @@ Game.resources.html       = {
     modal: function () {
         let battlefield = Game.resources.config.pattern.battlefield;
 
-        return ' \
+        return ` \
             <div class="modal fade"> \
                 <div class="modal-dialog"> \
                     <div class="modal-content"> \
@@ -273,7 +273,7 @@ Game.resources.html       = {
                             <div class="form-group"> \
                                 <label for="model-input-battlefield-size">battlefield size</label> \
                                 <input type="test" class="form-control" id="model-input-battlefield-size" \
-                                    placeholder="between ' + battlefield.min + ' and ' + battlefield.max + '"> \
+                                    placeholder="between ${battlefield.min} and ${battlefield.max}"> \
                             </div> \
                         </div> \
                         <div class="modal-footer"> \
@@ -281,6 +281,6 @@ Game.resources.html       = {
                         </div> \
                     </div> \
                 </div> \
-            </div>';
+            </div>`;
     }
 };
