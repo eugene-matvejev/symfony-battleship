@@ -172,13 +172,12 @@ class Game extends APIRequestMgr {
      * @returns {Cell}
      */
     findCell(criteria) {
-        for (let i = 0; i < this.players.length; i++) {
-            if (undefined !== criteria.playerId && criteria.playerId !== this.players[i].id) {
+        for (let player of this.players) {
+            if (undefined !== criteria.playerId && criteria.playerId !== player.id) {
                 continue;
             }
 
-            let cell = this.players[i].battlefield.findCell(criteria);
-
+            let cell = player.battlefield.findCell(criteria);
             if (undefined !== cell) {
                 return cell;
             }
