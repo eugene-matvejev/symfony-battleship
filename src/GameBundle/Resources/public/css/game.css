@@ -64,7 +64,7 @@
     cursor: no-drop;
 }
 
-.player-area[data-player-type="1"] .battlefield-cell:not([data-state="1"]):not([data-state="3"]):not([data-state="4"]):hover {
+.player-area[data-player-flag="1"] .battlefield-cell:not([data-state="1"]):not([data-state="3"]):not([data-state="4"]):hover {
     cursor: pointer;
 }
 
