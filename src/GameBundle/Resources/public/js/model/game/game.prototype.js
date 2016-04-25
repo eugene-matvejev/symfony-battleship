@@ -50,7 +50,7 @@ class Game extends APIRequestMgr {
                 self.parseInitResponse(response);
             };
 
-        players.map(function (_player) {
+        players.forEach(function (_player) {
             let player = new Player(_player.name, _player.isCPU || false, battlefieldSize);
 
             self.players.push(player);
