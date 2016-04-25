@@ -193,7 +193,7 @@ class Game extends APIRequestMgr {
     }
 
     modalUnlockSubmission() {
-        let validation             = this.constructor.resources.validation,
+        let validation             = this.constructor.resources.validate,
             isUsernameValid        = validation.input(document.getElementById('model-input-player-name')),
             isBattlefieldSizeValid = validation.input(document.getElementById('model-input-battlefield-size'));
 
