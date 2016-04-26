@@ -8,11 +8,12 @@ class Player {
      */
     constructor(playerName, isCPUPlayer, battlefieldSize) {
         this.$html = $(this.constructor.resources.layout);
-        let type   = this.constructor.resources.type;
+        let flags  = this.constructor.resources.flags;
 
+        /** by default: type: human */
         this.setId('undefined')
             .setName(playerName)
-            .setType(isCPUPlayer ? type.cpu : type.human);
+            .setFlag(isCPUPlayer ? flags.ai : flags.none);
 
         this.battlefield = (new Battlefield(this.$html.find('.player-field'), battlefieldSize, this));
         if (this.isHuman()) {
@@ -27,7 +28,7 @@ class Player {
      */
     setId(id) {
         this.id = id;
-        this.$html.attr('data-player-id', id)
+        this.$html.attr('data-player-id', id);
 
         return this;
     }
@@ -45,13 +46,13 @@ class Player {
     }
 
     /**
-     * @param {int} type
+     * @param {int} flag
      *
      * @returns {Player}
      */
-    setType(type) {
-        this.type = type;
-        this.$html.attr('data-player-type', type);
+    setFlag(flag) {
+        this.flag = flag;
+        this.$html.attr('data-player-flag', flag);
 
         return this;
     }
@@ -60,7 +61,9 @@ class Player {
      * @returns {boolean}
      */
     isCPU() {
-        return this.type === Player.resources.type.cpu
+        let flag = this.constructor.resources.flags.ai;
+
+        return (this.flags & flag) === flag;
     }
 
     /**
@@ -71,23 +74,21 @@ class Player {
     }
 
     /**
-     * @returns {{id: {int}, name: {string}, type: {int}}}
+     * @returns {{id: {int}, name: {string}, flag: {int}}}
      */
     getJSON() {
-        return { id: this.id, name: this.name, type: this.type };
+        return { id: this.id, name: this.name, flag: this.flag };
     }
 }
 
 Player.resources = {
     /** @enum {int} */
-    type: {
-        cpu: 1,
-        human: 2
+    flags: {
+        none: 0x0000,
+        ai: 0x0001
     },
-    /**
-     * @returns {string}
-     */
-    layout: '\
+    /** @type {string} */
+    layout: ' \
         <div class="col-md-6 player-area" data-player-id="unk" data-player-type="unk"> \
             <div class="player-name">undefined</div> \
             <div class="player-field"></div> \

@@ -12,7 +12,7 @@ $(document).ready(function () {
     );
 
     $('#game-current-area')
-        .on('click', '.player-area[data-player-type="1"] .battlefield-cell[data-state="0"]', function (e) {
+        .on('click', '.player-area[data-player-flag="1"] .battlefield-cell[data-state="0"]', function (e) {
             e.stopPropagation();
 
             game.update(this);
