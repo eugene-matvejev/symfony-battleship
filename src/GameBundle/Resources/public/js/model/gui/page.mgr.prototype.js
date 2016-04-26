@@ -18,7 +18,7 @@ class PageMgr {
      * @returns {PageMgr}
      */
     toggleSidebar() {
-        let css = PageMgr.resources.config.trigger.css;
+        let css = this.constructor.resources.config.trigger.css;
 
         this.$sidebar.toggleClass(css.toggle);
         this.$content.toggleClass(css.toggle);
@@ -32,7 +32,7 @@ class PageMgr {
      * @returns {PageMgr}
      */
     switchSection(el) {
-        let config = PageMgr.resources.config;
+        let config = this.constructor.resources.config;
 
         this.toggleTitle(el);
         this.hideAll();
@@ -59,9 +59,9 @@ class PageMgr {
      * @returns {PageMgr}
      */
     hideAll() {
-        let css = PageMgr.resources.config.trigger.css;
+        let css = this.constructor.resources.config.trigger.css;
 
-        this.$content.find('.container-fluid>.row>div:not(#notification-area)').addClass(css.hidden);
+        this.$content.find('.container-fluid > .row > div:not(#notification-area)').addClass(css.hidden);
         this.$sidebar.find('li:not(.sidebar-brand)').removeClass(css.selected);
 
         return this;
@@ -73,10 +73,10 @@ class PageMgr {
      * @returns {PageMgr}
      */
     show(id) {
-        let css = PageMgr.resources.config.trigger.css;
+        let css = this.constructor.resources.config.trigger.css;
 
-        this.$content.find('div#' + id).removeClass(css.hidden);
-        this.$sidebar.find('li[data-section="' + id + '"]').addClass(css.selected);
+        this.$content.find(`div#${id}`).removeClass(css.hidden);
+        this.$sidebar.find(`li[data-section="${id}"]`).addClass(css.selected);
 
         return this;
     }
@@ -88,9 +88,9 @@ class PageMgr {
      */
     toggleTitle(el) {
         let postfix = el.innerText,
-            prefix  = this.$sidebar.find('.' + PageMgr.resources.config.trigger.css.title).text();
+            prefix  = this.$sidebar.find('.' + this.constructor.resources.config.trigger.css.title).text();
 
-        this.$docTitle.text(prefix + ' :: ' + postfix);
+        this.$docTitle.text(`${prefix} :: ${postfix}`);
         this.$pageTitle.text(postfix);
 
         return this;
@@ -102,7 +102,7 @@ class PageMgr {
      * @returns {PageMgr}
      */
     loadingMode(enable) {
-        let css = PageMgr.resources.config.trigger.css;
+        let css = this.constructor.resources.config.trigger.css;
 
         this.modalMgr.updateHTML('');
 
