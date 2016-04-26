@@ -78,6 +78,7 @@ class Game extends APIRequestMgr {
      */
     parseInitResponse(response) {
         this.setId(response.id);
+
         let self = this;
 
         response.battlefields.forEach(function (battlefield) {
@@ -154,7 +155,7 @@ class Game extends APIRequestMgr {
         });
 
         if (undefined !== response.result) {
-            let text   = Game.resources.config.text,
+            let text   = this.constructor.resources.config.text,
                 type   = AlertMgr.resources.config.type,
                 player = this.findPlayerById(response.result.player.id);
 
@@ -192,9 +193,9 @@ class Game extends APIRequestMgr {
     }
 
     modalUnlockSubmission() {
-        let validation             = Game.resources.validation,
-            isUsernameValid        = validation.validateInput(document.getElementById('model-input-player-name')),
-            isBattlefieldSizeValid = validation.validateInput(document.getElementById('model-input-battlefield-size'));
+        let validation             = this.constructor.resources.validation,
+            isUsernameValid        = validation.input(document.getElementById('model-input-player-name')),
+            isBattlefieldSizeValid = validation.input(document.getElementById('model-input-battlefield-size'));
 
         this.modalMgr.unlockSubmission(isUsernameValid && isBattlefieldSizeValid);
     }
@@ -217,29 +218,30 @@ Game.resources.config     = {
         username: /^[a-zA-Z0-9\.\- @]{1,100}$/
     }
 };
-Game.resources.validation = {
+Game.resources.validate = {
     /**
      * @param {Element} el
      *
      * @returns {boolean}
      */
-    validateInput(el) {
+    input(el) {
+        let pattern = Game.resources.config.pattern;
+
         switch (el.id) {
             case 'model-input-player-name':
-                if (!Game.resources.config.pattern.username.test(el.value)) {
+                if (!pattern.username.test(el.value)) {
                     el.value = el.value.substr(0, el.value.length - 1);
 
                     return false;
                 }
                 return true;
             case 'model-input-battlefield-size':
-                let battlefieldSize = Game.resources.config.pattern.battlefield
                 if (isNaN(el.value))
                     el.value = el.value.substr(0, el.value.length - 1);
-                else if (el.value > battlefieldSize.max)
-                    el.value = battlefieldSize.max;
+                else if (el.value > pattern.battlefield.max)
+                    el.value = pattern.battlefield.max;
 
-                return el.value >= battlefieldSize.min;
+                return el.value >= pattern.battlefield.min;
         }
     }
 };
