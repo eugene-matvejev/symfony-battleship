@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 trait TimestampedTrait
 {
     /**
-     * @ORM\Column(name="timestamp", type="datetime", nullable=false)
+     * @ORM\Column(name="timestamp", type="datetime")
      *
      * @var \DateTime
      */

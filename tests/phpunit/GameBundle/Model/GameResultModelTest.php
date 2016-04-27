@@ -35,14 +35,12 @@ class GameResultModelTest extends ContainerAwareTestSuite
         for ($i = 0; $i < $resultsToPersist; $i++) {
             $result = $this->getGameResultMock(2, 0);
 
-//            foreach ($result->getGame()->getBattlefields() as $battlefield) {
-//                $battlefield->getPlayer()->setFlag($playerType);
-//            }
-
             $player = $result->getGame()->getBattlefields()[0]->getPlayer();
             $result->setPlayer($player);
 
             static::$om->persist($result->getGame());
+
+            $this->assertInstanceOf(\DateTime::class, $result->getTimestamp());
         }
         static::$om->flush();
 
