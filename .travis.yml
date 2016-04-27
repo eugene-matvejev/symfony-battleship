@@ -1,10 +1,6 @@
 language: "php"
 php:
-    - '7.0.1'
-
-env:
-    global:
-        - "MIN_PHP=7.0.1"
+    - '7.0.4'
 
 services:
     - "mysql"
@@ -19,8 +15,4 @@ script:
 
 after_success:
     - "bash <(curl -s https://codecov.io/bash)"
-    - "CODECLIMATE_REPO_TOKEN=2f804dfe85a65f7f14d8be5d36f38bcbf07a5f2fcf6852ceb19327e7931a8d49 ./bin/test-reporter"
-
-#addons:
-#    code_climate:
-#        repo_token: "2f804dfe85a65f7f14d8be5d36f38bcbf07a5f2fcf6852ceb19327e7931a8d49"
+    - "CODECLIMATE_REPO_TOKEN=2f804dfe85a65f7f14d8be5d36f38bcbf07a5f2fcf6852ceb19327e7931a8d49 ./bin/test-reporter --coverage-report=\"./coverage.xml\""
