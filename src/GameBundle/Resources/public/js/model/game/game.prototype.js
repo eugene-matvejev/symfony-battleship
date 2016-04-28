@@ -191,18 +191,10 @@ class Game extends APIRequestMgr {
 
         return this;
     }
-
-    modalUnlockSubmission() {
-        let validation             = this.constructor.resources.validate,
-            isUsernameValid        = validation.input(document.getElementById('model-input-player-name')),
-            isBattlefieldSizeValid = validation.input(document.getElementById('model-input-battlefield-size'));
-
-        this.modalMgr.unlockSubmission(isUsernameValid && isBattlefieldSizeValid);
-    }
 }
 
-Game.resources            = {};
-Game.resources.config     = {
+Game.resources          = {};
+Game.resources.config   = {
     /** @enum {string} */
     text: {
         win: 'you won',
@@ -219,33 +211,28 @@ Game.resources.config     = {
     }
 };
 Game.resources.validate = {
+    battlefield: {
+        /**
+         * @type {number}
+         *
+         * @returns {boolean}
+         */
+        size: function (value) {
+            let battlefield = Game.resources.config.pattern.battlefield;
+
+            return !isNaN(value) && value >= battlefield.min && value <= battlefield.max;
+        }
+    },
     /**
-     * @param {Element} el
+     * @type {string}
      *
      * @returns {boolean}
      */
-    input(el) {
-        let pattern = Game.resources.config.pattern;
-
-        switch (el.id) {
-            case 'model-input-player-name':
-                if (!pattern.username.test(el.value)) {
-                    el.value = el.value.substr(0, el.value.length - 1);
-
-                    return false;
-                }
-                return true;
-            case 'model-input-battlefield-size':
-                if (isNaN(el.value))
-                    el.value = el.value.substr(0, el.value.length - 1);
-                else if (el.value > pattern.battlefield.max)
-                    el.value = pattern.battlefield.max;
-
-                return el.value >= pattern.battlefield.min;
-        }
+    username: function (value) {
+        return Game.resources.config.pattern.username.test(value);
     }
 };
-Game.resources.html       = {
+Game.resources.html     = {
     /**
      * @returns {string}
      */
