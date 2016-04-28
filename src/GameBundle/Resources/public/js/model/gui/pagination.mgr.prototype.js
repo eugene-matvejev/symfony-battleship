@@ -14,8 +14,8 @@ class PaginationMgr {
     }
 
     /**
-     * @param {int} currPage
-     * @param {int} totalPages
+     * @param {number} currPage
+     * @param {number} totalPages
      */
     update(currPage, totalPages) {
         this.setTotalPages(totalPages);
@@ -26,7 +26,7 @@ class PaginationMgr {
     }
 
     /**
-     * @param {int} page
+     * @param {number} page
      */
     setPreviousPage(page) {
         this.previousPage = page;
@@ -35,7 +35,7 @@ class PaginationMgr {
     }
 
     /**
-     * @param {int} page
+     * @param {number} page
      */
     setCurrentPage(page) {
         this.currentPage = page;
@@ -44,7 +44,7 @@ class PaginationMgr {
     }
 
     /**
-     * @param {int} page
+     * @param {number} page
      */
     setTotalPages(page) {
         this.totalPages = page;
@@ -53,7 +53,7 @@ class PaginationMgr {
     }
 
     /**
-     * @param {int} page
+     * @param {number} page
      */
     setNextPage(page) {
         this.nextPage = page;

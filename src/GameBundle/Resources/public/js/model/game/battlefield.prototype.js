@@ -3,7 +3,7 @@
 class Battlefield {
     /**
      * @param {jQuery} $el
-     * @param {int}    size
+     * @param {number} size
      * @param {Player} player
      */
     constructor($el, size, player) {
@@ -56,7 +56,7 @@ class Battlefield {
     }
 
     /**
-     * @param {{id: {int}, coordinate: {string}}} criteria
+     * @param {{id: {number}, coordinate: {string}}} criteria
      *
      * @returns {Cell}
      */
@@ -65,7 +65,7 @@ class Battlefield {
     }
 
     /**
-     * @return {{id: {int|string}}
+     * @return {{id: {number|string}}
      */
     getJSON() {
         return { id: this.id }
@@ -73,11 +73,10 @@ class Battlefield {
 
     /** *** *** *** *** *** *** *** *** *** *** *** *** *** **/
     initPlayerCells() {
-        let self = this,
-            mask = Cell.resources.mask;
+        let self = this;
 
         ['A1', 'A2', 'A3', 'C3', 'C4', 'C5', 'C1', 'D1', 'E1', 'F1', 'G5', 'G6', 'F3'].forEach(function (coordinate) {
-            self.findCell({ coordinate: coordinate }).setState(mask.ship);
+            self.findCell({ coordinate: coordinate }).setState(Cell.resources.mask.ship);
         });
     }
 }
