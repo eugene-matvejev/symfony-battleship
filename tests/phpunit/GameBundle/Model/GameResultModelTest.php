@@ -31,27 +31,24 @@ class GameResultModelTest extends ContainerAwareTestSuite
      */
     public function prepareResponse()
     {
-        $resultsToPersist = 21;
-        for ($i = 0; $i < $resultsToPersist; $i++) {
-            $result = $this->getGameResultMock(2, 0);
+        $perPage = static::$container->getParameter('battleship_game.game_results_per_page');
 
+        /** populated 2 full pages of Game Results + 1 result */
+        for ($i = 0; $i < ($perPage * 2 + 1); $i++) {
+            $result = $this->getGameResultMock(2, 0);
             $player = $result->getGame()->getBattlefields()[0]->getPlayer();
             $result->setPlayer($player);
 
             static::$om->persist($result->getGame());
-
-            $this->assertInstanceOf(\DateTime::class, $result->getTimestamp());
         }
         static::$om->flush();
 
-        $perPage = static::$container->getParameter('battleship_game.game_results_per_page');
-
-        $pages = ceil($resultsToPersist / $perPage);
-        for ($page = 1; $page < $pages; $page++) {
+        /** should be 3 pages in total */
+        for ($page = 1; $page < 3; $page++) {
             $response = $this->gameResultModel->prepareResponse($page);
 
-            $this->assertEquals($pages, $response->getMeta()[GameResultsResponse::META_INDEX_TOTAL_PAGES]);
             $this->assertEquals($page, $response->getMeta()[GameResultsResponse::META_INDEX_CURRENT_PAGE]);
+            $this->assertEquals(3, $response->getMeta()[GameResultsResponse::META_INDEX_TOTAL_PAGES]);
 
             $this->assertInternalType('array', $response->getResults());
             $this->assertContainsOnlyInstancesOf(GameResult::class, $response->getResults());
