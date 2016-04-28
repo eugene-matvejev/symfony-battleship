@@ -14,7 +14,7 @@ use EM\GameBundle\ORM\AbstractFlaggedEntity;
 class Player extends AbstractFlaggedEntity
 {
     /**
-     * @ORM\Column(name="name", type="string", length=200)
+     * @ORM\Column(name="name", type="string", length=100)
      *
      * @var string
      */
