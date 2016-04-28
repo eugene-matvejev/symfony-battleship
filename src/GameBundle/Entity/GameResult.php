@@ -31,7 +31,7 @@ class GameResult extends AbstractEntity implements PlayerInterface, TimestampedI
      *
      * @var Game
      */
-    private $game;
+    protected $game;
 
     public function getGame() : Game
     {
