@@ -15,16 +15,16 @@ class PlayerModel
     /**
      * @var EntityRepository
      */
-    private $playerRepository;
+    private $repository;
 
-    public function __construct(EntityRepository $playerRepository)
+    public function __construct(EntityRepository $repository)
     {
-        $this->playerRepository = $playerRepository;
+        $this->repository = $repository;
     }
 
     public function createOnRequest(string $name, bool $cpuControlled = false) : Player
     {
-        $player = $this->playerRepository->findOneBy(['name' => $name]);
+        $player = $this->repository->findOneBy(['name' => $name]);
 
         return $player ?? (new Player())
             ->setName($name)
