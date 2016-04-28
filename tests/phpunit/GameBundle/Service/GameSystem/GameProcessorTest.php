@@ -34,6 +34,8 @@ class GameProcessorTest extends ContainerAwareTestSuite
     }
 
     /**
+     * should initiate CPU battlefields
+     *
      * @see GameProcessor::processCPUBattlefieldsInitiation
      * @test
      */
@@ -58,6 +60,8 @@ class GameProcessorTest extends ContainerAwareTestSuite
     }
 
     /**
+     * should initiate Game with 7x7 with two Battlefields
+     *
      * @see GameProcessor::processGameInitiation
      *
      * @test
@@ -80,6 +84,8 @@ class GameProcessorTest extends ContainerAwareTestSuite
     }
 
     /**
+     * invoke game processing method on Unfinished Game
+     *
      * @see GameProcessor::processGameTurn
      * @test
      */
@@ -88,6 +94,7 @@ class GameProcessorTest extends ContainerAwareTestSuite
         $game = $this->getGameMock();
         $game->getBattlefields()[0]->getPlayer()->setFlags(PlayerModel::FLAG_AI_CONTROLLED);
 
+        /** because CellModel::changedCells are indexed by Cell Id */
         $i = 0;
         foreach ($game->getBattlefields() as $battlefield) {
             foreach ($battlefield->getCells() as $cell) {
@@ -114,6 +121,8 @@ class GameProcessorTest extends ContainerAwareTestSuite
     }
 
     /**
+     * invoke game processing method to Win Game
+     *
      * @see     GameProcessor::processGameTurn
      * @test
      *
@@ -138,6 +147,8 @@ class GameProcessorTest extends ContainerAwareTestSuite
     }
 
     /**
+     * invoke game processing method to Win Game
+     *
      * @see GameProcessor::processGameTurn
      * @test
      */
@@ -174,7 +185,7 @@ class GameProcessorTest extends ContainerAwareTestSuite
 //        );
 //        $this->assertTrue($battlefield->getCellByCoordinate('A1')->hasFlag(CellModel::FLAG_DEAD));
 //    }
-
+//
 //    /**
 //     * @see     GameProcessor::processPlayerTurn
 //     * @test
@@ -190,9 +201,9 @@ class GameProcessorTest extends ContainerAwareTestSuite
 //
 //        $this->invokeProcessPlayerTurnMethod([$battlefield, $battlefield->getCellByCoordinate('A1')]);
 //    }
-
-    private function invokeProcessPlayerTurnMethod(array $args)
-    {
-        $this->invokeNonPublicMethod($this->gameProcessor, 'processPlayerTurn', $args);
-    }
+//
+//    private function invokeProcessPlayerTurnMethod(array $args)
+//    {
+//        $this->invokeNonPublicMethod($this->gameProcessor, 'processPlayerTurn', $args);
+//    }
 }
