@@ -15,7 +15,7 @@ class GameResults extends APIRequestMgr {
     }
 
     /**
-     * @param {int|string} page
+     * @param {number|string} page
      */
     fetch(page) {
         let self      = this,
@@ -27,7 +27,7 @@ class GameResults extends APIRequestMgr {
     }
 
     /**
-     * @param {{meta: {currentPage: {int}, totalPages: {int}}, results: []}} response
+     * @param {{meta: {currentPage: {number}, totalPages: {number}}, results: []}} response
      */
     update(response) {
         let html   = this.constructor.resources.html,
@@ -66,7 +66,7 @@ GameResults.resources.html   = {
             </table>`;
     },
     /**
-     * @param {{id: {int}, player: {id: {int}}, timestamp: {string}}} obj
+     * @param {{id: {number}, player: {id: {number}}, timestamp: {string}}} obj
      *
      * @returns {string}
      */

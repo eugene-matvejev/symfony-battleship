@@ -26,7 +26,7 @@ class Cell {
     }
 
     /**
-     * @param {int|string} id
+     * @param {number|string} id
      *
      * @returns {Cell}
      */
@@ -38,7 +38,7 @@ class Cell {
     }
 
     /**
-     * @param {int|string} state
+     * @param {number|string} state
      *
      * @returns {Cell}
      */
@@ -70,7 +70,7 @@ class Cell {
     }
 
     /**
-     * @returns {{id: {int}, coordinate: {string}, state: {int}}}
+     * @returns {{id: {number}, coordinate: {string}, state: {number}}}
      */
     getJSON() {
         return { id: this.id, coordinate: this.coordinate, state: this.state };
@@ -78,7 +78,7 @@ class Cell {
 }
 
 Cell.resources = {
-    /** @enum {int} */
+    /** @enum {number} */
     mask: {
         none: 0x0000,
         dead: 0x0001,
@@ -86,14 +86,12 @@ Cell.resources = {
         deadShip: 0x0002 | 0x0001,
         skip: 0x0004 | 0x0001
     },
-    /**
-     * @type {string}
-     */
+    /** @type {string} */
     layout: '<div class="col-md-1 battlefield-cell"></div>',
     coordinate: {
         /**
-         * @param {int} x
-         * @param {int} y
+         * @param {number} x
+         * @param {number} y
          *
          * @returns {string}
          */

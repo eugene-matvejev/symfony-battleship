@@ -13,7 +13,7 @@ class Game extends APIRequestMgr {
     }
 
     /**
-     * @param {int|string} id
+     * @param {number|string} id
      *
      * @returns {Game}
      */
@@ -24,7 +24,7 @@ class Game extends APIRequestMgr {
     }
 
     /**
-     * @returns {{id: {int}}}
+     * @returns {{id: {number}}}
      */
     getJSON() {
         return { id: this.id };
@@ -32,7 +32,7 @@ class Game extends APIRequestMgr {
 
     /**
      * @param {{name: {string}, isCPU: {boolean}}[]} players
-     * @param {int}                                  battlefieldSize
+     * @param {number}                               battlefieldSize
      */
     init(players, battlefieldSize) {
         this.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="game-current-area"]'));
@@ -68,11 +68,11 @@ class Game extends APIRequestMgr {
 
     /**
      * @param {{
-     *     id: {int},
+     *     id: {number},
      *     battlefields: {
-     *         id: {int},
-     *         player: {id: {int}, name: {string}},
-     *         cells: {id: {int}, coordinate: {string}, flags: {int}}[]
+     *         id: {number},
+     *         player: {id: {number}, name: {string}},
+     *         cells: {id: {number}, coordinate: {string}, flags: {number}}[]
      *     }[]
      * }} response
      */
@@ -111,7 +111,7 @@ class Game extends APIRequestMgr {
     }
 
     /**
-     * @param id {int}
+     * @param id {number}
      *
      * @returns {Player|undefined}
      */
@@ -141,7 +141,7 @@ class Game extends APIRequestMgr {
     }
 
     /**
-     * @param {{cells: {id: {int}, flags: {int}}[], result: {player: {Object}}}} response
+     * @param {{cells: {id: {number}, flags: {number}}[], result: {player: {Object}}}} response
      */
     parseUpdateResponse(response) {
         let self = this;
@@ -168,7 +168,7 @@ class Game extends APIRequestMgr {
     }
 
     /**
-     * @param {{playerId: {int}, id: {int}, coordinate: {string}}} criteria
+     * @param {{playerId: {number}, id: {number}, coordinate: {string}}} criteria
      *
      * @returns {Cell}
      */
@@ -201,7 +201,7 @@ Game.resources.config   = {
         loss: 'you lost'
     },
     pattern: {
-        /** @enum {int} */
+        /** @enum {number} */
         battlefield: {
             min: 7,
             max: 12

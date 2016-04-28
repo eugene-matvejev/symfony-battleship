@@ -4,7 +4,7 @@ class Player {
     /**
      * @param {string}  playerName
      * @param {boolean} isCPUPlayer
-     * @param {int}     battlefieldSize
+     * @param {number}  battlefieldSize
      */
     constructor(playerName, isCPUPlayer, battlefieldSize) {
         this.$html = $(this.constructor.resources.layout);
@@ -22,7 +22,7 @@ class Player {
     }
 
     /**
-     * @param {int|string} id
+     * @param {number|string} id
      *
      * @returns {Player}
      */
@@ -46,7 +46,7 @@ class Player {
     }
 
     /**
-     * @param {int} flag
+     * @param {number} flag
      *
      * @returns {Player}
      */
@@ -74,7 +74,7 @@ class Player {
     }
 
     /**
-     * @returns {{id: {int}, name: {string}, flag: {int}}}
+     * @returns {{id: {number}, name: {string}, flag: {number}}}
      */
     getJSON() {
         return { id: this.id, name: this.name, flag: this.flag };
@@ -82,7 +82,7 @@ class Player {
 }
 
 Player.resources = {
-    /** @enum {int} */
+    /** @enum {number} */
     flags: {
         none: 0x0000,
         ai: 0x0001

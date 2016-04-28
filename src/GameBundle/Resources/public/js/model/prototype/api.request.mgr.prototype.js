@@ -43,7 +43,7 @@ class APIRequestMgr {
 
 APIRequestMgr.resources = {
     config: {
-        /** @type {int} */
+        /** @type {number} */
         timeout: 5000 /** in milliseconds */
     }
 };
