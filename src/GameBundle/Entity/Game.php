@@ -25,13 +25,13 @@ class Game extends AbstractEntity implements TimestampedInterface
      *
      * @var Collection|Battlefield[]
      */
-    private $battlefields;
+    protected $battlefields;
     /**
      * @ORM\OneToOne(targetEntity="EM\GameBundle\Entity\GameResult", mappedBy="game", cascade={"persist"}, fetch="EAGER")
      *
      * @var GameResult
      */
-    private $result;
+    protected $result;
 
     public function __construct()
     {

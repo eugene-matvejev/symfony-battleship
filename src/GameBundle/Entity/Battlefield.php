@@ -29,13 +29,13 @@ class Battlefield extends AbstractEntity implements PlayerInterface
      *
      * @var Game
      */
-    private $game;
+    protected $game;
     /**
      * @ORM\OneToMany(targetEntity="EM\GameBundle\Entity\Cell", mappedBy="battlefield", cascade={"persist"}, fetch="EAGER", indexBy="coordinate")
      *
      * @var Collection|Cell[]
      */
-    private $cells;
+    protected $cells;
 
     public function __construct()
     {

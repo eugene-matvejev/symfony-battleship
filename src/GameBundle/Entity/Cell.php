@@ -27,13 +27,13 @@ class Cell extends AbstractFlaggedEntity
      *
      * @var Battlefield
      */
-    private $battlefield;
+    protected $battlefield;
     /**
      * @ORM\Column(name="coordinate", type="string", length=3)
      *
      * @var string
      */
-    private $coordinate;
+    protected $coordinate;
 
     public function getBattlefield() : Battlefield
     {
