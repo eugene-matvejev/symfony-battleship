@@ -20,7 +20,10 @@ class GameControllerTest extends ContainerAwareTestSuite
     public function indexAction()
     {
         $client = clone static::$client;
-        $client->request(Request::METHOD_GET, static::$router->generate('battleship.game.gui.index'));
+        $client->request(
+            Request::METHOD_GET,
+            static::$router->generate('battleship.game.gui.index')
+        );
         $this->assertSuccessfulResponse($client->getResponse());
     }
 
@@ -113,12 +116,11 @@ class GameControllerTest extends ContainerAwareTestSuite
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/xml'],
             json_encode($json)
         );
-
         $this->assertSuccessfulXMLResponse($client->getResponse());
 
         $response = simplexml_load_string($client->getResponse()->getContent(), 'SimpleXMLElement', LIBXML_NOCDATA);
-
         $response = json_decode(json_encode($response));
+
         $this->assertInternalType('string', $response->id);
         $this->assertInternalType('string', $response->timestamp);
         $this->assertInternalType('array', $response->battlefields->battlefield);
@@ -188,11 +190,10 @@ class GameControllerTest extends ContainerAwareTestSuite
                         [],
                         ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
                     );
-                    $response = $client->getResponse();
+                    $this->assertSuccessfulJSONResponse($client->getResponse());
 
-                    $this->assertSuccessfulJSONResponse($response);
-                    $parsed = json_decode($response->getContent());
-                    if(isset($parsed->result)) {
+                    $parsed = json_decode($client->getResponse()->getContent());
+                    if (isset($parsed->result)) {
                         return;
                     }
                 }
