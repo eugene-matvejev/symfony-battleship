@@ -171,3 +171,9 @@ body > .container {
 .pagination-area {
     text-align: center;
 }
+
+#modal-area .help-block {
+
+    font-size: 14px;
+    font-style: italic;
+}

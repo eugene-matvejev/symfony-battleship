@@ -7,8 +7,9 @@ class Player {
      * @param {number}  battlefieldSize
      */
     constructor(playerName, isCPUPlayer, battlefieldSize) {
-        this.$html = $(this.constructor.resources.layout);
         let flags  = this.constructor.resources.flags;
+
+        this.$html = $(this.constructor.resources.layout);
 
         /** by default: type: human */
         this.setId('undefined')
