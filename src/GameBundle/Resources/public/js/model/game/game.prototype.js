@@ -237,7 +237,7 @@ Game.resources.html     = {
      * @returns {string}
      */
     modal: function () {
-        let battlefield = Game.resources.config.pattern.battlefield;
+        let pattern = Game.resources.config.pattern;
 
         return ` \
             <div class="modal fade"> \
@@ -251,13 +251,16 @@ Game.resources.html     = {
                         </div> \
                         <div class="modal-body"> \
                             <div class="form-group"> \
-                                <label for="model-input-player-name">nickname</label> \
+                                <label class="control-label" for="model-input-player-name">player name</label> \
                                 <input type="text" class="form-control" id="model-input-player-name" placeholder=""> \
+                                <span class="help-block">pattern: "${pattern.username.toString()}"</span>
+                                <span class="help-block">example: eugene.matvejev@gmail.com</span>
                             </div> \
                             <div class="form-group"> \
-                                <label for="model-input-battlefield-size">battlefield size</label> \
-                                <input type="test" class="form-control" id="model-input-battlefield-size" \
-                                    placeholder="between ${battlefield.min} and ${battlefield.max}"> \
+                                <label class="control-label" for="model-input-battlefield-size">battlefield size</label> \
+                                <input type="test" class="form-control" id="model-input-battlefield-size"
+                                        placeholder="battlefield size ${pattern.battlefield.min} and ${pattern.battlefield.max}"/> \
+                                <span class="help-block">example: 7</span>
                             </div> \
                         </div> \
                         <div class="modal-footer"> \

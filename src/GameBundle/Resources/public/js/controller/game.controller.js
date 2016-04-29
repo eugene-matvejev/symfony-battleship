@@ -1,12 +1,19 @@
 'use strict';
 
 $(document).ready(function () {
+    const FLAG_NONE             = 0x00;
     const FLAG_USERNAME         = 0x01;
     const FLAG_BATTLEFIELD_SIZE = 0x02;
     const FLAG_ALL              = FLAG_USERNAME | FLAG_BATTLEFIELD_SIZE;
 
-    let bytes = 0x00,
-        game  = new Game($('div#game-current-area'));
+    let bytes     = FLAG_NONE,
+        game      = new Game($('div#game-current-area')),
+        highlight = function (el, flag) {
+            el.parentElement.classList.remove('has-success');
+            el.parentElement.classList.remove('has-error');
+
+            el.parentElement.classList.add((bytes & flag) === flag ? 'has-success' : 'has-error');
+        };
 
     game.init(
         [
@@ -29,18 +36,20 @@ $(document).ready(function () {
             game.modalGameInitiation();
         });
     $('#modal-area')
+        /** modal area: player name */
         .on('input', '#model-input-player-name', function (e) {
             e.stopPropagation();
 
             if (!Game.resources.validate.username(this.value)) {
-                this.value = this.value.substr(0, this.value.length - 1);
                 bytes &= ~FLAG_USERNAME;
             } else {
                 bytes |= FLAG_USERNAME;
             }
 
-            game.modalMgr.unlockSubmission((bytes & 0x03) === 0x03);
+            highlight(this, FLAG_USERNAME);
+            game.modalMgr.unlockSubmission((bytes & FLAG_ALL) === FLAG_ALL);
         })
+        /** modal area: battlefield size */
         .on('input', '#model-input-battlefield-size', function (e) {
             e.stopPropagation();
 
@@ -60,8 +69,10 @@ $(document).ready(function () {
                 bytes |= FLAG_BATTLEFIELD_SIZE;
             }
 
+            highlight(this, FLAG_BATTLEFIELD_SIZE);
             game.modalMgr.unlockSubmission((bytes & FLAG_ALL) === FLAG_ALL);
         })
+        /** modal area: submit */
         .on('click', '#model-button-init-new-game', function (e) {
             e.stopPropagation();
 
