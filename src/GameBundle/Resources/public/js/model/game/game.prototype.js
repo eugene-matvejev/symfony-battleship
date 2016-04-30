@@ -156,13 +156,12 @@ class Game extends APIRequestMgr {
 
         if (undefined !== response.result) {
             let text   = this.constructor.resources.config.text,
-                type   = AlertMgr.resources.config.type,
                 player = this.findPlayerById(response.result.player.id);
 
             if (undefined !== player) {
                 player.isHuman()
-                    ? this.alertMgr.show(text.win, type.success)
-                    : this.alertMgr.show(text.loss, type.error);
+                    ? this.alertMgr.show(text.win, 'success')
+                    : this.alertMgr.show(text.loss, 'error');
             }
         }
     }
