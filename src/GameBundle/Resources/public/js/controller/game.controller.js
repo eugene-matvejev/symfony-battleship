@@ -6,13 +6,11 @@ $(document).ready(function () {
     const FLAG_BATTLEFIELD_SIZE = 0x02;
     const FLAG_ALL              = FLAG_USERNAME | FLAG_BATTLEFIELD_SIZE;
 
-    let bytes     = FLAG_NONE,
-        game      = new Game($('div#game-current-area')),
-        highlight = function (el, flag) {
-            el.parentElement.classList.remove('has-success');
-            el.parentElement.classList.remove('has-error');
-
-            el.parentElement.classList.add((bytes & flag) === flag ? 'has-success' : 'has-error');
+    let bytes              = FLAG_NONE,
+        game               = new Game($('div#game-current-area')),
+        highlightFormGroup = function (el, flag) {
+            let $el = $(el.parentElement);
+            $el.removeClass('has-success has-error').addClass((bytes & flag) === flag ? 'has-success' : 'has-error');
         };
 
     game.init(
@@ -36,8 +34,8 @@ $(document).ready(function () {
             game.modalGameInitiation();
         });
     $('#modal-area')
-        /** modal area: player name */
         .on('input', '#model-input-player-name', function (e) {
+            /** modal area: player name */
             e.stopPropagation();
 
             if (!Game.resources.validate.username(this.value)) {
@@ -46,18 +44,17 @@ $(document).ready(function () {
                 bytes |= FLAG_USERNAME;
             }
 
-            highlight(this, FLAG_USERNAME);
+            highlightFormGroup(this, FLAG_USERNAME);
             game.modalMgr.unlockSubmission((bytes & FLAG_ALL) === FLAG_ALL);
         })
-        /** modal area: battlefield size */
         .on('input', '#model-input-battlefield-size', function (e) {
+            /** modal area: battlefield size */
             e.stopPropagation();
 
             let pattern = Game.resources.config.pattern;
 
             if (!Game.resources.validate.battlefield.size(this.value)) {
                 if (isNaN(this.value)) {
-                    this.value = this.value.substr(0, this.value.length - 1);
                     bytes &= ~FLAG_BATTLEFIELD_SIZE;
                 } else if (this.value > pattern.battlefield.max) {
                     this.value = pattern.battlefield.max;
@@ -69,11 +66,11 @@ $(document).ready(function () {
                 bytes |= FLAG_BATTLEFIELD_SIZE;
             }
 
-            highlight(this, FLAG_BATTLEFIELD_SIZE);
+            highlightFormGroup(this, FLAG_BATTLEFIELD_SIZE);
             game.modalMgr.unlockSubmission((bytes & FLAG_ALL) === FLAG_ALL);
         })
-        /** modal area: submit */
         .on('click', '#model-button-init-new-game', function (e) {
+            /** modal area: submit */
             e.stopPropagation();
 
             game.init(
