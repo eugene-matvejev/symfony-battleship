@@ -31,7 +31,7 @@ class PaginationMgr {
     setPreviousPage(page) {
         this.previousPage = page;
 
-        this.$previousPageBtn.attr("data-page", this.previousPage)[0].disabled = this.previousPage < 1;
+        this.$previousPageBtn.attr('data-page', this.previousPage)[0].disabled = this.previousPage < 1;
     }
 
     /**
@@ -58,7 +58,7 @@ class PaginationMgr {
     setNextPage(page) {
         this.nextPage = page;
 
-        this.$nextPageBtn.attr("data-page", this.nextPage)[0].disabled = this.nextPage > this.totalPages;
+        this.$nextPageBtn.attr('data-page', this.nextPage)[0].disabled = this.nextPage > this.totalPages;
     }
 }
 
