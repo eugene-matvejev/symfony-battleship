@@ -15,7 +15,8 @@
     "autoload-dev": {
         "psr-4": {
             "EM\\Tests\\Environment\\": "tests/environment",
-            "EM\\Tests\\PHPUnit\\": "tests/phpunit"
+            "EM\\Tests\\PHPUnit\\": "tests/phpunit",
+            "EM\\Tests\\Behat\\": "tests/behat"
         }
     },
     "authors": [
