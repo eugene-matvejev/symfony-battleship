@@ -26,7 +26,7 @@ class APIRequestMgr {
             method: requestMethod,
             url: requestURL,
             data: requestData,
-            timeout: APIRequestMgr.resources.config.timeout,
+            timeout: self.constructor.resources.config.defaultTimeout,
             beforeSend: function () {
                 self.pageMgr.loadingMode(true);
                 console.log(` >>> ${requestMethod} :: ${requestURL}`, requestData);
@@ -44,6 +44,6 @@ class APIRequestMgr {
 APIRequestMgr.resources = {
     config: {
         /** @type {number} */
-        timeout: 5000 /** in milliseconds */
+        defaultTimeout: 5000 /** in milliseconds */
     }
 };
