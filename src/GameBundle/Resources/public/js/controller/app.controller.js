@@ -1,5 +1,8 @@
 'use strict';
 
+/**
+ * this controller serve common "Application" actions such as sidebar toggling
+ */
 $(document).ready(function () {
     let pageMgr  = new PageMgr(),
         alertMgr = new AlertMgr();

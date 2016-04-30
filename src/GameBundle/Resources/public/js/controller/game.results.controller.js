@@ -1,5 +1,8 @@
 'use strict';
 
+/**
+ * this controller server "Game Results" related actions such as pagination and records displaying
+ */
 $(document).ready(function () {
     let gameResults = new GameResults($('div#game-results-area'));
 
