@@ -54,14 +54,14 @@ GameResults.resources.html   = {
      * @returns {string}
      */
     table: function () {
-        let header = GameResults.resources.tableHeader;
+        let text = GameResults.resources.tableHeader;
 
         return ` \
             <table class="table"> \
                 <tr> \
-                    <th>${header.resultId}</th> \
-                    <th>${header.playerName}</th> \
-                    <th>${header.finishTime}</th> \
+                    <th>${text.resultId}</th> \
+                    <th>${text.playerName}</th> \
+                    <th>${text.finishTime}</th> \
                 </tr> \
             </table>`;
     },
