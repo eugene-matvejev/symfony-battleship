@@ -18,10 +18,8 @@ class PageMgr {
      * @returns {PageMgr}
      */
     toggleSidebar() {
-        let css = this.constructor.resources.config.trigger.css;
-
-        this.$sidebar.toggleClass(css.toggle);
-        this.$content.toggleClass(css.toggle);
+        this.$sidebar.toggleClass('toggled');
+        this.$content.toggleClass('toggled');
 
         return this;
     }
@@ -32,24 +30,15 @@ class PageMgr {
      * @returns {PageMgr}
      */
     switchSection(el) {
-        let config = this.constructor.resources.config;
+        let section = el.getAttribute('data-section');
+        switch (section) {
+            case 'game-current-area':
+            case 'game-results-area':
+                this.alertMgr.hide();
+                this.toggleTitle(el);
+                this.hideAll();
 
-        this.toggleTitle(el);
-        this.hideAll();
-        this.alertMgr.hide();
-
-        switch (el.getAttribute(config.trigger.action)) {
-            case config.action.game.new:
-                break;
-            default:
-                let section = el.getAttribute(config.trigger.section);
-                switch (section) {
-                    case config.section.game.current:
-                    case config.section.game.results:
-                        this.show(section);
-                        break;
-                }
-                break;
+                this.show(section);
         }
 
         return this;
@@ -59,10 +48,8 @@ class PageMgr {
      * @returns {PageMgr}
      */
     hideAll() {
-        let css = this.constructor.resources.config.trigger.css;
-
-        this.$content.find('.container-fluid > .row > div:not(#notification-area)').addClass(css.hidden);
-        this.$sidebar.find('li:not(.sidebar-brand)').removeClass(css.selected);
+        this.$content.find('.container-fluid > .row > div:not(#notification-area)').addClass('hidden');
+        this.$sidebar.find('li:not(.sidebar-brand)').removeClass('selected');
 
         return this;
     }
@@ -73,10 +60,8 @@ class PageMgr {
      * @returns {PageMgr}
      */
     show(id) {
-        let css = this.constructor.resources.config.trigger.css;
-
-        this.$content.find(`div#${id}`).removeClass(css.hidden);
-        this.$sidebar.find(`li[data-section="${id}"]`).addClass(css.selected);
+        this.$content.find(`div#${id}`).removeClass('hidden');
+        this.$sidebar.find(`li[data-section="${id}"]`).addClass('selected');
 
         return this;
     }
@@ -87,11 +72,10 @@ class PageMgr {
      * @returns {PageMgr}
      */
     toggleTitle(el) {
-        let postfix = el.innerText,
-            prefix  = this.$sidebar.find('.' + this.constructor.resources.config.trigger.css.title).text();
+        let prefix = this.$sidebar.find('.page-header').text();
 
-        this.$docTitle.text(`${prefix} :: ${postfix}`);
-        this.$pageTitle.text(postfix);
+        this.$docTitle.text(`${prefix} :: ${el.innerText}`);
+        this.$pageTitle.text(el.innerText);
 
         return this;
     }
@@ -102,48 +86,16 @@ class PageMgr {
      * @returns {PageMgr}
      */
     loadingMode(enable) {
-        let css = this.constructor.resources.config.trigger.css;
-
         this.modalMgr.updateHTML('');
+        this.modalMgr.hide();
+
+        this.$loading.addClass('hidden');
 
         if (enable) {
-            this.$loading.removeClass(css.hidden);
+            this.$loading.removeClass('hidden');
             this.modalMgr.show();
-        } else {
-            this.$loading.addClass(css.hidden);
-            this.modalMgr.hide();
         }
 
         return this;
     }
 }
-
-PageMgr.resources        = {};
-PageMgr.resources.config = {
-    action: {
-        /** @enum {string} */
-        game: {
-            new: 'game-new-action'
-        }
-    },
-    section: {
-        /** @enum {string} */
-        game: {
-            current: 'game-current-area',
-            results: 'game-results-area'
-        }
-    },
-    trigger: {
-        /** @enum {string} */
-        css: {
-            selected: 'selected',
-            title: 'page-header',
-            toggle: 'toggled',
-            hidden: 'hidden'
-        },
-        /** @type {string} */
-        action: 'data-action',
-        /** @type {string} */
-        section: 'data-section'
-    }
-};
