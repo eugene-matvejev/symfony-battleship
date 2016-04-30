@@ -8,4 +8,4 @@ dependencies:
 
 test:
     override:
-        - "php bin/phpunit -c tests/phpunit.xml --colors=always --verbose --coverage-clover=coverage.xml"
+        - "php bin/phpunit -c phpunit.xml --colors=always --verbose --coverage-clover=coverage.xml"
