@@ -7,16 +7,16 @@ class AlertMgr {
     }
 
     /**
-     * @param {string} txt
+     * @param {string} text
      * @param {string} type
      *
      * @returns {AlertMgr}
      */
-    show(txt, type) {
+    show(text, type) {
         this.colorByType(type);
-        this.$content.html(txt);
+        this.$content.html(text);
 
-        this.$html.removeClass(PageMgr.resources.config.trigger.css.hidden);
+        this.$html.removeClass('hidden');
 
         return this;
     }
@@ -25,39 +25,26 @@ class AlertMgr {
      * @returns {AlertMgr}
      */
     hide() {
-        this.$html.addClass(PageMgr.resources.config.trigger.css.hidden);
+        this.$html.addClass('hidden');
 
         return this;
     }
 
     /**
-     * @param {string} _type
+     * @param {string} type
      *
      * @returns {AlertMgr}
      */
-    colorByType(_type) {
-        let type = AlertMgr.resources.config.type;
-
-        switch (_type) {
-            case type.info:
-            case type.success:
-            case type.warning:
-            case type.error:
-                this.$html.removeClass().addClass('alert alert-' + _type);
+    colorByType(type) {
+        switch (type) {
+            case 'success':
+            case 'info':
+            case 'warning':
+            case 'danger':
+                this.$html.removeClass().addClass(`alert alert-${type}`);
                 break;
         }
 
         return this;
     }
 }
-
-AlertMgr.resources        = {};
-AlertMgr.resources.config = {
-    /** @enum {string} */
-    type: {
-        info: 'info',
-        success: 'success',
-        warning: 'warning',
-        error: 'danger'
-    }
-};
