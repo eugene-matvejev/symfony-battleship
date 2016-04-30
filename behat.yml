@@ -74,23 +74,21 @@
 
 
 default:
+#    definitions:
+#        KERNEL_DIR: "%paths.base%/app"
     formatters:
         pretty: true
     autoload:
-        - "%paths.base%/tests/behat/context"
         - "%paths.base%/tests/behat/bootstrap"
 
     suites:
 # ### ### ### ### ### API ### ### ### ### ###
 #        api.game_features:
-#            contexts:
-#                - EM\Tests\Behat\GameBundle\Controller\GameControllerContext:
-#                    session:   '@session'
         api.game_results_features:
-            paths: [ "%paths.base%/../tests/behat/features/game_results" ]
+            paths: [ "%paths.base%/tests/behat/features/api/api.game_results.feature" ]
             contexts:
-                - EM\Tests\Behat\GameBundle\Controller\GameControllerContext:
-                    session:   '@session'
+                - EM\Tests\Behat\GameBundle\Controller\GameResultControllerContext:
+#                    session:   '@session'
 # ### ### ### ### ### GUI ### ### ### ### ###
 #        gui.game_features:
 #            paths: [ "%paths.base%/tests/behat/features/gui" ] #/api_game.feature
