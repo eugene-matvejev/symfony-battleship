@@ -1,5 +1,8 @@
 'use strict';
 
+/**
+ * this controller serve all "Game" related actions such as game initiation
+ */
 $(document).ready(function () {
     const FLAG_NONE             = 0x00;
     const FLAG_USERNAME         = 0x01;
