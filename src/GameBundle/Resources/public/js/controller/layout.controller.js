@@ -1,7 +1,8 @@
 'use strict';
 
 $(document).ready(function () {
-    let pageMgr = new PageMgr();
+    let pageMgr  = new PageMgr(),
+        alertMgr = new AlertMgr();
 
     $('.page-sidebar, .page-content')
         .on('click', '.toggle-btn, .switch-btn', function (e) {
@@ -11,9 +12,16 @@ $(document).ready(function () {
         });
 
     $('.page-sidebar')
-        .on('click', 'li[data-section], li[data-action]', function (e) {
+        .on('click', 'li[data-section]', function (e) {
             e.stopPropagation();
 
             pageMgr.switchSection(this);
+        });
+
+    $('#notification-area')
+        .on('click', 'span.notification-control', function (e) {
+            e.stopPropagation();
+
+            alertMgr.hide();
         });
 });
