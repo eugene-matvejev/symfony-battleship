@@ -6,27 +6,29 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Testwork\Hook\Call as Behat;
 use EM\Tests\Environment\ContainerAwareTestSuite;
+use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\File;
 
 abstract class AbstractContainerAwareContext extends ContainerAwareTestSuite implements Context, SnippetAcceptingContext
 {
     /**
+     * @var Client
+     */
+    protected $_client;
+
+    /**
      * @Given setup context
      */
     public function setupContext()
     {
         parent::setUp();
+
+        $this->_client = clone static::$client;
     }
 
     /**
-     * Attempts to guess the kernel location.
-     *
-     * When the Kernel is located, the file is required.
-     *
-     * @return string The Kernel class name
-     *
-     * @throws \RuntimeException
+     * {@inheritdoc}
      */
     protected static function getKernelClass()
     {

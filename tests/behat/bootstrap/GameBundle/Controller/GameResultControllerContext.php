@@ -2,6 +2,7 @@
 
 namespace EM\Tests\Behat\GameBundle\Controller;
 
+use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Testwork\Hook\Call as Behat;
@@ -10,17 +11,18 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GameResultControllerContext extends AbstractContainerAwareContext implements Context, SnippetAcceptingContext
 {
-    protected $_client;
     /**
-     * @Given request api endpoint
+     * @Given I am requesting :route with :param and :value API endpoint
+     *
+     * @param string $route
+     * @param string $param
+     * @param string $value
      */
-    public function requestApiEndpoint()
+    public function iAmRequestingWithAndApiEndpoint(string $route, string $param, string $value)
     {
-        $client = clone static::$client;
-
-        $client->request(
+        $this->_client->request(
             Request::METHOD_GET,
-            static::$router->generate('battleship.game.api.game.results', ['page' => 1]),
+            static::$router->generate($route, [$param => $value]),
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
@@ -28,20 +30,25 @@ class GameResultControllerContext extends AbstractContainerAwareContext implemen
     }
 
     /**
-     * @Then get results
+     * @Then I should get successful response
      */
-    public function getResults()
+    public function iShouldGetSuccessfulResponse()
     {
-        throw new PendingException();
+        $this->assertSuccessfulJSONResponse($this->_client->getResponse());
     }
 
     /**
-     * @Then there are :arg1 results
+     * @Then there should be :arg1 results
      */
-    public function thereAreResults($arg1)
+    public function thereShouldBeResults(string $page, string $results)
     {
-        throw new PendingException();
+        $parsedJson = json_decode($this->_client->getResponse()->getContent());
+
+        $parsedJson;
+        if('asd' != 1) {
+
+        }
+        $this->assertInstanceOf(\stdClass::class, $parsedJson->meta);
+        $this->assertEquals()
     }
 }
-
-
