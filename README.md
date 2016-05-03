@@ -54,7 +54,7 @@
  * __optional!__ *php bin/console assets:install* __# to dump assets__
  * __optional!__ *composer dump-autoload --optimize* __# to generate "hash-map" autoloader__
   * __NOTE!__ production uses __APC autoloader__
- * __optional!__ *php bin/console doctrine:fixtures:load --env=test* __#for testing purposes only__
+ * __optional!__ *php bin/console doctrine:fixtures:load --env=test* __# for testing purposes only__
  * apache virtual host config:
  ```
 <VirtualHost 127.0.0.1:80 ::1:80>
