@@ -9,7 +9,12 @@ use EM\GameBundle\ORM\AbstractFlaggedEntity;
  * @since 1.0
  *
  * @ORM\Entity()
- * @ORM\Table(name="players")
+ * @ORM\Table(
+ *      name="players",
+ *      indexes={
+ *          @ORM\Index(name="INDEX_PLAYER_NAME", columns={"name"})
+ *      }
+ * )
  */
 class Player extends AbstractFlaggedEntity
 {
