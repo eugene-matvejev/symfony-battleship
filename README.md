@@ -40,7 +40,9 @@ __BDD tests__ [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-g
  * PHP7 (7.0.1, as 7.0.0 had bugged primitive types)
  * Symfony Framework 3 (SF3)
  * Doctrine 2
+ * Doctrine Fixtures
  * PHPUnit 5
+ * Behat 3
  * Composer
  * JMS Serializer
  * Twig
@@ -50,11 +52,13 @@ __BDD tests__ [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-g
 
 # How to install
  * copy *app/config/parameters.yml.dist* to *app/config/parameters.yml* and amend database settings
- * *composer install* (will create databases if they are not exists and execute migrations)
- * *php bin/console doctrine:fixtures:load --env=test* (optional, for testing purposes only)
- * *php bin/console assets:install* (as need dump assets once)
- * *composer dump-autoload --optimize* (optimized 'hash-map' autoloader)
-  * production uses APC autoloader
+ * *composer install* __# to fetch depencies and initial commands__
+  * __NOTE!__ composer is configured to create databases if they not exists and run apply migrations__
+ * __optional!__ *composer dump-autoload --optimize* __# to generate "hash-map" autoloader__
+  * __NOTE!__ production uses __APC autoloader__
+ * __optional!__ *php bin/console assets:install* __# to dump assets as hard copies__
+  * __NOTE!__ by default assets are installed as symlinks
+ * __optional!__ *php bin/console doctrine:fixtures:load --env=test* __# for testing purposes only__
  * apache virtual host config:
  ```
 <VirtualHost 127.0.0.1:80 ::1:80>
