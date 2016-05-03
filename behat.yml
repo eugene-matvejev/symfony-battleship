@@ -1,0 +1,28 @@
+default:
+#    formatters:
+#        pretty: true
+
+    autoload:
+        - "%paths.base%/tests/behat/bootstrap"
+
+    suites:
+# ### ### ### ### ### API ### ### ### ### ###
+        api.game_features:
+            paths: [ "%paths.base%/tests/behat/features/api/api.game.feature" ]
+            contexts:
+                - EM\Tests\Behat\GameBundle\Controller\GameControllerContext:
+            filters:
+                tags: "@api"
+        api.game_results_features:
+            paths: [ "%paths.base%/tests/behat/features/api/api.game_results.feature" ]
+            contexts:
+                - EM\Tests\Behat\GameBundle\Controller\GameResultControllerContext:
+            filters:
+                tags: "@api"
+# ### ### ### ### ### GUI ### ### ### ### ###
+        gui.game_features:
+            paths: [ "%paths.base%/tests/behat/features/gui/gui.game.feature" ]
+            contexts:
+                - EM\Tests\Behat\GameBundle\Controller\GameControllerContext:
+            filters:
+                tags: "@gui"

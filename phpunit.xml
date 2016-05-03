@@ -11,25 +11,30 @@
          processIsolation            = "false"
          stopOnFailure               = "true"
          syntaxCheck                 = "false"
-         bootstrap                   = "../app/autoload.php"
+         bootstrap                   = "./app/autoload.php"
 >
     <php>
         <server name="KERNEL_DIR" value="app/" />
     </php>
 
     <testsuites>
-        <testsuite name="Project Test Suite">
-            <directory>phpunit/*Bundle/*</directory>
+        <testsuite name="functional tests">
+            <directory>./tests/phpunit/*Bundle/Controller</directory>
+        </testsuite>
+        <testsuite name="unit tests">
+            <directory>./tests/phpunit/*Bundle/Entity</directory>
+            <directory>./tests/phpunit/*Bundle/Model</directory>
+            <directory>./tests/phpunit/*Bundle/Service</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory>../src</directory>
+            <directory>./src</directory>
             <exclude>
-                <directory>../src/*Bundle/DataFixtures</directory>
-                <directory>../src/*Bundle/DependencyInjection</directory>
-                <directory>../src/*Bundle/Resources</directory>
+                <directory>./src/*Bundle/DataFixtures</directory>
+                <directory>./src/*Bundle/DependencyInjection</directory>
+                <directory>./src/*Bundle/Resources</directory>
             </exclude>
         </whitelist>
     </filter>

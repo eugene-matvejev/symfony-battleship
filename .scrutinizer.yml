@@ -23,7 +23,7 @@ build:
     tests:
         override:
             -
-                command: "php bin/phpunit -c tests/phpunit.xml --colors=always --verbose --coverage-clover=coverage.xml"
+                command: "php bin/phpunit -c phpunit.xml --colors=always --verbose --coverage-clover=coverage.xml"
                 coverage:
                     file: "coverage.xml"
                     format: "php-clover"
