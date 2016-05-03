@@ -1,12 +1,9 @@
-Feature: index page
+Feature: Game GUI
 
   Background:
-#    Given I am viewing the index page
+    Given setup context
 
-  Scenario: Successful game initiation
-    Given I am viewing the index page
-    When loading has been finished
-    Then new game been initiated
-    And human player have at least one live ship
-    And cpu player have at least one live ship
-
+  @gui
+  Scenario: verify index page
+    Given request GUI "battleship.game.gui.index" route via "GET" method
+    Then observe successful response

@@ -2,17 +2,35 @@
 
 namespace EM\Tests\Behat\GameBundle\Controller;
 
+use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use EM\GameBundle\Controller\GameController;
-use Symfony\Component\HttpFoundation\Session\Session;
+use EM\Tests\Behat\AbstractContainerAwareContext;
 
 /**
  * @see GameController
  */
-class GameControllerContext implements SnippetAcceptingContext //extends ExtendedTestCase
+class GameControllerContext extends AbstractContainerAwareContext implements Context, SnippetAcceptingContext
 {
-    public function __construct(Session $session)
+    /**
+     * @Given request GUI :route route via :method method
+     *
+     * @param string $route
+     * @param string $method
+     */
+    public function requestGuiRouteViaMethod(string $route, string $method)
     {
-        die('asd');
+        $routeParams = [];
+        if (!empty($paramKey) && !empty($paramValue)) {
+            $routeParams[$paramKey] = $paramValue;
+        }
+
+        $this->_client->request(
+            $method,
+            static::$router->generate($route, $routeParams),
+            [],
+            [],
+            []
+        );
     }
 }

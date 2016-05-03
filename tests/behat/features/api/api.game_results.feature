@@ -1,15 +1,16 @@
-Feature: Game Results API
+Feature: API: Game Results
 
   Background:
     Given setup context
 
-  Scenario Outline: request API
-    Given requesting "<route>" with "<arg>" and "<argValue>" API endpoint
-    Then observe successful response
-    And there should be "<argValue>" and have "<expectedAmountOfGameResults>" results
+  @api
+  Scenario Outline:
+    Given request API "<routeAlias>" route via "<routeMethod>" with "<routeParam>" "<paramValue>"
+    Then observe JSON successful response
+    And observe "<expectedAmount>" results in page "<paramValue>"
 
     Examples:
-      | route                            | arg  | argValue | expectedAmountOfGameResults |
-      | battleship.game.api.game.results | page | 1        | 0                           |
-      | battleship.game.api.game.results | page | 2        | 0                           |
-      | battleship.game.api.game.results | page | 99       | 0                           |
+      | routeAlias                       | routeMethod | routeParam | paramValue | expectedAmount |
+      | battleship.game.api.game.results | GET         | page       | 1          | 0              |
+      | battleship.game.api.game.results | GET         | page       | 2          | 0              |
+      | battleship.game.api.game.results | GET         | page       | 99         | 0              |

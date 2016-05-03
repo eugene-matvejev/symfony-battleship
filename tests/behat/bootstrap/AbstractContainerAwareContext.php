@@ -4,7 +4,6 @@ namespace EM\Tests\Behat;
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
-use Behat\Testwork\Hook\Call as Behat;
 use EM\Tests\Environment\ContainerAwareTestSuite;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\Finder\Finder;
@@ -18,6 +17,45 @@ abstract class AbstractContainerAwareContext extends ContainerAwareTestSuite imp
     protected $_client;
 
     /**
+     * @Given request API :route route via :method with :paramKey :paramValue
+     *
+     * @param string $route
+     * @param string $method
+     * @param string $paramKey
+     * @param string $paramValue
+     */
+    public function requestApiRouteViaWith(string $route, string $method, string $paramKey, string $paramValue)
+    {
+        $routeParams = [];
+        if (!empty($paramKey) && !empty($paramValue)) {
+            $routeParams[$paramKey] = $paramValue;
+        }
+        $this->_client->request(
+            $method,
+            static::$router->generate($route, $routeParams),
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
+        );
+    }
+
+    /**
+     * @Then observe successful response
+     */
+    public function observeSuccessfulResponse()
+    {
+        $this->assertSuccessfulResponse($this->_client->getResponse());
+    }
+
+    /**
+     * @Then observe unsuccessful response
+     */
+    public function observeUnsuccessfulResponse()
+    {
+        $this->assertUnsuccessfulResponse($this->_client->getResponse());
+    }
+
+    /**
      * @Given setup context
      */
     public function setupContext()
@@ -28,6 +66,8 @@ abstract class AbstractContainerAwareContext extends ContainerAwareTestSuite imp
     }
 
     /**
+     * if KERNEL_DIR is not presented change behaviour otherwise use default
+     *
      * {@inheritdoc}
      */
     protected static function getKernelClass()

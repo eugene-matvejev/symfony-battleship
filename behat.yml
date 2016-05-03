@@ -1,150 +1,28 @@
-#testwork:
-#    argument:             []
-#    autoload:
-#
-#        # Default:
-#        :                    %paths.base%/features/bootstrap
-#    suites:
-#
-#        # Prototype
-#        name:
-#
-#            # Enables/disables suite
-#            enabled:              true
-#
-#            # Specifies suite type
-#            type:                 null
-#
-#            # Specifies suite extra settings
-#            settings:
-#
-#                # Prototype
-#                name:                 ~
-#    formatters:
-#
-#        # Prototype
-#        name:                 []
-#    exceptions:
-#
-#        # Output verbosity
-#        verbosity:            1 # Example: 1, 2, 3, 4
-#    gherkin:
-#
-#        # Sets the gherkin parser cache folder
-#        cache:                /var/folders/z8/m0hm2sx12x9407zdcq3xcl940000gp/T/behat_gherkin_cache
-#
-#        # Sets the gherkin filters (overridable by CLI options)
-#        filters:
-#
-#            # Prototype
-#            name:                 ~
-#    calls:
-#
-#        # Call executor will catch exceptions matching this level
-#        error_reporting:      32767
-#    translation:
-#
-#        # Sets output locale for the tester
-#        locale:               en
-#
-#        # Sets fallback output locale for the tester
-#        fallback_locale:      en
-#    gherkin_translations:  []
-#    testers:
-#
-#        # Sets the strict mode for result interpretation
-#        strict:               false
-#
-#        # Tells tester to skip all tests
-#        skip:                 false
-#
-#        # Sets the rerun cache path
-#        rerun_cache:          /var/folders/z8/m0hm2sx12x9407zdcq3xcl940000gp/T/behat_rerun_cache
-#    cli:                  []
-#    environments:         []
-#    specifications:       []
-#    filesystem:           []
-#    contexts:             []
-#    snippets:             []
-#    definitions:          []
-#    events:               []
-#    hooks:                []
-#    transformations:      []
-#    ordering:             []
-
-
 default:
-#    definitions:
-#        KERNEL_DIR: "%paths.base%/app"
-    formatters:
-        pretty: true
+#    formatters:
+#        pretty: true
+
     autoload:
         - "%paths.base%/tests/behat/bootstrap"
 
     suites:
 # ### ### ### ### ### API ### ### ### ### ###
-#        api.game_features:
+        api.game_features:
+            paths: [ "%paths.base%/tests/behat/features/api/api.game.feature" ]
+            contexts:
+                - EM\Tests\Behat\GameBundle\Controller\GameControllerContext:
+            filters:
+                tags: "@api"
         api.game_results_features:
             paths: [ "%paths.base%/tests/behat/features/api/api.game_results.feature" ]
             contexts:
                 - EM\Tests\Behat\GameBundle\Controller\GameResultControllerContext:
-#                    session:   '@session'
+            filters:
+                tags: "@api"
 # ### ### ### ### ### GUI ### ### ### ### ###
-#        gui.game_features:
-#            paths: [ "%paths.base%/tests/behat/features/gui" ] #/api_game.feature
-#            contexts:
-#                - EM\Tests\Behat\GameBundle\Controller\GameControllerContext:
-#                    - "@session"
-#        default:
-#            paths: [ %paths.base%/tests/behat ]
-#            paths: [ %paths.base%/tests/behat/features/gui ] #/api_game.feature
-#            contexts:
-#                - EM\Tests\Behat\GameBundle\Controller\GameControllerContext:
-#                    session:   '@session'
-#    extensions:
-#        Behat\Symfony2Extension: ~
-##        Behat\MinkExtension\Extension:
-##            default_session: symfony2
-##            show_cmd: 'open -a Google\ Chrome.app %s'
-##            base_url: http://api.game.local/app_dev.php
-##        Behat\Symfony2Extension: ~
-#        Behat\MinkExtension:
-#            sessions:
-#                default:
-#                    symfony2: ~
-#
-#    formatter:
-#        name: pretty
-
-#    suites:
-## ### ### ### ### ### API ### ### ### ### ###
-##        api.game_features:
-##            contexts:
-##                - EM\Tests\Behat\GameBundle\Controller\GameControllerContext:
-##                    session:   '@session'
-##        api.game_results_features:
-##            contexts:
-##                - EM\Tests\Behat\GameBundle\Controller\GameControllerContext:
-##                    session:   '@session'
-## ### ### ### ### ### GUI ### ### ### ### ###
-#        gui.game_features:
-#            paths: [%paths.base%/tests/behat/features/gui] #/api_game.feature
-#            contexts:
-#                - EM\Tests\Behat\GameBundle\Controller\GameControllerContext:
-#                    session:   '@session'
-
-#
-#default:
-#    formatter:
-#        name: pretty
-#    paths:
-#        features: features
-#    context:
-#        class:  Context\FeatureContext
-#    extensions:
-#        Behat\MinkExtension\Extension:
-#            default_session: symfony2
-#            show_cmd: 'open -a Firefox.app %s'
-#            base_url: http://myproject.dev
-#
-#        Behat\Symfony2Extension\Extension: ~
+        gui.game_features:
+            paths: [ "%paths.base%/tests/behat/features/gui/gui.game.feature" ]
+            contexts:
+                - EM\Tests\Behat\GameBundle\Controller\GameControllerContext:
+            filters:
+                tags: "@gui"
