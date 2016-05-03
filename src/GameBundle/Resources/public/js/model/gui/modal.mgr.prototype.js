@@ -44,9 +44,7 @@ class ModalMgr {
     unlockSubmission(enable) {
         let $button = this.$html.find('button.btn[type="button"]');
 
-        undefined === enable || enable
-            ? $button.removeAttr('disabled')
-            : $button.attr('disabled', 'disabled');
+        $button[0].disabled = !(undefined === enable || enable);
 
         return this;
     }
