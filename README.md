@@ -50,7 +50,8 @@
 
 # How to install
  * copy *app/config/parameters.yml.dist* to *app/config/parameters.yml* and amend database settings
- * *composer install* __# composer is configured to create databases if they not exists and run apply migrations__
+ * *composer install* __# to fetch depencies and initial commands__
+  * __NOTE!__ composer is configured to create databases if they not exists and run apply migrations__
  * __optional!__ *composer dump-autoload --optimize* __# to generate "hash-map" autoloader__
   * __NOTE!__ production uses __APC autoloader__
  * __optional!__ *php bin/console assets:install* __# to dump assets as hard copies__
