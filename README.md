@@ -53,7 +53,8 @@
  * *composer install* __# composer is configured to create databases if they not exists and run apply migrations__
  * __optional!__ *composer dump-autoload --optimize* __# to generate "hash-map" autoloader__
   * __NOTE!__ production uses __APC autoloader__
- * __optional!__ *php bin/console assets:install* __# to dump assets__
+ * __optional!__ *php bin/console assets:install* __# to dump assets as hard copies__
+  * __NOTE!__ by default assets are installed as symlinks
  * __optional!__ *php bin/console doctrine:fixtures:load --env=test* __# for testing purposes only__
  * apache virtual host config:
  ```
