@@ -1,4 +1,4 @@
-Feature: Game API
+Feature: API: Game
 
   Background:
     Given setup context
