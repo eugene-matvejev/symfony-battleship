@@ -101,10 +101,10 @@ class Game extends APIRequestMgr {
     }
 
     /**
-     * @param {Element} el
+     * @param {number} cellId
      */
-    update(el) {
-        let cell = this.findCell({ id: el.getAttribute('data-id') });
+    update(cellId) {
+        let cell = this.findCell({ id: cellId });
         if (undefined !== cell) {
             this.cellSend(cell);
         }
