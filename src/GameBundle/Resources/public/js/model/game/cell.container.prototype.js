@@ -33,16 +33,7 @@ class CellContainer {
      * @returns {Cell|undefined}
      */
     findCell(criteria) {
-        return this.cells.find(function (cell) {
-            if (undefined !== criteria.id && cell.id == criteria.id) {
-                return cell;
-            }
-            if (undefined !== criteria.coordinate && cell.coordinate == criteria.coordinate) {
-                return cell
-            }
-
-            return undefined;
-        });
+        return this.cells.find(cell => (undefined !== criteria.id && cell.id == criteria.id) || (undefined !== criteria.coordinate && cell.coordinate === criteria.coordinate));
     }
 
     /**
