@@ -12,8 +12,9 @@ $(document).ready(function () {
     let bytes              = FLAG_NONE,
         game               = new Game($('div#game-current-area')),
         highlightFormGroup = function (el, flag) {
-            let $el = $(el.parentElement);
-            $el.removeClass('has-success has-error').addClass((bytes & flag) === flag ? 'has-success' : 'has-error');
+            el.classList.remove('has-success');
+            el.classList.remove('has-error');
+            el.classList.add((bytes & flag) === flag ? 'has-success' : 'has-error');
         };
 
     game.init(
@@ -47,7 +48,7 @@ $(document).ready(function () {
                 bytes |= FLAG_USERNAME;
             }
 
-            highlightFormGroup(this, FLAG_USERNAME);
+            highlightFormGroup(this.parentElement, FLAG_USERNAME);
             game.modalMgr.unlockSubmission((bytes & FLAG_ALL) === FLAG_ALL);
         })
         .on('input', '#model-input-battlefield-size', function (e) {
@@ -69,7 +70,7 @@ $(document).ready(function () {
                 bytes |= FLAG_BATTLEFIELD_SIZE;
             }
 
-            highlightFormGroup(this, FLAG_BATTLEFIELD_SIZE);
+            highlightFormGroup(this.parentElement, FLAG_BATTLEFIELD_SIZE);
             game.modalMgr.unlockSubmission((bytes & FLAG_ALL) === FLAG_ALL);
         })
         .on('click', '#model-button-init-new-game', function (e) {
