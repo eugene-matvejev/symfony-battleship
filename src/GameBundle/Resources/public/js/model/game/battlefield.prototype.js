@@ -71,7 +71,7 @@ class Battlefield {
         return { id: this.id }
     }
 
-    /** *** *** *** *** *** *** *** *** *** *** *** *** *** **/
+    /** *** *** *** *** *** *** *** DATA MOCK *** *** *** *** *** *** **/
     initPlayerCells() {
         let self = this;
 
