@@ -50,8 +50,10 @@ class Game extends APIRequestMgr {
                 self.parseInitResponse(response);
             };
 
-        players.forEach(function (_player) {
-            let player = new Player(_player.name, _player.isCPU || false, battlefieldSize);
+        // ECMA3
+        for (var i = 0, length = players.length; i < length; i++) {
+            var _player = players[i],
+                player = new Player(_player.name, _player.isCPU || false, battlefieldSize);
 
             self.players.push(player);
             self.$html.append(player.$html);
@@ -61,7 +63,33 @@ class Game extends APIRequestMgr {
                 battlefield: player.battlefield.getJSON(),
                 cells: player.battlefield.cellContainer.getJSON()
             });
-        });
+        }
+        // // ECMA 6
+        // for (let _player of players) {
+        //     let player = new Player(_player.name, _player.isCPU || false, battlefieldSize);
+        //
+        //     self.players.push(player);
+        //     self.$html.append(player.$html);
+        //
+        //     requestData.data.push({
+        //         player: player.getJSON(),
+        //         battlefield: player.battlefield.getJSON(),
+        //         cells: player.battlefield.cellContainer.getJSON()
+        //     });
+        // }
+        // // ECMA5
+        // players.forEach(function (_player) {
+        //     let player = new Player(_player.name, _player.isCPU || false, battlefieldSize);
+        //
+        //     self.players.push(player);
+        //     self.$html.append(player.$html);
+        //
+        //     requestData.data.push({
+        //         player: player.getJSON(),
+        //         battlefield: player.battlefield.getJSON(),
+        //         cells: player.battlefield.cellContainer.getJSON()
+        //     });
+        // });
 
         this.request('POST', this.$html.attr('data-init-link'), requestData, onSuccess);
     }
