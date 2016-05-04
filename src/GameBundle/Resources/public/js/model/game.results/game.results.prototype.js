@@ -48,6 +48,7 @@ GameResults.resources.tableHeader = {
     playerName: 'winner',
     finishTime: 'finished at'
 };
+/** @type {string} */
 GameResults.resources.layout = '<div class="results-area"></div>';
 GameResults.resources.html   = {
     /**
