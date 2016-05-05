@@ -6,7 +6,7 @@
 class PageMgr {
     constructor() {
         this.modalMgr   = new ModalMgr();
-        this.alertMgr   = new AlertMgr();
+        this.popupMgr   = new PopupMgr();
         this.$docTitle  = $('head>title');
         this.$loading   = $('.page-loading');
         this.$sidebar   = $('.page-sidebar');
@@ -34,8 +34,8 @@ class PageMgr {
         switch (section) {
             case 'game-current-area':
             case 'game-results-area':
-                this.alertMgr.hide();
                 this.toggleTitle(el);
+                this.popupMgr.hide();
                 this.hideAll();
 
                 this.show(section);

@@ -1,6 +1,6 @@
 'use strict';
 
-class AlertMgr {
+class PopupMgr {
     constructor() {
         this.$html    = $('#notification-area');
         this.$content = this.$html.find('.notification-content');
@@ -10,7 +10,7 @@ class AlertMgr {
      * @param {string} text
      * @param {string} type
      *
-     * @returns {AlertMgr}
+     * @returns {PopupMgr}
      */
     show(text, type) {
         this.colorByType(type);
@@ -22,7 +22,7 @@ class AlertMgr {
     }
 
     /**
-     * @returns {AlertMgr}
+     * @returns {PopupMgr}
      */
     hide() {
         this.$html.addClass('hidden');
@@ -33,7 +33,7 @@ class AlertMgr {
     /**
      * @param {string} type
      *
-     * @returns {AlertMgr}
+     * @returns {PopupMgr}
      */
     colorByType(type) {
         switch (type) {

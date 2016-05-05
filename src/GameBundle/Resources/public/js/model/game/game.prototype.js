@@ -8,7 +8,7 @@ class Game extends APIRequestMgr {
         super();
         this.$html = $el;
 
-        this.alertMgr = new AlertMgr();
+        this.popupMgr = new PopupMgr();
         this.modalMgr = new ModalMgr();
     }
 
@@ -160,8 +160,8 @@ class Game extends APIRequestMgr {
 
             if (undefined !== player) {
                 player.isHuman()
-                    ? this.alertMgr.show(text.win, 'success')
-                    : this.alertMgr.show(text.loss, 'error');
+                    ? this.popupMgr.show(text.win, 'success')
+                    : this.popupMgr.show(text.loss, 'error');
             }
         }
     }
@@ -185,7 +185,7 @@ class Game extends APIRequestMgr {
     }
 
     modalGameInitiation() {
-        this.alertMgr.hide();
+        this.popupMgr.hide();
         this.modalMgr.updateHTML(Game.resources.html.modal).show();
 
         return this;
