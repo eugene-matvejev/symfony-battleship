@@ -28,12 +28,12 @@ class CellContainer {
     }
 
     /**
-     * @param {{id: {number}, coordinate: {string}}} criteria
+     * @param {{id: {number}, coordinate: {string}}} obj
      *
      * @returns {Cell|undefined}
      */
-    findCell(criteria) {
-        return this.cells.find(cell => (undefined !== criteria.id && cell.id == criteria.id) || (undefined !== criteria.coordinate && cell.coordinate === criteria.coordinate));
+    findCellByCriteria(obj) {
+        return this.cells.find(cell => (undefined !== obj.id && cell.id == obj.id) || (undefined !== obj.coordinate && cell.coordinate === obj.coordinate));
     }
 
     /**
