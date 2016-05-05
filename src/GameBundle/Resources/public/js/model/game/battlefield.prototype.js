@@ -60,8 +60,8 @@ class Battlefield {
      *
      * @returns {Cell}
      */
-    findCell(criteria) {
-        return this.cellContainer.findCell(criteria);
+    findCellByCriteria(criteria) {
+        return this.cellContainer.findCellByCriteria(criteria);
     }
 
     /**
@@ -76,7 +76,7 @@ class Battlefield {
         let self = this;
 
         ['A1', 'A2', 'A3', 'C3', 'C4', 'C5', 'C1', 'D1', 'E1', 'F1', 'G5', 'G6', 'F3'].forEach(function (coordinate) {
-            self.findCell({ coordinate: coordinate }).setState(Cell.resources.mask.ship);
+            self.findCellByCriteria({ coordinate: coordinate }).setState(Cell.resources.mask.ship);
         });
     }
 }

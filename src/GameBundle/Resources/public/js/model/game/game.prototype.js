@@ -89,7 +89,7 @@ class Game extends APIRequestMgr {
 
                 Object.keys(battlefield.cells).forEach(function (index) {
                     let _cell = battlefield.cells[index],
-                        cell  = self.findCell({ playerId: player.id, coordinate: _cell.coordinate });
+                        cell  = self.findPlayerCellByCriteria({ playerId: player.id, coordinate: _cell.coordinate });
 
                     if (undefined !== cell) {
                         cell.setId(_cell.id)
@@ -104,7 +104,7 @@ class Game extends APIRequestMgr {
      * @param {number} cellId
      */
     update(cellId) {
-        let cell = this.findCell({ id: cellId });
+        let cell = this.findPlayerCellByCriteria({ id: cellId });
         if (undefined !== cell) {
             this.cellSend(cell);
         }
@@ -147,7 +147,7 @@ class Game extends APIRequestMgr {
         let self = this;
 
         response.cells.forEach(function (_cell) {
-            let cell = self.findCell({ id: _cell.id });
+            let cell = self.findPlayerCellByCriteria({ id: _cell.id });
 
             if (undefined !== cell) {
                 cell.setState(_cell.flags);
@@ -171,13 +171,13 @@ class Game extends APIRequestMgr {
      *
      * @returns {Cell}
      */
-    findCell(criteria) {
+    findPlayerCellByCriteria(criteria) {
         for (let player of this.players) {
             if (undefined !== criteria.playerId && criteria.playerId !== player.id) {
                 continue;
             }
 
-            let cell = player.battlefield.findCell(criteria);
+            let cell = player.battlefield.findCellByCriteria(criteria);
             if (undefined !== cell) {
                 return cell;
             }
