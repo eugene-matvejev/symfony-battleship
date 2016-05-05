@@ -34,8 +34,8 @@ class PageMgr {
         switch (section) {
             case 'game-current-area':
             case 'game-results-area':
-                this.toggleTitle(el);
                 this.popupMgr.hide();
+                this.toggleTitle(el.innerText);
                 this.hideAll();
 
                 this.show(section);
@@ -67,15 +67,15 @@ class PageMgr {
     }
 
     /**
-     * @param {Element} el
+     * @param {string} text
      *
      * @returns {PageMgr}
      */
-    toggleTitle(el) {
+    toggleTitle(text) {
         let prefix = this.$sidebar.find('.page-header').text();
 
-        this.$docTitle.text(`${prefix} :: ${el.innerText}`);
-        this.$pageTitle.text(el.innerText);
+        this.$docTitle.text(`${prefix} :: ${text}`);
+        this.$pageTitle.text(text);
 
         return this;
     }
@@ -86,8 +86,7 @@ class PageMgr {
      * @returns {PageMgr}
      */
     loadingMode(enable) {
-        this.modalMgr.updateHTML('');
-        this.modalMgr.hide();
+        this.modalMgr.updateHTML('').hide();
 
         this.$loading.addClass('hidden');
 
