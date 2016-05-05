@@ -125,7 +125,7 @@ class Game extends APIRequestMgr {
      * @returns {Player|undefined}
      */
     findPlayerByName(name) {
-        return this.players.find(player => player.name == name);
+        return this.players.find(player => player.name === name);
     }
 
     /**
