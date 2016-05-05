@@ -29,7 +29,7 @@ $(document).ready(function () {
         .on('click', '.player-area[data-player-flag="1"] .battlefield-cell[data-state="0"]', function (e) {
             e.stopPropagation();
 
-            game.update(this);
+            game.update(this.getAttribute('data-id'));
         });
     $('.page-sidebar')
         .on('click', 'li[data-action="game-new-action"]', function (e) {
