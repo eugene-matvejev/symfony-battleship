@@ -5,7 +5,7 @@
  */
 $(document).ready(function () {
     let pageMgr  = new PageMgr(),
-        alertMgr = new AlertMgr();
+        popupMgr = new PopupMgr();
 
     $('.page-sidebar, .page-content')
         .on('click', '.toggle-btn, .switch-btn', function (e) {
@@ -25,6 +25,6 @@ $(document).ready(function () {
         .on('click', 'span.notification-control', function (e) {
             e.stopPropagation();
 
-            alertMgr.hide();
+            popupMgr.hide();
         });
 });
