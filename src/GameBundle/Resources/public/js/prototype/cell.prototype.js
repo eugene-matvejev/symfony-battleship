@@ -2,13 +2,12 @@
 
 class Cell {
     /**
-     * @param {string}      coordinate
-     * @param {Battlefield} battlefield
+     * @param {number} x
+     * @param {number} y
      */
-    constructor(coordinate, battlefield) {
-        this.battlefield = battlefield;
-        this.$html       = $(this.constructor.resources.layout);
-        this.setCoordinate(coordinate);
+    constructor(x, y) {
+        this.$html = $(this.constructor.resources.layout);
+        this.setCoordinate(this.constructor.resources.coordinate.factory(x, y));
     }
 
     /**
@@ -18,7 +17,7 @@ class Cell {
      */
     setCoordinate(coordinate) {
         this.coordinate = coordinate;
-        this.$html.attr('data-coordinate', this.coordinate);
+        this.$html.attr('data-coordinate', coordinate);
 
         return this;
     }
@@ -30,19 +29,19 @@ class Cell {
      */
     setId(id) {
         this.id = id;
-        this.$html.attr('data-id', this.id);
+        this.$html.attr('data-id', id);
 
         return this;
     }
 
     /**
-     * @param {number} state
+     * @param {number} flags
      *
      * @returns {Cell}
      */
-    setState(state) {
-        this.state = state;
-        this.$html.attr('data-state', this.state);
+    setFlags(flags) {
+        this.flags = flags;
+        this.$html.attr('data-flags', flags);
 
         return this;
     }
@@ -53,16 +52,7 @@ class Cell {
      * @returns {Cell}
      */
     actAsAxisLabel(mode) {
-        let format = this.constructor.resources.coordinate.format;
-
-        switch (mode) {
-            case 'letter':
-                this.$html.text(format.letterOnly(this));
-                break;
-            case 'digit':
-                this.$html.text(format.digitOnly(this));
-                break;
-        }
+        this.$html.text(this.constructor.resources.coordinate.format[mode](this));
 
         return this;
     }
@@ -71,17 +61,16 @@ class Cell {
      * @returns {{id: {number}, coordinate: {string}, flags: {number}}}
      */
     getSerializationView() {
-        return { id: this.id, coordinate: this.coordinate, flags: this.state };
+        return { id: this.id, coordinate: this.coordinate, flags: this.flags };
     }
 }
 
 Cell.resources = {
     /** @enum {number} */
-    mask: {
-        dead: 0x0001,
-        ship: 0x0002,
-        deadShip: 0x0002 | 0x0001,
-        skip: 0x0004 | 0x0001
+    flags: {
+        none: 0x00,
+        dead: 0x01,
+        ship: 0x02
     },
     /** @type {string} */
     layout: '<div class="col-md-1 battlefield-cell"></div>',
@@ -92,7 +81,7 @@ Cell.resources = {
          *
          * @returns {string}
          */
-        raw: function (x, y) {
+        factory: function (x, y) {
             return String.fromCharCode(97 + x).toUpperCase() + (1 + y);
         },
         format: {
@@ -101,7 +90,7 @@ Cell.resources = {
              *
              * @returns {string}
              */
-            letterOnly: function (cell) {
+            letter: function (cell) {
                 return cell.coordinate.charAt(0);
             },
             /**
@@ -109,7 +98,7 @@ Cell.resources = {
              *
              * @returns {string}
              */
-            digitOnly: function (cell) {
+            digit: function (cell) {
                 return cell.coordinate.substring(1);
             }
         }

@@ -12,12 +12,15 @@ $(document).ready(function () {
     let bytes                 = FLAG_NONE,
         game                  = new Game($('div#game-current-area')),
         highlightInputSection = function (el, flag) {
-            el.classList.remove('has-success has-error');
+            el.classList.remove('has-success');
+            el.classList.remove('has-error');
             el.classList.add((bytes & flag) === flag ? 'has-success' : 'has-error');
 
             game.modalMgr.unlockSubmission((bytes & FLAG_ALL) === FLAG_ALL);
         };
 
+    // /** open modal for new game when page is loaded */
+    // game.modalMgr.updateHTML(game.constructor.resources.html.modal).show();
     /** initiate game when page is loaded */
     game.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="game-current-area"]'));
     game.init(
@@ -29,7 +32,7 @@ $(document).ready(function () {
     );
 
     $('#game-current-area')
-        .on('click', '.player-area[data-player-flag="1"] .battlefield-cell[data-state="0"]', function (e) {
+        .on('click', '.player-area[data-player-flag="1"] .battlefield-cell[data-flags="0"]', function (e) {
             e.stopPropagation();
 
             game.update(parseInt(this.getAttribute('data-id')));

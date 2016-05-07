@@ -1,6 +1,6 @@
 'use strict';
 
-class Game extends APIRequestMgr {
+class Game extends APIRequestService {
     /**
      * @param {jQuery} $el
      */
@@ -52,7 +52,7 @@ class Game extends APIRequestMgr {
                     cell  = this.findPlayerCellByCriteria({ playerId: player.id, coordinate: _cell.coordinate });
 
                 if (undefined !== cell) {
-                    cell.setId(_cell.id).setState(_cell.flags);
+                    cell.setId(_cell.id).setFlags(_cell.flags);
                 }
             }, this);
         }, this);
@@ -109,15 +109,15 @@ class Game extends APIRequestMgr {
      * @param {{cells: {id: {number}, flags: {number}}[], result: {player: {Object}}}} response
      */
     parseUpdateResponse(response) {
-        response.cells.forEach(cell => this.findPlayerCellByCriteria({ id: parseInt(cell.id) }).setState(cell.flags), this);
+        response.cells.forEach(cell => this.findPlayerCellByCriteria({ id: parseInt(cell.id) }).setFlags(cell.flags), this);
 
         /** detect victory */
         if (undefined !== response.result) {
             let text = this.constructor.resources.config.text;
 
-            this.findPlayerById(response.result.player.id).isHuman()
-                ? this.popupMgr.show(text.win, 'success')
-                : this.popupMgr.show(text.loss, 'error');
+            this.findPlayerById(response.result.player.id).isAIControlled()
+                ? this.popupMgr.show(text.loss, 'error')
+                : this.popupMgr.show(text.win, 'success');
         }
     }
 
@@ -132,7 +132,7 @@ class Game extends APIRequestMgr {
                 continue;
             }
 
-            let cell = player.battlefield.findByCriteria(criteria);
+            let cell = player.battlefield.findCellByCriteria(criteria);
             if (undefined !== cell) {
                 return cell;
             }

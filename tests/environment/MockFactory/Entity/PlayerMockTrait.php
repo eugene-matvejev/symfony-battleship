@@ -11,14 +11,14 @@ use EM\GameBundle\Model\PlayerModel;
  */
 trait PlayerMockTrait
 {
-    protected function getPlayerMock(string $name, int $mask = PlayerModel::FLAG_NONE) : Player
+    protected function getPlayerMock(string $name, int $flags = PlayerModel::FLAG_NONE) : Player
     {
         return (new Player())
             ->setName($name)
-            ->setFlags($mask);
+            ->setFlags($flags);
     }
 
-    protected function getCPUPlayerMock(string $name) : Player
+    protected function getAIControlledPlayerMock(string $name) : Player
     {
         return $this->getPlayerMock($name, PlayerModel::FLAG_AI_CONTROLLED);
     }

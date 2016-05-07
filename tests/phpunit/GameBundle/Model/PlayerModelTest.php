@@ -30,6 +30,7 @@ class PlayerModelTest extends ContainerAwareTestSuite
     public function createOnRequestOnExistingPlayer()
     {
         $player = $this->playerModel->createOnRequest('CPU');
+        $this->assertEquals('CPU', $player->getName());
         $this->assertNotNull($player->getId());
     }
 
@@ -41,7 +42,8 @@ class PlayerModelTest extends ContainerAwareTestSuite
      */
     public function createOnRequestOnNonExistingPlayer()
     {
-        $player = $this->playerModel->createOnRequest('NON_EXISTING_USER');
+        $player = $this->playerModel->createOnRequest('NON-EXISTING-USER');
+        $this->assertEquals('NON-EXISTING-USER', $player->getName());
         $this->assertNull($player->getId());
     }
 

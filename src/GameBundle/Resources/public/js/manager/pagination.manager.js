@@ -29,7 +29,7 @@ class PaginationMgr {
     /**
      * @param {number} page
      *
-     * @returns {!PaginationMgr}
+     * @returns {PaginationMgr}
      */
     setPreviousPage(page) {
         this.previousPage = page;
@@ -42,7 +42,7 @@ class PaginationMgr {
     /**
      * @param {number} page
      *
-     * @returns {!PaginationMgr}
+     * @returns {PaginationMgr}
      */
     setCurrentPage(page) {
         this.currentPage = page;
@@ -55,7 +55,7 @@ class PaginationMgr {
     /**
      * @param {number} page
      *
-     * @returns {!PaginationMgr}
+     * @returns {PaginationMgr}
      */
     setTotalPages(page) {
         this.totalPages = page;
@@ -68,7 +68,7 @@ class PaginationMgr {
     /**
      * @param {number} page
      *
-     * @returns {!PaginationMgr}
+     * @returns {PaginationMgr}
      */
     setNextPage(page) {
         this.nextPage = page;
