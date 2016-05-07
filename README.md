@@ -1,13 +1,15 @@
-[![Build Status](https://travis-ci.org/eugene-matvejev/battleship-game-api.svg?branch=master)](https://travis-ci.org/eugene-matvejev/battleship-game-api)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
 [![Code Climate](https://codeclimate.com/github/eugene-matvejev/battleship-game-api/badges/gpa.svg)](https://codeclimate.com/github/eugene-matvejev/battleship-game-api)
 [![Code Coverage](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc/mini.png)](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc)
 
+__TDD tests__ [![Build Status](https://travis-ci.org/eugene-matvejev/battleship-game-api.svg?branch=master)](https://travis-ci.org/eugene-matvejev/battleship-game-api) / *PHPUnit*
+
+__BDD tests__ [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master)  / *Behat*
 
 # Battleship Game API
 ##### THIS IS SPARE TIME PROJECT, WORK IN PROGRESS! HIGHLY EXPERIMENTAL!!!
-#### Project purpose
+#### Project purpose:
  * try 'cutting edge' technologies and approaches such as PHP7, SF3, ECMA6
  * simulate database loading e.g. upto 500 insertions/request
  * deliver preview about my technical knowledge before the job interview
@@ -38,20 +40,25 @@
  * PHP7 (7.0.1, as 7.0.0 had bugged primitive types)
  * Symfony Framework 3 (SF3)
  * Doctrine 2
+ * Doctrine Fixtures
  * PHPUnit 5
+ * Behat 3
  * Composer
  * JMS Serializer
  * Twig
- * Twitter Bootstrap 3
  * EMCAScript6 (JavaScript ES6)
+ * CSS3
+ * Twitter Bootstrap 3
 
 # How to install
  * copy *app/config/parameters.yml.dist* to *app/config/parameters.yml* and amend database settings
- * *composer install* (will create databases if they are not exists and execute migrations)
- * *php bin/console doctrine:fixtures:load --env=test* (optional, for testing purposes only)
- * *php bin/console assets:install* (as need dump assets once)
- * *composer dump-autoload --optimize* (optimized 'hash-map' autoloader)
-  * production uses APC autoloader
+ * *composer install* __# to fetch depencies and initial commands__
+  * __NOTE!__ composer is configured to create databases if they not exists and run apply migrations__
+ * __optional!__ *composer dump-autoload --optimize* __# to generate "hash-map" autoloader__
+  * __NOTE!__ production uses __APC autoloader__
+ * __optional!__ *php bin/console assets:install* __# to dump assets as hard copies__
+  * __NOTE!__ by default assets are installed as symlinks
+ * __optional!__ *php bin/console doctrine:fixtures:load --env=test* __# for testing purposes only__
  * apache virtual host config:
  ```
 <VirtualHost 127.0.0.1:80 ::1:80>
