@@ -1,8 +1,5 @@
 'use strict';
 
-/**
- * @constructor
- */
 class PageMgr {
     constructor() {
         this.modalMgr   = new ModalMgr();
