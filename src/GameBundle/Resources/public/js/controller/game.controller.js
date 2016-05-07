@@ -12,8 +12,7 @@ $(document).ready(function () {
     let bytes                 = FLAG_NONE,
         game                  = new Game($('div#game-current-area')),
         highlightInputSection = function (el, flag) {
-            el.classList.remove('has-success');
-            el.classList.remove('has-error');
+            el.classList.remove('has-success has-error');
             el.classList.add((bytes & flag) === flag ? 'has-success' : 'has-error');
 
             game.modalMgr.unlockSubmission((bytes & FLAG_ALL) === FLAG_ALL);
