@@ -26,7 +26,7 @@ class Cell {
     }
 
     /**
-     * @param {number|string} id
+     * @param {(number|string)} id
      *
      * @returns {Cell}
      */
@@ -70,7 +70,7 @@ class Cell {
     }
 
     /**
-     * @returns {{id: {number}, coordinate: {string}, state: {number}}}
+     * @returns {{id: {(number|string)}, coordinate: {string}, state: {number}}}
      */
     getJSON() {
         return { id: this.id, coordinate: this.coordinate, state: this.state };

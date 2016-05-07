@@ -56,7 +56,7 @@ class Battlefield {
     }
 
     /**
-     * @return {{id: {number|string}}
+     * @return {{id: {(number|string)}}}
      */
     getJSON() {
         return { id: this.id }

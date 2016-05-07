@@ -6,11 +6,11 @@ class APIRequestMgr {
     }
 
     /**
-     * @param {string}        requestMethod
-     * @param {string}        requestURL
-     * @param {string|Object} [requestData]
-     * @param {function}      [onSuccess]
-     * @param {function}      [onError]
+     * @param {string}          requestMethod
+     * @param {string}          requestURL
+     * @param {(string|Object)} [requestData]
+     * @param {function}        [onSuccess]
+     * @param {function}        [onError]
      */
     request(requestMethod, requestURL, requestData, onSuccess, onError) {
         let self = this;
