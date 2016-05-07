@@ -1,8 +1,8 @@
 'use strict';
 
-class GameResults extends APIRequestMgr {
+class GameResults extends APIRequestService {
     /**
-     * @param {jQuery} $el
+     * @param {!jQuery} $el
      */
     constructor($el) {
         super();

@@ -131,7 +131,7 @@ class AIServiceTest extends ContainerAwareTestSuite
         $this->ai->processCPUTurn($battlefield);
         foreach ($battlefield->getCells() as $cell) {
             $this->assertEquals(
-                ($expectedMasks[$cell->getCoordinate()] ?? CellModel::FLAG_NONE),
+                $expectedMasks[$cell->getCoordinate()] ?? CellModel::FLAG_NONE,
                 $cell->getFlags(),
                 "cell {$cell->getCoordinate()} have unexpected state: {$cell->getFlags()}"
             );

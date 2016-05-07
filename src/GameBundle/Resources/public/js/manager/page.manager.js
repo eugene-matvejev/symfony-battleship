@@ -78,7 +78,7 @@ class PageMgr {
     }
 
     /**
-     * @param {boolean} enable
+     * @param {boolean} [enable]
      *
      * @returns {PageMgr}
      */
@@ -87,7 +87,7 @@ class PageMgr {
 
         this.$loading.addClass('hidden');
 
-        if (enable) {
+        if (undefined === enable || enable) {
             this.$loading.removeClass('hidden');
             this.modalMgr.show();
         }

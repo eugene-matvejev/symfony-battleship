@@ -7,23 +7,19 @@ class Player {
      * @param {number}  battlefieldSize
      */
     constructor(playerName, isCPUPlayer, battlefieldSize) {
-        let flags = this.constructor.resources.flags;
-
         this.$html = $(this.constructor.resources.layout);
-
-        /** by default: type: human */
-        this.setId('undefined')
-            .setName(playerName)
-            .setFlag(isCPUPlayer ? flags.ai : 0x0000);
+        /** by default: type: human (0x00) */
+        this.setName(playerName)
+            .setFlag(isCPUPlayer ? this.constructor.resources.flags.ai : 0x00);
 
         this.battlefield = (new Battlefield(this.$html.find('.player-field'), battlefieldSize, this));
-        if (this.isHuman()) {
+        if (!this.isAIControlled()) {
             this.battlefield.initPlayerCells();
         }
     }
 
     /**
-     * @param {(number|string)} id
+     * @param {number} id
      *
      * @returns {Player}
      */
@@ -52,7 +48,7 @@ class Player {
      * @returns {Player}
      */
     setFlag(flag) {
-        this.flag = flag;
+        this.flags = flag;
         this.$html.attr('data-player-flag', flag);
 
         return this;
@@ -61,31 +57,36 @@ class Player {
     /**
      * @returns {boolean}
      */
-    isCPU() {
+    isAIControlled() {
         let flag = this.constructor.resources.flags.ai;
 
         return (this.flags & flag) === flag;
     }
 
     /**
-     * @returns {boolean}
+     * @returns {{
+     *      id: {number},
+     *      flags: {number},
+     *      name: {string},
+     *      battlefield: {number}
+     *      cells: {id: {number}, coordinate: {string}, flags: {number}}[]
+     * }}
      */
-    isHuman() {
-        return !this.isCPU();
-    }
-
-    /**
-     * @returns {{id: {number}, name: {string}, flag: {number}}}
-     */
-    getJSON() {
-        return { id: this.id, name: this.name, flag: this.flag };
+    getSerializationView() {
+        return {
+            id: this.id,
+            flags: this.flags,
+            name: this.name,
+            battlefield: this.battlefield.id,
+            cells: this.battlefield.cells.map(cell => cell.getSerializationView())
+        };
     }
 }
 
 Player.resources = {
     /** @enum {number} */
     flags: {
-        ai: 0x0001
+        ai: 0x01
     },
     /** @type {string} */
     layout: ' \
