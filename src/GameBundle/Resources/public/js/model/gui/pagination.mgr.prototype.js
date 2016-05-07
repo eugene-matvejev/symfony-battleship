@@ -16,49 +16,66 @@ class PaginationMgr {
     /**
      * @param {number} currPage
      * @param {number} totalPages
+     *
+     * @returns {void}
      */
     update(currPage, totalPages) {
-        this.setTotalPages(totalPages);
-        this.setCurrentPage(currPage);
-
-        this.setPreviousPage(this.currentPage - 1);
-        this.setNextPage(this.currentPage + 1);
+        this.setTotalPages(totalPages)
+            .setCurrentPage(currPage)
+            .setPreviousPage(this.currentPage - 1)
+            .setNextPage(this.currentPage + 1);
     }
 
     /**
      * @param {number} page
+     *
+     * @returns {!PaginationMgr}
      */
     setPreviousPage(page) {
         this.previousPage = page;
 
         this.$previousPageBtn.attr('data-page', this.previousPage)[0].disabled = this.previousPage < 1;
+
+        return this;
     }
 
     /**
      * @param {number} page
+     *
+     * @returns {!PaginationMgr}
      */
     setCurrentPage(page) {
         this.currentPage = page;
 
         this.$currentPage.text(this.currentPage);
+
+        return this;
     }
 
     /**
      * @param {number} page
+     *
+     * @returns {!PaginationMgr}
      */
     setTotalPages(page) {
         this.totalPages = page;
 
         this.$totalPages.text(this.totalPages);
+
+        return this;
     }
 
     /**
      * @param {number} page
+     *
+     * @returns {!PaginationMgr}
      */
     setNextPage(page) {
         this.nextPage = page;
 
         this.$nextPageBtn.attr('data-page', this.nextPage)[0].disabled = this.nextPage > this.totalPages;
+
+        return this;
     }
 }
 

@@ -1,12 +1,14 @@
 'use strict';
 
-class Battlefield {
+class Battlefield extends CellContainer {
     /**
      * @param {jQuery} $el
      * @param {number} size
      * @param {Player} player
      */
     constructor($el, size, player) {
+        super();
+
         this.$html  = $el;
         this.size   = size;
         this.player = player;
@@ -18,56 +20,47 @@ class Battlefield {
      * @returns {Battlefield}
      */
     init() {
-        this.cellContainer = new CellContainer();
-
-        let cellLayout     = Cell.resources.layout,
-            cellCoordinate = Cell.resources.coordinate,
-            $cellContainer = $(CellContainer.resources.layout),
-            $top           = $cellContainer
-                .clone()
-                .append(cellLayout);
+        let layout     = Cell.resources.layout,
+            factory    = Cell.resources.coordinate,
+            $container = $(super.constructor.resources.layout),
+            /** append < first , first > transparent cell to top decoration row */
+            $top       = $container.clone().append(layout);
 
         this.$html.append($top);
 
         for (let y = 0; y < this.size; y++) {
-            let $row = $cellContainer.clone();
+            let $row = $container.clone();
 
-            this.cellContainer.xAxisNav.push((new Cell(cellCoordinate.full(0, y), this)).setState('undefined').actAsAxisLabel('digit'));
-            this.cellContainer.yAxisNav.push((new Cell(cellCoordinate.full(y, 0), this)).setState('undefined').actAsAxisLabel('letter'));
+            this.xAxis.push((new Cell(factory.raw(0, y), this)).actAsAxisLabel('digit'));
+            this.yAxis.push((new Cell(factory.raw(y, 0), this)).actAsAxisLabel('letter'));
 
             this.$html.append($row);
 
-            $row.append(this.cellContainer.xAxisNav[y].$html.clone());
-            $top.append(this.cellContainer.yAxisNav[y].$html.clone());
+            $row.append(this.xAxis[y].$html.clone());
+            $top.append(this.yAxis[y].$html.clone());
 
             for (let x = 0; x < this.size; x++) {
-                let cell = (new Cell(cellCoordinate.full(x, y), this));
+                let cell = (new Cell(factory.raw(x, y), this)).setState(0x0000);
                 $row.append(cell.$html);
-                this.cellContainer.addCell(cell);
+                this.addCell(cell);
             }
 
-            $row.append(this.cellContainer.xAxisNav[y].$html.clone());
+            $row.append(this.xAxis[y].$html.clone());
         }
 
-        $top.append(cellLayout);
+        /** append < last , last > transparent cell to top decoration row */
+        $top.append(layout);
+        /** duplicate top navigation row at bottom */
         this.$html.append($top.clone());
 
         return this;
     }
 
-    /**
-     * @return {{id: {(number|string)}}}
-     */
-    getJSON() {
-        return { id: this.id }
-    }
-
     /** *** *** *** *** *** *** *** DATA MOCK *** *** *** *** *** *** **/
     initPlayerCells() {
-        let self = this;
-
-        ['A1', 'A2', 'A3', 'C3', 'C4', 'C5', 'C1', 'D1', 'E1', 'F1', 'G5', 'G6', 'F3'].forEach(function (coordinate) {
-            self.cellContainer.findCellByCriteria({ coordinate: coordinate }).setState(Cell.resources.mask.ship);
-        });
+        ['A1', 'A2', 'A3', 'C3', 'C4', 'C5', 'C1', 'D1', 'E1', 'F1', 'G5', 'G6', 'F3'].forEach(
+            coordinate => this.findByCriteria({ coordinate: coordinate }).setState(Cell.resources.mask.ship),
+            this
+        );
     }
 }

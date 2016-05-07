@@ -2,7 +2,7 @@
 
 class GameResults extends APIRequestMgr {
     /**
-     * @param {jQuery} $el
+     * @param {!jQuery} $el
      */
     constructor($el) {
         super();

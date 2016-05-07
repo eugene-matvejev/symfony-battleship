@@ -6,7 +6,7 @@ class ModalMgr {
     }
 
     /**
-     * @returns {ModalMgr}
+     * @returns {!ModalMgr}
      */
     show() {
         this.$html.removeClass('hidden').find('.modal').modal({ keyboard: false });
@@ -15,7 +15,7 @@ class ModalMgr {
     }
 
     /**
-     * @returns {ModalMgr}
+     * @returns {!ModalMgr}
      */
     hide() {
         this.$html.find('.modal').modal('hide');
@@ -28,7 +28,7 @@ class ModalMgr {
     /**
      * @param {string} html
      *
-     * @returns {ModalMgr}
+     * @returns {!ModalMgr}
      */
     updateHTML(html) {
         this.$html.html(html);
@@ -39,7 +39,7 @@ class ModalMgr {
     /**
      * @param {boolean} [enable]
      *
-     * @returns {ModalMgr}
+     * @returns {!ModalMgr}
      */
     unlockSubmission(enable) {
         let $button = this.$html.find('button.btn[type="button"]');

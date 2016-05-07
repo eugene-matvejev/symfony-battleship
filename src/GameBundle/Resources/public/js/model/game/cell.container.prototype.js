@@ -2,11 +2,11 @@
 
 class CellContainer {
     constructor() {
-        /** @type {Cell[]} */
-        this.xAxisNav = [];
-        /** @type {Cell[]} */
-        this.yAxisNav = [];
-        /** @type {Cell[]} */
+        /** @type {Cell[]} for decoration purposes only */
+        this.xAxis = [];
+        /** @type {Cell[]} for decoration purposes only */
+        this.yAxis = [];
+        /** @type {Cell[]} game cells */
         this.cells = [];
     }
 
@@ -26,18 +26,11 @@ class CellContainer {
      *
      * @returns {?Cell}
      */
-    findCellByCriteria(criteria) {
+    findByCriteria(criteria) {
         return this.cells.find(cell =>
             (undefined !== criteria.id && cell.id === criteria.id) ||
             (undefined !== criteria.coordinate && cell.coordinate === criteria.coordinate)
         );
-    }
-
-    /**
-     * @returns {{id: {(number|string)}, x: {number}, y: {number}, state: {number}}[]}
-     */
-    getJSON() {
-        return this.cells.map(cell => cell.getJSON());
     }
 }
 

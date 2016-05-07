@@ -8,9 +8,7 @@ class Cell {
     constructor(coordinate, battlefield) {
         this.battlefield = battlefield;
         this.$html       = $(this.constructor.resources.layout);
-        this.setId('undefined')
-            .setCoordinate(coordinate)
-            .setState(0x0000);
+        this.setCoordinate(coordinate);
     }
 
     /**
@@ -26,7 +24,7 @@ class Cell {
     }
 
     /**
-     * @param {(number|string)} id
+     * @param {number} id
      *
      * @returns {Cell}
      */
@@ -38,7 +36,7 @@ class Cell {
     }
 
     /**
-     * @param {number|string} state
+     * @param {number} state
      *
      * @returns {Cell}
      */
@@ -55,14 +53,14 @@ class Cell {
      * @returns {Cell}
      */
     actAsAxisLabel(mode) {
-        let coordinate = this.constructor.resources.coordinate;
+        let format = this.constructor.resources.coordinate.format;
 
         switch (mode) {
             case 'letter':
-                this.$html.text(coordinate.letterOnly(this));
+                this.$html.text(format.letterOnly(this));
                 break;
             case 'digit':
-                this.$html.text(coordinate.digitOnly(this));
+                this.$html.text(format.digitOnly(this));
                 break;
         }
 
@@ -70,10 +68,10 @@ class Cell {
     }
 
     /**
-     * @returns {{id: {(number|string)}, coordinate: {string}, state: {number}}}
+     * @returns {{id: {number}, coordinate: {string}, flags: {number}}}
      */
-    getJSON() {
-        return { id: this.id, coordinate: this.coordinate, state: this.state };
+    getSerializationView() {
+        return { id: this.id, coordinate: this.coordinate, flags: this.state };
     }
 }
 
@@ -94,24 +92,26 @@ Cell.resources = {
          *
          * @returns {string}
          */
-        full: function (x, y) {
+        raw: function (x, y) {
             return String.fromCharCode(97 + x).toUpperCase() + (1 + y);
         },
-        /**
-         * @param {Cell} cell
-         *
-         * @returns {string}
-         */
-        letterOnly: function (cell) {
-            return cell.coordinate.charAt(0);
-        },
-        /**
-         * @param {Cell} cell
-         *
-         * @returns {string}
-         */
-        digitOnly: function (cell) {
-            return cell.coordinate.substring(1);
+        format: {
+            /**
+             * @param {Cell} cell
+             *
+             * @returns {string}
+             */
+            letterOnly: function (cell) {
+                return cell.coordinate.charAt(0);
+            },
+            /**
+             * @param {Cell} cell
+             *
+             * @returns {string}
+             */
+            digitOnly: function (cell) {
+                return cell.coordinate.substring(1);
+            }
         }
     }
 };

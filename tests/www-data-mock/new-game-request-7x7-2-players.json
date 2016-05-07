@@ -1,517 +1,408 @@
-{
-    "game": {
-        "id": "undefined"
+[
+    {
+        "id": "undefined",
+        "name": "CPU",
+        "flags": 1,
+        "cells": [
+            {
+                "coordinate": "A1",
+                "flags": 0
+            },
+            {
+                "coordinate": "B1",
+                "flags": 0
+            },
+            {
+                "coordinate": "C1",
+                "flags": 0
+            },
+            {
+                "coordinate": "D1",
+                "flags": 0
+            },
+            {
+                "coordinate": "E1",
+                "flags": 0
+            },
+            {
+                "coordinate": "F1",
+                "flags": 0
+            },
+            {
+                "coordinate": "G1",
+                "flags": 0
+            },
+            {
+                "coordinate": "A2",
+                "flags": 0
+            },
+            {
+                "coordinate": "B2",
+                "flags": 0
+            },
+            {
+                "coordinate": "C2",
+                "flags": 0
+            },
+            {
+                "coordinate": "D2",
+                "flags": 0
+            },
+            {
+                "coordinate": "E2",
+                "flags": 0
+            },
+            {
+                "coordinate": "F2",
+                "flags": 0
+            },
+            {
+                "coordinate": "G2",
+                "flags": 0
+            },
+            {
+                "coordinate": "A3",
+                "flags": 0
+            },
+            {
+                "coordinate": "B3",
+                "flags": 0
+            },
+            {
+                "coordinate": "C3",
+                "flags": 0
+            },
+            {
+                "coordinate": "D3",
+                "flags": 0
+            },
+            {
+                "coordinate": "E3",
+                "flags": 0
+            },
+            {
+                "coordinate": "F3",
+                "flags": 0
+            },
+            {
+                "coordinate": "G3",
+                "flags": 0
+            },
+            {
+                "coordinate": "A4",
+                "flags": 0
+            },
+            {
+                "coordinate": "B4",
+                "flags": 0
+            },
+            {
+                "coordinate": "C4",
+                "flags": 0
+            },
+            {
+                "coordinate": "D4",
+                "flags": 0
+            },
+            {
+                "coordinate": "E4",
+                "flags": 0
+            },
+            {
+                "coordinate": "F4",
+                "flags": 0
+            },
+            {
+                "coordinate": "G4",
+                "flags": 0
+            },
+            {
+                "coordinate": "A5",
+                "flags": 0
+            },
+            {
+                "coordinate": "B5",
+                "flags": 0
+            },
+            {
+                "coordinate": "C5",
+                "flags": 0
+            },
+            {
+                "coordinate": "D5",
+                "flags": 0
+            },
+            {
+                "coordinate": "E5",
+                "flags": 0
+            },
+            {
+                "coordinate": "F5",
+                "flags": 0
+            },
+            {
+                "coordinate": "G5",
+                "flags": 0
+            },
+            {
+                "coordinate": "A6",
+                "flags": 0
+            },
+            {
+                "coordinate": "B6",
+                "flags": 0
+            },
+            {
+                "coordinate": "C6",
+                "flags": 0
+            },
+            {
+                "coordinate": "D6",
+                "flags": 0
+            },
+            {
+                "coordinate": "E6",
+                "flags": 0
+            },
+            {
+                "coordinate": "F6",
+                "flags": 0
+            },
+            {
+                "coordinate": "G6",
+                "flags": 0
+            },
+            {
+                "coordinate": "A7",
+                "flags": 0
+            },
+            {
+                "coordinate": "B7",
+                "flags": 0
+            },
+            {
+                "coordinate": "C7",
+                "flags": 0
+            },
+            {
+                "coordinate": "D7",
+                "flags": 0
+            },
+            {
+                "coordinate": "E7",
+                "flags": 0
+            },
+            {
+                "coordinate": "F7",
+                "flags": 0
+            },
+            {
+                "coordinate": "G7",
+                "flags": 0
+            }
+        ]
     },
-    "data": [
-        {
-            "player": {
-                "id": "undefined",
-                "name": "CPU",
-                "type": 1
+    {
+        "id": "undefined",
+        "name": "Human",
+        "flags": 0,
+        "cells": [
+            {
+                "coordinate": "A1",
+                "flags": 2
             },
-            "battlefield": {},
-            "cells": [
-                {
-                    "id": "undefined",
-                    "coordinate": "A1",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "B1",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "C1",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "D1",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "E1",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "F1",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "G1",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "A2",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "B2",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "C2",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "D2",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "E2",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "F2",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "G2",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "A3",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "B3",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "C3",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "D3",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "E3",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "F3",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "G3",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "A4",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "B4",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "C4",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "D4",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "E4",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "F4",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "G4",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "A5",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "B5",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "C5",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "D5",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "E5",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "F5",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "G5",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "A6",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "B6",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "C6",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "D6",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "E6",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "F6",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "G6",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "A7",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "B7",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "C7",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "D7",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "E7",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "F7",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "G7",
-                    "state": 1
-                }
-            ]
-        },
-        {
-            "player": {
-                "id": "undefined",
-                "name": "Human",
-                "type": 2
+            {
+                "coordinate": "B1",
+                "flags": 0
             },
-            "battlefield": {},
-            "cells": [
-                {
-                    "id": "undefined",
-                    "coordinate": "A1",
-                    "state": 4
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "B1",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "C1",
-                    "state": 3
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "D1",
-                    "state": 3
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "E1",
-                    "state": 3
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "F1",
-                    "state": 3
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "G1",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "A2",
-                    "state": 3
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "B2",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "C2",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "D2",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "E2",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "F2",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "G2",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "A3",
-                    "state": 3
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "B3",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "C3",
-                    "state": 3
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "D3",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "E3",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "F3",
-                    "state": 3
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "G3",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "A4",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "B4",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "C4",
-                    "state": 3
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "D4",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "E4",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "F4",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "G4",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "A5",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "B5",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "C5",
-                    "state": 3
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "D5",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "E5",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "F5",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "G5",
-                    "state": 3
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "A6",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "B6",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "C6",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "D6",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "E6",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "F6",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "G6",
-                    "state": 3
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "A7",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "B7",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "C7",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "D7",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "E7",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "F7",
-                    "state": 1
-                },
-                {
-                    "id": "undefined",
-                    "coordinate": "G7",
-                    "state": 1
-                }
-            ]
-        }
-    ]
-}
+            {
+                "coordinate": "C1",
+                "flags": 2
+            },
+            {
+                "coordinate": "D1",
+                "flags": 2
+            },
+            {
+                "coordinate": "E1",
+                "flags": 2
+            },
+            {
+                "coordinate": "F1",
+                "flags": 2
+            },
+            {
+                "coordinate": "G1",
+                "flags": 0
+            },
+            {
+                "coordinate": "A2",
+                "flags": 2
+            },
+            {
+                "coordinate": "B2",
+                "flags": 0
+            },
+            {
+                "coordinate": "C2",
+                "flags": 0
+            },
+            {
+                "coordinate": "D2",
+                "flags": 0
+            },
+            {
+                "coordinate": "E2",
+                "flags": 0
+            },
+            {
+                "coordinate": "F2",
+                "flags": 0
+            },
+            {
+                "coordinate": "G2",
+                "flags": 0
+            },
+            {
+                "coordinate": "A3",
+                "flags": 2
+            },
+            {
+                "coordinate": "B3",
+                "flags": 0
+            },
+            {
+                "coordinate": "C3",
+                "flags": 2
+            },
+            {
+                "coordinate": "D3",
+                "flags": 0
+            },
+            {
+                "coordinate": "E3",
+                "flags": 0
+            },
+            {
+                "coordinate": "F3",
+                "flags": 2
+            },
+            {
+                "coordinate": "G3",
+                "flags": 0
+            },
+            {
+                "coordinate": "A4",
+                "flags": 0
+            },
+            {
+                "coordinate": "B4",
+                "flags": 0
+            },
+            {
+                "coordinate": "C4",
+                "flags": 2
+            },
+            {
+                "coordinate": "D4",
+                "flags": 0
+            },
+            {
+                "coordinate": "E4",
+                "flags": 0
+            },
+            {
+                "coordinate": "F4",
+                "flags": 0
+            },
+            {
+                "coordinate": "G4",
+                "flags": 0
+            },
+            {
+                "coordinate": "A5",
+                "flags": 0
+            },
+            {
+                "coordinate": "B5",
+                "flags": 0
+            },
+            {
+                "coordinate": "C5",
+                "flags": 2
+            },
+            {
+                "coordinate": "D5",
+                "flags": 0
+            },
+            {
+                "coordinate": "E5",
+                "flags": 0
+            },
+            {
+                "coordinate": "F5",
+                "flags": 0
+            },
+            {
+                "coordinate": "G5",
+                "flags": 2
+            },
+            {
+                "coordinate": "A6",
+                "flags": 0
+            },
+            {
+                "coordinate": "B6",
+                "flags": 0
+            },
+            {
+                "coordinate": "C6",
+                "flags": 0
+            },
+            {
+                "coordinate": "D6",
+                "flags": 0
+            },
+            {
+                "coordinate": "E6",
+                "flags": 0
+            },
+            {
+                "coordinate": "F6",
+                "flags": 0
+            },
+            {
+                "coordinate": "G6",
+                "flags": 2
+            },
+            {
+                "coordinate": "A7",
+                "flags": 0
+            },
+            {
+                "coordinate": "B7",
+                "flags": 0
+            },
+            {
+                "coordinate": "C7",
+                "flags": 0
+            },
+            {
+                "coordinate": "D7",
+                "flags": 0
+            },
+            {
+                "coordinate": "E7",
+                "flags": 0
+            },
+            {
+                "coordinate": "F7",
+                "flags": 0
+            },
+            {
+                "coordinate": "G7",
+                "flags": 0
+            }
+        ]
+    }
+]

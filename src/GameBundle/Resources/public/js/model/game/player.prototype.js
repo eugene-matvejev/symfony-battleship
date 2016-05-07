@@ -52,7 +52,7 @@ class Player {
      * @returns {Player}
      */
     setFlag(flag) {
-        this.flag = flag;
+        this.flags = flag;
         this.$html.attr('data-player-flag', flag);
 
         return this;
@@ -75,10 +75,22 @@ class Player {
     }
 
     /**
-     * @returns {{id: {number}, name: {string}, flag: {number}}}
+     * @returns {{
+     *  id: {number},
+     *  name: {string},
+     *  flag: {number},
+     *  battlefield: {number}
+     *  cells: {id: {number}, coordinate: {string}, flags: {number}}[]
+     * }}
      */
-    getJSON() {
-        return { id: this.id, name: this.name, flag: this.flag };
+    getSerializationView() {
+        return {
+            id: this.id,
+            name: this.name,
+            flags: this.flags,
+            battlefield: this.battlefield.id,
+            cells: this.battlefield.cells.map(cell => cell.getSerializationView())
+        };
     }
 }
 

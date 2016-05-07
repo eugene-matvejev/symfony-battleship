@@ -10,7 +10,7 @@ class PopupMgr {
      * @param {string} text
      * @param {string} type
      *
-     * @returns {PopupMgr}
+     * @returns {!PopupMgr}
      */
     show(text, type) {
         this.colorByType(type);
@@ -22,7 +22,7 @@ class PopupMgr {
     }
 
     /**
-     * @returns {PopupMgr}
+     * @returns {!PopupMgr}
      */
     hide() {
         this.$html.addClass('hidden');
@@ -33,7 +33,7 @@ class PopupMgr {
     /**
      * @param {string} type
      *
-     * @returns {PopupMgr}
+     * @returns {!PopupMgr}
      */
     colorByType(type) {
         switch (type) {

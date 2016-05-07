@@ -19,6 +19,8 @@ $(document).ready(function () {
             game.modalMgr.unlockSubmission((bytes & FLAG_ALL) === FLAG_ALL);
         };
 
+    /** initiate game when page is loaded */
+    game.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="game-current-area"]'));
     game.init(
         [
             { name: 'CPU', isCPU: true },
@@ -37,7 +39,8 @@ $(document).ready(function () {
         .on('click', 'li[data-action="game-new-action"]', function (e) {
             e.stopPropagation();
 
-            game.modalGameInitiation();
+            game.popupMgr.hide();
+            game.modalMgr.updateHTML(game.constructor.resources.html.modal).show();
         });
     $('#modal-area')
         .on('input', '#model-input-player-name', function (e) {
@@ -70,6 +73,7 @@ $(document).ready(function () {
             /** modal area: submit */
             e.stopPropagation();
 
+            game.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="game-current-area"]'));
             game.init(
                 [
                     { name: 'CPU', isCPU: true },

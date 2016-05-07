@@ -12,7 +12,7 @@ class PageMgr {
     }
 
     /**
-     * @returns {PageMgr}
+     * @returns {!PageMgr}
      */
     toggleSidebar() {
         this.$sidebar.toggleClass('toggled');
@@ -22,9 +22,9 @@ class PageMgr {
     }
 
     /**
-     * @param {Element} el
+     * @param {!Element} el
      *
-     * @returns {PageMgr}
+     * @returns {!PageMgr}
      */
     switchSection(el) {
         let section = el.getAttribute('data-section');
@@ -42,7 +42,7 @@ class PageMgr {
     }
 
     /**
-     * @returns {PageMgr}
+     * @returns {!PageMgr}
      */
     hideAll() {
         this.$content.find('.container-fluid > .row > div:not(#notification-area)').addClass('hidden');
@@ -54,7 +54,7 @@ class PageMgr {
     /**
      * @param {string} id
      *
-     * @returns {PageMgr}
+     * @returns {!PageMgr}
      */
     show(id) {
         this.$content.find(`div#${id}`).removeClass('hidden');
@@ -66,7 +66,7 @@ class PageMgr {
     /**
      * @param {string} text
      *
-     * @returns {PageMgr}
+     * @returns {!PageMgr}
      */
     toggleTitle(text) {
         let prefix = this.$sidebar.find('.page-header').text();
@@ -78,16 +78,16 @@ class PageMgr {
     }
 
     /**
-     * @param {boolean} enable
+     * @param {?boolean} [enable]
      *
-     * @returns {PageMgr}
+     * @returns {!PageMgr}
      */
     loadingMode(enable) {
         this.modalMgr.updateHTML('').hide();
 
         this.$loading.addClass('hidden');
 
-        if (enable) {
+        if (undefined === enable || enable) {
             this.$loading.removeClass('hidden');
             this.modalMgr.show();
         }

@@ -29,7 +29,7 @@ class APIRequestMgr {
             timeout: APIRequestMgr.resources.config.defaultTimeout,
             beforeSend: function () {
                 self.pageMgr.loadingMode(true);
-                console.log(` >>> ${requestMethod} :: ${requestURL}`, requestData);
+                console.log(` >>> ${requestMethod} :: ${requestURL}`, requestData || '');
             },
             complete: function (jqXHR) {
                 self.pageMgr.loadingMode(false);

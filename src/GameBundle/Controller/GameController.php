@@ -27,7 +27,7 @@ class GameController extends AbstractAPIController
     public function initAction(Request $request) : Response
     {
         if (!$this->validateInitRequest($request)) {
-            throw new \Exception('bad format expected format: { data: {player: {name: %string%}, cells: {coordinate: %string%, state: %int%}[]}[]}');
+            throw new \Exception('unexpected request content');
         }
 
         $om = $this->getDoctrine()->getManager();
@@ -75,21 +75,19 @@ class GameController extends AbstractAPIController
 
     private function validateInitRequest(Request $request) : bool
     {
-        $content = $request->getContent();
-        if (!is_string($content)) {
-            return false;
-        }
-        $request = json_decode($content);
-        if (!isset($request->data) || !is_array($request->data)) {
+        $request = json_decode($request->getContent());
+
+        if (!is_array($request)) {
             return false;
         }
 
-        foreach ($request->data as $data) {
-            if (!isset($data->battlefield, $data->player->name, $data->cells) || !is_array($data->cells)) {
+        foreach ($request as $player) {
+            if (!isset($player->name, $player->flags, $player->cells) || !is_array($player->cells)) {
                 return false;
             }
-            foreach ($data->cells as $cell) {
-                if (!isset($cell->coordinate, $cell->state)) {
+
+            foreach ($player->cells as $cell) {
+                if (!isset($cell->coordinate, $cell->flags)) {
                     return false;
                 }
             }
