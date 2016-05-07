@@ -32,8 +32,8 @@ class Battlefield {
         for (let y = 0; y < this.size; y++) {
             let $row = $cellContainer.clone();
 
-            this.cellContainer.xAxisNav.push((new Cell(cellCoordinate.full(0, y), this)).actAsAxisLabel('digit'));
-            this.cellContainer.yAxisNav.push((new Cell(cellCoordinate.full(y, 0), this)).actAsAxisLabel('letter'));
+            this.cellContainer.xAxisNav.push((new Cell(cellCoordinate.full(0, y), this)).setState('undefined').actAsAxisLabel('digit'));
+            this.cellContainer.yAxisNav.push((new Cell(cellCoordinate.full(y, 0), this)).setState('undefined').actAsAxisLabel('letter'));
 
             this.$html.append($row);
 
@@ -41,7 +41,7 @@ class Battlefield {
             $top.append(this.cellContainer.yAxisNav[y].$html.clone());
 
             for (let x = 0; x < this.size; x++) {
-                let cell = (new Cell(cellCoordinate.full(x, y), this)).setState(0x0000);
+                let cell = (new Cell(cellCoordinate.full(x, y), this));
                 $row.append(cell.$html);
                 this.cellContainer.addCell(cell);
             }
