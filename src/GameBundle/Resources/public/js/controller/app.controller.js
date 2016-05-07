@@ -22,7 +22,7 @@ $(document).ready(function () {
         });
 
     $('#notification-area')
-        .on('click', 'span.notification-control', function (e) {
+        .on('click', '.notification-control', function (e) {
             e.stopPropagation();
 
             popupMgr.hide();
