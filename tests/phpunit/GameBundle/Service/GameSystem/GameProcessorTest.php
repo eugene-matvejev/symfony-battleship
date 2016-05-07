@@ -68,7 +68,7 @@ class GameProcessorTest extends ContainerAwareTestSuite
      */
     public function processGameInitiation()
     {
-        $json = file_get_contents(__DIR__ . '/../../../../data/new_game_request_7x7_2_players.json');
+        $json = file_get_contents(__DIR__ . '/../../../../www-data-mock/new-game-request-7x7-2-players.json');
 
         $game = $this->gameProcessor->processGameInitiation($json);
 
