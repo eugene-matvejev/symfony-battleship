@@ -2,17 +2,11 @@
 
 class CellContainer {
     constructor() {
-        /**
-         * @type {Cell[]}
-         */
+        /** @type {Cell[]} */
         this.xAxisNav = [];
-        /**
-         * @type {Cell[]}
-         */
+        /** @type {Cell[]} */
         this.yAxisNav = [];
-        /**
-         * @type {Cell[]}
-         */
+        /** @type {Cell[]} */
         this.cells = [];
     }
 
@@ -28,12 +22,15 @@ class CellContainer {
     }
 
     /**
-     * @param {{id: {number}, coordinate: {string}}} obj
+     * @param {{id: {number}, coordinate: {string}}} criteria
      *
      * @returns {Cell|undefined}
      */
-    findCellByCriteria(obj) {
-        return this.cells.find(cell => (undefined !== obj.id && cell.id == obj.id) || (undefined !== obj.coordinate && cell.coordinate === obj.coordinate));
+    findCellByCriteria(criteria) {
+        return this.cells.find(cell =>
+            (undefined !== criteria.id && cell.id === criteria.id) ||
+            (undefined !== criteria.coordinate && cell.coordinate === criteria.coordinate)
+        );
     }
 
     /**
