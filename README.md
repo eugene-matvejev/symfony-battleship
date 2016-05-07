@@ -30,7 +30,8 @@ __BDD tests__ [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-g
 # software requirements:
  * supported databases:
   * MySQL => 5.5
-  * MariaDB >= 9.*
+  * MariaDB >= 9.0
+  * PostgreSQL >= 9.3
  * WIP:
   * MongoDB
  * http server: apache/nginx with php >= 7.0.1
