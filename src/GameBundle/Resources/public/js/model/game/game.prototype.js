@@ -82,21 +82,16 @@ class Game extends APIRequestMgr {
         let self = this;
 
         response.battlefields.forEach(function (battlefield) {
-            let player = self.findPlayerByName(battlefield.player.name);
+            let player = self.findPlayerByName(battlefield.player.name).setId(battlefield.player.id);
 
-            if (undefined !== player) {
-                player.setId(battlefield.player.id);
+            Object.keys(battlefield.cells).forEach(function (index) {
+                let _cell = battlefield.cells[index],
+                    cell  = self.findPlayerCellByCriteria({ playerId: player.id, coordinate: _cell.coordinate });
 
-                Object.keys(battlefield.cells).forEach(function (index) {
-                    let _cell = battlefield.cells[index],
-                        cell  = self.findPlayerCellByCriteria({ playerId: player.id, coordinate: _cell.coordinate });
-
-                    if (undefined !== cell) {
-                        cell.setId(_cell.id)
-                            .setState(_cell.flags);
-                    }
-                });
-            }
+                if (undefined !== cell) {
+                    cell.setId(_cell.id).setState(_cell.flags);
+                }
+            });
         });
     }
 
@@ -104,10 +99,7 @@ class Game extends APIRequestMgr {
      * @param {number} cellId
      */
     update(cellId) {
-        let cell = this.findPlayerCellByCriteria({ id: cellId });
-        if (undefined !== cell) {
-            this.cellSend(cell);
-        }
+        this.cellSend(this.findPlayerCellByCriteria({ id: cellId }));
     }
 
     /**
@@ -116,7 +108,12 @@ class Game extends APIRequestMgr {
      * @returns {Player|undefined}
      */
     findPlayerById(id) {
-        return this.players.find(player => player.id === id);
+        let player = this.players.find(player => player.id === id);
+        if (undefined !== player) {
+            return player;
+        }
+
+        throw new PlayerException();
     }
 
     /**
@@ -125,7 +122,12 @@ class Game extends APIRequestMgr {
      * @returns {Player|undefined}
      */
     findPlayerByName(name) {
-        return this.players.find(player => player.name === name);
+        let player = this.players.find(player => player.name === name);
+        if (undefined !== player) {
+            return player;
+        }
+
+        throw new PlayerException();
     }
 
     /**
@@ -147,22 +149,15 @@ class Game extends APIRequestMgr {
         let self = this;
 
         response.cells.forEach(function (_cell) {
-            let cell = self.findPlayerCellByCriteria({ id: _cell.id });
-
-            if (undefined !== cell) {
-                cell.setState(_cell.flags);
-            }
+            self.findPlayerCellByCriteria({ id: parseInt(_cell.id) }).setState(_cell.flags);
         });
 
         if (undefined !== response.result) {
-            let text   = this.constructor.resources.config.text,
-                player = this.findPlayerById(response.result.player.id);
+            let text = this.constructor.resources.config.text;
 
-            if (undefined !== player) {
-                player.isHuman()
-                    ? this.popupMgr.show(text.win, 'success')
-                    : this.popupMgr.show(text.loss, 'error');
-            }
+            this.findPlayerById(response.result.player.id).isHuman()
+                ? this.popupMgr.show(text.win, 'success')
+                : this.popupMgr.show(text.loss, 'error');
         }
     }
 
@@ -177,7 +172,7 @@ class Game extends APIRequestMgr {
                 continue;
             }
 
-            let cell = player.battlefield.findCellByCriteria(criteria);
+            let cell = player.battlefield.cellContainer.findCellByCriteria(criteria);
             if (undefined !== cell) {
                 return cell;
             }
