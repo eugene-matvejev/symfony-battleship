@@ -54,7 +54,7 @@ class GameControllerTest extends ContainerAwareTestSuite
      */
     public function successfulInitAction_JSON()
     {
-        $json = json_decode(file_get_contents(__DIR__ . '/../../../data/new_game_request_7x7_2_players.json'));
+        $json = json_decode(file_get_contents(__DIR__ . '/../../../www-data-mock/new-game-request-7x7-2-players.json'));
 
         $client = clone static::$client;
         $client->request(
@@ -107,7 +107,7 @@ class GameControllerTest extends ContainerAwareTestSuite
     {
         $client = clone static::$client;
 
-        $json = json_decode(file_get_contents(__DIR__ . '/../../../data/new_game_request_7x7_2_players.json'));
+        $json = json_decode(file_get_contents(__DIR__ . '/../../../www-data-mock/new-game-request-7x7-2-players.json'));
         $client->request(
             Request::METHOD_POST,
             static::$router->generate('battleship.game.api.init'),
