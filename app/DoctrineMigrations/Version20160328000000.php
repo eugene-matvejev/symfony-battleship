@@ -12,7 +12,7 @@ class Version20160328000000 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on "mysql"');
+        $this->skipIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on "mysql"');
 
         $this->addSql('DROP INDEX INDEX_BATTLEFIELD_UNIQUE_CELL ON cells');
         $this->addSql('ALTER TABLE cells ADD coordinate VARCHAR(3) NOT NULL, DROP x, DROP y');
@@ -21,7 +21,7 @@ class Version20160328000000 extends AbstractMigration
 
     public function down(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on "mysql"');
+        $this->skipIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on "mysql"');
 
         $this->addSql('DROP INDEX INDEX_BATTLEFIELD_UNIQUE_CELL ON cells');
         $this->addSql('ALTER TABLE cells ADD x INT NOT NULL, ADD y INT NOT NULL, DROP coordinate');
