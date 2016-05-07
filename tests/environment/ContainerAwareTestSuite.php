@@ -22,7 +22,7 @@ abstract class ContainerAwareTestSuite extends ClientResponsesAssertionSuite
     /**
      * @var Application
      */
-    protected static $symfonyConsole;
+    protected static $console;
     /**
      * @var Registry
      */
@@ -86,15 +86,15 @@ abstract class ContainerAwareTestSuite extends ClientResponsesAssertionSuite
      *
      * @throws \Exception
      */
-    protected function runSymfonyConsoleCommand($command, array $options = [])
+    protected function runConsoleCommand($command, array $options = [])
     {
         $options['--env'] = 'test';
         $options['--no-interaction'] = true;
         $options['--quiet'] = true;
         $options = array_merge($options, ['command' => $command]);
         try {
-            static::$symfonyConsole->setCatchExceptions(false);
-            static::$symfonyConsole->run(new ArrayInput($options));
+            static::$console->setCatchExceptions(false);
+            static::$console->run(new ArrayInput($options));
         } catch (\Exception $e) {
             echo PHP_EOL . $e->getMessage() . PHP_EOL;
             echo PHP_EOL . $e->getTraceAsString() . PHP_EOL;
