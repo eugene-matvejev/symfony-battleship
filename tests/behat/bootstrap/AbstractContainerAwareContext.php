@@ -4,12 +4,12 @@ namespace EM\Tests\Behat;
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
-use EM\Tests\Environment\ContainerAwareTestSuite;
+use EM\Tests\Environment\IntegrationTestSuite;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\File;
 
-abstract class AbstractContainerAwareContext extends ContainerAwareTestSuite implements Context, SnippetAcceptingContext
+abstract class AbstractContainerAwareContext extends IntegrationTestSuite implements Context, SnippetAcceptingContext
 {
     /**
      * @var Client

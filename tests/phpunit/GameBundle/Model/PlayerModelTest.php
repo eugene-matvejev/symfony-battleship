@@ -3,13 +3,13 @@
 namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\Model\PlayerModel;
-use EM\Tests\Environment\ContainerAwareTestSuite;
+use EM\Tests\Environment\IntegrationTestSuite;
 use EM\Tests\Environment\MockFactory\Entity\PlayerMockTrait;
 
 /**
  * @see PlayerModel
  */
-class PlayerModelTest extends ContainerAwareTestSuite
+class PlayerModelTest extends IntegrationTestSuite
 {
     use PlayerMockTrait;
     /**

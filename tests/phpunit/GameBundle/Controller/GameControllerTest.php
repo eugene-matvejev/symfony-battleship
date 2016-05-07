@@ -5,13 +5,13 @@ namespace EM\Tests\PHPUnit\GameBundle\Controller;
 use EM\GameBundle\Controller\GameController;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Model\PlayerModel;
-use EM\Tests\Environment\ContainerAwareTestSuite;
+use EM\Tests\Environment\IntegrationTestSuite;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @see GameController
  */
-class GameControllerTest extends ContainerAwareTestSuite
+class GameControllerTest extends IntegrationTestSuite
 {
     /**
      * @see GameController::indexAction
