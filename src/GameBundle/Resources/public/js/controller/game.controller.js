@@ -9,12 +9,14 @@ $(document).ready(function () {
     const FLAG_BATTLEFIELD_SIZE = 0x02;
     const FLAG_ALL              = FLAG_USERNAME | FLAG_BATTLEFIELD_SIZE;
 
-    let bytes              = FLAG_NONE,
-        game               = new Game($('div#game-current-area')),
-        highlightFormGroup = function (el, flag) {
+    let bytes                 = FLAG_NONE,
+        game                  = new Game($('div#game-current-area')),
+        highlightInputSection = function (el, flag) {
             el.classList.remove('has-success');
             el.classList.remove('has-error');
             el.classList.add((bytes & flag) === flag ? 'has-success' : 'has-error');
+
+            game.modalMgr.unlockSubmission((bytes & FLAG_ALL) === FLAG_ALL);
         };
 
     game.init(
@@ -29,7 +31,7 @@ $(document).ready(function () {
         .on('click', '.player-area[data-player-flag="1"] .battlefield-cell[data-state="0"]', function (e) {
             e.stopPropagation();
 
-            game.update(this.getAttribute('data-id'));
+            game.update(parseInt(this.getAttribute('data-id')));
         });
     $('.page-sidebar')
         .on('click', 'li[data-action="game-new-action"]', function (e) {
@@ -42,14 +44,11 @@ $(document).ready(function () {
             /** modal area: player name */
             e.stopPropagation();
 
-            if (!Game.resources.validate.username(this.value)) {
-                bytes &= ~FLAG_USERNAME;
-            } else {
-                bytes |= FLAG_USERNAME;
-            }
+            Game.resources.validate.username(this.value)
+                ? bytes |= FLAG_USERNAME
+                : bytes &= ~FLAG_USERNAME;
 
-            highlightFormGroup(this.parentElement, FLAG_USERNAME);
-            game.modalMgr.unlockSubmission((bytes & FLAG_ALL) === FLAG_ALL);
+            highlightInputSection(this.parentElement, FLAG_USERNAME);
         })
         .on('input', '#model-input-battlefield-size', function (e) {
             /** modal area: battlefield size */
@@ -57,21 +56,15 @@ $(document).ready(function () {
 
             let pattern = Game.resources.config.pattern;
 
-            if (!Game.resources.validate.battlefield.size(this.value)) {
-                if (isNaN(this.value)) {
-                    bytes &= ~FLAG_BATTLEFIELD_SIZE;
-                } else if (this.value > pattern.battlefield.max) {
-                    this.value = pattern.battlefield.max;
-                    bytes |= FLAG_BATTLEFIELD_SIZE;
-                } else {
-                    bytes &= ~FLAG_BATTLEFIELD_SIZE;
-                }
-            } else {
-                bytes |= FLAG_BATTLEFIELD_SIZE;
+            if (!isNaN(this.value) && this.value > pattern.battlefield.max) {
+                this.value = pattern.battlefield.max;
             }
 
-            highlightFormGroup(this.parentElement, FLAG_BATTLEFIELD_SIZE);
-            game.modalMgr.unlockSubmission((bytes & FLAG_ALL) === FLAG_ALL);
+            Game.resources.validate.battlefield.size(this.value)
+                ? bytes |= FLAG_BATTLEFIELD_SIZE
+                : bytes &= ~FLAG_BATTLEFIELD_SIZE;
+
+            highlightInputSection(this.parentElement, FLAG_BATTLEFIELD_SIZE);
         })
         .on('click', '#model-button-init-new-game', function (e) {
             /** modal area: submit */
