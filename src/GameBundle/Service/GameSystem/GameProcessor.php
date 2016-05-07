@@ -73,7 +73,7 @@ class GameProcessor
             foreach ($_player->cells as $_cell) {
                 $flag = PlayerModel::isAIControlled($player)
                     ? CellModel::FLAG_NONE
-                    : (0 !== $_cell->flags ? CellModel::FLAG_SHIP : CellModel::FLAG_NONE);
+                    : (CellModel::FLAG_NONE !== $_cell->flags ? CellModel::FLAG_SHIP : CellModel::FLAG_NONE);
 
                 $cell = (new Cell())
                     ->setCoordinate($_cell->coordinate)
