@@ -22,7 +22,7 @@ abstract class ContainerAwareTestSuite extends ClientResponsesAssertionSuite
     /**
      * @var Application
      */
-    protected static $symfonyConsole;
+    protected static $console;
     /**
      * @var Registry
      */
@@ -53,26 +53,27 @@ abstract class ContainerAwareTestSuite extends ClientResponsesAssertionSuite
             static::$client = static::createClient();
 
             static::$container = static::$kernel->getContainer();
-            static::$symfonyConsole = new Application(static::$kernel);
-            static::$symfonyConsole->setAutoExit(false);
+            static::$console = new Application(static::$kernel);
+            static::$console->setAutoExit(false);
 
             static::$router = static::$container->get('router');
 
             static::$doctrine = static::$container->get('doctrine');
             static::$om = static::$doctrine->getManager();
 
-            $commandsToExecute = [
-                // reset database
-                'doctrine:database:drop' => ['--if-exists' => true, '--force' => true],
-                'doctrine:database:create' => ['--if-not-exists' => true],
-                // keep database schema up-to-date
+            $commands = [
+                /** reset test database */
+                'doctrine:database:create'    => ['--if-not-exists' => true],
+                /** PostgreSQL have some limitations, that is why not simple drop database */
+                'doctrine:schema:drop'        => ['--full-database' => true, '--force' => true],
+                /** keep database schema up-to-date */
                 'doctrine:migrations:migrate' => [],
-                // seed database with core data
-                'doctrine:fixtures:load' => ['--append' => true]
+                /** seed database with core data */
+                'doctrine:fixtures:load'      => ['--append' => true]
             ];
 
-            foreach ($commandsToExecute as $command => $args) {
-                $this->runSymfonyConsoleCommand($command, $args);
+            foreach ($commands as $command => $args) {
+                $this->runConsoleCommand($command, $args);
             }
 
             static::$setUp = true;
@@ -85,15 +86,15 @@ abstract class ContainerAwareTestSuite extends ClientResponsesAssertionSuite
      *
      * @throws \Exception
      */
-    protected function runSymfonyConsoleCommand($command, array $options = [])
+    protected function runConsoleCommand($command, array $options = [])
     {
         $options['--env'] = 'test';
         $options['--no-interaction'] = true;
         $options['--quiet'] = true;
         $options = array_merge($options, ['command' => $command]);
         try {
-            static::$symfonyConsole->setCatchExceptions(false);
-            static::$symfonyConsole->run(new ArrayInput($options));
+            static::$console->setCatchExceptions(false);
+            static::$console->run(new ArrayInput($options));
         } catch (\Exception $e) {
             echo PHP_EOL . $e->getMessage() . PHP_EOL;
             echo PHP_EOL . $e->getTraceAsString() . PHP_EOL;
