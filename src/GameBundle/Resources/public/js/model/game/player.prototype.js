@@ -7,14 +7,14 @@ class Player {
      * @param {number}  battlefieldSize
      */
     constructor(playerName, isCPUPlayer, battlefieldSize) {
-        let flags  = this.constructor.resources.flags;
+        let flags = this.constructor.resources.flags;
 
         this.$html = $(this.constructor.resources.layout);
 
         /** by default: type: human */
         this.setId('undefined')
             .setName(playerName)
-            .setFlag(isCPUPlayer ? flags.ai : flags.none);
+            .setFlag(isCPUPlayer ? flags.ai : 0x0000);
 
         this.battlefield = (new Battlefield(this.$html.find('.player-field'), battlefieldSize, this));
         if (this.isHuman()) {
@@ -85,7 +85,6 @@ class Player {
 Player.resources = {
     /** @enum {number} */
     flags: {
-        none: 0x0000,
         ai: 0x0001
     },
     /** @type {string} */
