@@ -10,7 +10,7 @@ class Cell {
         this.$html       = $(this.constructor.resources.layout);
         this.setId('undefined')
             .setCoordinate(coordinate)
-            .setState('undefined');
+            .setState(0x0000);
     }
 
     /**
