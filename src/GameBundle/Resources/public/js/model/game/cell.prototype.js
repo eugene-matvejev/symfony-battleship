@@ -80,7 +80,6 @@ class Cell {
 Cell.resources = {
     /** @enum {number} */
     mask: {
-        none: 0x0000,
         dead: 0x0001,
         ship: 0x0002,
         deadShip: 0x0002 | 0x0001,

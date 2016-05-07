@@ -41,7 +41,7 @@ class Battlefield {
             $top.append(this.cellContainer.yAxisNav[y].$html.clone());
 
             for (let x = 0; x < this.size; x++) {
-                let cell = (new Cell(cellCoordinate.full(x, y), this)).setState(Cell.resources.mask.none);
+                let cell = (new Cell(cellCoordinate.full(x, y), this)).setState(0x0000);
                 $row.append(cell.$html);
                 this.cellContainer.addCell(cell);
             }
