@@ -15,7 +15,7 @@ class GameResults extends APIRequestMgr {
     }
 
     /**
-     * @param {number|string} page
+     * @param {(number|string)} page
      */
     fetch(page) {
         let self      = this,

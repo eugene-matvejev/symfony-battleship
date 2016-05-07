@@ -13,7 +13,7 @@ class Game extends APIRequestMgr {
     }
 
     /**
-     * @param {number|string} id
+     * @param {(number|string)} id
      *
      * @returns {Game}
      */
@@ -105,7 +105,7 @@ class Game extends APIRequestMgr {
     /**
      * @param id {number}
      *
-     * @returns {Player|undefined}
+     * @returns {!Player}
      */
     findPlayerById(id) {
         let player = this.players.find(player => player.id === id);
@@ -117,9 +117,9 @@ class Game extends APIRequestMgr {
     }
 
     /**
-     * @param name {string}
+     * @param {string} name
      *
-     * @returns {Player|undefined}
+     * @returns {!Player}
      */
     findPlayerByName(name) {
         let player = this.players.find(player => player.name === name);
@@ -164,7 +164,7 @@ class Game extends APIRequestMgr {
     /**
      * @param {{playerId: {number}, id: {number}, coordinate: {string}}} criteria
      *
-     * @returns {Cell}
+     * @returns {?Cell}
      */
     findPlayerCellByCriteria(criteria) {
         for (let player of this.players) {

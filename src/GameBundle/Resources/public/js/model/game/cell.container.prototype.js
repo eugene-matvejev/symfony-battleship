@@ -24,7 +24,7 @@ class CellContainer {
     /**
      * @param {{id: {number}, coordinate: {string}}} criteria
      *
-     * @returns {Cell|undefined}
+     * @returns {?Cell}
      */
     findCellByCriteria(criteria) {
         return this.cells.find(cell =>
@@ -34,7 +34,7 @@ class CellContainer {
     }
 
     /**
-     * @returns {{id: {number}, x: {number}, y: {number}, state: {number}}[]}
+     * @returns {{id: {(number|string)}, x: {number}, y: {number}, state: {number}}[]}
      */
     getJSON() {
         return this.cells.map(cell => cell.getJSON());

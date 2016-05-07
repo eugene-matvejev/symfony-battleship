@@ -23,7 +23,7 @@ class Player {
     }
 
     /**
-     * @param {number|string} id
+     * @param {(number|string)} id
      *
      * @returns {Player}
      */
