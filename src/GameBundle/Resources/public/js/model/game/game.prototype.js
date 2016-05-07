@@ -113,7 +113,7 @@ class Game extends APIRequestMgr {
             return player;
         }
 
-        throw new PlayerException();
+        throw `player with id "${id}" not found`;
     }
 
     /**
@@ -127,7 +127,7 @@ class Game extends APIRequestMgr {
             return player;
         }
 
-        throw new PlayerException();
+        throw `player with name "${name}" not found`;
     }
 
     /**
