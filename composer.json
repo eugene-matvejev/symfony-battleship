@@ -23,6 +23,7 @@
         { "name": "Eugene Matvejev", "email": "eugene.matvejev@gmail.com" }
     ],
     "require": {
+        "incenteev/composer-parameter-handler": "^2.1",
         "php": ">=7.0.1",
         "doctrine/doctrine-bundle": "~1.6",
         "doctrine/doctrine-migrations-bundle": "~1.1",
@@ -42,6 +43,7 @@
     },
     "scripts": {
         "post-install-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
             "php bin/console doctrine:database:create --if-not-exists",
             "php bin/console doctrine:migrations:migrate --no-interaction",
@@ -51,6 +53,7 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
         ],
         "post-update-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
             "php bin/console doctrine:database:create --if-not-exists",
             "php bin/console doctrine:migrations:migrate --no-interaction",
@@ -71,6 +74,19 @@
         "symfony-bin-dir": "bin",
         "symfony-var-dir": "var",
         "symfony-web-dir": "web",
-        "symfony-assets-install": "symlink"
+        "symfony-assets-install": "symlink",
+        "incenteev-parameters": {
+            "file": "app/config/parameters.yml",
+            "dist-file": "app/config/parameters.yml.dist",
+            "env-map": {
+                "database_driver": "DATABASE_ENGINE",
+                "database_host": "DATABASE_HOST",
+                "database_port": "DATABASE_PORT",
+                "database_name": "DATABASE_NAME",
+                "database_user": "DATABASE_USER",
+                "database_password": "DATABASE_PASSWORD",
+                "secret": "SECRET_SYMFONY_TOKEN"
+            }
+        }
     }
 }
