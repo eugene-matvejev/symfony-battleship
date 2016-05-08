@@ -8,8 +8,9 @@ services:
 before_script:
     - "cp app/config/parameters.yml.dist app/config/parameters.yml"
 #    - "composer require codeclimate/php-test-reporter"
-    - "composer install"
+    - "composer install --no-scripts"
     - "php bin/console doctrine:database:create --if-not-exists"
+    - "composer install"
 
 script:
     - "php bin/phpunit -c phpunit.xml --colors=always --verbose --coverage-clover=coverage.xml"
