@@ -59,12 +59,18 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+        ],
+        "compile": [
+            "rm web/app_dev.php",
+            "php bin/console assets:install",
+            "php bin/console doctrine:schema:drop --full-database --force"
         ]
     },
     "config": {
         "platform": {
             "php": "7.0.1"
         },
+        "optimize-autoloader": true,
         "bin-dir": "bin/"
     },
     "extra": {
