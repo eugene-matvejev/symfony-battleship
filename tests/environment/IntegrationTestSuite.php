@@ -7,13 +7,15 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @since 11.3
+ * @since 15.2
  */
-abstract class ContainerAwareTestSuite extends ClientResponsesAssertionSuite
+abstract class IntegrationTestSuite extends WebTestCase
 {
     /**
      * @var ContainerInterface
@@ -22,7 +24,7 @@ abstract class ContainerAwareTestSuite extends ClientResponsesAssertionSuite
     /**
      * @var Application
      */
-    protected static $symfonyConsole;
+    protected static $console;
     /**
      * @var Registry
      */
@@ -53,26 +55,27 @@ abstract class ContainerAwareTestSuite extends ClientResponsesAssertionSuite
             static::$client = static::createClient();
 
             static::$container = static::$kernel->getContainer();
-            static::$symfonyConsole = new Application(static::$kernel);
-            static::$symfonyConsole->setAutoExit(false);
+            static::$console = new Application(static::$kernel);
+            static::$console->setAutoExit(false);
 
             static::$router = static::$container->get('router');
 
             static::$doctrine = static::$container->get('doctrine');
             static::$om = static::$doctrine->getManager();
 
-            $commandsToExecute = [
-                // reset database
-                'doctrine:database:drop' => ['--if-exists' => true, '--force' => true],
-                'doctrine:database:create' => ['--if-not-exists' => true],
-                // keep database schema up-to-date
+            $commands = [
+                /** reset test database */
+                'doctrine:database:create'    => ['--if-not-exists' => true],
+                /** PostgreSQL have some limitations, that is why not simple drop database */
+                'doctrine:schema:drop'        => ['--full-database' => true, '--force' => true],
+                /** keep database schema up-to-date */
                 'doctrine:migrations:migrate' => [],
-                // seed database with core data
-                'doctrine:fixtures:load' => ['--append' => true]
+                /** seed database with core data */
+                'doctrine:fixtures:load'      => ['--append' => true]
             ];
 
-            foreach ($commandsToExecute as $command => $args) {
-                $this->runSymfonyConsoleCommand($command, $args);
+            foreach ($commands as $command => $args) {
+                $this->runConsoleCommand($command, $args);
             }
 
             static::$setUp = true;
@@ -85,15 +88,15 @@ abstract class ContainerAwareTestSuite extends ClientResponsesAssertionSuite
      *
      * @throws \Exception
      */
-    protected function runSymfonyConsoleCommand($command, array $options = [])
+    protected function runConsoleCommand($command, array $options = [])
     {
         $options['--env'] = 'test';
         $options['--no-interaction'] = true;
         $options['--quiet'] = true;
         $options = array_merge($options, ['command' => $command]);
         try {
-            static::$symfonyConsole->setCatchExceptions(false);
-            static::$symfonyConsole->run(new ArrayInput($options));
+            static::$console->setCatchExceptions(false);
+            static::$console->run(new ArrayInput($options));
         } catch (\Exception $e) {
             echo PHP_EOL . $e->getMessage() . PHP_EOL;
             echo PHP_EOL . $e->getTraceAsString() . PHP_EOL;
@@ -102,27 +105,32 @@ abstract class ContainerAwareTestSuite extends ClientResponsesAssertionSuite
         }
     }
 
-//
-//    /**
-//     * Gets the display returned by the last execution of the command.
-//     *
-//     * @param ContainerAwareCommand $command
-//     *
-//     * @return string The display of command execution result
-//     */
-//    protected function executeCommand(ContainerAwareCommand $command)
-//    {
-//        $console = $this->getConsoleApp();
-//        $commandName = $command->getName();
-//        if (!$console->has($commandName)) {
-//            $this->getConsoleApp()->add($command);
-//        }
-//        $commandTester = new CommandTester($console->find($commandName));
-//        $commandTester->execute(['command' => $commandName]);
-//
-//        return $commandTester->getDisplay();
-//    }
-//
+    public function assertSuccessfulResponse(Response $response)
+    {
+        $this->assertGreaterThanOrEqual(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertLessThan(Response::HTTP_MULTIPLE_CHOICES, $response->getStatusCode());
+    }
+
+    public function assertSuccessfulJSONResponse(Response $response)
+    {
+        $this->assertSuccessfulResponse($response);
+
+        $this->assertJson($response->getContent());
+    }
+
+    public function assertSuccessfulXMLResponse(Response $response)
+    {
+        $this->assertSuccessfulResponse($response);
+
+        $xmlElement = simplexml_load_string($response->getContent(), 'SimpleXMLElement', LIBXML_NOCDATA);
+        $this->assertInstanceOf(\SimpleXMLElement::class, $xmlElement);
+    }
+
+    public function assertUnsuccessfulResponse(Response $response)
+    {
+        $this->assertGreaterThanOrEqual(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->assertLessThanOrEqual(Response::HTTP_NETWORK_AUTHENTICATION_REQUIRED, $response->getStatusCode());
+    }
 
     /**
      * invokes non-public method of the class and returns invoke result as well as throws Exception if it happen.

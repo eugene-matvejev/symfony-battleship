@@ -6,14 +6,14 @@ use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIStrategyProcessor;
 use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
-use EM\Tests\Environment\ContainerAwareTestSuite;
+use EM\Tests\Environment\IntegrationTestSuite;
 use EM\Tests\Environment\MockFactory\Entity\BattlefieldMockTrait;
 use EM\Tests\Environment\MockFactory\Service\PathProcessorMockTrait;
 
 /**
  * @see AIStrategy
  */
-class AIStrategyProcessorTest extends ContainerAwareTestSuite
+class AIStrategyProcessorTest extends IntegrationTestSuite
 {
     use BattlefieldMockTrait, PathProcessorMockTrait;
     /**

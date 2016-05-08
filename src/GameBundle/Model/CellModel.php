@@ -10,10 +10,10 @@ use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
  */
 class CellModel
 {
-    const FLAG_NONE = 0x0000;
-    const FLAG_DEAD = 0x0001;
-    const FLAG_SHIP = 0x0002;
-    const FLAG_SKIP = 0x0004 | self::FLAG_DEAD;
+    const FLAG_NONE = 0x00;
+    const FLAG_DEAD = 0x01;
+    const FLAG_SHIP = 0x02;
+    const FLAG_SKIP = 0x04 | self::FLAG_DEAD;
     const FLAG_DEAD_SHIP = self::FLAG_SHIP | self::FLAG_DEAD;
     /**
      * @var Cell[]
@@ -60,7 +60,7 @@ class CellModel
 
             /** @var Cell $cell */
             while (null !== $cell = $battlefield->getCellByCoordinate($PathProcessor->getNextCoordinate())) {
-                if (!$cell->hasFlag(self::FLAG_SHIP)) {
+                if (isset($cells[$cell->getCoordinate()]) || !$cell->hasFlag(self::FLAG_SHIP)) {
                     break;
                 }
                 if (!$cell->hasFlag(self::FLAG_DEAD)) {

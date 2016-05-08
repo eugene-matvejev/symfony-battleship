@@ -15,7 +15,8 @@
     "autoload-dev": {
         "psr-4": {
             "EM\\Tests\\Environment\\": "tests/environment",
-            "EM\\Tests\\PHPUnit\\": "tests/phpunit"
+            "EM\\Tests\\PHPUnit\\": "tests/phpunit",
+            "EM\\Tests\\Behat\\": "tests/behat/bootstrap"
         }
     },
     "authors": [
@@ -28,12 +29,13 @@
         "doctrine/orm": "~2.5",
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0",
-        "symfony/symfony": "3.0.3",
+        "symfony/symfony": "~3.0.3",
         "symfony/monolog-bundle": "~2.8",
         "jms/serializer-bundle": "^1.1"
     },
     "require-dev": {
         "composer/composer": "1.0.0-alpha11",
+        "behat/behat": "^3.1",
         "doctrine/doctrine-fixtures-bundle": "^2.3",
         "sensio/generator-bundle": "^3.0",
         "phpunit/phpunit": "^5.1"

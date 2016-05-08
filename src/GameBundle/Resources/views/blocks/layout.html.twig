@@ -6,7 +6,7 @@
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('bundles/game/vendor/bootstrap-3.3.5-dist/css/bootstrap.min.css') }}" type="text/css"/>
     <link rel="stylesheet" href="{{ asset('bundles/game/css/layout.css') }}" type="text/css"/>
-    <link rel="stylesheet" href="{{ asset('bundles/game/css/layout.loading.animation.css') }}" type="text/css"/>
+    <link rel="stylesheet" href="{{ asset('bundles/game/css/layout-loading-animation.css') }}" type="text/css"/>
 {% endblock %}
 </head>
 <body>
@@ -14,12 +14,13 @@
 {% block javascripts %}
     <script type="text/javascript" src="{{ asset('bundles/game/vendor/jquery/jquery-2.2.1.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('bundles/game/vendor/bootstrap-3.3.5-dist/js/bootstrap.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/model/gui/page.mgr.prototype.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/model/gui/alert.mgr.prototype.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/model/gui/modal.mgr.prototype.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/model/gui/pagination.mgr.prototype.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/controller/alert.controller.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/controller/page.controller.js') }}"></script>
+
+    <script type="text/javascript" src="{{ asset('bundles/game/js/manager/page.manager.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/manager/popup.manager.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/manager/modal.manager.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/manager/pagination.manager.js') }}"></script>
+
+    <script type="text/javascript" src="{{ asset('bundles/game/js/controller/app.controller.js') }}"></script>
 {% endblock %}
 </body>
 </html>

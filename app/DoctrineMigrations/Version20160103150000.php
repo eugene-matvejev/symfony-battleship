@@ -12,7 +12,7 @@ class Version20160103150000 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on "mysql"');
+        $this->skipIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on "mysql"');
 
         $this->addSql('CREATE TABLE battlefields (id INT AUTO_INCREMENT NOT NULL, game INT NOT NULL, player INT NOT NULL, INDEX INDEX_BATTLEFIELD_GAME (game), INDEX INDEX_BATTLEFIELD_PLAYER (player), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE cells (id INT AUTO_INCREMENT NOT NULL, battlefield INT NOT NULL, state INT NOT NULL, x INT NOT NULL, y INT NOT NULL, INDEX IDX_55C1CBD8A393D2FB (state), INDEX INDEX_CELL_BATTLEFIELD (battlefield), UNIQUE INDEX axisXY (battlefield, x, y), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
@@ -32,7 +32,7 @@ class Version20160103150000 extends AbstractMigration
 
     public function down(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on "mysql"');
+        $this->skipIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on "mysql"');
 
         $this->addSql('ALTER TABLE cells DROP FOREIGN KEY FK_55C1CBD851B7F6D5');
         $this->addSql('ALTER TABLE cells DROP FOREIGN KEY FK_55C1CBD8A393D2FB');

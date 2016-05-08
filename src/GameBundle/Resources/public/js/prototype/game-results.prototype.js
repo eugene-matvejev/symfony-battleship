@@ -1,8 +1,8 @@
 'use strict';
 
-class GameResults extends APIRequestMgr {
+class GameResults extends APIRequestService {
     /**
-     * @param {jQuery} $el
+     * @param {!jQuery} $el
      */
     constructor($el) {
         super();
@@ -15,7 +15,7 @@ class GameResults extends APIRequestMgr {
     }
 
     /**
-     * @param {number|string} page
+     * @param {(number|string)} page
      */
     fetch(page) {
         let self      = this,
@@ -48,20 +48,21 @@ GameResults.resources.tableHeader = {
     playerName: 'winner',
     finishTime: 'finished at'
 };
+/** @type {string} */
 GameResults.resources.layout = '<div class="results-area"></div>';
 GameResults.resources.html   = {
     /**
      * @returns {string}
      */
     table: function () {
-        let header = GameResults.resources.tableHeader;
+        let text = GameResults.resources.tableHeader;
 
         return ` \
             <table class="table"> \
                 <tr> \
-                    <th>${header.resultId}</th> \
-                    <th>${header.playerName}</th> \
-                    <th>${header.finishTime}</th> \
+                    <th>${text.resultId}</th> \
+                    <th>${text.playerName}</th> \
+                    <th>${text.finishTime}</th> \
                 </tr> \
             </table>`;
     },

@@ -5,13 +5,13 @@ namespace EM\Tests\PHPUnit\GameBundle\Controller;
 use EM\GameBundle\Controller\GameController;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Model\PlayerModel;
-use EM\Tests\Environment\ContainerAwareTestSuite;
+use EM\Tests\Environment\IntegrationTestSuite;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @see GameController
  */
-class GameControllerTest extends ContainerAwareTestSuite
+class GameControllerTest extends IntegrationTestSuite
 {
     /**
      * @see GameController::indexAction
@@ -54,7 +54,7 @@ class GameControllerTest extends ContainerAwareTestSuite
      */
     public function successfulInitAction_JSON()
     {
-        $json = json_decode(file_get_contents(__DIR__ . '/../../../data/new_game_request_7x7_2_players.json'));
+        $json = json_decode(file_get_contents(__DIR__ . '/../../../www-data-mock/new-game-request-7x7-2-players.json'));
 
         $client = clone static::$client;
         $client->request(
@@ -107,7 +107,7 @@ class GameControllerTest extends ContainerAwareTestSuite
     {
         $client = clone static::$client;
 
-        $json = json_decode(file_get_contents(__DIR__ . '/../../../data/new_game_request_7x7_2_players.json'));
+        $json = json_decode(file_get_contents(__DIR__ . '/../../../www-data-mock/new-game-request-7x7-2-players.json'));
         $client->request(
             Request::METHOD_POST,
             static::$router->generate('battleship.game.api.init'),

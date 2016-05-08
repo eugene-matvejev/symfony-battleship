@@ -1,6 +1,6 @@
 'use strict';
 
-class Game extends APIRequestMgr {
+class Game extends APIRequestService {
     /**
      * @param {jQuery} $el
      */
@@ -8,26 +8,8 @@ class Game extends APIRequestMgr {
         super();
         this.$html = $el;
 
-        this.alertMgr = new AlertMgr();
+        this.popupMgr = new PopupMgr();
         this.modalMgr = new ModalMgr();
-    }
-
-    /**
-     * @param {number|string} id
-     *
-     * @returns {Game}
-     */
-    setId(id) {
-        this.id = id;
-
-        return this;
-    }
-
-    /**
-     * @returns {{id: {number}}}
-     */
-    getJSON() {
-        return { id: this.id };
     }
 
     /**
@@ -35,35 +17,20 @@ class Game extends APIRequestMgr {
      * @param {number}                               battlefieldSize
      */
     init(players, battlefieldSize) {
-        this.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="game-current-area"]'));
-
-        this.setId('undefined');
         this.players = [];
         this.$html.html('');
 
-        let self        = this,
-            requestData = {
-                game: this.getJSON(),
-                data: []
-            },
-            onSuccess   = function (response) {
+        let self      = this,
+            onSuccess = function (response) {
                 self.parseInitResponse(response);
             };
 
-        players.forEach(function (_player) {
-            let player = new Player(_player.name, _player.isCPU || false, battlefieldSize);
+        /** construct players */
+        players.forEach(player => this.players.push(new Player(player.name, player.isCPU || false, battlefieldSize)), this);
+        /** append player's HTML to the document */
+        this.players.forEach(player => this.$html.append(player.$html), this);
 
-            self.players.push(player);
-            self.$html.append(player.$html);
-
-            requestData.data.push({
-                player: player.getJSON(),
-                battlefield: player.battlefield.getJSON(),
-                cells: player.battlefield.cellContainer.getJSON()
-            });
-        });
-
-        this.request('POST', this.$html.attr('data-init-link'), requestData, onSuccess);
+        this.request('POST', this.$html.attr('data-init-link'), this.players.map(player => player.getSerializationView()), onSuccess);
     }
 
     /**
@@ -77,55 +44,53 @@ class Game extends APIRequestMgr {
      * }} response
      */
     parseInitResponse(response) {
-        this.setId(response.id);
-
-        let self = this;
-
         response.battlefields.forEach(function (battlefield) {
-            let player = self.findPlayerByName(battlefield.player.name);
+            let player = this.findPlayerByName(battlefield.player.name).setId(battlefield.player.id);
 
-            if (undefined !== player) {
-                player.setId(battlefield.player.id);
+            Object.keys(battlefield.cells).forEach(function (index) {
+                let _cell = battlefield.cells[index],
+                    cell  = this.findPlayerCellByCriteria({ playerId: player.id, coordinate: _cell.coordinate });
 
-                Object.keys(battlefield.cells).forEach(function (index) {
-                    let _cell = battlefield.cells[index],
-                        cell  = self.findCell({ playerId: player.id, coordinate: _cell.coordinate });
-
-                    if (undefined !== cell) {
-                        cell.setId(_cell.id)
-                            .setState(_cell.flags);
-                    }
-                });
-            }
-        });
+                if (undefined !== cell) {
+                    cell.setId(_cell.id).setFlags(_cell.flags);
+                }
+            }, this);
+        }, this);
     }
 
     /**
-     * @param {Element} el
+     * @param {number} cellId
      */
-    update(el) {
-        let cell = this.findCell({ id: el.getAttribute('data-id') });
-        if (undefined !== cell) {
-            this.cellSend(cell);
-        }
+    update(cellId) {
+        this.cellSend(this.findPlayerCellByCriteria({ id: cellId }));
     }
 
     /**
      * @param id {number}
      *
-     * @returns {Player|undefined}
+     * @returns {!Player}
      */
     findPlayerById(id) {
-        return this.players.find(player => player.id == id);
+        let player = this.players.find(player => player.id === id);
+        if (undefined !== player) {
+            return player;
+        }
+
+        throw `player with id: ${id} not found`;
     }
 
     /**
-     * @param name {string}
+     * @param {string} name
      *
-     * @returns {Player|undefined}
+     * @returns {!Player}
      */
     findPlayerByName(name) {
-        return this.players.find(player => player.name == name);
+        let player = this.players.find(player => player.name === name);
+        if (undefined !== player) {
+            return player;
+        }
+
+        throw `player with name: "${name}" not found`;
     }
 
     /**
@@ -144,53 +109,38 @@ class Game extends APIRequestMgr {
      * @param {{cells: {id: {number}, flags: {number}}[], result: {player: {Object}}}} response
      */
     parseUpdateResponse(response) {
-        let self = this;
+        response.cells.forEach(cell => this.findPlayerCellByCriteria({ id: parseInt(cell.id) }).setFlags(cell.flags), this);
 
-        response.cells.forEach(function (_cell) {
-            let cell = self.findCell({ id: _cell.id });
-
-            if (undefined !== cell) {
-                cell.setState(_cell.flags);
-            }
-        });
-
+        /** detect victory */
         if (undefined !== response.result) {
-            let text   = this.constructor.resources.config.text,
-                type   = AlertMgr.resources.config.type,
-                player = this.findPlayerById(response.result.player.id);
+            let text = this.constructor.resources.config.text;
 
-            if (undefined !== player) {
-                player.isHuman()
-                    ? this.alertMgr.show(text.win, type.success)
-                    : this.alertMgr.show(text.loss, type.error);
-            }
+            this.findPlayerById(response.result.player.id).isAIControlled()
+                ? this.popupMgr.show(text.loss, 'error')
+                : this.popupMgr.show(text.win, 'success');
         }
     }
 
     /**
      * @param {{playerId: {number}, id: {number}, coordinate: {string}}} criteria
      *
-     * @returns {Cell}
+     * @returns {?Cell}
      */
-    findCell(criteria) {
+    findPlayerCellByCriteria(criteria) {
         for (let player of this.players) {
             if (undefined !== criteria.playerId && criteria.playerId !== player.id) {
                 continue;
             }
 
-            let cell = player.battlefield.findCell(criteria);
+            let cell = player.battlefield.findCellByCriteria(criteria);
             if (undefined !== cell) {
                 return cell;
             }
         }
+
+        throw `cell not found by criteria: ${JSON.stringify(criteria)}`;
     }
 
-    modalGameInitiation() {
-        this.alertMgr.hide();
-        this.modalMgr.updateHTML(Game.resources.html.modal).show();
-
-        return this;
-    }
 }
 
 Game.resources          = {};

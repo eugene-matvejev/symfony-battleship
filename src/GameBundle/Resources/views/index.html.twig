@@ -3,20 +3,21 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ asset('bundles/game/css/game.css') }}" type="text/css"/>
-    <link rel="stylesheet" href="{{ asset('bundles/game/css/game.results.css') }}" type="text/css"/>
+    <link rel="stylesheet" href="{{ asset('bundles/game/css/game-results.css') }}" type="text/css"/>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ asset('bundles/game/js/model/prototype/api.request.mgr.prototype.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/model/game/cell.prototype.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/model/game/cell.container.prototype.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/model/game/battlefield.prototype.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/model/game/player.prototype.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/model/game/game.prototype.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/model/game.results/game.results.prototype.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/service/api-request.service.js') }}"></script>
+
+    <script type="text/javascript" src="{{ asset('bundles/game/js/prototype/battlefield.prototype.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/prototype/cell.prototype.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/prototype/game.prototype.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/prototype/game-results.prototype.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/prototype/player.prototype.js') }}"></script>
+
     <script type="text/javascript" src="{{ asset('bundles/game/js/controller/game.controller.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/game/js/controller/game.results.controller.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/game/js/controller/game-results.controller.js') }}"></script>
 {% endblock %}
 
 {% block content %}

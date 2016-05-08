@@ -10,8 +10,8 @@ use EM\GameBundle\Entity\Player;
  */
 class PlayerModel
 {
-    const FLAG_NONE          = 0x0000;
-    const FLAG_AI_CONTROLLED = 0x0001;
+    const FLAG_NONE          = 0x00;
+    const FLAG_AI_CONTROLLED = 0x01;
     /**
      * @var EntityRepository
      */

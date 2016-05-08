@@ -3,14 +3,14 @@
 namespace EM\Tests\PHPUnit\GameBundle\Controller;
 
 use EM\GameBundle\Controller\GameResultController;
-use EM\Tests\Environment\ContainerAwareTestSuite;
+use EM\Tests\Environment\IntegrationTestSuite;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Tests\Controller;
 
 /**
  * @see GameResultController
  */
-class GameResultControllerTest extends ContainerAwareTestSuite
+class GameResultControllerTest extends IntegrationTestSuite
 {
     /**
      * @see GameResultController::orderedByDateAction()

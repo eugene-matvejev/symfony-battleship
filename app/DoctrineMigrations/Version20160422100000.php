@@ -12,7 +12,7 @@ class Version20160422100000 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on "mysql"');
+        $this->skipIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on "mysql"');
 
         $this->addSql('ALTER TABLE cells CHANGE flag flags INT NOT NULL');
         $this->addSql('ALTER TABLE players CHANGE flag flags INT NOT NULL');
@@ -20,7 +20,7 @@ class Version20160422100000 extends AbstractMigration
 
     public function down(Schema $schema)
     {
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on "mysql"');
+        $this->skipIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on "mysql"');
 
         $this->addSql('ALTER TABLE cells CHANGE flags flag INT NOT NULL');
         $this->addSql('ALTER TABLE players CHANGE flags flag INT NOT NULL');

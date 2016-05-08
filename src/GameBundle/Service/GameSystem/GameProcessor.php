@@ -49,6 +49,7 @@ class GameProcessor
                 $cells[] = $battlefield->getCellByCoordinate('B2')->addFlag(CellModel::FLAG_SHIP);
             }
         }
+
         /** ********************** */
 
         return $cells;
@@ -58,23 +59,26 @@ class GameProcessor
     {
         $game = new Game();
 
-        foreach (json_decode($json)->data as $data) {
-            $shouldBeControllerByAI = (($data->player->type ?? PlayerModel::FLAG_NONE) & PlayerModel::FLAG_AI_CONTROLLED) === PlayerModel::FLAG_AI_CONTROLLED;
+        foreach (json_decode($json) as $_player) {
+            $player = $this->playerModel->createOnRequest(
+                $_player->name,
+                ($_player->flags & PlayerModel::FLAG_AI_CONTROLLED) === PlayerModel::FLAG_AI_CONTROLLED
+            );
 
-            $player = $this->playerModel->createOnRequest($data->player->name, $shouldBeControllerByAI);
             $battlefield = (new Battlefield())
                 ->setGame($game)
                 ->setPlayer($player);
             $game->addBattlefield($battlefield);
 
-            foreach ($data->cells as $_cell) {
+            foreach ($_player->cells as $_cell) {
                 $flag = PlayerModel::isAIControlled($player)
                     ? CellModel::FLAG_NONE
-                    : (0 !== $_cell->state ? CellModel::FLAG_SHIP : CellModel::FLAG_NONE);
+                    : (CellModel::FLAG_NONE !== $_cell->flags ? CellModel::FLAG_SHIP : CellModel::FLAG_NONE);
 
                 $cell = (new Cell())
                     ->setCoordinate($_cell->coordinate)
                     ->setFlags($flag);
+                /** @var Cell $cell */
                 $battlefield->addCell($cell);
             }
 
@@ -111,10 +115,12 @@ class GameProcessor
 
             foreach ($game->getBattlefields() as $battlefield) {
                 if ($playerBattlefield === $battlefield) {
+                    /** do not process player's turn on own battlefield */
                     continue;
                 }
 
                 $_cell = $this->processPlayerTurn($player, $battlefield, $cell);
+                /** to mark cells around dead ship as skipped */
                 CellModel::isShipDead($_cell);
 
                 if (!BattlefieldModel::hasUnfinishedShips($battlefield)) {

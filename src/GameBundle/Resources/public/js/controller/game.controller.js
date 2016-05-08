@@ -1,20 +1,28 @@
 'use strict';
 
+/**
+ * this controller serve all "Game" related actions such as game initiation
+ */
 $(document).ready(function () {
     const FLAG_NONE             = 0x00;
     const FLAG_USERNAME         = 0x01;
     const FLAG_BATTLEFIELD_SIZE = 0x02;
     const FLAG_ALL              = FLAG_USERNAME | FLAG_BATTLEFIELD_SIZE;
 
-    let bytes     = FLAG_NONE,
-        game      = new Game($('div#game-current-area')),
-        highlight = function (el, flag) {
-            el.parentElement.classList.remove('has-success');
-            el.parentElement.classList.remove('has-error');
+    let bytes                 = FLAG_NONE,
+        game                  = new Game($('div#game-current-area')),
+        highlightInputSection = function (el, flag) {
+            el.classList.remove('has-success');
+            el.classList.remove('has-error');
+            el.classList.add((bytes & flag) === flag ? 'has-success' : 'has-error');
 
-            el.parentElement.classList.add((bytes & flag) === flag ? 'has-success' : 'has-error');
+            game.modalMgr.unlockSubmission((bytes & FLAG_ALL) === FLAG_ALL);
         };
 
+    // /** open modal for new game when page is loaded */
+    // game.modalMgr.updateHTML(game.constructor.resources.html.modal).show();
+    /** initiate game when page is loaded */
+    game.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="game-current-area"]'));
     game.init(
         [
             { name: 'CPU', isCPU: true },
@@ -24,58 +32,50 @@ $(document).ready(function () {
     );
 
     $('#game-current-area')
-        .on('click', '.player-area[data-player-flag="1"] .battlefield-cell[data-state="0"]', function (e) {
+        .on('click', '.player-area[data-player-flag="1"] .battlefield-cell[data-flags="0"]', function (e) {
             e.stopPropagation();
 
-            game.update(this);
+            game.update(parseInt(this.getAttribute('data-id')));
         });
     $('.page-sidebar')
         .on('click', 'li[data-action="game-new-action"]', function (e) {
             e.stopPropagation();
 
-            game.modalGameInitiation();
+            game.popupMgr.hide();
+            game.modalMgr.updateHTML(game.constructor.resources.html.modal).show();
         });
     $('#modal-area')
-        /** modal area: player name */
         .on('input', '#model-input-player-name', function (e) {
+            /** modal area: player name */
             e.stopPropagation();
 
-            if (!Game.resources.validate.username(this.value)) {
-                bytes &= ~FLAG_USERNAME;
-            } else {
-                bytes |= FLAG_USERNAME;
-            }
+            Game.resources.validate.username(this.value)
+                ? bytes |= FLAG_USERNAME
+                : bytes &= ~FLAG_USERNAME;
 
-            highlight(this, FLAG_USERNAME);
-            game.modalMgr.unlockSubmission((bytes & FLAG_ALL) === FLAG_ALL);
+            highlightInputSection(this.parentElement, FLAG_USERNAME);
         })
-        /** modal area: battlefield size */
         .on('input', '#model-input-battlefield-size', function (e) {
+            /** modal area: battlefield size */
             e.stopPropagation();
 
             let pattern = Game.resources.config.pattern;
 
-            if (!Game.resources.validate.battlefield.size(this.value)) {
-                if (isNaN(this.value)) {
-                    this.value = this.value.substr(0, this.value.length - 1);
-                    bytes &= ~FLAG_BATTLEFIELD_SIZE;
-                } else if (this.value > pattern.battlefield.max) {
-                    this.value = pattern.battlefield.max;
-                    bytes |= FLAG_BATTLEFIELD_SIZE;
-                } else {
-                    bytes &= ~FLAG_BATTLEFIELD_SIZE;
-                }
-            } else {
-                bytes |= FLAG_BATTLEFIELD_SIZE;
+            if (!isNaN(this.value) && this.value > pattern.battlefield.max) {
+                this.value = pattern.battlefield.max;
             }
 
-            highlight(this, FLAG_BATTLEFIELD_SIZE);
-            game.modalMgr.unlockSubmission((bytes & FLAG_ALL) === FLAG_ALL);
+            Game.resources.validate.battlefield.size(this.value)
+                ? bytes |= FLAG_BATTLEFIELD_SIZE
+                : bytes &= ~FLAG_BATTLEFIELD_SIZE;
+
+            highlightInputSection(this.parentElement, FLAG_BATTLEFIELD_SIZE);
         })
-        /** modal area: submit */
         .on('click', '#model-button-init-new-game', function (e) {
+            /** modal area: submit */
             e.stopPropagation();
 
+            game.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="game-current-area"]'));
             game.init(
                 [
                     { name: 'CPU', isCPU: true },

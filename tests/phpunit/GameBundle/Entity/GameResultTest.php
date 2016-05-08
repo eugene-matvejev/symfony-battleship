@@ -4,13 +4,13 @@ namespace EM\Tests\PHPUnit\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use EM\GameBundle\Entity\GameResult;
-use EM\Tests\Environment\ContainerAwareTestSuite;
+use EM\Tests\Environment\IntegrationTestSuite;
 use EM\Tests\Environment\MockFactory\Entity\GameResultMockTrait;
 
 /**
  * @see GameResult
  */
-class GameResultTest extends ContainerAwareTestSuite
+class GameResultTest extends IntegrationTestSuite
 {
     use GameResultMockTrait;
 

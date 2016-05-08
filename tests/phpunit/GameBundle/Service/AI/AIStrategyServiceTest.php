@@ -4,13 +4,13 @@ namespace EM\Tests\PHPUnit\GameBundle\Service\AI;
 
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIStrategyService;
-use EM\Tests\Environment\ContainerAwareTestSuite;
+use EM\Tests\Environment\IntegrationTestSuite;
 use EM\Tests\Environment\MockFactory\Entity\BattlefieldMockTrait;
 
 /**
  * @see AIStrategyService
  */
-class AIStrategyServiceTest extends ContainerAwareTestSuite
+class AIStrategyServiceTest extends IntegrationTestSuite
 {
     use BattlefieldMockTrait;
     /**
@@ -28,7 +28,7 @@ class AIStrategyServiceTest extends ContainerAwareTestSuite
      * @see AIStrategyService::chooseCells()
      * @test
      */
-    public function chooseCells()
+    public function chooseCellsOnNoDeadCellsInBattlefield()
     {
         $battlefield = $this->getBattlefieldMock();
 
@@ -36,25 +36,5 @@ class AIStrategyServiceTest extends ContainerAwareTestSuite
         $this->assertCount(0, $cells);
 
         $battlefield->getCellByCoordinate('B2')->setFlags(CellModel::FLAG_DEAD_SHIP);
-
-//        $cells = $this->strategyService->chooseCells($battlefield);
-//        $this->assertCount(4, $cells);
-//
-//        foreach ($battlefield->getCells() as $cell) {
-//            if ($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED || $this->isShipDead($cell)) {
-//                continue;
-//            }
-//
-//            switch ($this->decideStrategy($cell)) {
-//                case self::STRATEGY_X:
-//                    return $this->xStrategy->verify($cell);
-//                case self::STRATEGY_Y:
-//                    return $this->yStrategy->verify($cell);
-//            }
-//
-//            return $this->randStrategy->verify($cell);
-//        }
-//
-//        return [];
     }
 }

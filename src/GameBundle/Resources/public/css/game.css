@@ -21,33 +21,33 @@
     border-bottom: 1px solid #000;
 }
 
-.battlefield-cell[data-state="0"]:hover {
+.battlefield-cell[data-flags="0"]:hover {
     background: rgba(225, 255, 255, 0.75);
     cursor: pointer;
 }
 
-.history-element[data-state="0"],
-.battlefield-cell[data-state="0"] {
+.history-element[data-flags="0"],
+.battlefield-cell[data-flags="0"] {
     background: #e1ffff;
 }
 
-.history-element[data-state="1"],
-.battlefield-cell[data-state="1"] {
+.history-element[data-flags="1"],
+.battlefield-cell[data-flags="1"] {
     background: #1e5799;
 }
 
-.history-element[data-state="2"],
-.battlefield-cell[data-state="2"] {
+.history-element[data-flags="2"],
+.battlefield-cell[data-flags="2"] {
     background: #000;
 }
 
-.history-element[data-state="3"],
-.battlefield-cell[data-state="3"] {
+.history-element[data-flags="3"],
+.battlefield-cell[data-flags="3"] {
     background: #6d0019;
 }
 
-.history-element[data-state="5"],
-.battlefield-cell[data-state="5"] {
+.history-element[data-flags="5"],
+.battlefield-cell[data-flags="5"] {
     background: #556980;
 }
 
@@ -60,15 +60,15 @@
     display: inline-block;
 }
 
-.player-area .battlefield-cell:not([data-state="undefined"]):hover {
+.player-area .battlefield-cell:not([data-flags="undefined"]):hover {
     cursor: no-drop;
 }
 
-.player-area[data-player-flag="1"] .battlefield-cell:not([data-state="1"]):not([data-state="3"]):not([data-state="4"]):hover {
+.player-area[data-player-flag="1"] .battlefield-cell:not([data-flags="1"]):not([data-flags="3"]):not([data-flags="4"]):hover {
     cursor: pointer;
 }
 
-.player-field div[data-state="undefined"] {
+.player-field div[data-flags="undefined"] {
     opacity: 0.75;
 }
 
