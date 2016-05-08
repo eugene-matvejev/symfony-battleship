@@ -25,7 +25,6 @@
     "require": {
         "incenteev/composer-parameter-handler": "^2.1",
         "php": ">=7.0.1",
-        "ext-apcu": "*",
         "doctrine/doctrine-bundle": "~1.6",
         "doctrine/doctrine-migrations-bundle": "~1.1",
         "doctrine/orm": "~2.5",
@@ -63,13 +62,15 @@
         ],
         "compile": [
             "rm web/app_dev.php",
-            "php bin/console assets:install"
+            "php bin/console assets:install",
+            "php bin/console doctrine:schema:drop --full-database --force"
         ]
     },
     "config": {
         "platform": {
             "php": "7.0.1"
         },
+        "optimize-autoloader": true,
         "bin-dir": "bin/"
     },
     "extra": {
