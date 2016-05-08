@@ -7,13 +7,15 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @since 11.3
+ * @since 15.2
  */
-abstract class ContainerAwareTestSuite extends ClientResponsesAssertionSuite
+abstract class IntegrationTestSuite extends WebTestCase
 {
     /**
      * @var ContainerInterface
@@ -103,27 +105,32 @@ abstract class ContainerAwareTestSuite extends ClientResponsesAssertionSuite
         }
     }
 
-//
-//    /**
-//     * Gets the display returned by the last execution of the command.
-//     *
-//     * @param ContainerAwareCommand $command
-//     *
-//     * @return string The display of command execution result
-//     */
-//    protected function executeCommand(ContainerAwareCommand $command)
-//    {
-//        $console = $this->getConsoleApp();
-//        $commandName = $command->getName();
-//        if (!$console->has($commandName)) {
-//            $this->getConsoleApp()->add($command);
-//        }
-//        $commandTester = new CommandTester($console->find($commandName));
-//        $commandTester->execute(['command' => $commandName]);
-//
-//        return $commandTester->getDisplay();
-//    }
-//
+    public function assertSuccessfulResponse(Response $response)
+    {
+        $this->assertGreaterThanOrEqual(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertLessThan(Response::HTTP_MULTIPLE_CHOICES, $response->getStatusCode());
+    }
+
+    public function assertSuccessfulJSONResponse(Response $response)
+    {
+        $this->assertSuccessfulResponse($response);
+
+        $this->assertJson($response->getContent());
+    }
+
+    public function assertSuccessfulXMLResponse(Response $response)
+    {
+        $this->assertSuccessfulResponse($response);
+
+        $xmlElement = simplexml_load_string($response->getContent(), 'SimpleXMLElement', LIBXML_NOCDATA);
+        $this->assertInstanceOf(\SimpleXMLElement::class, $xmlElement);
+    }
+
+    public function assertUnsuccessfulResponse(Response $response)
+    {
+        $this->assertGreaterThanOrEqual(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->assertLessThanOrEqual(Response::HTTP_NETWORK_AUTHENTICATION_REQUIRED, $response->getStatusCode());
+    }
 
     /**
      * invokes non-public method of the class and returns invoke result as well as throws Exception if it happen.

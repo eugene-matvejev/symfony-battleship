@@ -7,13 +7,13 @@ use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Model\PlayerModel;
 use EM\GameBundle\Service\GameSystem\GameProcessor;
-use EM\Tests\Environment\ContainerAwareTestSuite;
+use EM\Tests\Environment\IntegrationTestSuite;
 use EM\Tests\Environment\MockFactory\Entity\GameResultMockTrait;
 
 /**
  * @see GameProcessor
  */
-class GameProcessorTest extends ContainerAwareTestSuite
+class GameProcessorTest extends IntegrationTestSuite
 {
     use GameResultMockTrait;
     /**

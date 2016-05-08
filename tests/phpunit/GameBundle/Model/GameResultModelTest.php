@@ -5,13 +5,13 @@ namespace EM\Tests\PHPUnit\GameBundle\Model;
 use EM\GameBundle\Entity\GameResult;
 use EM\GameBundle\Model\GameResultModel;
 use EM\GameBundle\Response\GameResultsResponse;
-use EM\Tests\Environment\ContainerAwareTestSuite;
+use EM\Tests\Environment\IntegrationTestSuite;
 use EM\Tests\Environment\MockFactory\Entity\GameResultMockTrait;
 
 /**
  * @see GameResultModel
  */
-class GameResultModelTest extends ContainerAwareTestSuite
+class GameResultModelTest extends IntegrationTestSuite
 {
     use GameResultMockTrait;
     /**
