@@ -7,6 +7,8 @@ __TDD tests__ [![Build Status](https://travis-ci.org/eugene-matvejev/battleship-
 
 __BDD tests__ [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master)  / *Behat*
 
+__DEMO__ : https://battleship-game-api.herokuapp.com/
+
 # Battleship Game API
 ##### THIS IS SPARE TIME PROJECT, WORK IN PROGRESS! HIGHLY EXPERIMENTAL!!!
 #### Project purpose:
