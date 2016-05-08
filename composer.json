@@ -45,7 +45,6 @@
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "php bin/console doctrine:migrations:migrate --no-interaction",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
@@ -54,7 +53,6 @@
         "post-update-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "php bin/console doctrine:migrations:migrate --no-interaction",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
@@ -63,7 +61,8 @@
         "compile": [
             "rm web/app_dev.php",
             "php bin/console assets:install",
-            "php bin/console doctrine:schema:drop --full-database --force"
+            "php bin/console doctrine:schema:drop --full-database --force",
+            "php bin/console doctrine:migrations:migrate --no-interaction"
         ]
     },
     "config": {
