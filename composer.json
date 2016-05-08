@@ -64,7 +64,8 @@
         ],
         "compile": [
             "rm web/app_dev.php",
-            "php bin/console assets:install"
+            "php bin/console assets:install",
+            "php bin/console doctrine:schema:drop --full-database --force"
         ]
     },
     "config": {
