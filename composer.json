@@ -25,7 +25,6 @@
     "require": {
         "incenteev/composer-parameter-handler": "^2.1",
         "php": ">=7.0.1",
-        "ext-intl": "*",
         "ext-apcu": "*",
         "doctrine/doctrine-bundle": "~1.6",
         "doctrine/doctrine-migrations-bundle": "~1.1",
@@ -71,7 +70,6 @@
         "platform": {
             "php": "7.0.1"
         },
-        "optimize-autoloader": true,
         "bin-dir": "bin/"
     },
     "extra": {
