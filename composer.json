@@ -41,16 +41,9 @@
         "phpunit/phpunit": "^5.1"
     },
     "scripts": {
-        "post-install-cmd": [
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "php bin/console doctrine:database:create --if-not-exists",
-            "php bin/console doctrine:migrations:migrate --no-interaction",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
-        ],
-        "post-update-cmd": [
+        "post-install-cmd": "@prepareSymfonyEnvironment",
+        "post-update-cmd": "@prepareSymfonyEnvironment",
+        "prepareSymfonyEnvironment": [
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
             "php bin/console doctrine:database:create --if-not-exists",
             "php bin/console doctrine:migrations:migrate --no-interaction",
