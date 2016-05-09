@@ -8,6 +8,10 @@
     text-align: center;
 }
 
+.battlefield-cell-container {
+    display: flex;
+}
+
 .battlefield-cell-container:not(:first-child):not(:last-child) > .battlefield-cell[data-coordinate]:not(:first-child):not(:last-child) {
     border-top: 1px solid #000;
     border-left: 1px solid #000;
