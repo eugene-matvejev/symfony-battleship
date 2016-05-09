@@ -23,7 +23,7 @@
         { "name": "Eugene Matvejev", "email": "eugene.matvejev@gmail.com" }
     ],
     "require": {
-        "php": ">=7.0.1",
+        "php": "7.0.1 - 7.0.4 || >= 7.0.6",
         "doctrine/doctrine-bundle": "~1.6",
         "doctrine/doctrine-migrations-bundle": "~1.1",
         "doctrine/orm": "~2.5",
@@ -34,7 +34,7 @@
         "jms/serializer-bundle": "^1.1"
     },
     "require-dev": {
-        "composer/composer": "1.0.0-alpha11",
+        "composer/composer": "^1.0",
         "behat/behat": "^3.1",
         "doctrine/doctrine-fixtures-bundle": "^2.3",
         "sensio/generator-bundle": "^3.0",
