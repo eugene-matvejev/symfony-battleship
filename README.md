@@ -31,13 +31,13 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
 
 # software requirements:
  * supported databases:
-  * MySQL => 5.5
+  * MySQL >= 5.5
   * MariaDB >= 9.0
   * PostgreSQL >= 9.3
  * WIP:
   * MongoDB
  * http server: apache/nginx with php >= 7.0.1
- * composer
+ * composer >= 1.0.3
 
 ### key technologies:
  * PHP7 (7.0.1 - 7.0.4 || >= 7.0.6, as 7.0.0 had bug with namespaces and primitive types, 7.0.5 had bugged SPL)
