@@ -83,6 +83,8 @@ abstract class IntegrationTestSuite extends WebTestCase
     }
 
     /**
+     * @coversNothing
+     *
      * @param string $command
      * @param array  $options
      *
