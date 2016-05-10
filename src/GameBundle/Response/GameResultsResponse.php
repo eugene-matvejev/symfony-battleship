@@ -10,7 +10,7 @@ use EM\GameBundle\Entity\GameResult;
 class GameResultsResponse
 {
     const META_INDEX_CURRENT_PAGE = 'currentPage';
-    const META_INDEX_TOTAL_PAGES = 'totalPages';
+    const META_INDEX_TOTAL_PAGES  = 'totalPages';
     /**
      * @var GameResult[]
      */
