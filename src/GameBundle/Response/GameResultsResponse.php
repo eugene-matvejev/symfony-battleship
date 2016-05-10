@@ -10,13 +10,13 @@ use EM\GameBundle\Entity\GameResult;
 class GameResultsResponse
 {
     const META_INDEX_CURRENT_PAGE = 'currentPage';
-    const META_INDEX_TOTAL_PAGES  = 'totalPages';
+    const META_INDEX_TOTAL_PAGES = 'totalPages';
     /**
      * @var GameResult[]
      */
     private $results = [];
     /**
-     * @var string[]
+     * @var int[]
      */
     private $meta = [];
 
@@ -41,14 +41,14 @@ class GameResultsResponse
     }
 
     /**
-     * @return string[]
+     * @return int[]
      */
     public function getMeta() : array
     {
         return $this->meta;
     }
 
-    protected function setMeta(string $key, string $value) : self
+    protected function setMeta(string $key, int $value) : self
     {
         $this->meta[$key] = $value;
 
