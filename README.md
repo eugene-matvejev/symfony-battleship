@@ -30,27 +30,27 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
  * implement behat tests, consider kahlan as well
 
 # software requirements:
+ * Composer >= 1.0.3
  * supported databases:
   * MySQL >= 5.5
   * MariaDB >= 9.0
   * PostgreSQL >= 9.3
  * WIP:
   * MongoDB
- * http server: apache/nginx with php >= 7.0.1
- * composer >= 1.0.3
+ * http server: apache/nginx with PHP7
 
 ### key technologies:
  * PHP7 (7.0.1 - 7.0.4 || >= 7.0.6, as 7.0.0 had bug with namespaces and primitive types, 7.0.5 had bugged SPL)
  * Symfony Framework 3 (SF3)
- * Doctrine 2
- * Doctrine Fixtures
+ * Doctrine 2 [with Fixtures]
  * PHPUnit 5
  * Behat 3
  * Composer
  * JMS Serializer
  * Twig
- * EMCAScript6 (JavaScript ES6)
+ * JavaScript ES6 (ECMAScript6)
  * CSS3
+ * jQuery 2
  * Twitter Bootstrap 3
 
 # How to install
