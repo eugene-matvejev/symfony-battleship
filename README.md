@@ -39,6 +39,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
   * MongoDB
  * http server: apache/nginx with PHP7
 
+# techonology stack:
 ### key technologies:
  * PHP7 (7.0.1 - 7.0.4 || >= 7.0.6, as 7.0.0 had bug with namespaces and primitive types, 7.0.5 had bugged SPL)
  * Symfony Framework 3 (SF3)
@@ -53,21 +54,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
  * jQuery 2
  * Twitter Bootstrap 3
 
-
-# How to install
- * copy *app/config/parameters.yml.dist* to *app/config/parameters.yml* and amend database settings
- * *composer install* __# to fetch depencies and initial commands__
-  * __NOTE!__ composer is configured to create databases if they not exists and run apply migrations__
- * __optional!__ *composer dump-autoload --optimize* __# to generate "hash-map" autoloader__
-  * __NOTE!__ production uses __APC autoloader__
- * __optional!__ *php bin/console assets:install* __# to dump assets as hard copies__
-  * __NOTE!__ by default assets are installed as symlinks
- * __optional!__ *php bin/console doctrine:fixtures:load --env=test* __# for testing purposes only__
-
-### How to execute tests
- * *phpunit -c test* or *php bin/phpunit -c tests* (fixtures will wipe and populate database before execute tests)
-
-### used patterns
+### used patterns:
  * Front Controller
  * MVC
  * ORM
@@ -82,16 +69,35 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
  * Event Dispatcher
  * Dependency Injection
 
-### github usage:
- * semantic versioning with pull-requests into the master branch
+### PHP-FIG:
+ * PSR-2
+ * PSR-4
 
-### used standarts:
- * PHP-FIG:
-  * ../PSR-2
-  * ../PSR-4
+# workflow:
+ * new functionality is added into master only by pull requests from feature branches
+ * using follow semantic versioning, as result of each PR is ready-to-use source to reflect Continious Delivery approach
+ * each pull request/push trigger various CI engines such as Travis, Circle, Scrutinizer, Sensiolabs Insight, CodeCov, Jenkins, SonarQube
+ * gitflow:
+  * master branch: latest stable
+  * heroku branch: reflects currect deployed app at heroku (prototype of Continuous Delivery and Continuous Deployment)
+  * prototype!_*: prototype branches which contains new idea (merge of prototype branch is new major version release)
+  * x.x.x: feature branches
 
- * apache virtual host config:
- ```
+# How to install
+ * copy *app/config/parameters.yml.dist* to *app/config/parameters.yml* and amend database settings
+ * *composer install* __# to fetch depencies and initial commands__
+  * __NOTE!__ composer is configured to create databases if they not exists and run apply migrations__
+ * __optional!__ *composer dump-autoload --optimize* __# to generate "hash-map" autoloader__
+  * __NOTE!__ production uses __APC autoloader__
+ * __optional!__ *php bin/console assets:install* __# to dump assets as hard copies__
+  * __NOTE!__ by default assets are installed as symlinks
+ * __optional!__ *php bin/console doctrine:fixtures:load --env=test* __# for testing purposes only__
+
+### How to execute tests
+ * *phpunit -c test* or *php bin/phpunit -c tests* (fixtures will wipe and populate database before execute tests)
+
+### apache virtual host config:
+```
 <VirtualHost 127.0.0.1:80 ::1:80>
     DocumentRoot "%PROJECT_ROOT_DIRECTORY%/web"
     ErrorLog "%PROJECT_ROOT_DIRECTORY%/var/logs/apache_log"
@@ -175,4 +181,4 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
         </IfModule>
     </Directory>
 </VirtualHost>
- ```
+```
