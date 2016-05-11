@@ -21,7 +21,6 @@ class GameResultModelTest extends IntegrationTestSuite
 
     protected function setUp()
     {
-        parent::setUp();
         $this->gameResultModel = static::$container->get('battleship.game.services.game.result.model');
     }
 

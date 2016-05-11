@@ -1,8 +1,5 @@
 Feature: API: Game Results
 
-  Background:
-    Given setup context
-
   @api
   Scenario Outline:
     Given request API "<routeAlias>" route via "<routeMethod>" with "<routeParam>" "<paramValue>"

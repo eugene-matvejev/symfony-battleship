@@ -27,7 +27,6 @@ class GameProcessorTest extends IntegrationTestSuite
 
     protected function setUp()
     {
-        parent::setUp();
         $this->gameProcessor = static::$container->get('battleship.game.services.game.processor');
         $this->playerModel = static::$container->get('battleship.game.services.player.model');
     }
@@ -43,7 +42,7 @@ class GameProcessorTest extends IntegrationTestSuite
         $game = $this->getGameMock();
         $game->getBattlefields()[0]->setPlayer($this->getAIControlledPlayerMock(''));
 
-        $this->invokeNonPublicMethod($this->gameProcessor, 'processCPUBattlefieldsInitiation', [$game]);
+        $this->invokeMethod($this->gameProcessor, 'processCPUBattlefieldsInitiation', [$game]);
 
         foreach ($game->getBattlefields() as $battlefield) {
             if (PlayerModel::isAIControlled($battlefield->getPlayer())) {
