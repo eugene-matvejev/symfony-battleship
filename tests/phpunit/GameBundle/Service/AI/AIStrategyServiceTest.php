@@ -20,7 +20,6 @@ class AIStrategyServiceTest extends IntegrationTestSuite
 
     protected function setUp()
     {
-        parent::setUp();
         $this->strategyService = static::$container->get('battleship.game.services.ai.strategy.service');
     }
 

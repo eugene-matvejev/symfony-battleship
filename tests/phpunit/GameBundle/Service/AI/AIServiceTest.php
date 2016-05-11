@@ -21,7 +21,6 @@ class AIServiceTest extends IntegrationTestSuite
 
     protected function setUp()
     {
-        parent::setUp();
         $this->ai = static::$container->get('battleship.game.services.ai.core.service');
     }
 
@@ -34,7 +33,7 @@ class AIServiceTest extends IntegrationTestSuite
     public function pickCellToAttackExpectedException()
     {
         $cells = [];
-        $this->invokeNonPublicMethod($this->ai, 'pickCellToAttack', [$cells]);
+        $this->invokeMethod($this->ai, 'pickCellToAttack', [$cells]);
     }
 
     /**
@@ -48,7 +47,7 @@ class AIServiceTest extends IntegrationTestSuite
             $this->getCellMock('A2')
         ];
         /** @var Cell $cell */
-        $cell = $this->invokeNonPublicMethod($this->ai, 'pickCellToAttack', [$cells]);
+        $cell = $this->invokeMethod($this->ai, 'pickCellToAttack', [$cells]);
         $this->assertInstanceOf(Cell::class, $cell);
         $this->assertTrue($cell->hasFlag(CellModel::FLAG_DEAD));
     }
@@ -192,7 +191,7 @@ class AIServiceTest extends IntegrationTestSuite
     private function invokeAttackCellMethod(int $cellMask, int $expectedMask)
     {
         $cell = $this->getCellMock('A1', $cellMask);
-        $returnedCell = $this->invokeNonPublicMethod($this->ai, 'attackCell', [$cell]);
+        $returnedCell = $this->invokeMethod($this->ai, 'attackCell', [$cell]);
 
         $this->assertSame($cell, $returnedCell);
         $this->assertEquals($expectedMask, $cell->getFlags());

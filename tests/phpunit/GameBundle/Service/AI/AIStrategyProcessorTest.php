@@ -23,7 +23,6 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
 
     protected function setUp()
     {
-        parent::setUp();
         $this->strategyProcessor = static::$container->get('battleship.game.services.ai.strategy.processor');
     }
 
@@ -98,7 +97,7 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
 
     private function invokeStrategyMethod(array $args) : array
     {
-        return $this->invokeNonPublicMethod($this->strategyProcessor, 'processCoordinates', $args);
+        return $this->invokeMethod($this->strategyProcessor, 'processCoordinates', $args);
     }
 
     /**
