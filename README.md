@@ -12,44 +12,41 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
 # Battleship Game API
 ##### THIS IS SPARE TIME PROJECT, WORK IN PROGRESS! HIGHLY EXPERIMENTAL!!!
 #### project purpose:
- * try out 'cutting edge' technologies and approaches such as PHP7, SF3, ECMA6
- * simulate database loading e.g. upto 500 insertions/request
+ * try out "cutting edge" technologies and approaches such as PHP7, SF3, ES6 and Continuous Integration/Deployment
+ * simulate database loading e.g. up to 500 transactions per request
  * deliver preview about my technical knowledge before the job interview
 
 #### game cheat-code:
- * CPU have only one-cell ship which is hardcoded at __B2__ cell
-  * if you will hit __B2__ cell - you will instantly win
-   * purpose: to easier manual testing (as the project is far from 'finished' stage, as I am keep polishing it)
+* purpose: make manual testing easier (as the project is far from final stage, I keep polishing it)
+ * AI player have only one ship, which is one-cell ship which is located at __B2__ cell
+  * if you will hit __B2__ cell - you will win
 
 #### future plans:
- * deliver back-end as OpenAPI using SF3, PHP7, Doctrine2 with various databases
-  * try to create it later as well on Silex
- * separate front-end into separate repository and rewrite it using AngularJS 2
-  * front-end already is done as single-page-application (SPA)
- * make simple and flexible database support e.g. MariaDB, MySQL, MongoDB
- * implement behat tests, consider kahlan as well
-
+ * deliver back-end as RESTful API using SF3, PHP7, Doctrine2 with various database engines support
+ * separate front-end into separate repository and rewrite it using React or AngularJS 2
+  * front-end is already behave as single-page-application [SPA] 
+ 
 # software requirements
- * Composer >= 1.0.3
- * supported databases:
+ * supported database engines:
   * MySQL >= 5.5
   * MariaDB >= 9.0
   * PostgreSQL >= 9.3
  * WIP:
   * MongoDB
+ * Composer >= 1.0.3
  * http server: apache/nginx with PHP7
 
-# techonology stack
+# technology stack
 ### key technologies:
- * PHP7 (7.0.0 - 7.0.4 || >= 7.0.6, as 7.0.5 had bugged SPL)
- * Symfony Framework 3 (SF3)
+ * PHP7 (7.0.0 - 7.0.4 || >= 7.0.6 [7.0.5 had bugged SPL])
+ * Symfony Framework 3 [SF3]
  * Doctrine 2 [with Fixtures]
  * PHPUnit 5
  * Behat 3
  * Composer
  * JMS Serializer
  * Twig
- * JavaScript ES6 (ECMAScript6)
+ * JavaScript ES6 [ECMAScript6]
  * CSS3
  * jQuery 2
  * Twitter Bootstrap 3
@@ -74,19 +71,19 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
  * PSR-4
 
 # workflow
- * new functionality is added into master only by pull requests from feature branches
- * using follow semantic versioning, as result of each PR is ready-to-use source to reflect Continious Delivery approach
+ * new functionality is added into master branch only by pull requests from feature branches
+ * result of each pull request is ready-to-use release, using Continuous Delivery principles, follow semantic visioning
  * each pull request/push trigger various CI engines such as Travis, Circle, Scrutinizer, Sensiolabs Insight, CodeCov, Jenkins, SonarQube
  * __gitflow__:
-  * master branch: latest stable
-  * heroku branch: reflects currect deployed app at heroku (prototype of Continuous Delivery and Continuous Deployment)
-  * prototype!_*: prototype branches which contains new idea (merge of prototype branch is new major version release)
-  * x.x.x: feature branches
+  * master branch: contains release-ready source
+  * heroku branch: reflects current deployed app at heroku (prototype of Continuous Delivery and Continuous Deployment)
+  * prototype!_* branches contains new idea [merged pull request of prototype branch is always next *major* version release]
+  * %major%.%minor%.%patch%: feature branches [example: 15.2.3]
 
 # how to install
  * copy *app/config/parameters.yml.dist* to *app/config/parameters.yml* and amend database settings
- * *composer install* __# to fetch depencies and initial commands__
-  * __NOTE!__ composer is configured to create databases if they not exists and run apply migrations__
+ * *composer install* __# to fetch dependencies and initial commands__
+  * __NOTE!__ composer is configured to create databases if they not exists and run apply migrations using production env.__
  * __optional!__ *composer dump-autoload --optimize* __# to generate "hash-map" autoloader__
   * __NOTE!__ production uses __APC autoloader__
  * __optional!__ *php bin/console assets:install* __# to dump assets as hard copies__
@@ -94,7 +91,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
  * __optional!__ *php bin/console doctrine:fixtures:load --env=test* __# for testing purposes only__
 
 ### how to execute tests
- * *phpunit -c test* or *php bin/phpunit -c tests* (fixtures will wipe and populate database before execute tests)
+ * *phpunit -c test* or *php bin/phpunit -c tests* (database will be wiped, and seeded again before test execution)
 
 ### apache virtual host config:
 ```
