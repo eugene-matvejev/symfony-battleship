@@ -53,6 +53,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
  * jQuery 2
  * Twitter Bootstrap 3
 
+
 # How to install
  * copy *app/config/parameters.yml.dist* to *app/config/parameters.yml* and amend database settings
  * *composer install* __# to fetch depencies and initial commands__
@@ -62,6 +63,33 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
  * __optional!__ *php bin/console assets:install* __# to dump assets as hard copies__
   * __NOTE!__ by default assets are installed as symlinks
  * __optional!__ *php bin/console doctrine:fixtures:load --env=test* __# for testing purposes only__
+
+### How to execute tests
+ * *phpunit -c test* or *php bin/phpunit -c tests* (fixtures will wipe and populate database before execute tests)
+
+### used patterns
+ * Front Controller
+ * MVC
+ * ORM
+ * Data Mapper
+ * Builder
+ * Strategy
+ * Factory
+ * Singleton
+ * Delegation
+ * Registry
+ * Service Locator
+ * Event Dispatcher
+ * Dependency Injection
+
+### github usage:
+ * semantic versioning with pull-requests into the master branch
+
+### used standarts:
+ * PHP-FIG:
+  * ../PSR-2
+  * ../PSR-4
+
  * apache virtual host config:
  ```
 <VirtualHost 127.0.0.1:80 ::1:80>
@@ -148,29 +176,3 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
     </Directory>
 </VirtualHost>
  ```
-
-### How to execute tests
- * *phpunit -c test* or *php bin/phpunit -c tests* (fixtures will wipe and populate database before execute tests)
-
-### used patterns
- * Front Controller
- * MVC
- * ORM
- * Data Mapper
- * Builder
- * Strategy
- * Factory
- * Singleton
- * Delegation
- * Registry
- * Service Locator
- * Event Dispatcher
- * Dependency Injection
-
-### github usage:
- * semantic versioning with pull-requests into the master branch
-
-### used standarts:
- * PHP-FIG:
-  * ../PSR-2
-  * ../PSR-4
