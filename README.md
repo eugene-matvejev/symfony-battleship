@@ -83,7 +83,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
   * prototype!_*: prototype branches which contains new idea (merge of prototype branch is new major version release)
   * x.x.x: feature branches
 
-# How to install
+# how to install
  * copy *app/config/parameters.yml.dist* to *app/config/parameters.yml* and amend database settings
  * *composer install* __# to fetch depencies and initial commands__
   * __NOTE!__ composer is configured to create databases if they not exists and run apply migrations__
@@ -93,7 +93,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
   * __NOTE!__ by default assets are installed as symlinks
  * __optional!__ *php bin/console doctrine:fixtures:load --env=test* __# for testing purposes only__
 
-### How to execute tests
+### how to execute tests
  * *phpunit -c test* or *php bin/phpunit -c tests* (fixtures will wipe and populate database before execute tests)
 
 ### apache virtual host config:
