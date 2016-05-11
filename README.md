@@ -16,12 +16,12 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
  * simulate database loading e.g. upto 500 insertions/request
  * deliver preview about my technical knowledge before the job interview
 
-### game cheat-code:
+#### game cheat-code:
  * CPU have only one-cell ship which is hardcoded at __B2__ cell
   * if you will hit __B2__ cell - you will instantly win
    * purpose: to easier manual testing (as the project is far from 'finished' stage, as I keep trying polish it)
 
-### future plans:
+#### future plans:
  * deliver back-end as OpenAPI using SF3, PHP7, Doctrine2 with various databases
   * try to create it later as well on Silex
  * separate front-end into separate repository and rewrite it using AngularJS 2
@@ -29,7 +29,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
  * make simple and flexible database support e.g. MariaDB, MySQL, MongoDB
  * implement behat tests, consider kahlan as well
 
-# software requirements:
+# software requirements
  * Composer >= 1.0.3
  * supported databases:
   * MySQL >= 5.5
@@ -39,7 +39,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
   * MongoDB
  * http server: apache/nginx with PHP7
 
-# techonology stack:
+# techonology stack
 ### key technologies:
  * PHP7 (7.0.1 - 7.0.4 || >= 7.0.6, as 7.0.0 had bug with namespaces and primitive types, 7.0.5 had bugged SPL)
  * Symfony Framework 3 (SF3)
@@ -73,11 +73,11 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
  * PSR-2
  * PSR-4
 
-# workflow:
+# workflow
  * new functionality is added into master only by pull requests from feature branches
  * using follow semantic versioning, as result of each PR is ready-to-use source to reflect Continious Delivery approach
  * each pull request/push trigger various CI engines such as Travis, Circle, Scrutinizer, Sensiolabs Insight, CodeCov, Jenkins, SonarQube
- * gitflow:
+ * __gitflow__:
   * master branch: latest stable
   * heroku branch: reflects currect deployed app at heroku (prototype of Continuous Delivery and Continuous Deployment)
   * prototype!_*: prototype branches which contains new idea (merge of prototype branch is new major version release)
