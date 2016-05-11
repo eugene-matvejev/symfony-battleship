@@ -16,7 +16,7 @@ class GameResultsResponse
      */
     private $results = [];
     /**
-     * @var string[]
+     * @var int[]
      */
     private $meta = [];
 
@@ -41,14 +41,14 @@ class GameResultsResponse
     }
 
     /**
-     * @return string[]
+     * @return int[]
      */
     public function getMeta() : array
     {
         return $this->meta;
     }
 
-    protected function setMeta(string $key, string $value) : self
+    protected function setMeta(string $key, int $value) : self
     {
         $this->meta[$key] = $value;
 

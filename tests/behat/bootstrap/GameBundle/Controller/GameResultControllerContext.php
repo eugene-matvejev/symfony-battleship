@@ -20,7 +20,7 @@ class GameResultControllerContext extends AbstractContainerAwareContext implemen
      */
     public function observeResultsInPage(int $page, int $expectedAmount)
     {
-        $response = json_decode($this->_client->getResponse()->getContent());
+        $response = json_decode(self::$_client->getResponse()->getContent());
 
         $this->assertInstanceOf(\stdClass::class, $response->meta);
         $this->assertEquals($page, $response->meta->currentPage);
@@ -32,6 +32,6 @@ class GameResultControllerContext extends AbstractContainerAwareContext implemen
      */
     public function observeJsonSuccessfulResponse()
     {
-        $this->assertSuccessfulJSONResponse($this->_client->getResponse());
+        $this->assertSuccessfulJSONResponse(self::$_client->getResponse());
     }
 }

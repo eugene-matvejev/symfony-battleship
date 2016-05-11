@@ -14,7 +14,7 @@ abstract class AbstractContainerAwareContext extends IntegrationTestSuite implem
     /**
      * @var Client
      */
-    protected $_client;
+    protected static $_client;
 
     /**
      * @Given request API :route route via :method with :paramKey :paramValue
@@ -30,7 +30,7 @@ abstract class AbstractContainerAwareContext extends IntegrationTestSuite implem
         if (!empty($paramKey) && !empty($paramValue)) {
             $routeParams[$paramKey] = $paramValue;
         }
-        $this->_client->request(
+        static::$_client->request(
             $method,
             static::$router->generate($route, $routeParams),
             [],
@@ -44,7 +44,7 @@ abstract class AbstractContainerAwareContext extends IntegrationTestSuite implem
      */
     public function observeSuccessfulResponse()
     {
-        $this->assertSuccessfulResponse($this->_client->getResponse());
+        $this->assertSuccessfulResponse(static::$_client->getResponse());
     }
 
     /**
@@ -52,17 +52,17 @@ abstract class AbstractContainerAwareContext extends IntegrationTestSuite implem
      */
     public function observeUnsuccessfulResponse()
     {
-        $this->assertUnsuccessfulResponse($this->_client->getResponse());
+        $this->assertUnsuccessfulResponse(static::$_client->getResponse());
     }
 
     /**
-     * @Given setup context
+     * @BeforeScenario
      */
-    public function setupContext()
+    public static function beforeEachScenario()
     {
-        parent::setUp();
+        parent::setUpBeforeClass();
 
-        $this->_client = clone static::$client;
+        static::$_client = clone static::$client;
     }
 
     /**
@@ -80,7 +80,7 @@ abstract class AbstractContainerAwareContext extends IntegrationTestSuite implem
         $finder->name('*Kernel.php')->depth(0)->in(__DIR__ . '/../../../app');
         $results = iterator_to_array($finder);
         if (!count($results)) {
-            throw new \RuntimeException('Either set KERNEL_DIR or user default Symfony Structure');
+            throw new \RuntimeException('Either set KERNEL_DIR or use default Symfony structure');
         }
 
         /**
@@ -94,5 +94,3 @@ abstract class AbstractContainerAwareContext extends IntegrationTestSuite implem
         return $class;
     }
 }
-
-

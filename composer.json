@@ -20,43 +20,46 @@
         }
     },
     "authors": [
-        { "name": "Eugene Matvejev", "email": "eugene.matvejev@gmail.com" }
+        {
+            "name": "Eugene Matvejev",
+            "email": "eugene.matvejev@gmail.com"
+        }
     ],
     "require": {
-        "incenteev/composer-parameter-handler": "^2.1",
-        "php": ">=7.0.1",
+        "php": "7.0.1 - 7.0.4 || >= 7.0.6",
         "doctrine/doctrine-bundle": "~1.6",
         "doctrine/doctrine-migrations-bundle": "~1.1",
         "doctrine/orm": "~2.5",
+        "incenteev/composer-parameter-handler": "^2.1",
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0",
         "symfony/symfony": "~3.0.3",
         "symfony/monolog-bundle": "~2.8",
-        "jms/serializer-bundle": "^1.1"
+        "jms/serializer-bundle": "^1.1",
+        "components/jquery": "^2.2",
+        "twitter/bootstrap": "^3.3"
     },
     "require-dev": {
-        "composer/composer": "1.0.0-alpha11",
+        "composer/composer": "^1.0",
         "behat/behat": "^3.1",
         "doctrine/doctrine-fixtures-bundle": "^2.3",
         "sensio/generator-bundle": "^3.0",
         "phpunit/phpunit": "^5.1"
     },
     "scripts": {
-        "post-install-cmd": [
+        "post-install-cmd": "@prepareEnvironment",
+        "post-update-cmd": "@prepareEnvironment",
+        "prepareEnvironment": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
-        ],
-        "post-update-cmd": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget",
+            "mkdir -p web/bundles/vendor/jquery",
+            "cp vendor/components/jquery/jquery.min.js web/bundles/vendor/jquery/jquery.min.js",
+            "mkdir -p web/bundles/vendor/twitter-bootstrap",
+            "cp -r vendor/twitter/bootstrap/dist/* web/bundles/vendor/twitter-bootstrap"
         ],
         "compile": [
             "rm web/app_dev.php",
@@ -66,9 +69,6 @@
         ]
     },
     "config": {
-        "platform": {
-            "php": "7.0.1"
-        },
         "optimize-autoloader": true,
         "bin-dir": "bin/"
     },

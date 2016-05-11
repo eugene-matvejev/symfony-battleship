@@ -44,65 +44,57 @@ abstract class IntegrationTestSuite extends WebTestCase
     /**
      * @var bool
      */
-    protected static $setUp;
+    protected static $initiated;
 
     /**
      * @coversNothing
      */
-    protected function setUp()
+    public static function setUpBeforeClass()
     {
-        if (null === static::$setUp) {
-            static::$client = static::createClient();
+        if (null !== static::$initiated) {
+            return;
+        }
 
-            static::$container = static::$kernel->getContainer();
-            static::$console = new Application(static::$kernel);
-            static::$console->setAutoExit(false);
+        static::$client = static::createClient();
 
-            static::$router = static::$container->get('router');
+        static::$container = static::$kernel->getContainer();
+        static::$console = new Application(static::$kernel);
+        static::$console->setAutoExit(false);
 
-            static::$doctrine = static::$container->get('doctrine');
-            static::$om = static::$doctrine->getManager();
+        static::$router = static::$container->get('router');
 
-            $commands = [
-                /** reset test database */
-                'doctrine:database:create'    => ['--if-not-exists' => true],
-                /** PostgreSQL have some limitations, that is why not simple drop database */
-                'doctrine:schema:drop'        => ['--full-database' => true, '--force' => true],
-                /** keep database schema up-to-date */
-                'doctrine:migrations:migrate' => [],
-                /** seed database with core data */
-                'doctrine:fixtures:load'      => ['--append' => true]
-            ];
+        static::$doctrine = static::$container->get('doctrine');
+        static::$om = static::$doctrine->getManager();
 
-            foreach ($commands as $command => $args) {
-                $this->runConsoleCommand($command, $args);
+        $commands = [
+            /** reset test database */
+            'doctrine:database:create'    => ['--if-not-exists' => true],
+            /** PostgreSQL have some limitations, that is why not simple drop database */
+            'doctrine:schema:drop'        => ['--full-database' => true, '--force' => true],
+            /** keep database schema up-to-date */
+            'doctrine:migrations:migrate' => [],
+            /** seed database with core data */
+            'doctrine:fixtures:load'      => ['--append' => true]
+        ];
+
+        foreach ($commands as $command => $args) {
+            /** apply common commands options */
+            $args['--env'] = 'test';
+            $args['--quiet'] = true;
+            $args['--no-interaction'] = true;
+            $args['command'] = $command;
+            try {
+                static::$console->setCatchExceptions(false);
+                static::$console->run(new ArrayInput($args));
+            } catch (\Exception $e) {
+                echo PHP_EOL . $e->getMessage() . PHP_EOL;
+                echo PHP_EOL . $e->getTraceAsString() . PHP_EOL;
+
+                throw new \Exception();
             }
-
-            static::$setUp = true;
         }
-    }
 
-    /**
-     * @param string $command
-     * @param array  $options
-     *
-     * @throws \Exception
-     */
-    protected function runConsoleCommand($command, array $options = [])
-    {
-        $options['--env'] = 'test';
-        $options['--no-interaction'] = true;
-        $options['--quiet'] = true;
-        $options = array_merge($options, ['command' => $command]);
-        try {
-            static::$console->setCatchExceptions(false);
-            static::$console->run(new ArrayInput($options));
-        } catch (\Exception $e) {
-            echo PHP_EOL . $e->getMessage() . PHP_EOL;
-            echo PHP_EOL . $e->getTraceAsString() . PHP_EOL;
-
-            throw new \Exception();
-        }
+        static::$initiated = true;
     }
 
     public function assertSuccessfulResponse(Response $response)
@@ -133,7 +125,9 @@ abstract class IntegrationTestSuite extends WebTestCase
     }
 
     /**
-     * invokes non-public method of the class and returns invoke result as well as throws Exception if it happen.
+     * able to invoke any non-static of object and return the result and throws exceptions if so
+     *
+     * useful to used to invoke non-public method of the class
      *
      * @param mixed  $object
      * @param string $methodName
@@ -142,7 +136,7 @@ abstract class IntegrationTestSuite extends WebTestCase
      * @return mixed
      * @throws \Exception
      */
-    protected function invokeNonPublicMethod($object, string $methodName, array $methodArguments = [])
+    protected function invokeMethod($object, string $methodName, array $methodArguments = [])
     {
         $method = (new \ReflectionClass(get_class($object)))->getMethod($methodName);
         $method->setAccessible(true);
