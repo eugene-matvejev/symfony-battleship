@@ -11,17 +11,17 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
 
 # Battleship Game API
 ##### THIS IS SPARE TIME PROJECT, WORK IN PROGRESS! HIGHLY EXPERIMENTAL!!!
-#### Project purpose:
- * try 'cutting edge' technologies and approaches such as PHP7, SF3, ECMA6
+#### project purpose:
+ * try out 'cutting edge' technologies and approaches such as PHP7, SF3, ECMA6
  * simulate database loading e.g. upto 500 insertions/request
  * deliver preview about my technical knowledge before the job interview
 
-### game cheat-code:
+#### game cheat-code:
  * CPU have only one-cell ship which is hardcoded at __B2__ cell
   * if you will hit __B2__ cell - you will instantly win
-   * purpose: to easier manual testing (as the project is far from 'finished' stage, as I keep trying polish it)
+   * purpose: to easier manual testing (as the project is far from 'finished' stage, as I am keep polishing it)
 
-### future plans:
+#### future plans:
  * deliver back-end as OpenAPI using SF3, PHP7, Doctrine2 with various databases
   * try to create it later as well on Silex
  * separate front-end into separate repository and rewrite it using AngularJS 2
@@ -29,31 +29,61 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
  * make simple and flexible database support e.g. MariaDB, MySQL, MongoDB
  * implement behat tests, consider kahlan as well
 
-# software requirements:
+# software requirements
+ * Composer >= 1.0.3
  * supported databases:
-  * MySQL => 5.5
+  * MySQL >= 5.5
   * MariaDB >= 9.0
   * PostgreSQL >= 9.3
  * WIP:
   * MongoDB
- * http server: apache/nginx with php >= 7.0.1
- * composer
+ * http server: apache/nginx with PHP7
 
+# techonology stack
 ### key technologies:
- * PHP7 (7.0.1, as 7.0.0 had bugged primitive types)
+ * PHP7 (7.0.1 - 7.0.4 || >= 7.0.6, as 7.0.0 had bug with namespaces and primitive types, 7.0.5 had bugged SPL)
  * Symfony Framework 3 (SF3)
- * Doctrine 2
- * Doctrine Fixtures
+ * Doctrine 2 [with Fixtures]
  * PHPUnit 5
  * Behat 3
  * Composer
  * JMS Serializer
  * Twig
- * EMCAScript6 (JavaScript ES6)
+ * JavaScript ES6 (ECMAScript6)
  * CSS3
+ * jQuery 2
  * Twitter Bootstrap 3
 
-# How to install
+### used patterns:
+ * Front Controller
+ * MVC
+ * ORM
+ * Data Mapper
+ * Builder
+ * Strategy
+ * Factory
+ * Singleton
+ * Delegation
+ * Registry
+ * Service Locator
+ * Event Dispatcher
+ * Dependency Injection
+
+### PHP-FIG:
+ * PSR-2
+ * PSR-4
+
+# workflow
+ * new functionality is added into master only by pull requests from feature branches
+ * using follow semantic versioning, as result of each PR is ready-to-use source to reflect Continious Delivery approach
+ * each pull request/push trigger various CI engines such as Travis, Circle, Scrutinizer, Sensiolabs Insight, CodeCov, Jenkins, SonarQube
+ * __gitflow__:
+  * master branch: latest stable
+  * heroku branch: reflects currect deployed app at heroku (prototype of Continuous Delivery and Continuous Deployment)
+  * prototype!_*: prototype branches which contains new idea (merge of prototype branch is new major version release)
+  * x.x.x: feature branches
+
+# how to install
  * copy *app/config/parameters.yml.dist* to *app/config/parameters.yml* and amend database settings
  * *composer install* __# to fetch depencies and initial commands__
   * __NOTE!__ composer is configured to create databases if they not exists and run apply migrations__
@@ -62,8 +92,12 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
  * __optional!__ *php bin/console assets:install* __# to dump assets as hard copies__
   * __NOTE!__ by default assets are installed as symlinks
  * __optional!__ *php bin/console doctrine:fixtures:load --env=test* __# for testing purposes only__
- * apache virtual host config:
- ```
+
+### how to execute tests
+ * *phpunit -c test* or *php bin/phpunit -c tests* (fixtures will wipe and populate database before execute tests)
+
+### apache virtual host config:
+```
 <VirtualHost 127.0.0.1:80 ::1:80>
     DocumentRoot "%PROJECT_ROOT_DIRECTORY%/web"
     ErrorLog "%PROJECT_ROOT_DIRECTORY%/var/logs/apache_log"
@@ -147,30 +181,4 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
         </IfModule>
     </Directory>
 </VirtualHost>
- ```
-
-### How to execute tests
- * *phpunit -c test* or *php bin/phpunit -c tests* (fixtures will wipe and populate database before execute tests)
-
-### used patterns
- * Front Controller
- * MVC
- * ORM
- * Data Mapper
- * Builder
- * Strategy
- * Factory
- * Singleton
- * Delegation
- * Registry
- * Service Locator
- * Event Dispatcher
- * Dependency Injection
-
-### github usage:
- * semantic versioning with pull-requests into the master branch
-
-### used standarts:
- * PHP-FIG:
-  * ../PSR-2
-  * ../PSR-4
+```
