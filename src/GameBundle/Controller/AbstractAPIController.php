@@ -14,7 +14,7 @@ abstract class AbstractAPIController extends Controller
     {
         $header = $this->get('request_stack')->getMasterRequest()->headers->get('accept');
         $format = false !== strpos($header, 'application/xml') ? 'xml' : 'json';
-        $headers['Content-Type'] = 'application/' . $format;
+        $headers['Content-Type'] = "application/{$format}";
 
         return new Response($this->get('jms_serializer')->serialize($data, $format), $status, $headers);
     }
