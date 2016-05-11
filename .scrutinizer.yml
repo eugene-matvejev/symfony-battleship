@@ -5,12 +5,7 @@ coding_style:
     php: {  }
 
 filter:
-    excluded_paths:
-        - "app/*"
-        - "bin/*"
-        - "tests/*"
-        - "vendor/*"
-        - "web/*"
+    excluded_paths: ["app/*", "bin/*", "tests/*", "vendor/*", "web/*"]
 
 build:
     dependencies:
