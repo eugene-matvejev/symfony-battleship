@@ -25,7 +25,7 @@ class GameControllerContext extends AbstractContainerAwareContext implements Con
             $routeParams[$paramKey] = $paramValue;
         }
 
-        $this->_client->request(
+        self::$_client->request(
             $method,
             static::$router->generate($route, $routeParams),
             [],
