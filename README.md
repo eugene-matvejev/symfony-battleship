@@ -41,7 +41,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
 
 # techonology stack
 ### key technologies:
- * PHP7 (7.0.1 - 7.0.4 || >= 7.0.6, as 7.0.0 had bug with namespaces and primitive types, 7.0.5 had bugged SPL)
+ * PHP7 (7.0.0 - 7.0.4 || >= 7.0.6, as 7.0.5 had bugged SPL)
  * Symfony Framework 3 (SF3)
  * Doctrine 2 [with Fixtures]
  * PHPUnit 5
