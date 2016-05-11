@@ -11,15 +11,15 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
 
 # Battleship Game API
 ##### THIS IS SPARE TIME PROJECT, WORK IN PROGRESS! HIGHLY EXPERIMENTAL!!!
-#### Project purpose:
- * try 'cutting edge' technologies and approaches such as PHP7, SF3, ECMA6
+#### project purpose:
+ * try out 'cutting edge' technologies and approaches such as PHP7, SF3, ECMA6
  * simulate database loading e.g. upto 500 insertions/request
  * deliver preview about my technical knowledge before the job interview
 
 #### game cheat-code:
  * CPU have only one-cell ship which is hardcoded at __B2__ cell
   * if you will hit __B2__ cell - you will instantly win
-   * purpose: to easier manual testing (as the project is far from 'finished' stage, as I keep trying polish it)
+   * purpose: to easier manual testing (as the project is far from 'finished' stage, as I am keep polishing it)
 
 #### future plans:
  * deliver back-end as OpenAPI using SF3, PHP7, Doctrine2 with various databases
