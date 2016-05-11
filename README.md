@@ -91,7 +91,13 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
  * __optional!__ *php bin/console doctrine:fixtures:load --env=test* __# for testing purposes only__
 
 ### how to execute tests
- * *phpunit -c test* or *php bin/phpunit -c tests* (database will be wiped, and seeded again before test execution)
+ * *phpunit -c test* or *php bin/phpunit -c tests* (test database will be wiped and seeded again before test execution)
+
+### /etc/hosts
+```
+127.0.0.1       api.game.local
+::1             api.game.local
+```
 
 ### apache virtual host config:
 ```
