@@ -5,12 +5,7 @@ coding_style:
     php: {  }
 
 filter:
-    excluded_paths:
-        - "app/*"
-        - "bin/*"
-        - "tests/*"
-        - "vendor/*"
-        - "web/*"
+    excluded_paths: ["app/*", "bin/*", "tests/*", "vendor/*", "web/*"]
 
 build:
     dependencies:
@@ -19,7 +14,7 @@ build:
                 command: "cp app/config/parameters.yml.dist app/config/parameters.yml"
     environment:
         php:
-            version: "7.0.6"
+            version: "7.0.4"
     tests:
         override:
             -
