@@ -98,6 +98,6 @@ jms_serializer:
             game-bundle-entity:
                 namespace_prefix: "EM\\GameBundle\\Entity\\"
                 path: "@GameBundle/Resources/config/serializer/entity"
-            game-bundle-response:
-                namespace_prefix: "EM\\GameBundle\\Response\\"
-                path: "@GameBundle/Resources/config/serializer/response"
+#            game-bundle-response:
+#                namespace_prefix: "EM\\GameBundle\\Response\\"
+#                path: "@GameBundle/Resources/config/serializer/response"
