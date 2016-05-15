@@ -4,20 +4,30 @@ namespace EM\GameBundle\Response;
 
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Entity\GameResult;
+use JMS\Serializer\Annotation as JMS;
 
 /**
+ * @JMS\AccessorOrder(order="custom", custom={"gameResult","cells"})
+ * @JMS\XmlRoot("game-turn-data")
+ *
  * @since 5.0
  */
 class GameTurnResponse
 {
     /**
-     * @var array
+     * @JMS\Type("array<EM\GameBundle\Entity\Cell>")
+     * @JMS\XmlList(entry="cell")
+     * @JMS\XmlKeyValuePairs()
+     *
+     * @var Cell[]
      */
     private $cells = [];
     /**
+     * @JMS\Type("EM\GameBundle\Entity\GameResult")
+     *
      * @var GameResult
      */
-    private $result;
+    private $gameResult;
 
     /**
      * @return Cell[]
@@ -43,14 +53,14 @@ class GameTurnResponse
     /**
      * @return GameResult
      */
-    public function getResult()
+    public function getGameResult()
     {
-        return $this->result;
+        return $this->gameResult;
     }
 
     public function setGameResult(GameResult $result) : self
     {
-        $this->result = $result;
+        $this->gameResult = $result;
 
         return $this;
     }

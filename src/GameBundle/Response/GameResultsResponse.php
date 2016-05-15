@@ -6,29 +6,10 @@ use EM\GameBundle\Entity\GameResult;
 use JMS\Serializer\Annotation as JMS;
 
 /**
- * EM\GameBundle\Response\GameResultsResponse:
- * accessor_order: custom
- * custom_accessor_order: [meta, results]
- *
- * xml_root_name: statistics
- *
- * properties:
- * meta:
- * type: array<string, integer>
- * inline: false
- * xml_key_value_pairs: true
- * results:
- * type: array<EM\GameBundle\Entity\GameResult>
- * xml_list:
- * inline: false
- * entry_name: result
- */
-
-/**
  * @since 5.0
  *
- * @JMS\AccessorOrder("custom", custom={"results","meta"})
- * @JMS\XmlRoot("statistics")
+ * @JMS\AccessorOrder(order="custom", custom={"results","meta"})
+ * @JMS\XmlRoot("game-results")
  */
 class GameResultsResponse
 {
@@ -42,6 +23,8 @@ class GameResultsResponse
      */
     private $meta = [];
     /**
+     * @JMS\Type("array<EM\GameBundle\Entity\GameResult>")
+     * @JMS\XmlList(entry="result")
      *
      * @var GameResult[]
      */
