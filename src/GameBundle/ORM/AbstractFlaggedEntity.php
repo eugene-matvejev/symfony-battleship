@@ -14,7 +14,7 @@ abstract class AbstractFlaggedEntity extends AbstractEntity implements FlaggedIn
 {
     /**
      * @ORM\Column(name="flags", type="integer")
-     * 
+     *
      * @Serializer\Type("integer")
      *
      * @var int
@@ -35,16 +35,16 @@ abstract class AbstractFlaggedEntity extends AbstractEntity implements FlaggedIn
         return $this;
     }
 
+    public function getFlags() : int
+    {
+        return $this->flags;
+    }
+
     public function setFlags(int $flag) : self
     {
         $this->flags = $flag;
 
         return $this;
-    }
-
-    public function getFlags() : int
-    {
-        return $this->flags;
     }
 
     public function hasFlag(int $flag) : bool
