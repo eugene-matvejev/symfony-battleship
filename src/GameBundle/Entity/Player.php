@@ -4,7 +4,7 @@ namespace EM\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use EM\GameBundle\ORM\AbstractFlaggedEntity;
-use JMS\Serializer\Annotation as JMS;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @since 1.0
@@ -17,15 +17,15 @@ use JMS\Serializer\Annotation as JMS;
  *      }
  * )
  *
- * @JMS\AccessorOrder(order="custom", custom={"id", "flag", "name"})
- * @JMS\XmlRoot("player")
+ * @Serializer\AccessorOrder(order="custom", custom={"id", "flag", "name"})
+ * @Serializer\XmlRoot("player")
  */
 class Player extends AbstractFlaggedEntity
 {
     /**
      * @ORM\Column(name="name", type="string", length=100)
      *
-     * @JMS\Type("string")
+     * @Serializer\Type("string")
      *
      * @var string
      */

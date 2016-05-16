@@ -8,7 +8,7 @@ use EM\GameBundle\ORM\PlayerInterface;
 use EM\GameBundle\ORM\PlayerTrait;
 use EM\GameBundle\ORM\TimestampedInterface;
 use EM\GameBundle\ORM\TimestampedTrait;
-use JMS\Serializer\Annotation as JMS;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @since 1.0
@@ -23,8 +23,8 @@ use JMS\Serializer\Annotation as JMS;
  * )
  * @ORM\HasLifecycleCallbacks()
  *
- * @JMS\AccessorOrder(order="custom", custom={"id", "timestamp", "player"})
- * @JMS\XmlRoot("game-result")
+ * @Serializer\AccessorOrder(order="custom", custom={"id", "timestamp", "player"})
+ * @Serializer\XmlRoot("game-result")
  */
 class GameResult extends AbstractEntity implements PlayerInterface, TimestampedInterface
 {
@@ -33,7 +33,7 @@ class GameResult extends AbstractEntity implements PlayerInterface, TimestampedI
      * @ORM\OneToOne(targetEntity="EM\GameBundle\Entity\Game", inversedBy="result")
      * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)
      *
-     * @JMS\Exclude()
+     * @Serializer\Exclude()
      *
      * @var Game
      */

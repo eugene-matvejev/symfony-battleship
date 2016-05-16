@@ -4,7 +4,7 @@ namespace EM\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use EM\GameBundle\ORM\AbstractFlaggedEntity;
-use JMS\Serializer\Annotation as JMS;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @since 1.0
@@ -20,8 +20,8 @@ use JMS\Serializer\Annotation as JMS;
  *      }
  * )
  *
- * @JMS\AccessorOrder(order="custom", custom={"id", "coordinate", "flags"})
- * @JMS\XmlRoot("cell")
+ * @Serializer\AccessorOrder(order="custom", custom={"id", "coordinate", "flags"})
+ * @Serializer\XmlRoot("cell")
  */
 class Cell extends AbstractFlaggedEntity
 {
@@ -29,7 +29,7 @@ class Cell extends AbstractFlaggedEntity
      * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\Battlefield", inversedBy="cells", fetch="EAGER")
      * @ORM\JoinColumn(name="battlefield", referencedColumnName="id", nullable=false)
      *
-     * @JMS\Exclude()
+     * @Serializer\Exclude()
      *
      * @var Battlefield
      */
@@ -37,7 +37,7 @@ class Cell extends AbstractFlaggedEntity
     /**
      * @ORM\Column(name="coordinate", type="string", length=3)
      *
-     * @JMS\Type("string")
+     * @Serializer\Type("string")
      *
      * @var string
      */
