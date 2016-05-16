@@ -32,10 +32,10 @@ class CellModel
         return self::$changedCells;
     }
 
-    public static function switchPhase(Cell $cell, int $customMask = null) : Cell
+    public static function switchPhase(Cell $cell, int $additionalFlag = self::FLAG_NONE) : Cell
     {
         if (!$cell->hasFlag(CellModel::FLAG_DEAD)) {
-            self::$changedCells[$cell->getId()] = $cell->addFlag($customMask ?? CellModel::FLAG_DEAD);
+            self::$changedCells[$cell->getId()] = $cell->addFlag($additionalFlag | CellModel::FLAG_DEAD);
         }
 
         return $cell;
