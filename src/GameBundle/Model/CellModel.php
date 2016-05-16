@@ -34,7 +34,7 @@ class CellModel
 
     public static function switchPhase(Cell $cell, int $additionalFlag = self::FLAG_NONE) : Cell
     {
-        if ($cell->hasFlag(CellModel::FLAG_DEAD)) {
+        if (!$cell->hasFlag(CellModel::FLAG_DEAD)) {
             self::$changedCells[$cell->getId()] = $cell->addFlag($additionalFlag | CellModel::FLAG_DEAD);
         }
 
