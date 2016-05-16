@@ -8,6 +8,28 @@ use Doctrine\ORM\Mapping as ORM;
 use EM\GameBundle\ORM\AbstractEntity;
 use EM\GameBundle\ORM\PlayerInterface;
 use EM\GameBundle\ORM\PlayerTrait;
+use JMS\Serializer\Annotation as JMS;
+
+/**
+ * EM\GameBundle\Entity\Battlefield:
+ * accessor_order: custom
+ * custom_accessor_order: []
+ *
+ * xml_root_name: battlefield
+ *
+ * properties:
+ * id:
+ * type: integer
+ * player:
+ * type: EM\GameBundle\Entity\Player
+ * serialized_name: player
+ * cells:
+ * type: array<EM\GameBundle\Entity\Cell>
+ * serialized_name: cells
+ * xml_list:
+ * inline: false
+ * entry_name: cell
+ */
 
 /**
  * @since 1.0
@@ -19,6 +41,9 @@ use EM\GameBundle\ORM\PlayerTrait;
  *          @ORM\Index(name="INDEX_BATTLEFIELDS_GAME", columns={"game"}),
  *          @ORM\Index(name="INDEX_BATTLEFIELDS_PLAYER", columns={"player"})
  *     })
+ *
+ * @JMS\AccessorOrder(order="custom", custom={"id", "player", "cells"})
+ * @JMS\XmlRoot("battlefield")
  */
 class Battlefield extends AbstractEntity implements PlayerInterface
 {
@@ -27,11 +52,16 @@ class Battlefield extends AbstractEntity implements PlayerInterface
      * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\Game", inversedBy="battlefields", fetch="EAGER")
      * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)
      *
+     * @JMS\Exclude()
+     *
      * @var Game
      */
     protected $game;
     /**
      * @ORM\OneToMany(targetEntity="EM\GameBundle\Entity\Cell", mappedBy="battlefield", cascade={"persist"}, fetch="EAGER", indexBy="coordinate")
+     *
+     * @JMS\Type("EM\GameBundle\Entity\Cell")
+     * @JMS\XmlList(entry="cell")
      *
      * @var Collection|Cell[]
      */

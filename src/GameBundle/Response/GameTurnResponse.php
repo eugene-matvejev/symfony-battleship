@@ -7,7 +7,7 @@ use EM\GameBundle\Entity\GameResult;
 use JMS\Serializer\Annotation as JMS;
 
 /**
- * @JMS\AccessorOrder(order="custom", custom={"gameResult","cells"})
+ * @JMS\AccessorOrder(order="custom", custom={"result","cells"})
  * @JMS\XmlRoot("game-turn-data")
  *
  * @since 5.0
@@ -27,7 +27,7 @@ class GameTurnResponse
      *
      * @var GameResult
      */
-    private $gameResult;
+    private $result;
 
     /**
      * @return Cell[]
@@ -53,14 +53,14 @@ class GameTurnResponse
     /**
      * @return GameResult
      */
-    public function getGameResult()
+    public function getResult()
     {
-        return $this->gameResult;
+        return $this->result;
     }
 
-    public function setGameResult(GameResult $result) : self
+    public function setResult(GameResult $result) : self
     {
-        $this->gameResult = $result;
+        $this->result = $result;
 
         return $this;
     }

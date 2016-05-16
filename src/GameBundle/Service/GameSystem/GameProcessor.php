@@ -127,7 +127,7 @@ class GameProcessor
                     $result = (new GameResult())
                         ->setPlayer($player);
                     $game->setResult($result);
-                    $response->setGameResult($result);
+                    $response->setResult($result);
 
                     break 2;
                 }

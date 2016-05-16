@@ -74,10 +74,10 @@ jms_serializer:
             default_format: "c" # ISO8601
             default_timezone: "UTC" # defaults to whatever timezone set in php.ini or via date_default_timezone_set
 
-    property_naming:
-        separator:  _
-        lower_case: true
-
+#    property_naming:
+#        separator:  _
+#        lower_case: true
+#
     metadata:
         cache: file
         debug: "%kernel.debug%"
@@ -90,14 +90,14 @@ jms_serializer:
         # Example:
         # class: My\FooBundle\Entity\User
         # expected path: @MyFooBundle/Resources/config/serializer/Entity.User.(yml|xml|php)
-        auto_detection: false
+#        auto_detection: false
 
         # if you don't want to use auto-detection, you can also define the
         # namespace prefix and the corresponding directory explicitly
-        directories:
-            game-bundle-entity:
-                namespace_prefix: "EM\\GameBundle\\Entity\\"
-                path: "@GameBundle/Resources/config/serializer/entity"
+#        directories:
+#            game-bundle-entity:
+#                namespace_prefix: "EM\\GameBundle\\Entity\\"
+#                path: "@GameBundle/Resources/config/serializer/entity"
 #            game-bundle-response:
 #                namespace_prefix: "EM\\GameBundle\\Response\\"
 #                path: "@GameBundle/Resources/config/serializer/response"

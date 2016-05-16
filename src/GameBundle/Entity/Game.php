@@ -8,6 +8,29 @@ use Doctrine\ORM\Mapping as ORM;
 use EM\GameBundle\ORM\AbstractEntity;
 use EM\GameBundle\ORM\TimestampedInterface;
 use EM\GameBundle\ORM\TimestampedTrait;
+use JMS\Serializer\Annotation as JMS;
+
+/**
+ * EM\GameBundle\Entity\Game:
+ * accessor_order: custom
+ * custom_accessor_order: [id, timestamp, result, battlefields]
+ *
+ * xml_root_name: game
+ *
+ * properties:
+ * id:
+ * type: integer
+ * timestamp:
+ * type: DateTime
+ * result:
+ * type: EM\GameBundle\Entity\GameResult
+ * battlefields:
+ * type: array<EM\GameBundle\Entity\Battlefield>
+ * serialized_name: battlefields
+ * xml_list:
+ * inline: false
+ * entry_name: battlefield
+ */
 
 /**
  * @since 1.0
@@ -15,6 +38,9 @@ use EM\GameBundle\ORM\TimestampedTrait;
  * @ORM\Entity()
  * @ORM\Table(name="games")
  * @ORM\HasLifecycleCallbacks()
+ *
+ * @JMS\AccessorOrder(order="custom", custom={"id", "timestamp", "result", "battlefields"})
+ * @JMS\XmlRoot("game")
  */
 class Game extends AbstractEntity implements TimestampedInterface
 {
@@ -23,11 +49,16 @@ class Game extends AbstractEntity implements TimestampedInterface
      * @ORM\OneToMany(targetEntity="EM\GameBundle\Entity\Battlefield", mappedBy="game", cascade={"persist"}, fetch="EAGER", indexBy="id")
      * @ORM\JoinColumn(name="id", referencedColumnName="game", nullable=false)
      *
+     * @JMS\Type("array<EM\GameBundle\Entity\Battlefield>")
+     * @JMS\XmlList(entry="battlefield")
+     *
      * @var Collection|Battlefield[]
      */
     protected $battlefields;
     /**
      * @ORM\OneToOne(targetEntity="EM\GameBundle\Entity\GameResult", mappedBy="game", cascade={"persist"}, fetch="EAGER")
+     *
+     * @JMS\Type("EM\GameBundle\Entity\GameResult")
      *
      * @var GameResult
      */

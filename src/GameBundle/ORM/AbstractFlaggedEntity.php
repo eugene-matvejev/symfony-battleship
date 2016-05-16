@@ -3,6 +3,7 @@
 namespace EM\GameBundle\ORM;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @since 13.1
@@ -13,6 +14,8 @@ abstract class AbstractFlaggedEntity extends AbstractEntity implements FlaggedIn
 {
     /**
      * @ORM\Column(name="flags", type="integer")
+     * 
+     * @JMS\Type("integer")
      *
      * @var int
      */
