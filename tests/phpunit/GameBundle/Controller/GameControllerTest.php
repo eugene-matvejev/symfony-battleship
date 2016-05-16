@@ -54,8 +54,6 @@ class GameControllerTest extends IntegrationTestSuite
      */
     public function successfulInitAction_JSON()
     {
-        $json = static::getSharedFixture('init-game-request-2-players-7x7.json');
-
         $client = clone static::$client;
         $client->request(
             Request::METHOD_POST,
@@ -63,7 +61,7 @@ class GameControllerTest extends IntegrationTestSuite
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json'],
-            $json
+            static::getSharedFixtureContent('init-game-request-2-players-7x7.json')
         );
         $this->assertSuccessfulJSONResponse($client->getResponse());
 
@@ -107,14 +105,13 @@ class GameControllerTest extends IntegrationTestSuite
     {
         $client = clone static::$client;
 
-        $json = static::getSharedFixture('init-game-request-2-players-7x7.json');
         $client->request(
             Request::METHOD_POST,
             static::$router->generate('battleship.game.api.init'),
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/xml'],
-            $json
+            static::getSharedFixtureContent('init-game-request-2-players-7x7.json')
         );
         $this->assertSuccessfulXMLResponse($client->getResponse());
 
