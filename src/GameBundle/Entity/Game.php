@@ -11,28 +11,6 @@ use EM\GameBundle\ORM\TimestampedTrait;
 use JMS\Serializer\Annotation as JMS;
 
 /**
- * EM\GameBundle\Entity\Game:
- * accessor_order: custom
- * custom_accessor_order: [id, timestamp, result, battlefields]
- *
- * xml_root_name: game
- *
- * properties:
- * id:
- * type: integer
- * timestamp:
- * type: DateTime
- * result:
- * type: EM\GameBundle\Entity\GameResult
- * battlefields:
- * type: array<EM\GameBundle\Entity\Battlefield>
- * serialized_name: battlefields
- * xml_list:
- * inline: false
- * entry_name: battlefield
- */
-
-/**
  * @since 1.0
  *
  * @ORM\Entity()

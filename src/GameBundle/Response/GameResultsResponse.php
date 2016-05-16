@@ -60,6 +60,14 @@ class GameResultsResponse
     }
 
     /**
+     * @return GameResult[]
+     */
+    public function getResults() : array
+    {
+        return $this->results;
+    }
+
+    /**
      * @param GameResult[] $results
      *
      * @return GameResultsResponse
@@ -69,13 +77,5 @@ class GameResultsResponse
         $this->results = $results;
 
         return $this;
-    }
-
-    /**
-     * @return GameResult[]
-     */
-    public function getResults() : array
-    {
-        return $this->results;
     }
 }

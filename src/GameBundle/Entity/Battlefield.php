@@ -11,27 +11,6 @@ use EM\GameBundle\ORM\PlayerTrait;
 use JMS\Serializer\Annotation as JMS;
 
 /**
- * EM\GameBundle\Entity\Battlefield:
- * accessor_order: custom
- * custom_accessor_order: []
- *
- * xml_root_name: battlefield
- *
- * properties:
- * id:
- * type: integer
- * player:
- * type: EM\GameBundle\Entity\Player
- * serialized_name: player
- * cells:
- * type: array<EM\GameBundle\Entity\Cell>
- * serialized_name: cells
- * xml_list:
- * inline: false
- * entry_name: cell
- */
-
-/**
  * @since 1.0
  *
  * @ORM\Entity(readOnly=true)

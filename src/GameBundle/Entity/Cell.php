@@ -7,24 +7,6 @@ use EM\GameBundle\ORM\AbstractFlaggedEntity;
 use JMS\Serializer\Annotation as JMS;
 
 /**
-accessor_order: custom
-custom_accessor_order: [id, coordinate, flags]
-
-exclusion_policy: ALL
-
-xml_root_name: cell
-
-properties:
-id:
-type: integer
-expose: true
-coordinate:
-type: string
-flags:
-type: integer
-expose: true
- */
-/**
  * @since 1.0
  *
  * @ORM\Entity()
@@ -48,7 +30,7 @@ class Cell extends AbstractFlaggedEntity
      * @ORM\JoinColumn(name="battlefield", referencedColumnName="id", nullable=false)
      *
      * @JMS\Exclude()
-     * 
+     *
      * @var Battlefield
      */
     protected $battlefield;

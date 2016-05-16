@@ -11,27 +11,6 @@ use EM\GameBundle\ORM\TimestampedTrait;
 use JMS\Serializer\Annotation as JMS;
 
 /**
-EM\GameBundle\Entity\GameResult:
-accessor_order: custom
-custom_accessor_order: [id, timestamp, player]
-
-exclusion_policy: ALL
-
-xml_root_name: gameResult
-
-properties:
-id:
-type: integer
-expose: true
-timestamp:
-type: DateTime
-expose: true
-player:
-type: EM\GameBundle\Entity\Player
-expose: true
-
- */
-/**
  * @since 1.0
  *
  * @ORM\Entity(repositoryClass="EM\GameBundle\Repository\GameResultRepository", readOnly=true)
