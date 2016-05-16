@@ -4,17 +4,27 @@ namespace EM\GameBundle\Response;
 
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Entity\GameResult;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
+ * @Serializer\XmlRoot("game-turn-data")
+ * @Serializer\AccessorOrder(order="custom", custom={"result","cells"})
+ *
  * @since 5.0
  */
 class GameTurnResponse
 {
     /**
-     * @var array
+     * @Serializer\Type("array<EM\GameBundle\Entity\Cell>")
+     * @Serializer\XmlList(entry="cell")
+     * @Serializer\XmlKeyValuePairs()
+     *
+     * @var Cell[]
      */
     private $cells = [];
     /**
+     * @Serializer\Type("EM\GameBundle\Entity\GameResult")
+     *
      * @var GameResult
      */
     private $result;
@@ -48,7 +58,7 @@ class GameTurnResponse
         return $this->result;
     }
 
-    public function setGameResult(GameResult $result) : self
+    public function setResult(GameResult $result) : self
     {
         $this->result = $result;
 

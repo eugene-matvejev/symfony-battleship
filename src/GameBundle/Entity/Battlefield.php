@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use EM\GameBundle\ORM\AbstractEntity;
 use EM\GameBundle\ORM\PlayerInterface;
 use EM\GameBundle\ORM\PlayerTrait;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @since 1.0
@@ -19,6 +20,9 @@ use EM\GameBundle\ORM\PlayerTrait;
  *          @ORM\Index(name="INDEX_BATTLEFIELDS_GAME", columns={"game"}),
  *          @ORM\Index(name="INDEX_BATTLEFIELDS_PLAYER", columns={"player"})
  *     })
+ *
+ * @Serializer\AccessorOrder(order="custom", custom={"id", "player", "cells"})
+ * @Serializer\XmlRoot("battlefield")
  */
 class Battlefield extends AbstractEntity implements PlayerInterface
 {
@@ -27,11 +31,16 @@ class Battlefield extends AbstractEntity implements PlayerInterface
      * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\Game", inversedBy="battlefields", fetch="EAGER")
      * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)
      *
+     * @Serializer\Exclude()
+     *
      * @var Game
      */
     protected $game;
     /**
      * @ORM\OneToMany(targetEntity="EM\GameBundle\Entity\Cell", mappedBy="battlefield", cascade={"persist"}, fetch="EAGER", indexBy="coordinate")
+     *
+     * @Serializer\Type("EM\GameBundle\Entity\Cell")
+     * @Serializer\XmlList(entry="cell")
      *
      * @var Collection|Cell[]
      */
@@ -56,8 +65,8 @@ class Battlefield extends AbstractEntity implements PlayerInterface
 
     public function addCell(Cell $cell) : self
     {
-        $cell->setBattlefield($this);
         $this->cells->set($cell->getCoordinate(), $cell);
+        $cell->setBattlefield($this);
 
         return $this;
     }

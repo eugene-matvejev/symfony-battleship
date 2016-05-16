@@ -65,9 +65,7 @@ class GameProcessorTest extends IntegrationTestSuite
      */
     public function processGameInitiation()
     {
-        $json = file_get_contents(__DIR__ . '/../../../../www-data-mock/new-game-request-7x7-2-players.json');
-
-        $game = $this->gameProcessor->processGameInitiation($json);
+        $game = $this->gameProcessor->processGameInitiation(static::getSharedFixtureContent('init-game-request-2-players-7x7.json'));
 
         $this->assertCount(2, $game->getBattlefields());
         foreach ($game->getBattlefields() as $battlefield) {
