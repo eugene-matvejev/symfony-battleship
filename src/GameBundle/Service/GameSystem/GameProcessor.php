@@ -105,7 +105,7 @@ class GameProcessor
         $response = new GameTurnResponse();
 
         if (null !== $game->getResult()) {
-            $response->setGameResult($game->getResult());
+            $response->setResult($game->getResult());
 
             return $response;
         }
