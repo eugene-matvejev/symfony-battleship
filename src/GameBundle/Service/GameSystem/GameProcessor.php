@@ -105,7 +105,7 @@ class GameProcessor
         $response = new GameTurnResponse();
 
         if (null !== $game->getResult()) {
-            $response->setGameResult($game->getResult());
+            $response->setResult($game->getResult());
 
             return $response;
         }
@@ -127,7 +127,7 @@ class GameProcessor
                     $result = (new GameResult())
                         ->setPlayer($player);
                     $game->setResult($result);
-                    $response->setGameResult($result);
+                    $response->setResult($result);
 
                     break 2;
                 }
