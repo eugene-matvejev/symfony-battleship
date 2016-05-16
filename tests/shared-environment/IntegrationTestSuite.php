@@ -143,4 +143,16 @@ abstract class IntegrationTestSuite extends WebTestCase
 
         return $method->invokeArgs($object, $methodArguments);
     }
+
+    /**
+     * return content of the file in located in tests/shared-fixtures directory
+     *
+     * @param string $filename
+     *
+     * @return string
+     */
+    public static function getSharedFixture(string $filename) : string
+    {
+        return file_get_contents(__DIR__ . "/../shared-fixtures/$filename");
+    }
 }
