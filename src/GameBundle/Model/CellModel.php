@@ -51,15 +51,15 @@ class CellModel
             return false;
         }
 
-        $PathProcessor = new PathProcessor($cell);
         $battlefield = $cell->getBattlefield();
+        $pathProcessor = new PathProcessor($cell);
         $cells = [$cell->getCoordinate() => $cell];
 
         foreach (PathProcessor::PRIMARY_PATHS as $way) {
-            $PathProcessor->setPath($way);
+            $pathProcessor->setPath($way);
 
             /** @var Cell $cell */
-            while (null !== $cell = $battlefield->getCellByCoordinate($PathProcessor->getNextCoordinate())) {
+            while (null !== $cell = $battlefield->getCellByCoordinate($pathProcessor->getNextCoordinate())) {
                 if (isset($cells[$cell->getCoordinate()]) || !$cell->hasFlag(self::FLAG_SHIP)) {
                     break;
                 }
