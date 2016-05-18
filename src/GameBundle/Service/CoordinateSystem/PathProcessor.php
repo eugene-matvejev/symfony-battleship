@@ -70,33 +70,25 @@ class PathProcessor
     {
         $number = substr($this->coordinate, 1);
         $letter = substr($this->coordinate, 0, 1);
-        $prevLetter = chr(ord($letter) - 1);
 
         /**
          * LEFT-UP   (--letter, --number)  UP (--number)  RIGHT-UP   (++letter, --number)
-         * LEFT      (--letter)               current     RIGHT      (++letter)
+         * LEFT      (--letter)               UNCHANGED   RIGHT      (++letter)
          * LEFT-DOWN (--letter, ++number) DOWN (++number) RIGHT-DOWN (++letter, ++number)
          */
-        switch ($this->way) {
-            case self::PATH_UP:
-                return $this->coordinate = $letter . --$number;
-            case self::PATH_DOWN:
-                return $this->coordinate = $letter . ++$number;
-            case self::PATH_LEFT:
-                return $this->coordinate = $prevLetter . $number;
-            case self::PATH_LEFT_UP:
-                return $this->coordinate = $prevLetter . --$number;
-            case self::PATH_LEFT_DOWN:
-                return $this->coordinate = $prevLetter . ++$number;
-            case self::PATH_RIGHT:
-                return $this->coordinate = ++$letter . $number;
-            case self::PATH_RIGHT_UP:
-                return $this->coordinate = ++$letter . --$number;
-            case self::PATH_RIGHT_DOWN:
-                return $this->coordinate = ++$letter . ++$number;
+        if (($this->way & static::PATH_UP) === static::PATH_UP) {
+            --$number;
+        } elseif (($this->way & static::PATH_DOWN) === static::PATH_DOWN) {
+            ++$number;
         }
 
-        return $this->coordinate;
+        if (($this->way & static::PATH_RIGHT) === static::PATH_RIGHT) {
+            ++$letter;
+        } elseif (($this->way & static::PATH_LEFT) === static::PATH_LEFT) {
+            $letter = chr(ord($letter) - 1);
+        }
+
+        return $this->coordinate = $letter . $number;
     }
 
     /**
