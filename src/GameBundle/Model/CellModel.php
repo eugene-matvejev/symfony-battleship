@@ -32,6 +32,12 @@ class CellModel
         return self::$changedCells;
     }
 
+    /**
+     * @param Cell $cell
+     * @param int  $additionalFlag - additional flag which will be applied with CellModel::FLAG_DEAD
+     *
+     * @return Cell
+     */
     public static function switchPhase(Cell $cell, int $additionalFlag = self::FLAG_NONE) : Cell
     {
         if (!$cell->hasFlag(CellModel::FLAG_DEAD)) {
