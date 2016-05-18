@@ -8,14 +8,13 @@ use EM\GameBundle\Service\AI\AIStrategyProcessor;
 use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 use EM\Tests\Environment\IntegrationTestSuite;
 use EM\Tests\Environment\MockFactory\Entity\BattlefieldMockTrait;
-use EM\Tests\Environment\MockFactory\Service\PathProcessorMockTrait;
 
 /**
  * @see AIStrategy
  */
 class AIStrategyProcessorTest extends IntegrationTestSuite
 {
-    use BattlefieldMockTrait, PathProcessorMockTrait;
+    use BattlefieldMockTrait;
     /**
      * @var AIStrategyProcessor
      */
@@ -34,22 +33,21 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
     {
         $battlefield = $this->getBattlefieldMock();
         $battlefield->getCellByCoordinate('B2')->setFlags(CellModel::FLAG_DEAD_SHIP);
-        $service = $this->getPathProcessorMock($battlefield->getCellByCoordinate('B2'));
 
-        $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
+        $cells = $this->invokeProcessCoordinatesMethod([$battlefield->getCellByCoordinate('B2'), PathProcessor::PRIMARY_PATHS]);
         /** as battlefield is mocked having all cells STATE_WATER_LIVE state */
         $this->assertCount(4, $cells);
         $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
 
         /** as LEFT (A1) cell is dead */
         $battlefield->getCellByCoordinate('A2')->setFlags(CellModel::FLAG_DEAD_SHIP);
-        $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
+        $cells = $this->invokeProcessCoordinatesMethod([$battlefield->getCellByCoordinate('B2'), PathProcessor::PRIMARY_PATHS]);
         $this->assertCount(3, $cells);
 
         /** as entire horizontal row is dead (A1-J10) cell is dead */
         for ($letter = 'C'; $letter < 'G'; $letter++) {
             $battlefield->getCellByCoordinate("{$letter}2")->setFlags(CellModel::FLAG_DEAD_SHIP);
-            $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
+            $cells = $this->invokeProcessCoordinatesMethod([$battlefield->getCellByCoordinate('B2'), PathProcessor::PRIMARY_PATHS]);
             $this->assertCount(3, $cells);
         }
         /** left for explanation purposes */
@@ -57,18 +55,18 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
 //        ...
 //        $battlefield->getCellByCoordinate('F2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
         $battlefield->getCellByCoordinate('G2')->setFlags(CellModel::FLAG_DEAD_SHIP);
-        $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
+        $cells = $this->invokeProcessCoordinatesMethod([$battlefield->getCellByCoordinate('B2'), PathProcessor::PRIMARY_PATHS]);
         $this->assertCount(2, $cells);
 
         /** as top (B1) cell is dead also */
         $battlefield->getCellByCoordinate('B1')->setFlags(CellModel::FLAG_DEAD_SHIP);
-        $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
+        $cells = $this->invokeProcessCoordinatesMethod([$battlefield->getCellByCoordinate('B2'), PathProcessor::PRIMARY_PATHS]);
         $this->assertCount(1, $cells);
 
         /** as vertical (B1-B10) and horizontal (A1-J10) rows contains only dead cells */
         for ($digit = 3; $digit < 7; $digit++) {
             $battlefield->getCellByCoordinate("B{$digit}")->setFlags(CellModel::FLAG_DEAD_SHIP);
-            $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
+            $cells = $this->invokeProcessCoordinatesMethod([$battlefield->getCellByCoordinate('B2'), PathProcessor::PRIMARY_PATHS]);
             $this->assertCount(1, $cells);
         }
         /** left for explanation purposes */
@@ -76,26 +74,11 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
 //        ...
 //        $battlefield->getCellByCoordinate('B6')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
         $battlefield->getCellByCoordinate('B7')->setFlags(CellModel::FLAG_DEAD_SHIP);
-        $cells = $this->invokeStrategyMethod([$battlefield, $this->getBasicCoordinates($service)]);
+        $cells = $this->invokeProcessCoordinatesMethod([$battlefield->getCellByCoordinate('B2'), PathProcessor::PRIMARY_PATHS]);
         $this->assertEmpty($cells);
     }
 
-    /**
-     * @param PathProcessor $service
-     *
-     * @return PathProcessor[]
-     */
-    private function getBasicCoordinates(PathProcessor $service) : array
-    {
-        return [
-            clone $service->setPath(PathProcessor::PATH_UP),
-            clone $service->setPath(PathProcessor::PATH_DOWN),
-            clone $service->setPath(PathProcessor::PATH_LEFT),
-            clone $service->setPath(PathProcessor::PATH_RIGHT)
-        ];
-    }
-
-    private function invokeStrategyMethod(array $args) : array
+    private function invokeProcessCoordinatesMethod(array $args) : array
     {
         return $this->invokeMethod($this->strategyProcessor, 'processCoordinates', $args);
     }
@@ -153,12 +136,12 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
     }
 
     /**
-     * @param int $strategyId
+     * @param int $strategy
      *
      * @return Cell[]
      */
-    private function invokeProcessMethod(int $strategyId) : array
+    private function invokeProcessMethod(int $strategy) : array
     {
-        return $this->strategyProcessor->process($this->getBattlefieldMock()->getCellByCoordinate('B2'), $strategyId);
+        return $this->strategyProcessor->process($this->getBattlefieldMock()->getCellByCoordinate('B2'), $strategy);
     }
 }
