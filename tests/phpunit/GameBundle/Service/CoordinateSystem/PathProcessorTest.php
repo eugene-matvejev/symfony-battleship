@@ -14,6 +14,8 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
     use PathProcessorMockTrait, BattlefieldMockTrait;
 
     /**
+     * primary paths are only: UP, DOWN, LEFT, RIGHT
+     *
      * @see PathProcessor::PRIMARY_PATHS
      * @test
      */
@@ -28,6 +30,8 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * extended paths contains primary paths as well as (right|left)-(up|down)
+     *
      * @see PathProcessor::EXTENDED_PATHS
      * @test
      */
@@ -44,8 +48,6 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertContains(PathProcessor::PATH_LEFT_DOWN, PathProcessor::EXTENDED_PATHS);
         $this->assertContains(PathProcessor::PATH_RIGHT_UP, PathProcessor::EXTENDED_PATHS);
         $this->assertContains(PathProcessor::PATH_RIGHT_DOWN, PathProcessor::EXTENDED_PATHS);
-
-        $this->assertNotContains(PathProcessor::PATH_NONE, PathProcessor::EXTENDED_PATHS);
     }
 
     /**
