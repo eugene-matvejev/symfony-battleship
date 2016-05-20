@@ -39,56 +39,56 @@ class PathProcessor
      */
     private $cell;
     /**
-     * @var string
-     */
-    private $coordinate;
-    /**
      * @var int
      */
-    private $way = self::PATH_NONE;
+    private $path = self::PATH_NONE;
+    /**
+     * @var string
+     */
+    private $currentCoordinate;
 
     public function __construct(Cell $cell)
     {
         $this->cell = $cell;
-        $this->coordinate = $cell->getCoordinate();
+        $this->currentCoordinate = $cell->getCoordinate();
     }
 
-    public function setPath(int $way) : self
+    public function setPath(int $path) : self
     {
-        $this->way = $way;
-        $this->coordinate = $this->cell->getCoordinate();
+        $this->path = $path;
+        $this->currentCoordinate = $this->cell->getCoordinate();
 
         return $this;
     }
 
     public function getCurrentCoordinate() : string
     {
-        return $this->coordinate;
+        return $this->currentCoordinate;
     }
 
+    /**
+     * LEFT-UP   (--letter, --number)  UP (--number)  RIGHT-UP   (++letter, --number)
+     * LEFT      (--letter)               UNCHANGED   RIGHT      (++letter)
+     * LEFT-DOWN (--letter, ++number) DOWN (++number) RIGHT-DOWN (++letter, ++number)
+     */
     public function getNextCoordinate() : string
     {
-        $number = substr($this->coordinate, 1);
-        $letter = substr($this->coordinate, 0, 1);
+        $number = substr($this->currentCoordinate, 1);
+        $letter = substr($this->currentCoordinate, 0, 1);
 
-        /**
-         * LEFT-UP   (--letter, --number)  UP (--number)  RIGHT-UP   (++letter, --number)
-         * LEFT      (--letter)               UNCHANGED   RIGHT      (++letter)
-         * LEFT-DOWN (--letter, ++number) DOWN (++number) RIGHT-DOWN (++letter, ++number)
-         */
-        if (($this->way & static::PATH_UP) === static::PATH_UP) {
+        if (($this->path & static::PATH_UP) === static::PATH_UP) {
             --$number;
-        } elseif (($this->way & static::PATH_DOWN) === static::PATH_DOWN) {
+        } elseif (($this->path & static::PATH_DOWN) === static::PATH_DOWN) {
             ++$number;
         }
 
-        if (($this->way & static::PATH_RIGHT) === static::PATH_RIGHT) {
+        if (($this->path & static::PATH_RIGHT) === static::PATH_RIGHT) {
             ++$letter;
-        } elseif (($this->way & static::PATH_LEFT) === static::PATH_LEFT) {
+        } elseif (($this->path & static::PATH_LEFT) === static::PATH_LEFT) {
             $letter = chr(ord($letter) - 1);
         }
 
-        return $this->coordinate = $letter . $number;
+        return $this->currentCoordinate = $letter . $number;
     }
 
     /**
