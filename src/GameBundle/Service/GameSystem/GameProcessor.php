@@ -55,41 +55,43 @@ class GameProcessor
         return $cells;
     }
 
-    public function processGameInitiation(string $json) : Game
+    public function buildGame(string $json) : Game
     {
         $game = new Game();
 
-        foreach (json_decode($json) as $_player) {
-            $player = $this->playerModel->createOnRequest(
-                $_player->name,
-                ($_player->flags & PlayerModel::FLAG_AI_CONTROLLED) === PlayerModel::FLAG_AI_CONTROLLED
-            );
+        foreach (json_decode($json) as $playerData) {
+            $player = $this->playerModel->createOnRequest($playerData->name, $playerData->flags);
 
-            $battlefield = (new Battlefield())
-                ->setGame($game)
-                ->setPlayer($player);
+            $battlefield = $this->buildBattlefield($playerData, PlayerModel::isAIControlled($player));
+            $battlefield->setPlayer($player);
             $game->addBattlefield($battlefield);
 
-            foreach ($_player->cells as $_cell) {
-                $flag = PlayerModel::isAIControlled($player)
-                    ? CellModel::FLAG_NONE
-                    : (CellModel::FLAG_NONE !== $_cell->flags ? CellModel::FLAG_SHIP : CellModel::FLAG_NONE);
-
-                $cell = (new Cell())
-                    ->setCoordinate($_cell->coordinate)
-                    ->setFlags($flag);
-                /** @var Cell $cell */
-                $battlefield->addCell($cell);
-            }
-
-            /** for test purposes only */
+            /** for test purposes only - mark player cell as damaged */
             if (!PlayerModel::isAIControlled($player)) {
-                $battlefield->getCellByCoordinate('A1')->setFlags(CellModel::FLAG_DEAD_SHIP);
+                $battlefield->getCellByCoordinate('A2')->setFlags(CellModel::FLAG_DEAD_SHIP);
             }
-            /** ********************** */
+            /** **************************************************** */
         }
 
         return $game;
+    }
+
+    protected function buildBattlefield(\stdClass $data, bool $defaultStateOnly = false) : Battlefield
+    {
+        $battlefield = new Battlefield();
+
+        foreach ($data->cells as $cellData) {
+            $flag = $defaultStateOnly || CellModel::FLAG_NONE === $cellData->flags
+                ? CellModel::FLAG_NONE
+                : CellModel::FLAG_SHIP;
+
+            $cell = (new Cell())
+                ->setCoordinate($cellData->coordinate)
+                ->setFlags($flag);
+            $battlefield->addCell($cell);
+        }
+
+        return $battlefield;
     }
 
     /**
