@@ -13,6 +13,6 @@ class GameResultController extends AbstractAPIController
     {
         $data = $this->get('battleship.game.services.game.result.model')->prepareResponse($page);
 
-        return $this->prepareSerializedResponse($data);
+        return $this->buildSerializedResponse($data);
     }
 }
