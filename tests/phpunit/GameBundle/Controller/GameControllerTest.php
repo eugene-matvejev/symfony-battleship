@@ -2,7 +2,6 @@
 
 namespace EM\Tests\PHPUnit\GameBundle\Controller;
 
-use EM\GameBundle\Controller\GameController;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Model\PlayerModel;
 use EM\Tests\Environment\IntegrationTestSuite;
@@ -165,7 +164,7 @@ class GameControllerTest extends IntegrationTestSuite
     }
 
     /**
-     * simulate human interaction until game has been won
+     * simulate human interaction until game has been finished
      *
      * @var     \stdClass $response
      *
