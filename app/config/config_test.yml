@@ -22,4 +22,4 @@ doctrine:
         password: "%database_password_test%"
         charset:  "%database_encoding%"
 #       for SQLite Only
-#        path:     "%kernel.root_dir%/sqlite.test.db.cache"
+#        path:     "%kernel.cache_dir%/sqlite.db.cache"
