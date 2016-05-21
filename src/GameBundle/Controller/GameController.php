@@ -32,7 +32,7 @@ class GameController extends AbstractAPIController
 
         $om = $this->getDoctrine()->getManager();
         $gameProcessor = $this->get('battleship.game.services.game.processor');
-        $game = $gameProcessor->processGameInitiation($request->getContent());
+        $game = $gameProcessor->buildGame($request->getContent());
 
         $om->persist($game);
         $om->flush();

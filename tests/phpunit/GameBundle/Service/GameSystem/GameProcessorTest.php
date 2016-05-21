@@ -59,13 +59,12 @@ class GameProcessorTest extends IntegrationTestSuite
     /**
      * should initiate Game with 7x7 with two Battlefields
      *
-     * @see GameProcessor::processGameInitiation
-     *
+     * @see GameProcessor::buildGame
      * @test
      */
-    public function processGameInitiation()
+    public function buildGame()
     {
-        $game = $this->gameProcessor->processGameInitiation(static::getSharedFixtureContent('init-game-request-2-players-7x7.json'));
+        $game = $this->gameProcessor->buildGame(static::getSharedFixtureContent('init-game-request-2-players-7x7.json'));
 
         $this->assertCount(2, $game->getBattlefields());
         foreach ($game->getBattlefields() as $battlefield) {
