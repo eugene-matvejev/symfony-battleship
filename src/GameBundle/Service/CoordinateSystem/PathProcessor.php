@@ -76,15 +76,15 @@ class PathProcessor
         $number = substr($this->currentCoordinate, 1);
         $letter = substr($this->currentCoordinate, 0, 1);
 
-        if (($this->path & static::PATH_UP) === static::PATH_UP) {
+        if ($this->isPathContainsBytes(static::PATH_UP)) {
             --$number;
-        } elseif (($this->path & static::PATH_DOWN) === static::PATH_DOWN) {
+        } elseif ($this->isPathContainsBytes(static::PATH_DOWN)) {
             ++$number;
         }
 
-        if (($this->path & static::PATH_RIGHT) === static::PATH_RIGHT) {
+        if ($this->isPathContainsBytes(static::PATH_RIGHT)) {
             ++$letter;
-        } elseif (($this->path & static::PATH_LEFT) === static::PATH_LEFT) {
+        } elseif ($this->isPathContainsBytes(static::PATH_LEFT)) {
             $letter = chr(ord($letter) - 1);
         }
 
@@ -92,9 +92,11 @@ class PathProcessor
     }
 
     /**
+     * @param int|null $excludeFlag [optional] - cells with this flag will be ignored
+     *
      * @return Cell[]
      */
-    public function getAdjacentCells() : array
+    public function getAdjacentCells(int $excludeFlag = null) : array
     {
         $cells = [];
         $battlefield = $this->cell->getBattlefield();
@@ -102,10 +104,24 @@ class PathProcessor
             $this->setPath($way);
 
             if (null !== $cell = $battlefield->getCellByCoordinate($this->getNextCoordinate())) {
-                $cells[] = $cell;
+                if ($excludeFlag && $cell->hasFlag($excludeFlag)) {
+                    continue;
+                }
+
+                $cells[$cell->getCoordinate()] = $cell;
             }
         }
 
         return $cells;
+    }
+
+    /**
+     * @param int $flag
+     *
+     * @return bool
+     */
+    protected function isPathContainsBytes(int $flag) : bool
+    {
+        return ($this->path & $flag) === $flag;
     }
 }

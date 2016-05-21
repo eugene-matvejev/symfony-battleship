@@ -2,16 +2,18 @@
 
 namespace EM\Tests\PHPUnit\GameBundle\Service\CoordinateSystem;
 
+use EM\GameBundle\Entity\Cell;
+use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
+use EM\Tests\Environment\IntegrationTestSuite;
 use EM\Tests\Environment\MockFactory\Entity\BattlefieldMockTrait;
-use EM\Tests\Environment\MockFactory\Service\PathProcessorMockTrait;
 
 /**
  * @see PathProcessor
  */
-class PathProcessorTest extends \PHPUnit_Framework_TestCase
+class PathProcessorTest extends IntegrationTestSuite
 {
-    use PathProcessorMockTrait, BattlefieldMockTrait;
+    use BattlefieldMockTrait;
 
     /**
      * primary paths are only: UP, DOWN, LEFT, RIGHT
@@ -19,69 +21,204 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
      * @see PathProcessor::PRIMARY_PATHS
      * @test
      */
-    public function primaryWays()
+    public function primaryPaths()
     {
         $this->assertCount(4, PathProcessor::PRIMARY_PATHS);
 
-        $this->assertContains(PathProcessor::PATH_LEFT, PathProcessor::PRIMARY_PATHS);
-        $this->assertContains(PathProcessor::PATH_RIGHT, PathProcessor::PRIMARY_PATHS);
-        $this->assertContains(PathProcessor::PATH_UP, PathProcessor::PRIMARY_PATHS);
-        $this->assertContains(PathProcessor::PATH_DOWN, PathProcessor::PRIMARY_PATHS);
+        $expectedPaths = [
+            PathProcessor::PATH_LEFT,
+            PathProcessor::PATH_RIGHT,
+            PathProcessor::PATH_UP,
+            PathProcessor::PATH_DOWN
+        ];
+
+        foreach ($expectedPaths as $path) {
+            $this->assertContains($path, PathProcessor::PRIMARY_PATHS);
+        }
     }
 
     /**
-     * extended paths contains primary paths as well as (right|left)-(up|down)
+     * extended paths contains primary paths as well as (LEFT|RIGHT)-(UP|DOWN)
      *
      * @see PathProcessor::EXTENDED_PATHS
      * @test
      */
-    public function extendedWays()
+    public function extendedPaths()
     {
         $this->assertCount(8, PathProcessor::EXTENDED_PATHS);
 
-        $this->assertContains(PathProcessor::PATH_LEFT, PathProcessor::EXTENDED_PATHS);
-        $this->assertContains(PathProcessor::PATH_RIGHT, PathProcessor::EXTENDED_PATHS);
-        $this->assertContains(PathProcessor::PATH_UP, PathProcessor::EXTENDED_PATHS);
-        $this->assertContains(PathProcessor::PATH_DOWN, PathProcessor::EXTENDED_PATHS);
+        $expectedPaths = [
+            PathProcessor::PATH_LEFT,
+            PathProcessor::PATH_RIGHT,
+            PathProcessor::PATH_UP,
+            PathProcessor::PATH_DOWN,
+            PathProcessor::PATH_LEFT_UP,
+            PathProcessor::PATH_LEFT_DOWN,
+            PathProcessor::PATH_RIGHT_UP,
+            PathProcessor::PATH_RIGHT_DOWN
+        ];
 
-        $this->assertContains(PathProcessor::PATH_LEFT_UP, PathProcessor::EXTENDED_PATHS);
-        $this->assertContains(PathProcessor::PATH_LEFT_DOWN, PathProcessor::EXTENDED_PATHS);
-        $this->assertContains(PathProcessor::PATH_RIGHT_UP, PathProcessor::EXTENDED_PATHS);
-        $this->assertContains(PathProcessor::PATH_RIGHT_DOWN, PathProcessor::EXTENDED_PATHS);
+        foreach ($expectedPaths as $path) {
+            $this->assertContains($path, PathProcessor::EXTENDED_PATHS);
+        }
+    }
+
+    /**
+     * check entire list of paths to contain bytes
+     *
+     * @see     PathProcessor::isPathContainsBytes
+     * @test
+     *
+     * @depends primaryPaths
+     * @depends extendedPaths
+     */
+    public function isPathContainsBytesYes()
+    {
+        $contains = [
+            PathProcessor::PATH_LEFT       => [PathProcessor::PATH_LEFT],
+            PathProcessor::PATH_RIGHT      => [PathProcessor::PATH_RIGHT],
+            PathProcessor::PATH_UP         => [PathProcessor::PATH_UP],
+            PathProcessor::PATH_DOWN       => [PathProcessor::PATH_DOWN],
+            PathProcessor::PATH_NONE       => [],
+            PathProcessor::PATH_LEFT_UP    => [PathProcessor::PATH_LEFT, PathProcessor::PATH_UP],
+            PathProcessor::PATH_LEFT_DOWN  => [PathProcessor::PATH_LEFT, PathProcessor::PATH_DOWN],
+            PathProcessor::PATH_RIGHT_UP   => [PathProcessor::PATH_RIGHT, PathProcessor::PATH_UP],
+            PathProcessor::PATH_RIGHT_DOWN => [PathProcessor::PATH_RIGHT, PathProcessor::PATH_DOWN]
+        ];
+
+        foreach ($contains as $path => $set) {
+            $this->assertTrue($this->invokeIsPathContainsBytesMethod($path, $path));
+
+            foreach ($set as $bytes) {
+                $this->assertTrue($this->invokeIsPathContainsBytesMethod($path, $bytes));
+            }
+        }
+    }
+
+    /**
+     * check entire list of paths to do not contain bytes into path
+     *
+     * @see     PathProcessor::isPathContainsBytes
+     * @test
+     *
+     * @depends primaryPaths
+     * @depends extendedPaths
+     */
+    public function isPathContainsBytesNot()
+    {
+        $notContains = [
+            PathProcessor::PATH_LEFT       => [PathProcessor::PATH_RIGHT],
+            PathProcessor::PATH_RIGHT      => [PathProcessor::PATH_LEFT],
+            PathProcessor::PATH_UP         => [PathProcessor::PATH_DOWN],
+            PathProcessor::PATH_DOWN       => [PathProcessor::PATH_UP],
+            PathProcessor::PATH_NONE       => PathProcessor::EXTENDED_PATHS,
+            PathProcessor::PATH_LEFT_UP    => [PathProcessor::PATH_RIGHT, PathProcessor::PATH_DOWN],
+            PathProcessor::PATH_LEFT_DOWN  => [PathProcessor::PATH_RIGHT, PathProcessor::PATH_UP],
+            PathProcessor::PATH_RIGHT_UP   => [PathProcessor::PATH_LEFT, PathProcessor::PATH_DOWN],
+            PathProcessor::PATH_RIGHT_DOWN => [PathProcessor::PATH_LEFT, PathProcessor::PATH_UP],
+        ];
+
+        foreach ($notContains as $path => $set) {
+            $this->assertTrue($this->invokeIsPathContainsBytesMethod($path, $path));
+
+            foreach ($set as $bytes) {
+                $this->assertFalse($this->invokeIsPathContainsBytesMethod($path, $bytes));
+            }
+        }
+    }
+
+    /**
+     * @param int $path
+     * @param int $bytes
+     *
+     * @return mixed
+     */
+    private function invokeIsPathContainsBytesMethod(int $path, int $bytes)
+    {
+        $processor = (new PathProcessor($this->getCellMock('B2')))
+            ->setPath($path);
+
+        return $this->invokeMethod($processor, 'isPathContainsBytes', [$bytes]);
     }
 
     /**
      * @see     PathProcessor::getAdjacentCells
      * @test
      *
-     * @depends extendedWays
+     * @depends extendedPaths
      */
-    public function getAdjacentCells()
+    public function getAdjacentCellsNoFlags()
+    {
+        $cells = (new PathProcessor($this->getBattlefieldMock()->getCellByCoordinate('B2')))->getAdjacentCells();
+
+        $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
+        $this->assertCount(8, $cells);
+
+        foreach (['A2', 'C2', 'B1', 'B3', 'A1', 'A3', 'C1', 'C3'] as $coordinate) {
+            $this->assertArrayHasKey($coordinate, $cells);
+            $this->assertEquals($coordinate, $cells[$coordinate]->getCoordinate());
+        }
+    }
+
+    /**
+     * @see     PathProcessor::getAdjacentCells
+     * @test
+     *
+     * @depends extendedPaths
+     */
+    public function getAdjacentCellsWith_FLAG_DEAD_OnNotDeadCells()
+    {
+        $cells = (new PathProcessor($this->getBattlefieldMock()->getCellByCoordinate('B2')))->getAdjacentCells(CellModel::FLAG_DEAD);
+
+        $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
+        $this->assertCount(8, $cells);
+
+        foreach (['A2', 'C2', 'B1', 'B3', 'A1', 'A3', 'C1', 'C3'] as $coordinate) {
+            $this->assertArrayHasKey($coordinate, $cells);
+            $this->assertEquals($coordinate, $cells[$coordinate]->getCoordinate());
+        }
+    }
+
+    /**
+     * @see     PathProcessor::getAdjacentCells
+     * @test
+     *
+     * @depends extendedPaths
+     */
+    public function getAdjacentCellsWith_FLAG_DEAD_OnSomeDeadCells()
     {
         $battlefield = $this->getBattlefieldMock();
-        $cells = $this->getPathProcessorMock($battlefield->getCellByCoordinate('B2'))->getAdjacentCells();
+        $fixtures = [
+            'A2' => CellModel::FLAG_DEAD,
+            'C2' => CellModel::FLAG_SHIP,
+            'B1' => CellModel::FLAG_SKIP,
+            'B3' => CellModel::FLAG_DEAD_SHIP
+        ];
 
-        $this->assertCount(8, $cells);
-        $this->assertEquals('A2', $cells[0]->getCoordinate());
-        $this->assertEquals('C2', $cells[1]->getCoordinate());
-        $this->assertEquals('B1', $cells[2]->getCoordinate());
-        $this->assertEquals('B3', $cells[3]->getCoordinate());
+        foreach ($fixtures as $coordinate => $flag) {
+            $battlefield->getCellByCoordinate($coordinate)->setFlags($flag);
+        }
 
-        $this->assertEquals('A1', $cells[4]->getCoordinate());
-        $this->assertEquals('A3', $cells[5]->getCoordinate());
-        $this->assertEquals('C1', $cells[6]->getCoordinate());
-        $this->assertEquals('C3', $cells[7]->getCoordinate());
+        $cells = (new PathProcessor($battlefield->getCellByCoordinate('B2')))->getAdjacentCells(CellModel::FLAG_DEAD);
+
+        $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
+        $this->assertCount(5, $cells);
+
+        foreach (['C2', 'A1', 'A3', 'C1', 'C3'] as $coordinate) {
+            $this->assertArrayHasKey($coordinate, $cells);
+            $this->assertEquals($coordinate, $cells[$coordinate]->getCoordinate());
+        }
     }
 
     /**
      * @see     PathProcessor::getNextCoordinate
      * @test
      *
-     * @depends extendedWays
+     * @depends extendedPaths
      */
     public function getNextCoordinate()
     {
-        $expectedCoordinatesByWay = [
+        $expectedCoordinatesByPath = [
             PathProcessor::PATH_LEFT       => 'C4',
             PathProcessor::PATH_RIGHT      => 'E4',
             PathProcessor::PATH_UP         => 'D3',
@@ -93,12 +230,22 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
             PathProcessor::PATH_RIGHT_DOWN => 'E5'
         ];
 
-        $service = $this->getPathProcessorMock($this->getCellMock('D4'));
-        foreach ($expectedCoordinatesByWay as $wayId => $expectedCoordinate) {
-            $service->setPath($wayId);
-            $this->assertEquals('D4', $service->getCurrentCoordinate());
-            $this->assertEquals($expectedCoordinate, $service->getNextCoordinate());
-            $this->assertEquals($expectedCoordinate, $service->getCurrentCoordinate());
+        $processor = new PathProcessor($this->getCellMock('D4'));
+        foreach ($expectedCoordinatesByPath as $path => $expectedCoordinate) {
+            $processor->setPath($path);
+
+            $this->assertEquals('D4', $processor->getCurrentCoordinate());
+
+            $this->assertEquals($expectedCoordinate, $processor->getNextCoordinate());
+            $this->assertEquals($expectedCoordinate, $processor->getCurrentCoordinate());
+
+            /** if PathProcessor::PATH_NONE then coordinate should not change */
+            if (PathProcessor::PATH_NONE !== $path) {
+                $this->assertNotEquals($expectedCoordinate, $processor->getNextCoordinate());
+                $this->assertNotEquals($expectedCoordinate, $processor->getCurrentCoordinate());
+            } else {
+                $this->assertEquals('D4', $processor->getCurrentCoordinate());
+            }
         }
     }
 }
