@@ -2,21 +2,18 @@
 
 namespace EM\Tests\PHPUnit\GameBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
 use EM\Tests\Environment\MockFactory\Entity\CellMockTrait;
 
 /**
- * @see Cell
+ * @see AbstractFlaggedEntity
  */
-class CellTest extends \PHPUnit_Framework_TestCase
+class AbstractFlaggedEntityTest extends \PHPUnit_Framework_TestCase
 {
     use CellMockTrait;
 
     /**
-     * @see Cell::addMask
-     *
+     * @see AbstractFlaggedEntity::addMask
      * @test
      */
     public function addFlag()
@@ -31,8 +28,7 @@ class CellTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see Cell::removeMask
-     *
+     * @see AbstractFlaggedEntity::removeMask
      * @test
      */
     public function removeFlag()
@@ -45,8 +41,7 @@ class CellTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see Cell::hasMask
-     *
+     * @see AbstractFlaggedEntity::hasMask
      * @test
      */
     public function hasFlag()
