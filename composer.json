@@ -53,13 +53,6 @@
             "php bin/console doctrine:database:create --if-not-exists",
             "php bin/console doctrine:migrations:migrate --no-interaction"
         ],
-        "heroku-deployment-events": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "rm web/app_dev.php",
-            "php bin/console assets:install",
-            "php bin/console doctrine:schema:drop --full-database --force",
-            "php bin/console doctrine:migrations:migrate --no-interaction"
-        ],
         "deployment-events": [
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
@@ -71,6 +64,13 @@
             "cp vendor/components/jquery/jquery.min.js web/bundles/vendor/jquery/jquery.min.js",
             "mkdir -p web/bundles/vendor/twitter-bootstrap",
             "cp -r vendor/twitter/bootstrap/dist/* web/bundles/vendor/twitter-bootstrap"
+        ],
+        "compile": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "rm web/app_dev.php",
+            "php bin/console assets:install",
+            "php bin/console doctrine:schema:drop --full-database --force",
+            "php bin/console doctrine:migrations:migrate --no-interaction"
         ]
     },
     "config": {
