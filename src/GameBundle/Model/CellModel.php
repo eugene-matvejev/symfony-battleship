@@ -95,7 +95,7 @@ class CellModel
             foreach (static::getShipCells($cell, self::FLAG_DEAD) as $shipCell) {
                 self::$checkedCells[$cell->getId()] = $shipCell;
 
-                foreach ((new PathProcessor($cell))->getAdjacentCells(CellModel::FLAG_SHIP) as $waterCell) {
+                foreach ((new PathProcessor($shipCell))->getAdjacentCells(CellModel::FLAG_SHIP) as $waterCell) {
                     self::switchPhase($waterCell, static::FLAG_SKIP);
                 }
             }
