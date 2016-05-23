@@ -39,7 +39,7 @@ class CellModelTest extends \PHPUnit_Framework_TestCase
      *
      * @depends switchPhase
      */
-    public function switchPhaseToCustomState()
+    public function switchPhaseWithAdditionalFlag()
     {
         $this->iterateCellFlags(
             [
@@ -60,7 +60,7 @@ class CellModelTest extends \PHPUnit_Framework_TestCase
      * @test
      *
      * @depends switchPhase
-     * @depends switchPhaseToCustomState
+     * @depends switchPhaseWithAdditionalFlag
      */
     public function getChangedCells()
     {
