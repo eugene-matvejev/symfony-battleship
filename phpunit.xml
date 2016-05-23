@@ -33,7 +33,6 @@
             <directory>./src</directory>
             <exclude>
                 <directory>./src/*Bundle/DataFixtures</directory>
-                <directory>./src/*Bundle/DependencyInjection</directory>
                 <directory>./src/*Bundle/Resources</directory>
             </exclude>
         </whitelist>
