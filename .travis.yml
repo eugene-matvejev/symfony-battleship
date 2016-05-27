@@ -7,12 +7,11 @@ services:
 
 before_script:
     - "cp app/config/parameters.yml.dist app/config/parameters.yml"
-#    - "composer require codeclimate/php-test-reporter"
     - "composer install --no-progress --no-interaction"
 
 script:
     - "php bin/phpunit -c phpunit.xml --colors=always --verbose --coverage-clover=coverage.xml"
 
 after_success:
+    - "CODECLIMATE_REPO_TOKEN=2f804dfe85a65f7f14d8be5d36f38bcbf07a5f2fcf6852ceb19327e7931a8d49 ./bin/test-reporter --coverage-report=\"./coverage.xml\""
     - "bash <(curl -s https://codecov.io/bash)"
-#    - "CODECLIMATE_REPO_TOKEN=2f804dfe85a65f7f14d8be5d36f38bcbf07a5f2fcf6852ceb19327e7931a8d49 ./bin/test-reporter --coverage-report=\"./coverage.xml\""
