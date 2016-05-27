@@ -86,7 +86,6 @@
         "incenteev-parameters": {
             "file": "app/config/parameters.yml",
             "dist-file": "app/config/parameters.yml.dist",
-            "keep-outdated": true,
             "env-map": {
                 "secret": "SECRET_SYMFONY_TOKEN",
                 "database_driver": "DATABASE_ENGINE",
