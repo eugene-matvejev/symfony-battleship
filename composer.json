@@ -1,6 +1,6 @@
 {
     "name": "eugene-matvejev/battleship-game-api",
-    "description": "spare time project (API part), highly experimental! more info in readme.",
+    "description": "Battleship API, more info: please check readme.md",
     "license": "MIT",
     "type": "project",
     "autoload": {
@@ -44,7 +44,8 @@
         "behat/behat": "^3.1",
         "doctrine/doctrine-fixtures-bundle": "^2.3",
         "sensio/generator-bundle": "^3.0",
-        "phpunit/phpunit": "^5.1"
+        "phpunit/phpunit": "^5.1",
+        "codeclimate/php-test-reporter": "^0.3.2"
     },
     "scripts": {
         "post-install-cmd": "@deployment-events",
@@ -54,6 +55,7 @@
             "php bin/console doctrine:migrations:migrate --no-interaction"
         ],
         "deployment-events": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
@@ -66,7 +68,6 @@
             "cp -r vendor/twitter/bootstrap/dist/* web/bundles/vendor/twitter-bootstrap"
         ],
         "compile": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "rm web/app_dev.php",
             "php bin/console assets:install",
             "php bin/console doctrine:schema:drop --full-database --force",
@@ -82,6 +83,20 @@
         "symfony-var-dir": "var",
         "symfony-web-dir": "web",
         "symfony-tests-dir": "tests",
-        "symfony-assets-install": "symlink"
+        "symfony-assets-install": "symlink",
+        "incenteev-parameters": {
+            "file": "app/config/parameters.yml",
+            "dist-file": "app/config/parameters.yml.dist",
+            "env-map": {
+                "secret": "SECRET_SYMFONY_TOKEN",
+                "database_driver": "DATABASE_ENGINE",
+                "database_encoding": "DATABASE_ENCODING",
+                "database_host": "DATABASE_HOST",
+                "database_port": "DATABASE_PORT",
+                "database_name": "DATABASE_NAME",
+                "database_user": "DATABASE_USER",
+                "database_password": "DATABASE_PASSWORD"
+            }
+        }
     }
 }
