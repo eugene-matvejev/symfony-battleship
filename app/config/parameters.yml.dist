@@ -1,5 +1,5 @@
 parameters:
-    database_encoding: UTF-8
+    database_encoding: utf-8
 # MYSQL / MariaDB
     database_driver: pdo_mysql
     database_port: 3306
