@@ -4,9 +4,9 @@ machine:
 
 dependencies:
     pre:
-        - "cp app/config/parameters.yml.dist app/config/parameters.yml"
-        - "composer install --no-scripts"
-        - "php bin/console doctrine:database:create --if-not-exists"
+#        - "cp app/config/parameters.yml.dist app/config/parameters.yml"
+#        - "composer install --no-scripts"
+#        - "php bin/console doctrine:database:create --if-not-exists"
         - "composer install"
 
 test:
