@@ -1,6 +1,15 @@
 machine:
     php:
         version: "7.0.4"
+    enviroment:
+        DATABASE_ENGINE: "pdo_mysql"
+        DATABASE_HOST: "127.0.0.1"
+        DATABASE_PORT: 3306
+        DATABASE_NAME: "symfony_game_test"
+        DATABASE_USER: "root"
+        DATABASE_PASSWORD: ~
+        DATABASE_ENCODING: "UTF-8"
+        SECRET_SYMFONY_TOKEN: "df9407f9746333d83748c24bcc65255304069b6d"
 
 dependencies:
     pre:
