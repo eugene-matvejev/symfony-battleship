@@ -12,10 +12,6 @@ build:
         before:
             -
                 command: "cp app/config/parameters.yml.dist app/config/parameters.yml"
-            -
-                command: "composer install --no-scripts"
-            -
-                command: "php bin/console doctrine:database:create --if-not-exists"
     environment:
         php:
             version: "7.0.4"
