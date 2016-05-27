@@ -50,6 +50,8 @@
         "post-install-cmd": "@deployment-events",
         "post-update-cmd": "@deployment-events",
         "non-heroku-deployment-events": [
+            "php bin/console doctrine:database:create --if-not-exists",
+            "php bin/console doctrine:migrations:migrate --no-interaction"
         ],
         "deployment-events": [
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
@@ -57,7 +59,7 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget",
-            "@non-heroku-deployment-events",
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "mkdir -p web/bundles/vendor/jquery",
             "cp vendor/components/jquery/jquery.min.js web/bundles/vendor/jquery/jquery.min.js",
             "mkdir -p web/bundles/vendor/twitter-bootstrap",
