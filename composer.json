@@ -87,21 +87,14 @@
             "file": "app/config/parameters.yml",
             "dist-file": "app/config/parameters.yml.dist",
             "env-map": {
+                "secret": "SECRET_SYMFONY_TOKEN",
                 "database_driver": "DATABASE_ENGINE",
                 "database_encoding": "DATABASE_ENCODING",
-                "secret": "SECRET_SYMFONY_TOKEN",
-
                 "database_host": "DATABASE_HOST",
                 "database_port": "DATABASE_PORT",
                 "database_name": "DATABASE_NAME",
                 "database_user": "DATABASE_USER",
-                "database_password": "DATABASE_PASSWORD",
-
-                "test_database_host": "DATABASE_HOST",
-                "test_database_port": "DATABASE_PORT",
-                "test_database_name": "DATABASE_NAME",
-                "test_database_user": "DATABASE_USER",
-                "test_database_password": "DATABASE_PASSWORD"
+                "database_password": "DATABASE_PASSWORD"
             }
         }
     }
