@@ -1,6 +1,6 @@
 {
     "name": "eugene-matvejev/battleship-game-api",
-    "description": "Battleship API, more info: please check readme.md",
+    "description": "Battleship API, more info: please check README.md",
     "license": "MIT",
     "type": "project",
     "autoload": {
