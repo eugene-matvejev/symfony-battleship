@@ -4,7 +4,8 @@ machine:
 
 dependencies:
     pre:
-        - "composer install --no-interaction"
+        - "cp app/config/parameters.yml.dist app/config/parameters.yml"
+        - "composer install --no-progress --no-interaction"
 
 test:
     override:
