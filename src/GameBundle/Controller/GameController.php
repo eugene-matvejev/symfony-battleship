@@ -32,11 +32,11 @@ class GameController extends AbstractAPIController
 
         $om = $this->getDoctrine()->getManager();
         $gameProcessor = $this->get('battleship.game.services.game.processor');
-        $game = $gameProcessor->processGameInitiation($request->getContent());
+        $game = $gameProcessor->buildGame($request->getContent());
 
         $om->persist($game);
         $om->flush();
-        $response = $this->prepareSerializedResponse($game, Response::HTTP_CREATED);
+        $response = $this->buildSerializedResponse($game, Response::HTTP_CREATED);
 
         foreach ($gameProcessor->processCPUBattlefieldsInitiation($game) as $cell) {
             $om->persist($cell);
@@ -70,7 +70,7 @@ class GameController extends AbstractAPIController
         }
         $om->flush();
 
-        return $this->prepareSerializedResponse($data);
+        return $this->buildSerializedResponse($data);
     }
 
     private function validateInitRequest(Request $request) : bool

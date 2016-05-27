@@ -2,8 +2,6 @@
 
 namespace EM\Tests\PHPUnit\GameBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use EM\GameBundle\Entity\GameResult;
 use EM\Tests\Environment\IntegrationTestSuite;
 use EM\Tests\Environment\MockFactory\Entity\GameResultMockTrait;
 

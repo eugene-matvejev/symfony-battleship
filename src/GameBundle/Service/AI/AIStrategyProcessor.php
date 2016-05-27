@@ -2,7 +2,6 @@
 
 namespace EM\GameBundle\Service\AI;
 
-use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
@@ -12,62 +11,54 @@ use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
  */
 class AIStrategyProcessor
 {
-    const STRATEGY_HORIZONTAL = 0;
-    const STRATEGY_VERTICAL   = 1;
-    const STRATEGY_BOTH       = 2;
+    const STRATEGY_NONE       = 0x00;
+    const STRATEGY_HORIZONTAL = 0x01;
+    const STRATEGY_VERTICAL   = 0x02;
+    const STRATEGY_BOTH       = self::STRATEGY_HORIZONTAL | self::STRATEGY_VERTICAL;
 
     /**
      * @param Cell $cell
-     * @param int  $strategyId
+     * @param int  $strategyFlag
      *
      * @return Cell[]
      */
-    public function process(Cell $cell, int $strategyId) : array
+    public function process(Cell $cell, int $strategyFlag) : array
     {
-        $processor = new PathProcessor($cell);
-        $processors = [];
-        switch ($strategyId) {
-            case self::STRATEGY_HORIZONTAL:
-                $processors = [
-                    clone $processor->setPath(PathProcessor::PATH_LEFT),
-                    clone $processor->setPath(PathProcessor::PATH_RIGHT)
-                ];
-                break;
-            case self::STRATEGY_VERTICAL:
-                $processors = [
-                    clone $processor->setPath(PathProcessor::PATH_UP),
-                    clone $processor->setPath(PathProcessor::PATH_DOWN)
-                ];
-                break;
-            case self::STRATEGY_BOTH:
-                $processors = [
-                    clone $processor->setPath(PathProcessor::PATH_LEFT),
-                    clone $processor->setPath(PathProcessor::PATH_RIGHT),
-                    clone $processor->setPath(PathProcessor::PATH_UP),
-                    clone $processor->setPath(PathProcessor::PATH_DOWN)
-                ];
-                break;
+        $paths = [];
+        if (($strategyFlag & static::STRATEGY_HORIZONTAL) === static::STRATEGY_HORIZONTAL) {
+            $paths[] = PathProcessor::PATH_LEFT;
+            $paths[] = PathProcessor::PATH_RIGHT;
+        }
+        if (($strategyFlag & static::STRATEGY_VERTICAL) === static::STRATEGY_VERTICAL) {
+            $paths[] = PathProcessor::PATH_UP;
+            $paths[] = PathProcessor::PATH_DOWN;
         }
 
-        return $this->processCoordinates($cell->getBattlefield(), $processors);
+        return $this->processCoordinates($cell, $paths);
     }
 
     /**
-     * @param Battlefield     $battlefield
-     * @param PathProcessor[] $coordinates
+     * @param Cell  $cell
+     * @param int[] $paths
      *
      * @return Cell[]
      */
-    protected function processCoordinates(Battlefield $battlefield, array $coordinates) : array
+    protected function processCoordinates(Cell $cell, array $paths) : array
     {
         $cells = [];
-        foreach ($coordinates as $coordinate) {
-            while (null !== $cell = $battlefield->getCellByCoordinate($coordinate->getNextCoordinate())) {
-                if ($cell->hasFlag(CellModel::FLAG_SKIP)
-                    || (!$cell->hasFlag(CellModel::FLAG_SHIP) && $cell->hasFlag(CellModel::FLAG_DEAD))
-                ) {
+        $battlefield = $cell->getBattlefield();
+        $processor = new PathProcessor($cell);
+
+        foreach ($paths as $path) {
+            $processor->setPath($path);
+
+            /** @var Cell $cell */
+            while (null !== $cell = $battlefield->getCellByCoordinate($processor->getNextCoordinate())) {
+                /** if it is marked as skipped or dead water - skip processing */
+                if ($cell->hasFlag(CellModel::FLAG_SKIP) || (!$cell->hasFlag(CellModel::FLAG_SHIP) && $cell->hasFlag(CellModel::FLAG_DEAD))) {
                     break;
                 }
+                /** if it not marked as dead return it later */
                 if (!$cell->hasFlag(CellModel::FLAG_DEAD)) {
                     $cells[] = $cell;
                     break;

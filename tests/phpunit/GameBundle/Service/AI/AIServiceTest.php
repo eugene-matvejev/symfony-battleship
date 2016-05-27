@@ -37,7 +37,7 @@ class AIServiceTest extends IntegrationTestSuite
     }
 
     /**
-     * @see     AIService::pickCellToAttack
+     * @see AIService::pickCellToAttack
      * @test
      */
     public function pickCellToAttack()

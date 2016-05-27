@@ -14,12 +14,12 @@ class CellModelTest extends \PHPUnit_Framework_TestCase
     use CellMockTrait;
 
     /**
-     * @see     CellModel::switchPhase()
+     * @see CellModel::switchPhase
      * @test
      */
     public function switchPhase()
     {
-        $this->iterateCellMasks(
+        $this->iterateCellFlags(
             [
                 CellModel::FLAG_NONE      => CellModel::FLAG_DEAD,
                 CellModel::FLAG_DEAD      => CellModel::FLAG_DEAD,
@@ -34,14 +34,14 @@ class CellModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see     CellModel::switchPhaseToSkipped()
+     * @see     CellModel::switchPhase
      * @test
      *
      * @depends switchPhase
      */
-    public function switchPhaseToCustomState()
+    public function switchPhaseWithAdditionalFlag()
     {
-        $this->iterateCellMasks(
+        $this->iterateCellFlags(
             [
                 CellModel::FLAG_NONE      => CellModel::FLAG_SKIP,
                 CellModel::FLAG_DEAD      => CellModel::FLAG_DEAD,
@@ -56,11 +56,11 @@ class CellModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see     CellModel::getChangedCells()
+     * @see     CellModel::getChangedCells
      * @test
      *
      * @depends switchPhase
-     * @depends switchPhaseToCustomState
+     * @depends switchPhaseWithAdditionalFlag
      */
     public function getChangedCells()
     {
@@ -69,16 +69,16 @@ class CellModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param int[]    $masks
+     * @param int[]    $flags
      * @param callable $closure
      */
-    private function iterateCellMasks(array $masks, callable $closure)
+    private function iterateCellFlags(array $flags, callable $closure)
     {
-        foreach ($masks as $originalMask => $expectedMask) {
+        foreach ($flags as $originFlag => $expectedFlag) {
             /** @var Cell $cell */
-            $cell = $closure($this->getCellMock('A1')->setFlags($originalMask));
+            $cell = $closure($this->getCellMock('A1')->setFlags($originFlag));
 
-            $this->assertEquals($expectedMask, $cell->getFlags());
+            $this->assertEquals($expectedFlag, $cell->getFlags());
         }
     }
 }

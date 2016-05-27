@@ -27,14 +27,14 @@
     ],
     "require": {
         "php": "7.0.0 - 7.0.4 || >= 7.0.6",
-        "doctrine/doctrine-bundle": "~1.6",
-        "doctrine/doctrine-migrations-bundle": "~1.1",
-        "doctrine/orm": "~2.5",
         "incenteev/composer-parameter-handler": "^2.1",
+        "doctrine/doctrine-bundle": "^1.6",
+        "doctrine/doctrine-migrations-bundle": "^1.1",
+        "doctrine/orm": "^2.5",
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0",
-        "symfony/symfony": "~3.0.3",
-        "symfony/monolog-bundle": "~2.8",
+        "symfony/symfony": "^3.0.3",
+        "symfony/monolog-bundle": "^2.8",
         "jms/serializer-bundle": "^1.1",
         "components/jquery": "^2.2",
         "twitter/bootstrap": "^3.3"
@@ -47,21 +47,24 @@
         "phpunit/phpunit": "^5.1"
     },
     "scripts": {
-        "post-install-cmd": "@prepareEnvironment",
-        "post-update-cmd": "@prepareEnvironment",
-        "prepareEnvironment": [
-            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+        "post-install-cmd": "@deployment-events",
+        "post-update-cmd": "@deployment-events",
+        "non-heroku-deployment-events": [
+        ],
+        "deployment-events": [
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget",
+            "@non-heroku-deployment-events",
             "mkdir -p web/bundles/vendor/jquery",
             "cp vendor/components/jquery/jquery.min.js web/bundles/vendor/jquery/jquery.min.js",
             "mkdir -p web/bundles/vendor/twitter-bootstrap",
             "cp -r vendor/twitter/bootstrap/dist/* web/bundles/vendor/twitter-bootstrap"
         ],
         "compile": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "rm web/app_dev.php",
             "php bin/console assets:install",
             "php bin/console doctrine:schema:drop --full-database --force",
@@ -69,7 +72,6 @@
         ]
     },
     "config": {
-        "optimize-autoloader": true,
         "bin-dir": "bin/"
     },
     "extra": {
@@ -77,19 +79,7 @@
         "symfony-bin-dir": "bin",
         "symfony-var-dir": "var",
         "symfony-web-dir": "web",
-        "symfony-assets-install": "symlink",
-        "incenteev-parameters": {
-            "file": "app/config/parameters.yml",
-            "dist-file": "app/config/parameters.yml.dist",
-            "env-map": {
-                "database_driver": "DATABASE_ENGINE",
-                "database_host": "DATABASE_HOST",
-                "database_port": "DATABASE_PORT",
-                "database_name": "DATABASE_NAME",
-                "database_user": "DATABASE_USER",
-                "database_password": "DATABASE_PASSWORD",
-                "secret": "SECRET_SYMFONY_TOKEN"
-            }
-        }
+        "symfony-tests-dir": "tests",
+        "symfony-assets-install": "symlink"
     }
 }

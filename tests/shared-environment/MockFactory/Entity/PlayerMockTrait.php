@@ -3,7 +3,6 @@
 namespace EM\Tests\Environment\MockFactory\Entity;
 
 use EM\GameBundle\Entity\Player;
-use EM\GameBundle\Entity\PlayerType;
 use EM\GameBundle\Model\PlayerModel;
 
 /**
@@ -18,7 +17,7 @@ trait PlayerMockTrait
             ->setFlags($flags);
     }
 
-    protected function getAIControlledPlayerMock(string $name) : Player
+    protected function getAIPlayerMock(string $name) : Player
     {
         return $this->getPlayerMock($name, PlayerModel::FLAG_AI_CONTROLLED);
     }

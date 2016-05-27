@@ -23,7 +23,7 @@ class PlayerModelTest extends IntegrationTestSuite
     }
 
     /**
-     * @see PlayerModel::createOnRequest()
+     * @see PlayerModel::createOnRequest
      * @test
      */
     public function createOnRequestOnExistingPlayer()
@@ -34,7 +34,7 @@ class PlayerModelTest extends IntegrationTestSuite
     }
 
     /**
-     * @see     PlayerModel::createOnRequest()
+     * @see     PlayerModel::createOnRequest
      * @test
      *
      * @depends createOnRequestOnExistingPlayer
@@ -47,7 +47,7 @@ class PlayerModelTest extends IntegrationTestSuite
     }
 
     /**
-     * @see  PlayerModel::isAIControlled()
+     * @see PlayerModel::isAIControlled
      * @test
      */
     public function isAIControlledOn_FLAG_NONE()
@@ -57,7 +57,7 @@ class PlayerModelTest extends IntegrationTestSuite
     }
 
     /**
-     * @see  PlayerModel::isAIControlled()
+     * @see PlayerModel::isAIControlled
      * @test
      */
     public function isAIControlledOn_FLAG_AI_CONTROLLED()

@@ -40,7 +40,7 @@ class GameProcessorTest extends IntegrationTestSuite
     public function processCPUBattlefieldsInitiation()
     {
         $game = $this->getGameMock();
-        $game->getBattlefields()[0]->setPlayer($this->getAIControlledPlayerMock(''));
+        $game->getBattlefields()[0]->setPlayer($this->getAIPlayerMock(''));
 
         $this->invokeMethod($this->gameProcessor, 'processCPUBattlefieldsInitiation', [$game]);
 
@@ -59,13 +59,12 @@ class GameProcessorTest extends IntegrationTestSuite
     /**
      * should initiate Game with 7x7 with two Battlefields
      *
-     * @see GameProcessor::processGameInitiation
-     *
+     * @see GameProcessor::buildGame
      * @test
      */
-    public function processGameInitiation()
+    public function buildGame()
     {
-        $game = $this->gameProcessor->processGameInitiation(static::getSharedFixtureContent('init-game-request-2-players-7x7.json'));
+        $game = $this->gameProcessor->buildGame(static::getSharedFixtureContent('init-game-request-2-players-7x7.json'));
 
         $this->assertCount(2, $game->getBattlefields());
         foreach ($game->getBattlefields() as $battlefield) {
@@ -86,7 +85,7 @@ class GameProcessorTest extends IntegrationTestSuite
     public function processGameTurnOnUnfinishedGame()
     {
         $game = $this->getGameMock();
-        $game->getBattlefields()[0]->setPlayer($this->getAIControlledPlayerMock(''));
+        $game->getBattlefields()[0]->setPlayer($this->getAIPlayerMock(''));
 
         /** because CellModel::changedCells are indexed by Cell Id */
         $i = 0;
@@ -126,7 +125,7 @@ class GameProcessorTest extends IntegrationTestSuite
         $game->getBattlefields()[0]->getCellByCoordinate('A1')->addFlag(CellModel::FLAG_SHIP);
         $game->getBattlefields()[0]->getCellByCoordinate('A2')->addFlag(CellModel::FLAG_SHIP);
 
-        $game->getBattlefields()[1]->setPlayer($this->getAIControlledPlayerMock(''));
+        $game->getBattlefields()[1]->setPlayer($this->getAIPlayerMock(''));
         $game->getBattlefields()[1]->getCellByCoordinate('A1')->addFlag(CellModel::FLAG_SHIP);
 
         $cell = $game->getBattlefields()[1]->getCellByCoordinate('A1');
@@ -138,7 +137,7 @@ class GameProcessorTest extends IntegrationTestSuite
     }
 
     /**
-     * invoke game processing method to Win Game
+     * invoke game processing method on unfinished game to Win Game
      *
      * @see GameProcessor::processGameTurn
      * @test
