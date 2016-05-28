@@ -4,15 +4,13 @@ namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
-use EM\Tests\Environment\MockFactory\Entity\CellMockTrait;
+use EM\Tests\Environment\MockFactory;
 
 /**
  * @see CellModel
  */
 class CellModelTest extends \PHPUnit_Framework_TestCase
 {
-    use CellMockTrait;
-
     /**
      * @see CellModel::switchPhase
      * @test
@@ -76,7 +74,7 @@ class CellModelTest extends \PHPUnit_Framework_TestCase
     {
         foreach ($flags as $originFlag => $expectedFlag) {
             /** @var Cell $cell */
-            $cell = $closure($this->getCellMock('A1')->setFlags($originFlag));
+            $cell = $closure(MockFactory::getCellMock('A1')->setFlags($originFlag));
 
             $this->assertEquals($expectedFlag, $cell->getFlags());
         }

@@ -6,14 +6,13 @@ use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIService;
 use EM\Tests\Environment\IntegrationTestSuite;
-use EM\Tests\Environment\MockFactory\Entity\BattlefieldMockTrait;
+use EM\Tests\Environment\MockFactory;
 
 /**
  * @see AIService
  */
 class AIServiceTest extends IntegrationTestSuite
 {
-    use BattlefieldMockTrait;
     /**
      * @var AIService
      */
@@ -43,8 +42,8 @@ class AIServiceTest extends IntegrationTestSuite
     public function pickCellToAttack()
     {
         $cells = [
-            $this->getCellMock('A1'),
-            $this->getCellMock('A2')
+            MockFactory::getCellMock('A1'),
+            MockFactory::getCellMock('A2')
         ];
         /** @var Cell $cell */
         $cell = $this->invokeMethod($this->ai, 'pickCellToAttack', [$cells]);
@@ -120,7 +119,7 @@ class AIServiceTest extends IntegrationTestSuite
 
     private function invokeProcessCPUTurnMethod(array $cellsToAlter, array $expectedMasks)
     {
-        $battlefield = $this->getBattlefieldMock();
+        $battlefield = MockFactory::getBattlefieldMock();
         foreach ($cellsToAlter as $mask => $coordinates) {
             foreach ($coordinates as $coordinate) {
                 $battlefield->getCellByCoordinate($coordinate)->setFlags($mask);
@@ -190,7 +189,7 @@ class AIServiceTest extends IntegrationTestSuite
 
     private function invokeAttackCellMethod(int $cellMask, int $expectedMask)
     {
-        $cell = $this->getCellMock('A1', $cellMask);
+        $cell = MockFactory::getCellMock('A1', $cellMask);
         $returnedCell = $this->invokeMethod($this->ai, 'attackCell', [$cell]);
 
         $this->assertSame($cell, $returnedCell);
