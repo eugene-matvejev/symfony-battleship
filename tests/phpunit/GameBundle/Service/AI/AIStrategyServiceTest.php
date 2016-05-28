@@ -5,14 +5,13 @@ namespace EM\Tests\PHPUnit\GameBundle\Service\AI;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIStrategyService;
 use EM\Tests\Environment\IntegrationTestSuite;
-use EM\Tests\Environment\MockFactory\Entity\BattlefieldMockTrait;
+use EM\Tests\Environment\MockFactory;
 
 /**
  * @see AIStrategyService
  */
 class AIStrategyServiceTest extends IntegrationTestSuite
 {
-    use BattlefieldMockTrait;
     /**
      * @var AIStrategyService
      */
@@ -29,7 +28,7 @@ class AIStrategyServiceTest extends IntegrationTestSuite
      */
     public function chooseCellsOnNoDeadCellsInBattlefield()
     {
-        $battlefield = $this->getBattlefieldMock();
+        $battlefield = MockFactory::getBattlefieldMock();
 
         $cells = $this->strategyService->chooseCells($battlefield);
         $this->assertCount(0, $cells);

@@ -6,15 +6,13 @@ use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 use EM\Tests\Environment\IntegrationTestSuite;
-use EM\Tests\Environment\MockFactory\Entity\BattlefieldMockTrait;
+use EM\Tests\Environment\MockFactory;
 
 /**
  * @see PathProcessor
  */
 class PathProcessorTest extends IntegrationTestSuite
 {
-    use BattlefieldMockTrait;
-
     /**
      * primary paths are only: UP, DOWN, LEFT, RIGHT
      *
@@ -135,7 +133,7 @@ class PathProcessorTest extends IntegrationTestSuite
      */
     private function invokeIsPathContainsBytesMethod(int $path, int $bytes)
     {
-        $processor = (new PathProcessor($this->getCellMock('B2')))
+        $processor = (new PathProcessor(MockFactory::getCellMock('B2')))
             ->setPath($path);
 
         return $this->invokeMethod($processor, 'isPathContainsBytes', [$bytes]);
@@ -149,7 +147,7 @@ class PathProcessorTest extends IntegrationTestSuite
      */
     public function getAdjacentCellsNoFlags()
     {
-        $cells = (new PathProcessor($this->getBattlefieldMock()->getCellByCoordinate('B2')))->getAdjacentCells();
+        $cells = (new PathProcessor(MockFactory::getBattlefieldMock()->getCellByCoordinate('B2')))->getAdjacentCells();
 
         $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
         $this->assertCount(8, $cells);
@@ -168,7 +166,7 @@ class PathProcessorTest extends IntegrationTestSuite
      */
     public function getAdjacentCellsWith_FLAG_DEAD_OnNotDeadCells()
     {
-        $cells = (new PathProcessor($this->getBattlefieldMock()->getCellByCoordinate('B2')))->getAdjacentCells(CellModel::FLAG_DEAD);
+        $cells = (new PathProcessor(MockFactory::getBattlefieldMock()->getCellByCoordinate('B2')))->getAdjacentCells(CellModel::FLAG_DEAD);
 
         $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
         $this->assertCount(8, $cells);
@@ -187,7 +185,7 @@ class PathProcessorTest extends IntegrationTestSuite
      */
     public function getAdjacentCellsWith_FLAG_DEAD_OnSomeDeadCells()
     {
-        $battlefield = $this->getBattlefieldMock();
+        $battlefield = MockFactory::getBattlefieldMock();
         $fixtures = [
             'A2' => CellModel::FLAG_DEAD,
             'C2' => CellModel::FLAG_SHIP,
@@ -230,7 +228,7 @@ class PathProcessorTest extends IntegrationTestSuite
             PathProcessor::PATH_RIGHT_DOWN => 'E5'
         ];
 
-        $processor = new PathProcessor($this->getCellMock('D4'));
+        $processor = new PathProcessor(MockFactory::getCellMock('D4'));
         foreach ($expectedCoordinatesByPath as $path => $expectedCoordinate) {
             $processor->setPath($path);
 

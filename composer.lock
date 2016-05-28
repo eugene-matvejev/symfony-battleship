@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7c7a33d3b6098f403500d5a7cd171504",
-    "content-hash": "2435f294435941a31471e4cb08c591ae",
+    "hash": "9609c79f62a7600144e0c209baba29e6",
+    "content-hash": "7957adc396b056c93540a714791ec71d",
     "packages": [
         {
             "name": "components/jquery",
@@ -2995,6 +2995,57 @@
                 "validator"
             ],
             "time": "2016-05-04 12:27:30"
+        },
+        {
+            "name": "crysalead/kahlan",
+            "version": "2.5.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/crysalead/kahlan.git",
+                "reference": "71d40ea01d98b6afa019384942f7d27810c9ea48"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/crysalead/kahlan/zipball/71d40ea01d98b6afa019384942f7d27810c9ea48",
+                "reference": "71d40ea01d98b6afa019384942f7d27810c9ea48",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "bin": [
+                "bin/kahlan"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Kahlan\\": "src/"
+                },
+                "files": [
+                    "src/init.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "CrysaLEAD"
+                }
+            ],
+            "description": "Behavior-Driven Development (BDD) library.",
+            "keywords": [
+                "BDD",
+                "Behavior-Driven Development",
+                "Monkey Patching",
+                "TDD",
+                "mock",
+                "stub",
+                "testing",
+                "unit test"
+            ],
+            "time": "2016-05-10 16:20:10"
         },
         {
             "name": "doctrine/data-fixtures",

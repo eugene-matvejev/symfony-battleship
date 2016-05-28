@@ -3,22 +3,20 @@
 namespace EM\Tests\PHPUnit\GameBundle\Entity;
 
 use EM\Tests\Environment\IntegrationTestSuite;
-use EM\Tests\Environment\MockFactory\Entity\GameResultMockTrait;
+use EM\Tests\Environment\MockFactory;
 
 /**
  * @see GameResult
  */
 class GameResultTest extends IntegrationTestSuite
 {
-    use GameResultMockTrait;
-
     /**
      * @see GameResult::setTimestamp
      * @test
      */
     public function setTimestampSetOnPersist()
     {
-        $result = $this->getGameResultMock(2, 0);
+        $result = MockFactory::getGameResultMock(2, 0);
         $player = $result->getGame()->getBattlefields()[0]->getPlayer();
         $result->setPlayer($player);
         static::$om->persist($result->getGame());

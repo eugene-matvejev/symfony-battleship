@@ -4,14 +4,13 @@ namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\Model\PlayerModel;
 use EM\Tests\Environment\IntegrationTestSuite;
-use EM\Tests\Environment\MockFactory\Entity\PlayerMockTrait;
+use EM\Tests\Environment\MockFactory;
 
 /**
  * @see PlayerModel
  */
 class PlayerModelTest extends IntegrationTestSuite
 {
-    use PlayerMockTrait;
     /**
      * @var PlayerModel
      */
@@ -29,6 +28,7 @@ class PlayerModelTest extends IntegrationTestSuite
     public function createOnRequestOnExistingPlayer()
     {
         $player = $this->playerModel->createOnRequest('CPU');
+
         $this->assertEquals('CPU', $player->getName());
         $this->assertNotNull($player->getId());
     }
@@ -42,27 +42,30 @@ class PlayerModelTest extends IntegrationTestSuite
     public function createOnRequestOnNonExistingPlayer()
     {
         $player = $this->playerModel->createOnRequest('NON-EXISTING-USER');
+
         $this->assertEquals('NON-EXISTING-USER', $player->getName());
         $this->assertNull($player->getId());
     }
 
     /**
+     * should return false if player is not marked by @see PlayerModel::FLAG_AI_CONTROLLED flag
+     *
      * @see PlayerModel::isAIControlled
      * @test
      */
-    public function isAIControlledOn_FLAG_NONE()
+    public function isAIControlledOnFlagNone()
     {
-        $player = $this->getPlayerMock('', PlayerModel::FLAG_NONE);
-        $this->assertFalse(PlayerModel::isAIControlled($player));
+        $this->assertFalse(PlayerModel::isAIControlled(MockFactory::getPlayerMock('')));
     }
 
     /**
+     * should return true if player marked by @see PlayerModel::FLAG_AI_CONTROLLED flag
+     *
      * @see PlayerModel::isAIControlled
      * @test
      */
-    public function isAIControlledOn_FLAG_AI_CONTROLLED()
+    public function isAIControlledOnFlagAIControlled()
     {
-        $player = $this->getPlayerMock('', PlayerModel::FLAG_AI_CONTROLLED);
-        $this->assertTrue(PlayerModel::isAIControlled($player));
+        $this->assertTrue(PlayerModel::isAIControlled(MockFactory::getAIPlayerMock('')));
     }
 }

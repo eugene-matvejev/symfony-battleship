@@ -8,14 +8,13 @@ use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Model\PlayerModel;
 use EM\GameBundle\Service\GameSystem\GameProcessor;
 use EM\Tests\Environment\IntegrationTestSuite;
-use EM\Tests\Environment\MockFactory\Entity\GameResultMockTrait;
+use EM\Tests\Environment\MockFactory;
 
 /**
  * @see GameProcessor
  */
 class GameProcessorTest extends IntegrationTestSuite
 {
-    use GameResultMockTrait;
     /**
      * @var GameProcessor
      */
@@ -39,8 +38,8 @@ class GameProcessorTest extends IntegrationTestSuite
      */
     public function processCPUBattlefieldsInitiation()
     {
-        $game = $this->getGameMock();
-        $game->getBattlefields()[0]->setPlayer($this->getAIPlayerMock(''));
+        $game = MockFactory::getGameMock();
+        $game->getBattlefields()[0]->setPlayer(MockFactory::getAIPlayerMock(''));
 
         $this->invokeMethod($this->gameProcessor, 'processCPUBattlefieldsInitiation', [$game]);
 
@@ -84,8 +83,8 @@ class GameProcessorTest extends IntegrationTestSuite
      */
     public function processGameTurnOnUnfinishedGame()
     {
-        $game = $this->getGameMock();
-        $game->getBattlefields()[0]->setPlayer($this->getAIPlayerMock(''));
+        $game = MockFactory::getGameMock();
+        $game->getBattlefields()[0]->setPlayer(MockFactory::getAIPlayerMock(''));
 
         /** because CellModel::changedCells are indexed by Cell Id */
         $i = 0;
@@ -119,13 +118,13 @@ class GameProcessorTest extends IntegrationTestSuite
      */
     public function processGameTurnToWin()
     {
-        $game = $this->getGameMock();
+        $game = MockFactory::getGameMock();
 
         /** to make sure CPU will never win from one turn. */
         $game->getBattlefields()[0]->getCellByCoordinate('A1')->addFlag(CellModel::FLAG_SHIP);
         $game->getBattlefields()[0]->getCellByCoordinate('A2')->addFlag(CellModel::FLAG_SHIP);
 
-        $game->getBattlefields()[1]->setPlayer($this->getAIPlayerMock(''));
+        $game->getBattlefields()[1]->setPlayer(MockFactory::getAIPlayerMock(''));
         $game->getBattlefields()[1]->getCellByCoordinate('A1')->addFlag(CellModel::FLAG_SHIP);
 
         $cell = $game->getBattlefields()[1]->getCellByCoordinate('A1');
@@ -144,7 +143,7 @@ class GameProcessorTest extends IntegrationTestSuite
      */
     public function processGameTurnOnFinishedGame()
     {
-        $game = $this->getGameMock()->setResult($this->getGameResultMock());
+        $game = MockFactory::getGameMock()->setResult(MockFactory::getGameResultMock());
 
         foreach ($game->getBattlefields() as $battlefield) {
             $response = $this->gameProcessor->processGameTurn($battlefield->getCellByCoordinate('A1'));
