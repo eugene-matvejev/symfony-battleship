@@ -31,6 +31,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
   * MySQL >= 5.5
   * MariaDB >= 9.0
   * PostgreSQL >= 9.3
+  * SQLite >= 3
  * WIP:
   * MongoDB
  * Composer >= 1.0.3
