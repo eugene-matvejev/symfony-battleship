@@ -1,6 +1,6 @@
 {
     "name": "eugene-matvejev/battleship-game-api",
-    "description": "Battleship API, more info: please check readme.md",
+    "description": "Battleship API, more info: please check README.md",
     "license": "MIT",
     "type": "project",
     "autoload": {
@@ -44,7 +44,9 @@
         "behat/behat": "^3.1",
         "doctrine/doctrine-fixtures-bundle": "^2.3",
         "sensio/generator-bundle": "^3.0",
-        "phpunit/phpunit": "^5.1"
+        "phpunit/phpunit": "^5.1",
+        "codeclimate/php-test-reporter": "^0.3.2",
+        "crysalead/kahlan": "^2.5"
     },
     "scripts": {
         "post-install-cmd": "@deployment-events",

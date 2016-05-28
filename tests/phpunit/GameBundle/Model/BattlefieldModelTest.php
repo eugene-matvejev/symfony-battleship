@@ -4,22 +4,20 @@ namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
-use EM\Tests\Environment\MockFactory\Entity\BattlefieldMockTrait;
+use EM\Tests\Environment\MockFactory;
 
 /**
  * @see BattlefieldModel
  */
 class BattlefieldModelTest extends \PHPUnit_Framework_TestCase
 {
-    use BattlefieldMockTrait;
-
     /**
      * @see BattlefieldModel::getLiveCells
      * @test
      */
     public function getLiveCells()
     {
-        $battlefield = $this->getBattlefieldMock();
+        $battlefield = MockFactory::getBattlefieldMock();
         $this->assertCount(49, BattlefieldModel::getLiveCells($battlefield));
 
         $battlefield->getCellByCoordinate('A1')->addFlag(CellModel::FLAG_DEAD);
@@ -32,7 +30,7 @@ class BattlefieldModelTest extends \PHPUnit_Framework_TestCase
      */
     public function hasUnfinishedShips()
     {
-        $battlefield = $this->getBattlefieldMock();
+        $battlefield = MockFactory::getBattlefieldMock();
         /** by default all cells are mocked as 'live water' */
         $this->assertFalse(BattlefieldModel::hasUnfinishedShips($battlefield));
 

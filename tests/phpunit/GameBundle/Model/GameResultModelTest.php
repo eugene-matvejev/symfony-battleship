@@ -6,14 +6,13 @@ use EM\GameBundle\Entity\GameResult;
 use EM\GameBundle\Model\GameResultModel;
 use EM\GameBundle\Response\GameResultsResponse;
 use EM\Tests\Environment\IntegrationTestSuite;
-use EM\Tests\Environment\MockFactory\Entity\GameResultMockTrait;
+use EM\Tests\Environment\MockFactory;
 
 /**
  * @see GameResultModel
  */
 class GameResultModelTest extends IntegrationTestSuite
 {
-    use GameResultMockTrait;
     /**
      * @var GameResultModel
      */
@@ -34,7 +33,7 @@ class GameResultModelTest extends IntegrationTestSuite
 
         /** populated 2 full pages of Game Results + 1 result */
         for ($i = 0; $i < ($perPage * 2 + 1); $i++) {
-            $result = $this->getGameResultMock(2, 0);
+            $result = MockFactory::getGameResultMock(2, 0);
             $player = $result->getGame()->getBattlefields()[0]->getPlayer();
             $result->setPlayer($player);
 

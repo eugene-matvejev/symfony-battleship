@@ -7,14 +7,13 @@ use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIStrategyProcessor;
 use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 use EM\Tests\Environment\IntegrationTestSuite;
-use EM\Tests\Environment\MockFactory\Entity\BattlefieldMockTrait;
+use EM\Tests\Environment\MockFactory;
 
 /**
  * @see AIStrategy
  */
 class AIStrategyProcessorTest extends IntegrationTestSuite
 {
-    use BattlefieldMockTrait;
     /**
      * @var AIStrategyProcessor
      */
@@ -31,7 +30,7 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
      */
     public function processCoordinates()
     {
-        $battlefield = $this->getBattlefieldMock();
+        $battlefield = MockFactory::getBattlefieldMock();
         $battlefield->getCellByCoordinate('B2')->setFlags(CellModel::FLAG_DEAD_SHIP);
 
         $cells = $this->invokeProcessCoordinatesMethod([$battlefield->getCellByCoordinate('B2'), PathProcessor::PRIMARY_PATHS]);
@@ -142,6 +141,6 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
      */
     private function invokeProcessMethod(int $strategy) : array
     {
-        return $this->strategyProcessor->process($this->getBattlefieldMock()->getCellByCoordinate('B2'), $strategy);
+        return $this->strategyProcessor->process(MockFactory::getBattlefieldMock()->getCellByCoordinate('B2'), $strategy);
     }
 }
