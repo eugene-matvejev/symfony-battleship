@@ -52,7 +52,6 @@
         "post-install-cmd": "@deployment-events",
         "post-update-cmd": "@deployment-events",
         "non-heroku-deployment-events": [
-            "php bin/console doctrine:database:create --if-not-exists",
             "php bin/console doctrine:migrations:migrate --no-interaction"
         ],
         "deployment-events": [
