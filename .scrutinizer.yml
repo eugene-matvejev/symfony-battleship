@@ -16,6 +16,8 @@ build:
                 command: "composer install --no-progress --no-interaction --no-scripts"
             -
                 command: "php bin/console doctrine:database:create --if-not-exists"
+            -
+                command: "composer install --no-progress --no-interaction"
     environment:
         php:
             version: "7.0.4"
