@@ -7,6 +7,8 @@ services:
 
 before_script:
     - "cp app/config/parameters.yml.dist app/config/parameters.yml"
+    - "composer install --no-progress --no-interaction --no-scripts"
+    - "php bin/console doctrine:database:create --if-not-exists"
     - "composer install --no-progress --no-interaction"
 
 script:
