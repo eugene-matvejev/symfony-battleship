@@ -3,7 +3,7 @@ default:
         pretty: true
 
     autoload:
-        - "%paths.base%/tests/behat/bootstrap"
+        - "%paths.base%/tests/behat/contexts"
 
     suites:
 # ### ### ### ### ### API ### ### ### ### ###

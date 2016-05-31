@@ -16,7 +16,7 @@
         "psr-4": {
             "EM\\Tests\\Environment\\": "tests/shared-environment",
             "EM\\Tests\\PHPUnit\\": "tests/phpunit",
-            "EM\\Tests\\Behat\\": "tests/behat/bootstrap"
+            "EM\\Tests\\Behat\\": "tests/behat/contexts"
         }
     },
     "authors": [
