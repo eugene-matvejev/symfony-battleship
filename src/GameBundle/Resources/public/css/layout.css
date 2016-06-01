@@ -177,3 +177,7 @@ body > .container {
     font-size: 14px;
     font-style: italic;
 }
+
+a.history-title {
+    color: #F5DEB3;
+}
