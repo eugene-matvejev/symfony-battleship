@@ -5,6 +5,7 @@ namespace EM\GameBundle\Controller;
 use EM\GameBundle\Exception\CellException;
 use EM\GameBundle\Exception\PlayerException;
 use EM\GameBundle\Model\CellModel;
+use Nelmio\ApiDocBundle\Annotation as Documentation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -19,6 +20,16 @@ class GameController extends AbstractAPIController
     }
 
     /**
+     * @Documentation\ApiDoc(
+     *      section = "Game API",
+     *      description = "Creates a new game from the submitted data",
+     *      input = "int",
+     *      output = "EM\GameBundle\Entity\Game",
+     *      statusCodes = {
+     *          201 = "Returned when successful"
+     *      }
+     * )
+     *
      * @param Request $request
      *
      * @return Response
@@ -47,6 +58,13 @@ class GameController extends AbstractAPIController
     }
 
     /**
+     * @Documentation\ApiDoc(
+     *      section = "Game API",
+     *      description = "process game turn by cellId",
+     *      input = "int",
+     *      output = "EM\GameBundle\Response\GameTurnResponse"
+     * )
+     *
      * @param int $cellId
      *
      * @return Response

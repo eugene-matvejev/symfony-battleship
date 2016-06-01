@@ -17,6 +17,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             /** 3rd PARTY */
             new JMS\SerializerBundle\JMSSerializerBundle(),
+            new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             /** CUSTOM BUNDLES */
             new EM\GameBundle\GameBundle()
         ];

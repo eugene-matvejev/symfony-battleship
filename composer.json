@@ -37,7 +37,8 @@
         "symfony/monolog-bundle": "^2.8",
         "jms/serializer-bundle": "^1.1",
         "components/jquery": "^2.2",
-        "twitter/bootstrap": "^3.3"
+        "twitter/bootstrap": "^3.3",
+        "nelmio/api-doc-bundle": "^2.12"
     },
     "require-dev": {
         "composer/composer": "^1.0",
