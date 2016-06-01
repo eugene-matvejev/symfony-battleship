@@ -50,6 +50,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
  * Behat 3
  * Composer
  * JMS Serializer
+ * API Doc [nelmio/api-doc-bundle]
  * Twig
  * JavaScript ES6 [ECMAScript6]
  * CSS3
