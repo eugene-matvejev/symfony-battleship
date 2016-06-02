@@ -19,7 +19,8 @@ use JMS\Serializer\Annotation as Serializer;
  *     indexes={
  *          @ORM\Index(name="INDEX_BATTLEFIELDS_GAME", columns={"game"}),
  *          @ORM\Index(name="INDEX_BATTLEFIELDS_PLAYER", columns={"player"})
- *     })
+ *     }
+ * )
  *
  * @Serializer\AccessorOrder(order="custom", custom={"id", "player", "cells"})
  * @Serializer\XmlRoot("battlefield")
