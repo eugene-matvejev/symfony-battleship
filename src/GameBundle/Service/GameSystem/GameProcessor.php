@@ -12,6 +12,7 @@ use EM\GameBundle\Exception\PlayerException;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Model\PlayerModel;
+use EM\GameBundle\Request\GameInitiationRequest;
 use EM\GameBundle\Response\GameTurnResponse;
 use EM\GameBundle\Service\AI\AIService;
 
@@ -35,63 +36,33 @@ class GameProcessor
         $this->playerModel = $playerModel;
     }
 
-    /**
-     * @param Game $game
-     *
-     * @return Cell[]
-     */
-    public function processCPUBattlefieldsInitiation(Game $game) : array
+    private function attachAIBattlefields(Game $game, int $amount, int $size)
     {
-        $cells = [];
-        /** for test purposes only */
-        foreach ($game->getBattlefields() as $battlefield) {
-            if (PlayerModel::isAIControlled($battlefield->getPlayer())) {
-                $cells[] = $battlefield->getCellByCoordinate('B2')->addFlag(CellModel::FLAG_SHIP);
-            }
+        for ($i = 0; $i < $amount; $i++) {
+            $player = $this->playerModel->createOnRequestAIControlled("CPU {$i}");
+
+            /** hard-code ship into B2 for testing purposes */
+            $battlefield = BattlefieldModel::generate($size,  ['B2'])
+                ->setPlayer($player);
+            $game->addBattlefield($battlefield);
         }
-
-        /** ********************** */
-
-        return $cells;
     }
 
-    public function buildGame(string $json) : Game
+    public function buildGame(GameInitiationRequest $request) : Game
     {
         $game = new Game();
+        $this->attachAIBattlefields($game, $request->getOpponents(), $request->getSize());
 
-        foreach (json_decode($json) as $playerData) {
-            $player = $this->playerModel->createOnRequest($playerData->name, $playerData->flags);
+        $player = $this->playerModel->createOnRequest($request->getPlayerName());
 
-            $battlefield = $this->buildBattlefield($playerData, PlayerModel::isAIControlled($player));
-            $battlefield->setPlayer($player);
-            $game->addBattlefield($battlefield);
+        $battlefield = BattlefieldModel::generate($request->getSize(), $request->getCoordinates());
+        $battlefield->setPlayer($player);
+        $game->addBattlefield($battlefield);
 
-            /** for test purposes only - mark player cell as damaged */
-            if (!PlayerModel::isAIControlled($player)) {
-                $battlefield->getCellByCoordinate('A2')->setFlags(CellModel::FLAG_DEAD_SHIP);
-            }
-            /** **************************************************** */
-        }
+        /** for test purposes only - mark player cell as damaged */
+        $battlefield->getCellByCoordinate('A2')->setFlags(CellModel::FLAG_DEAD_SHIP);
 
         return $game;
-    }
-
-    protected function buildBattlefield(\stdClass $data, bool $defaultStateOnly = false) : Battlefield
-    {
-        $battlefield = new Battlefield();
-
-        foreach ($data->cells as $cellData) {
-            $flag = $defaultStateOnly || CellModel::FLAG_NONE === $cellData->flags
-                ? CellModel::FLAG_NONE
-                : CellModel::FLAG_SHIP;
-
-            $cell = (new Cell())
-                ->setCoordinate($cellData->coordinate)
-                ->setFlags($flag);
-            $battlefield->addCell($cell);
-        }
-
-        return $battlefield;
     }
 
     /**

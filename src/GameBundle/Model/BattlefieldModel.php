@@ -10,6 +10,7 @@ use EM\GameBundle\Entity\Cell;
  */
 class BattlefieldModel
 {
+    const INDEX_START = 'A';
     /**
      * @param Battlefield $battlefield
      *
@@ -36,5 +37,22 @@ class BattlefieldModel
         }
 
         return false;
+    }
+
+    public static function generate(int $size, array $coordinates = []) : Battlefield
+    {
+        $battlefield = new Battlefield();
+
+        for ($x = 0, $letter = static::INDEX_START; $x < $size; $letter++, $x++) {
+            for ($digit = 0; $digit < $size;) {
+                $coordinate = $letter . (++$digit);
+                $cell = (new Cell())
+                    ->setCoordinate($coordinate)
+                    ->setFlags(in_array($coordinate, $coordinates) ? CellModel::FLAG_SHIP : CellModel::FLAG_NONE);
+                $battlefield->addCell($cell);
+            }
+        }
+
+        return $battlefield;
     }
 }

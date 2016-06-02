@@ -23,13 +23,7 @@ $(document).ready(function () {
     // game.modalMgr.updateHTML(game.constructor.resources.html.modal).show();
     /** initiate game when page is loaded */
     game.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="game-current-area"]'));
-    game.init(
-        [
-            { name: 'CPU', isCPU: true },
-            { name: 'Human' }
-        ],
-        7
-    );
+    game.init('Human', 7);
 
     $('#game-current-area')
         .on('click', '.player-area[data-player-flag="1"] .battlefield-cell[data-flags="0"]', function (e) {
@@ -77,10 +71,7 @@ $(document).ready(function () {
 
             game.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="game-current-area"]'));
             game.init(
-                [
-                    { name: 'CPU', isCPU: true },
-                    { name: document.getElementById('model-input-player-name').value }
-                ],
+                document.getElementById('model-input-player-name').value,
                 document.getElementById('model-input-battlefield-size').value
             );
         });

@@ -2,7 +2,7 @@
 
 namespace EM\GameBundle\Controller;
 
-use Nelmio\ApiDocBundle\Annotation as Documentation;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -11,10 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 class GameResultController extends AbstractAPIController
 {
     /**
-     * @Documentation\ApiDoc(
+     * @ApiDoc(
      *      section = "Game Result API",
-     *      description = "process game turn by cellId",
-     *      input = "int",
+     *      description = "returns game results ordered by date in desc. order",
      *      output = "EM\GameBundle\Response\GameResultsResponse"
      * )
      *
