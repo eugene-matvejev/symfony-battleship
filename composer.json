@@ -96,8 +96,8 @@
                 "database_host": "DATABASE_HOST",
                 "database_port": "DATABASE_PORT",
                 "database_name": "DATABASE_NAME",
-                "database_user": "MYSQL_USER",
-                "database_password": "MYSQL_PASSWORD"
+                "database_user": "DATABASE_USER",
+                "database_password": "DATABASE_PASSWORD"
             }
         }
     }
