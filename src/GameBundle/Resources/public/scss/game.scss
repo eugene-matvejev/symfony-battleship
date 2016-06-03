@@ -1,0 +1,124 @@
+
+.battlefield-cell-container {
+    display: flex;
+
+    &:not(:first-child):not(:last-child) > .battlefield-cell[data-coordinate]:not(:first-child):not(:last-child) {
+        border-top: 1px solid #000;
+        border-left: 1px solid #000;
+    }
+    &:not(:first-child):not(:last-child) > .battlefield-cell[data-coordinate]:nth-last-child(2) {
+        border-right: 1px solid #000;
+    }
+    &:nth-last-child(2) > .battlefield-cell[data-coordinate]:not(:first-child):not(:last-child) {
+        border-bottom: 1px solid #000;
+    }
+}
+
+$FLAG_NONE_COLOR #e1ffff;
+$FLAG_SHIP_COLOR #1e5799;
+$FLAG_NONE_COLOR #e1ffff;
+$FLAG_DEAD_COLOR #e1ffff;
+$FLAG_SKIP_COLOR #e1ffff;
+
+const FLAG_NONE      = 0x00;
+const FLAG_DEAD      = 0x01;
+const FLAG_SHIP      = 0x02;
+const FLAG_SKIP      = 0x04 | self::FLAG_DEAD;
+const FLAG_DEAD_SHIP = self::FLAG_SHIP | self::FLAG_DEAD;
+
+.history-element,
+.battlefield-cell {
+    &[data-flags="0"],
+    &[data-flags="0"] {
+        background: $FLAG_NONE_COLOR;
+    }
+    &[data-flags="1"],
+    &[data-flags="1"] {
+        background: $FLAG_DEAD_COLOR;
+    }
+
+    &[data-flags="2"],
+    &[data-flags="2"] {
+        background: #000;
+    }
+
+    &[data-flags="3"],
+    &[data-flags="3"] {
+        background: #6d0019;
+    }
+
+    &[data-flags="5"],
+    &[data-flags="5"] {
+        background: #$FLAG_SKIP_COLOR;
+    }
+}
+
+.battlefield-cell {
+    height: 32px;
+    width: 32px;
+    padding: 0;
+    opacity: 1;
+    font-size: 12px;
+    line-height: 32px;
+    text-align: center;
+
+    &[data-flags="0"]:hover {
+        background: rgba(225, 255, 255, 0.75);
+        cursor: pointer;
+    }
+}
+
+.player-area {
+    margin-top: 25px;
+    display: inline-block;
+
+    & > .player-name {
+        font-size: 32px;
+    }
+
+    .battlefield-cell:not([data-flags="undefined"]):hover {
+        cursor: no-drop;
+    }
+
+    &[data-player-flag="1"] .battlefield-cell:not([data-flags="1"]):not([data-flags="3"]):not([data-flags="4"]):hover {
+        cursor: pointer;
+    }
+}
+
+.player-field div[data-flags="undefined"] {
+    opacity: 0.75;
+}
+
+div#game-current-area,
+div#game-results-area {
+    display: inline-block;
+    width: 100%;
+}
+
+li.history-container {
+    margin-top: 75px;
+
+    ul {
+        list-style-type: none;
+
+        li {
+            font-size: 12px;
+            vertical-align: middle;
+            margin: 5px 0;
+        }
+    }
+
+    .history-title {
+        display: block;
+        text-align: center;
+        border-bottom: 1px dashed #fff;
+        margin-bottom: 10px;
+    }
+
+    .history-element {
+        height: 28px;
+        width: 28px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+}
