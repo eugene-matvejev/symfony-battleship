@@ -100,7 +100,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
  * *php bin/phpunit -c .*
  * *php bin/behat --strict*
  * *php bin/kahlan*
- NOTE: tests interact with test database, will be wiped and seeded again before test execution
+ ** __NOTE__: tests interacting with test database [config: "database_name_test" in config.yml], it is wiped and seeded before tests execution
 
 ### /etc/hosts
 ```
