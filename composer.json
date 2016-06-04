@@ -67,7 +67,8 @@
             "mkdir -p web/bundles/vendor/jquery",
             "cp vendor/components/jquery/jquery.min.js web/bundles/vendor/jquery/jquery.min.js",
             "mkdir -p web/bundles/vendor/twitter-bootstrap",
-            "cp -r vendor/twitter/bootstrap/dist/* web/bundles/vendor/twitter-bootstrap"
+            "cp -r vendor/twitter/bootstrap/dist/* web/bundles/vendor/twitter-bootstrap",
+            "compass compile --output-style=compressed --force --no-line-comments"
         ],
         "compile": [
             "rm web/app_dev.php",

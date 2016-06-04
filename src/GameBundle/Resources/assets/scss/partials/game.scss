@@ -14,42 +14,42 @@
     }
 }
 
-$FLAG_NONE_COLOR #e1ffff;
-$FLAG_SHIP_COLOR #1e5799;
-$FLAG_NONE_COLOR #e1ffff;
-$FLAG_DEAD_COLOR #e1ffff;
-$FLAG_SKIP_COLOR #e1ffff;
+$FLAG_UNDEFINED_FLAG: undefined;
 
-const FLAG_NONE      = 0x00;
-const FLAG_DEAD      = 0x01;
-const FLAG_SHIP      = 0x02;
-const FLAG_SKIP      = 0x04 | self::FLAG_DEAD;
-const FLAG_DEAD_SHIP = self::FLAG_SHIP | self::FLAG_DEAD;
+$FLAG_NONE_COLOR: #e1ffff;
+$FLAG_NONE_FLAG: 0;
+
+$FLAG_DEAD_COLOR: #1e5799;
+$FLAG_DEAD_FLAG: 1;
+
+$FLAG_SHIP_COLOR: #000;
+$FLAG_SHIP_FLAG: 2;
+
+$FLAG_SHIP_DEAD_COLOR: #6d0019;
+$FLAG_SHIP_DEAD_FLAG: 3;
+
+$FLAG_SKIP_COLOR: #556980;
+$FLAG_SKIP_FLAG: 5;
 
 .history-element,
 .battlefield-cell {
-    &[data-flags="0"],
-    &[data-flags="0"] {
+    &[data-flags="#{$FLAG_NONE_FLAG}"] {
         background: $FLAG_NONE_COLOR;
     }
-    &[data-flags="1"],
-    &[data-flags="1"] {
+    &[data-flags="#{$FLAG_DEAD_FLAG}"] {
         background: $FLAG_DEAD_COLOR;
     }
 
-    &[data-flags="2"],
-    &[data-flags="2"] {
-        background: #000;
+    &[data-flags="#{$FLAG_SHIP_FLAG}"] {
+        background: $FLAG_SHIP_COLOR;
     }
 
-    &[data-flags="3"],
-    &[data-flags="3"] {
-        background: #6d0019;
+    &[data-flags="#{$FLAG_SHIP_DEAD_FLAG}"] {
+        background: $FLAG_SHIP_DEAD_COLOR;
     }
 
-    &[data-flags="5"],
-    &[data-flags="5"] {
-        background: #$FLAG_SKIP_COLOR;
+    &[data-flags="#{$FLAG_SKIP_FLAG}"] {
+        background: $FLAG_SKIP_COLOR;
     }
 }
 
@@ -62,7 +62,7 @@ const FLAG_DEAD_SHIP = self::FLAG_SHIP | self::FLAG_DEAD;
     line-height: 32px;
     text-align: center;
 
-    &[data-flags="0"]:hover {
+    &[data-flags="#{$FLAG_NONE_FLAG}"]:hover {
         background: rgba(225, 255, 255, 0.75);
         cursor: pointer;
     }
@@ -76,16 +76,16 @@ const FLAG_DEAD_SHIP = self::FLAG_SHIP | self::FLAG_DEAD;
         font-size: 32px;
     }
 
-    .battlefield-cell:not([data-flags="undefined"]):hover {
+    .battlefield-cell:not([data-flags="#{$FLAG_UNDEFINED_FLAG}"]):hover {
         cursor: no-drop;
     }
 
-    &[data-player-flag="1"] .battlefield-cell:not([data-flags="1"]):not([data-flags="3"]):not([data-flags="4"]):hover {
+    &[data-player-flag="1"] .battlefield-cell:not([data-flags="#{$FLAG_DEAD_FLAG}"]):not([data-flags="#{$FLAG_SHIP_DEAD_FLAG}"]):hover {
         cursor: pointer;
     }
 }
 
-.player-field div[data-flags="undefined"] {
+.player-field div[data-flags="#{$FLAG_UNDEFINED_FLAG}"] {
     opacity: 0.75;
 }
 

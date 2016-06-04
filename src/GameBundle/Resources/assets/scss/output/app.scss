@@ -1,0 +1,14 @@
+/**
+ * Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="assets/css/app.css" media="screen, projection" rel="stylesheet" type="text/css" />
+ */
+
+/* @import "compass/reset"; */
+
+@import "../partials/layout";
+@import "../partials/layout-loading-animation";
+
+@import "../partials/game";
+@import "../partials/game-results";

@@ -1,11 +1,5 @@
 {% extends '@Game/blocks/body.html.twig' %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('bundles/game/css/game.css') }}" type="text/css"/>
-    <link rel="stylesheet" href="{{ asset('bundles/game/css/game-results.css') }}" type="text/css"/>
-{% endblock %}
-
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('bundles/game/js/service/api-request.service.js') }}"></script>
