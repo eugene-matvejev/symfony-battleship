@@ -53,7 +53,7 @@ class GameProcessor
         $game = new Game();
         $this->attachAIBattlefields($game, $request->getOpponents(), $request->getSize());
 
-        $player = $this->playerModel->createOnRequest($request->getPlayerName());
+        $player = $this->playerModel->createOnRequestHumanControlled($request->getPlayerName());
 
         $battlefield = BattlefieldModel::generate($request->getSize(), $request->getCoordinates());
         $battlefield->setPlayer($player);

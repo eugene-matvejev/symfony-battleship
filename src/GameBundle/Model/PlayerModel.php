@@ -4,6 +4,7 @@ namespace EM\GameBundle\Model;
 
 use Doctrine\ORM\EntityRepository;
 use EM\GameBundle\Entity\Player;
+use EM\GameBundle\Exception\PlayerException;
 
 /**
  * @since 2.0
@@ -22,14 +23,43 @@ class PlayerModel
         $this->repository = $repository;
     }
 
+    /**
+     * @param string $name
+     *
+     * @return Player
+     * @throws PlayerException
+     */
     public function createOnRequestAIControlled(string $name) : Player
     {
         return $this->createOnRequest($name, true);
     }
 
-    public function createOnRequest(string $name, bool $controlledByAI = false) : Player
+    /**
+     * @param string $name
+     *
+     * @return Player
+     * @throws PlayerException
+     */
+    public function createOnRequestHumanControlled(string $name) : Player
     {
+        return $this->createOnRequest($name);
+    }
+
+    /**
+     * @param string $name
+     * @param bool   $controlledByAI
+     *
+     * @return Player
+     * @throws PlayerException
+     */
+    protected function createOnRequest(string $name, bool $controlledByAI = false) : Player
+    {
+        /** @var Player $player */
         $player = $this->repository->findOneBy(['name' => $name]);
+
+        if (null !== $player && $controlledByAI !== static::isAIControlled($player)) {
+            throw new PlayerException("player with '$name' already exists and controlledByAI do not match");
+        }
 
         return $player ?? (new Player())
             ->setName($name)
