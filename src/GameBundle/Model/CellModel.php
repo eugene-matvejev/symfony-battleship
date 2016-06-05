@@ -19,11 +19,11 @@ class CellModel
     /**
      * @var Cell[]
      */
-    private static $changedCells = [];
+    protected static $changedCells = [];
     /**
      * @var Cell[]
      */
-    private static $checkedCells = [];
+    protected static $checkedCells = [];
 
     /**
      * @return Cell[]
