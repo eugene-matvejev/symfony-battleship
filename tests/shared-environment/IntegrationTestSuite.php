@@ -90,7 +90,7 @@ abstract class IntegrationTestSuite extends WebTestCase
                 echo PHP_EOL . $e->getMessage() . PHP_EOL;
                 echo PHP_EOL . $e->getTraceAsString() . PHP_EOL;
 
-                throw new \Exception();
+                throw $e;
             }
         }
 
