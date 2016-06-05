@@ -4,24 +4,12 @@ namespace EM\Tests\PHPUnit\GameBundle\Request;
 
 use EM\GameBundle\Request\GameInitiationRequest;
 use EM\Tests\Environment\IntegrationTestSuite;
-use JMS\Serializer\Annotation as Serializer;
 
 /**
- * @since 18.0
+ * @see GameInitiationRequest
  */
-class GameInitiationRequestTest extends IntegrationTestSuite
+class GameInitiationRequestTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var GameInitiationRequest
-     */
-    private $request;
-
-    protected function setUp()
-    {
-        $this->request = new GameInitiationRequest();
-    }
-
-    /*********************************** PARSING & ASSIGNMENT ***********************************/
     /**
      * @see GameInitiationRequest::parse
      *
@@ -29,13 +17,12 @@ class GameInitiationRequestTest extends IntegrationTestSuite
      */
     public function parseOnValid()
     {
-        $fixture = $this->getSharedFixtureContent('init-game-request-2-players-7x7.json');
+        $fixture = IntegrationTestSuite::getSharedFixtureContent('init-game-request-2-players-7x7.json');
         $expected = json_decode($fixture);
+        $request = new GameInitiationRequest($fixture);
 
-        $this->request->parse($fixture);
-
-        $this->assertCount(count($expected->coordinates), $this->request->getCoordinates());
-        $this->assertEquals($expected->size, $this->request->getSize());
-        $this->assertEquals($expected->playerName, $this->request->getPlayerName());
+        $this->assertCount(count($expected->coordinates), $request->getCoordinates());
+        $this->assertEquals($expected->size, $request->getSize());
+        $this->assertEquals($expected->playerName, $request->getPlayerName());
     }
 }

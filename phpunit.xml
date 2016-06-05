@@ -25,6 +25,8 @@
             <directory>./tests/phpunit/*Bundle/Entity</directory>
             <directory>./tests/phpunit/*Bundle/Model</directory>
             <directory>./tests/phpunit/*Bundle/Service</directory>
+            <directory>./tests/phpunit/*Bundle/Request</directory>
+            <directory>./tests/phpunit/*Bundle/Response</directory>
         </testsuite>
     </testsuites>
 
