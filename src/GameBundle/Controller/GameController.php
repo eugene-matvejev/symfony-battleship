@@ -3,6 +3,7 @@
 namespace EM\GameBundle\Controller;
 
 use EM\GameBundle\Exception\CellException;
+use EM\GameBundle\Exception\GameRequestException;
 use EM\GameBundle\Exception\PlayerException;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Request\GameInitiationRequest;
@@ -38,21 +39,17 @@ class GameController extends AbstractAPIController
      */
     public function initAction(Request $request) : Response
     {
-        $_request = new GameInitiationRequest();
-        $_request->parse($request->getContent());
+        if (!$this->get('battleship_game.validator.game_initiation_request')->validate($request->getContent())) {
+            throw new GameRequestException('request validation failed, please check documentation');
+        }
 
-        $game = $this->get('battleship.game.services.game.processor')->buildGame($_request);
+        $game = $this->get('battleship_game.service.game_processor')->buildGame(new GameInitiationRequest($request->getContent()));
 
         $om = $this->getDoctrine()->getManager();
         $om->persist($game);
         $om->flush();
 
-        $response = $this->buildSerializedResponse(
-            (new GameInitiationResponse())->setBattlefields($game->getBattlefields()),
-            Response::HTTP_CREATED
-        );
-
-        return $response;
+        return $this->buildSerializedResponse(new GameInitiationResponse($game->getBattlefields()), Response::HTTP_CREATED);
     }
 
     /**
@@ -77,7 +74,7 @@ class GameController extends AbstractAPIController
             throw new CellException("cell: {$cellId} doesn't already flagged as *DEAD*");
         }
 
-        $data = $this->get('battleship.game.services.game.processor')->processGameTurn($cell);
+        $data = $this->get('battleship_game.service.game_processor')->processGameTurn($cell);
         $om = $this->getDoctrine()->getManager();
 
         foreach (CellModel::getChangedCells() as $cell) {

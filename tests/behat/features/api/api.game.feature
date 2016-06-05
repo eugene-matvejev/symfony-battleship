@@ -7,5 +7,5 @@ Feature: API: Game
 
     Examples:
       | routeAlias               | routeMethod | routeParam | paramValue |
-      | battleship.game.api.init | POST        |            |            |
-      | battleship.game.api.turn | PATCH       | cellId     | 1          |
+      | battleship_game.api.init | POST        |            |            |
+      | battleship_game.api.turn | PATCH       | cellId     | 1          |

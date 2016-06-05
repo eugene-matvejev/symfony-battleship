@@ -8,6 +8,6 @@ Feature: API: Game Results
 
     Examples:
       | routeAlias                       | routeMethod | routeParam | paramValue | expectedAmount |
-      | battleship.game.api.game.results | GET         | page       | 1          | 0              |
-      | battleship.game.api.game.results | GET         | page       | 2          | 0              |
-      | battleship.game.api.game.results | GET         | page       | 99         | 0              |
+      | battleship_game.api.game.results | GET         | page       | 1          | 0              |
+      | battleship_game.api.game.results | GET         | page       | 2          | 0              |
+      | battleship_game.api.game.results | GET         | page       | 99         | 0              |

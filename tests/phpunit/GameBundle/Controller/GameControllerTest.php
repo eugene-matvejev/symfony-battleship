@@ -21,7 +21,7 @@ class GameControllerTest extends IntegrationTestSuite
         $client = clone static::$client;
         $client->request(
             Request::METHOD_GET,
-            static::$router->generate('battleship.game.gui.index')
+            static::$router->generate('battleship_game.gui.index')
         );
         $this->assertSuccessfulResponse($client->getResponse());
     }
@@ -36,7 +36,7 @@ class GameControllerTest extends IntegrationTestSuite
             $client = clone static::$client;
             $client->request(
                 Request::METHOD_POST,
-                static::$router->generate('battleship.game.api.init'),
+                static::$router->generate('battleship_game.api.init'),
                 [],
                 [],
                 ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => $acceptHeader]
@@ -56,7 +56,7 @@ class GameControllerTest extends IntegrationTestSuite
         $client = clone static::$client;
         $client->request(
             Request::METHOD_POST,
-            static::$router->generate('battleship.game.api.init'),
+            static::$router->generate('battleship_game.api.init'),
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json'],
@@ -105,7 +105,7 @@ class GameControllerTest extends IntegrationTestSuite
 
         $client->request(
             Request::METHOD_POST,
-            static::$router->generate('battleship.game.api.init'),
+            static::$router->generate('battleship_game.api.init'),
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/xml'],
@@ -161,7 +161,7 @@ class GameControllerTest extends IntegrationTestSuite
         foreach (['application/xml', 'application/json'] as $acceptHeader) {
             $client->request(
                 Request::METHOD_PATCH,
-                static::$router->generate('battleship.game.api.turn', ['cellId' => 0]),
+                static::$router->generate('battleship_game.api.turn', ['cellId' => 0]),
                 [],
                 [],
                 ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => $acceptHeader]
@@ -188,7 +188,7 @@ class GameControllerTest extends IntegrationTestSuite
                     $client = clone static::$client;
                     $client->request(
                         Request::METHOD_PATCH,
-                        static::$router->generate('battleship.game.api.turn', ['cellId' => $cell->id]),
+                        static::$router->generate('battleship_game.api.turn', ['cellId' => $cell->id]),
                         [],
                         [],
                         ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']

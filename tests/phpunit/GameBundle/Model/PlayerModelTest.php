@@ -20,7 +20,7 @@ class PlayerModelTest extends IntegrationTestSuite
     {
         parent::setUpBeforeClass();
 
-        static::$playerModel = static::$container->get('battleship.game.services.player.model');
+        static::$playerModel = static::$container->get('battleship_game.service.player_model');
     }
 
     /*********************************** STATIC HELPERS ***********************************/

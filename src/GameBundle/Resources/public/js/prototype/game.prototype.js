@@ -145,7 +145,7 @@ class Game extends APIRequestService {
      */
     findPlayerCellByCriteria(criteria) {
         for (let player of this.players) {
-            if (undefined !== criteria.playerId && criteria.playerId != player.id) {
+            if (undefined !== criteria.playerId && criteria.playerId !== player.id) {
                 continue;
             }
 

@@ -20,7 +20,7 @@ class AIServiceTest extends IntegrationTestSuite
 
     protected function setUp()
     {
-        $this->ai = static::$container->get('battleship.game.services.ai.core.service');
+        $this->ai = static::$container->get('battleship_game.service.ai_core');
     }
 
     /**

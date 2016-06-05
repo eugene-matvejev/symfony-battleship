@@ -20,7 +20,7 @@ class GameResultModelTest extends IntegrationTestSuite
 
     protected function setUp()
     {
-        $this->gameResultModel = static::$container->get('battleship.game.services.game.result.model');
+        $this->gameResultModel = static::$container->get('battleship_game.service.game_result_model');
     }
 
     /**
@@ -29,7 +29,7 @@ class GameResultModelTest extends IntegrationTestSuite
      */
     public function prepareResponse()
     {
-        $perPage = static::$container->getParameter('battleship_game.game_results_per_page');
+        $perPage = static::$container->getParameter('battleship_game.setting.game_results_per_page');
 
         /** populated 2 full pages of Game Results + 1 result */
         for ($i = 0; $i < ($perPage * 2 + 1); $i++) {

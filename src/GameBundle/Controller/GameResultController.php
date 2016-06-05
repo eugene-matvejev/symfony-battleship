@@ -23,7 +23,7 @@ class GameResultController extends AbstractAPIController
      */
     public function orderedByDateAction(int $page) : Response
     {
-        $data = $this->get('battleship.game.services.game.result.model')->prepareResponse($page);
+        $data = $this->get('battleship_game.service.game_result_model')->prepareResponse($page);
 
         return $this->buildSerializedResponse($data);
     }

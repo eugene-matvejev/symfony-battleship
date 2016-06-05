@@ -25,6 +25,16 @@ class GameInitiationResponse
      */
     private $battlefields = [];
 
+    /**
+     * @param Collection|Battlefield[] $battlefields
+     */
+    public function __construct(Collection $battlefields)
+    {
+        foreach ($battlefields as $battlefield) {
+            $this->addBattlefield($battlefield);
+        }
+    }
+
     public function addBattlefield(Battlefield $battlefield) : self
     {
         $this->battlefields[] = $battlefield;
@@ -44,19 +54,5 @@ class GameInitiationResponse
     public function getBattlefields() : array
     {
         return $this->battlefields;
-    }
-
-    /**
-     * @param Collection|Battlefield[] $battlefields
-     *
-     * @return GameInitiationResponse
-     */
-    public function setBattlefields(Collection $battlefields) : self
-    {
-        foreach ($battlefields as $battlefield) {
-            $this->addBattlefield($battlefield);
-        }
-
-        return $this;
     }
 }

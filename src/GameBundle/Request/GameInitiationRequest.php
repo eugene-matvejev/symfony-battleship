@@ -35,73 +35,21 @@ class GameInitiationRequest
      */
     private $coordinates;
 
-    /**
-     * @param string $json
-     *
-     * @throws \Exception
-     */
-    public function parse(string $json)
+    public function __construct(string $json)
     {
-        if (!$this->validate($json)) {
-            throw new \Exception('invalid request');
-        }
+        $this->parse($json);
+    }
 
+    public function parse(string $json) : self
+    {
         $data = json_decode($json);
 
         $this->size = $data->size;
         $this->opponents = $data->opponents;
         $this->playerName = $data->playerName;
         $this->coordinates = $data->coordinates;
-    }
 
-    public function validate(string $json) : bool
-    {
-        $data = json_decode($json);
-
-        return
-            $data instanceof \stdClass
-            && $this->validateStructure($data)
-            && $this->validateBattlefieldSize($data->size)
-            && $this->validatePlayerName($data->playerName)
-            && $this->validateOpponentsAmount($data->opponents)
-            && $this->validateCoordinates($data->coordinates);
-    }
-
-    public function validateStructure(\stdClass $data) : bool
-    {
-        return
-            isset($data->opponents, $data->playerName, $data->size, $data->coordinates)
-            && is_array($data->coordinates);
-    }
-
-    public function validateOpponentsAmount(int $value) : bool
-    {
-        return $value === 1;
-    }
-
-    public function validateBattlefieldSize(int $value) : bool
-    {
-        return 7 >= $value && $value <= 12;
-    }
-
-    public function validatePlayerName(string $value) : bool
-    {
-        return !empty($value);
-    }
-
-    public function validateCoordinates(array $coordinates) : bool
-    {
-        if (empty($coordinates)) {
-            return false;
-        }
-
-        foreach ($coordinates as $coordinate) {
-            if (empty($coordinate)) {
-                return false;
-            }
-        }
-
-        return true;
+        return $this;
     }
 
     public function getOpponents() : int
