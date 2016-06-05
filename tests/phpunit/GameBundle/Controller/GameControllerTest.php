@@ -155,7 +155,7 @@ class GameControllerTest extends IntegrationTestSuite
      * @depends successfulInitAction_JSON
      * @depends successfulInitAction_XML
      */
-    public function unsuccessfulTurnAction()
+    public function unsuccessfulTurnActionOnNotExistingCell()
     {
         $client = clone static::$client;
         foreach (['application/xml', 'application/json'] as $acceptHeader) {
@@ -183,6 +183,43 @@ class GameControllerTest extends IntegrationTestSuite
     public function successfulTurnAction(array $response)
     {
         foreach ($response as $battlefield) {
+            if ($battlefield->player->flags !== PlayerModel::FLAG_AI_CONTROLLED) {
+                continue;
+            }
+
+            foreach ($battlefield->cells as $cell) {
+                $client = clone static::$client;
+                $client->request(
+                    Request::METHOD_PATCH,
+                    static::$router->generate('battleship_game.api.turn', ['cellId' => $cell->id]),
+                    [],
+                    [],
+                    ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
+                );
+                $this->assertSuccessfulJSONResponse($client->getResponse());
+
+                $parsed = json_decode($client->getResponse()->getContent());
+                if (isset($parsed->result)) {
+                    return;
+                }
+            }
+        }
+    }
+
+    /**
+     * simulate human interaction until game has been finished
+     *
+     * @var     \stdClass[] $response
+     *
+     * @see     GameController::turnAction
+     * @test
+     *
+     * @depends successfulInitAction_JSON
+     * @depends successfulTurnAction
+     */
+    public function unsuccessfulTurnActionOnDeadCell(array $response)
+    {
+        foreach ($response as $battlefield) {
             if ($battlefield->player->flags === PlayerModel::FLAG_AI_CONTROLLED) {
                 foreach ($battlefield->cells as $cell) {
                     $client = clone static::$client;
@@ -193,12 +230,6 @@ class GameControllerTest extends IntegrationTestSuite
                         [],
                         ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
                     );
-                    $this->assertSuccessfulJSONResponse($client->getResponse());
-
-                    $parsed = json_decode($client->getResponse()->getContent());
-                    if (isset($parsed->result)) {
-                        return;
-                    }
                 }
             }
         }
