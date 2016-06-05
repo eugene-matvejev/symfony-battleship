@@ -49,7 +49,7 @@ class GameController extends AbstractAPIController
         $om->persist($game);
         $om->flush();
 
-        return $this->buildSerializedResponse(new GameInitiationResponse($game->getBattlefields()), Response::HTTP_CREATED);
+        return $this->prepareSerializedResponse(new GameInitiationResponse($game->getBattlefields()), Response::HTTP_CREATED);
     }
 
     /**
@@ -82,6 +82,6 @@ class GameController extends AbstractAPIController
         }
         $om->flush();
 
-        return $this->buildSerializedResponse($data);
+        return $this->prepareSerializedResponse($data);
     }
 }
