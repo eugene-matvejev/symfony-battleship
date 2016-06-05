@@ -20,7 +20,7 @@ class GameResultControllerTest extends IntegrationTestSuite
         $client = clone static::$client;
         $client->request(
             Request::METHOD_GET,
-            static::$router->generate('battleship.game.api.game.results', ['page' => 1]),
+            static::$router->generate('battleship_game.api.game.results', ['page' => 1]),
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']

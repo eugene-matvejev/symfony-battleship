@@ -18,7 +18,7 @@ class PlayerModelTest extends IntegrationTestSuite
 
     protected function setUp()
     {
-        $this->playerModel = static::$container->get('battleship.game.services.player.model');
+        $this->playerModel = static::$container->get('battleship_game.service.player_model');
     }
 
     /**

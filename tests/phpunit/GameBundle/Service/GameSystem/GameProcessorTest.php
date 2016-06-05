@@ -20,41 +20,42 @@ class GameProcessorTest extends IntegrationTestSuite
      * @var GameProcessor
      */
     private $gameProcessor;
-    /**
-     * @var PlayerModel
-     */
-    private $playerModel;
 
     protected function setUp()
     {
-        $this->gameProcessor = static::$container->get('battleship.game.services.game.processor');
-        $this->playerModel = static::$container->get('battleship.game.services.player.model');
+        $this->gameProcessor = static::$container->get('battleship_game.service.game_processor');
     }
-//
-//    /**
-//     * should initiate CPU battlefields
-//     *
-//     * @see GameProcessor::processCPUBattlefieldsInitiation
-//     * @test
-//     */
-//    public function processCPUBattlefieldsInitiation()
-//    {
-//        $game = MockFactory::getGameMock();
-//        $game->getBattlefields()[0]->setPlayer(MockFactory::getAIPlayerMock(''));
-//
-//        $this->invokeMethod($this->gameProcessor, 'processCPUBattlefieldsInitiation', [$game]);
-//
-//        foreach ($game->getBattlefields() as $battlefield) {
-//            if (PlayerModel::isAIControlled($battlefield->getPlayer())) {
-//                $this->assertEquals(CellModel::FLAG_SHIP, $battlefield->getCellByCoordinate('B2')->getFlags());
-//                $this->assertTrue(BattlefieldModel::hasUnfinishedShips($battlefield));
-//            } else {
-//                foreach ($battlefield->getCells() as $cell) {
-//                    $this->assertEquals(CellModel::FLAG_NONE, $cell->getFlags());
-//                }
-//            }
-//        }
-//    }
+
+    /**
+     * should:
+     *      generate X battlefields of Y size
+     *      assign AI controlled player to the generated battlefield
+     *      initiate ship cells for the generated battlefield
+     *      attach generated battlefield to the Game
+     *
+     * @see GameProcessor::attachAIBattlefields
+     * @test
+     */
+    public function attachAIBattlefields()
+    {
+        $game = MockFactory::getGameMock(0, 0);
+
+        $this->invokeMethod($this->gameProcessor, 'attachAIBattlefields', [$game, 2, 7]);
+        $this->assertCount(2, $game->getBattlefields());
+
+        foreach ($game->getBattlefields() as $battlefield) {
+            $this->assertCount(49, $battlefield->getCells());
+
+            $this->assertTrue(PlayerModel::isAIControlled($battlefield->getPlayer()));
+            $this->assertTrue(BattlefieldModel::hasUnfinishedShips($battlefield));
+
+            foreach ($battlefield->getCells() as $coordinate => $cell) {
+                /** all battlefields associated with AI players currently have hardcoded ship into B2 cell */
+                $expectedFlag = ('B2' === $coordinate) ? CellModel::FLAG_SHIP : CellModel::FLAG_NONE;
+                $this->assertEquals($expectedFlag, $cell->getFlags());
+            }
+        }
+    }
 
     /**
      * should initiate Game with 7x7 with two Battlefields
@@ -64,8 +65,7 @@ class GameProcessorTest extends IntegrationTestSuite
      */
     public function buildGame()
     {
-        $request = new GameInitiationRequest();
-        $request->parse(static::getSharedFixtureContent('init-game-request-2-players-7x7.json'));
+        $request = new GameInitiationRequest(static::getSharedFixtureContent('init-game-request-2-players-7x7.json'));
 
         $game = $this->gameProcessor->buildGame($request);
 
