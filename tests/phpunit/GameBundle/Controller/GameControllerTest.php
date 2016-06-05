@@ -21,7 +21,7 @@ class GameControllerTest extends IntegrationTestSuite
         $client = clone static::$client;
         $client->request(
             Request::METHOD_GET,
-            static::$router->generate('battleship.game.gui.index')
+            static::$router->generate('battleship_game.gui.index')
         );
         $this->assertSuccessfulResponse($client->getResponse());
     }
@@ -36,7 +36,7 @@ class GameControllerTest extends IntegrationTestSuite
             $client = clone static::$client;
             $client->request(
                 Request::METHOD_POST,
-                static::$router->generate('battleship.game.api.init'),
+                static::$router->generate('battleship_game.api.init'),
                 [],
                 [],
                 ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => $acceptHeader]
@@ -56,7 +56,7 @@ class GameControllerTest extends IntegrationTestSuite
         $client = clone static::$client;
         $client->request(
             Request::METHOD_POST,
-            static::$router->generate('battleship.game.api.init'),
+            static::$router->generate('battleship_game.api.init'),
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json'],
@@ -65,10 +65,9 @@ class GameControllerTest extends IntegrationTestSuite
         $this->assertSuccessfulJSONResponse($client->getResponse());
 
         $response = json_decode($client->getResponse()->getContent());
-        $this->assertInternalType('int', $response->id);
-        $this->assertInternalType('string', $response->timestamp);
-        $this->assertInternalType('array', $response->battlefields);
-        foreach ($response->battlefields as $battlefield) {
+        $this->assertInternalType('array', $response);
+
+        foreach ($response as $battlefield) {
             $this->assertInternalType('int', $battlefield->id);
             $this->assertInstanceOf(\stdClass::class, $battlefield->player);
 
@@ -106,7 +105,7 @@ class GameControllerTest extends IntegrationTestSuite
 
         $client->request(
             Request::METHOD_POST,
-            static::$router->generate('battleship.game.api.init'),
+            static::$router->generate('battleship_game.api.init'),
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/xml'],
@@ -115,28 +114,36 @@ class GameControllerTest extends IntegrationTestSuite
         $this->assertSuccessfulXMLResponse($client->getResponse());
 
         $response = simplexml_load_string($client->getResponse()->getContent(), 'SimpleXMLElement', LIBXML_NOCDATA);
-        $response = json_decode(json_encode($response));
+        $this->assertInstanceOf(\SimpleXMLElement::class, $response);
 
-        $this->assertInternalType('string', $response->id);
-        $this->assertInternalType('string', $response->timestamp);
-        $this->assertInternalType('array', $response->battlefields->battlefield);
-        foreach ($response->battlefields->battlefield as $battlefield) {
-            $this->assertInternalType('string', $battlefield->id);
-            $this->assertInstanceOf(\stdClass::class, $battlefield->player);
+        foreach ($response as $battlefield) {
+            /** @var \SimpleXMLElement $battlefield */
+            $this->assertInstanceOf(\SimpleXMLElement::class, $battlefield);
+            $this->assertEquals('battlefield', $battlefield->getName());
 
-            $this->assertInternalType('string', $battlefield->player->id);
-            $this->assertInternalType('string', $battlefield->player->flags);
-            $this->assertInternalType('string', $battlefield->player->name);
+            $player = $battlefield->player;
+            /** @var \SimpleXMLElement $player */
+            $this->assertInstanceOf(\SimpleXMLElement::class, $player);
 
-            $this->assertCount(49, $battlefield->cells->cell);
-            foreach ($battlefield->cells->cell as $cell) {
-                $this->assertInternalType('string', $cell->id);
-                $this->assertInternalType('string', $cell->flags);
-                $this->assertInternalType('string', $cell->coordinate);
+            $this->assertInternalType('string', (string)$player->id);
+            $this->assertInternalType('string', (string)$player->flags);
+            $this->assertInternalType('string', (string)$player->name);
+
+            $cells = $battlefield->cells->children();
+            $this->assertEquals(49, $cells->count());
+            foreach ($cells as $cell) {
+                $this->assertInstanceOf(\SimpleXMLElement::class, $cell);
+
+                $this->assertInternalType('string', (string)$cell->id);
+                $this->assertInternalType('string', (string)$cell->flags);
+                $this->assertInternalType('string', (string)$cell->coordinate);
 
                 /** as CPU fields should have CellModel::FLAG_NONE on initiation */
-                $expected = $battlefield->player->flags == PlayerModel::FLAG_AI_CONTROLLED ? CellModel::FLAG_NONE : $cell->flags;
-                $this->assertEquals($expected, $cell->flags);
+                if ((string)$player->flags == PlayerModel::FLAG_AI_CONTROLLED) {
+                    $this->assertEquals(CellModel::FLAG_NONE, (string)$cell->flags);
+                } else {
+                    $this->assertContains((string)$cell->flags, [CellModel::FLAG_NONE, CellModel::FLAG_SHIP, CellModel::FLAG_DEAD_SHIP]);
+                }
             }
         }
     }
@@ -154,7 +161,7 @@ class GameControllerTest extends IntegrationTestSuite
         foreach (['application/xml', 'application/json'] as $acceptHeader) {
             $client->request(
                 Request::METHOD_PATCH,
-                static::$router->generate('battleship.game.api.turn', ['cellId' => 0]),
+                static::$router->generate('battleship_game.api.turn', ['cellId' => 0]),
                 [],
                 [],
                 ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => $acceptHeader]
@@ -166,22 +173,22 @@ class GameControllerTest extends IntegrationTestSuite
     /**
      * simulate human interaction until game has been finished
      *
-     * @var     \stdClass $response
+     * @var     \stdClass[] $response
      *
      * @see     GameController::turnAction
      * @test
      *
      * @depends successfulInitAction_JSON
      */
-    public function successfulTurnAction(\stdClass $passedGameResponse)
+    public function successfulTurnAction(array $response)
     {
-        foreach ($passedGameResponse->battlefields as $battlefield) {
+        foreach ($response as $battlefield) {
             if ($battlefield->player->flags === PlayerModel::FLAG_AI_CONTROLLED) {
                 foreach ($battlefield->cells as $cell) {
                     $client = clone static::$client;
                     $client->request(
                         Request::METHOD_PATCH,
-                        static::$router->generate('battleship.game.api.turn', ['cellId' => $cell->id]),
+                        static::$router->generate('battleship_game.api.turn', ['cellId' => $cell->id]),
                         [],
                         [],
                         ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']

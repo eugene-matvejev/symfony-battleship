@@ -47,6 +47,15 @@ class Cell {
     }
 
     /**
+     * @param {number} flag
+     * 
+     * @returns {boolean}
+     */
+    hasFlag(flag) {
+        return (this.flags & flag) === flag;
+    }
+
+    /**
      * @param {string} mode
      *
      * @returns {Cell}

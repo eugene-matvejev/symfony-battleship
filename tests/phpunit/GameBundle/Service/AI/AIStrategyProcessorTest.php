@@ -21,7 +21,7 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
 
     protected function setUp()
     {
-        $this->strategyProcessor = static::$container->get('battleship.game.services.ai.strategy.processor');
+        $this->strategyProcessor = static::$container->get('battleship_game.service.ai_strategy_processor');
     }
 
     /**

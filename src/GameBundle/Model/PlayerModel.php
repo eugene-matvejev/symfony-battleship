@@ -22,22 +22,22 @@ class PlayerModel
         $this->repository = $repository;
     }
 
-    public function createOnRequest(string $name, int $flags = self::FLAG_NONE) : Player
+    public function createOnRequestAIControlled(string $name) : Player
+    {
+        return $this->createOnRequest($name, true);
+    }
+
+    public function createOnRequest(string $name, bool $controlledByAI = false) : Player
     {
         $player = $this->repository->findOneBy(['name' => $name]);
 
         return $player ?? (new Player())
             ->setName($name)
-            ->setFlags(static::createAIControlled($flags) ? static::FLAG_AI_CONTROLLED : static::FLAG_NONE);
+            ->setFlags($controlledByAI ? static::FLAG_AI_CONTROLLED : static::FLAG_NONE);
     }
 
     public static function isAIControlled(Player $player) : bool
     {
         return $player->hasFlag(self::FLAG_AI_CONTROLLED);
-    }
-
-    public static function createAIControlled(int $flags) : bool
-    {
-        return ($flags & PlayerModel::FLAG_AI_CONTROLLED) === PlayerModel::FLAG_AI_CONTROLLED;
     }
 }

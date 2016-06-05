@@ -13,10 +13,10 @@ class Game extends APIRequestService {
     }
 
     /**
-     * @param {{name: {string}, isCPU: {boolean}}[]} players
-     * @param {number}                               battlefieldSize
+     * @param {string} playerName
+     * @param {number} battlefieldSize
      */
-    init(players, battlefieldSize) {
+    init(playerName, battlefieldSize) {
         this.players = [];
         this.$html.html('');
 
@@ -25,35 +25,52 @@ class Game extends APIRequestService {
                 self.parseInitResponse(response);
             };
 
-        /** construct players */
-        players.forEach(player => this.players.push(new Player(player.name, player.isCPU || false, battlefieldSize)), this);
+        /** construct player */
+        let player = new Player(playerName, battlefieldSize);
         /** append player's HTML to the document */
-        this.players.forEach(player => this.$html.append(player.$html), this);
+        this.$html.append(player.$html);
+        /** save human player **/
+        this.players.push(player);
 
-        this.request('POST', this.$html.attr('data-init-link'), this.players.map(player => player.getSerializationView()), onSuccess);
+        let requestData = {
+            playerName: playerName,
+            opponents: 1, //TODO: multi-player feature
+            size: battlefieldSize,
+            coordinates: player.battlefield.cells
+                .filter(cell => cell.hasFlag(Cell.resources.flags.ship))
+                .map(cell => cell.coordinate)
+        };
+
+        this.request('POST', this.$html.attr('data-init-link'), requestData, onSuccess);
     }
 
     /**
      * @param {{
-     *     id: {number},
-     *     battlefields: {
-     *         id: {number},
-     *         player: {id: {number}, name: {string}},
-     *         cells: {id: {number}, coordinate: {string}, flags: {number}}[]
-     *     }[]
-     * }} response
+     *      id: {number},
+     *      player: {id: {number}, name: {string}},
+     *      cells: {id: {number}, coordinate: {string}, flags: {number}}[]
+     *  }[]} response
      */
     parseInitResponse(response) {
-        response.battlefields.forEach(function (battlefield) {
-            let player = this.findPlayerByName(battlefield.player.name).setId(battlefield.player.id);
+        response.forEach(function (battlefield) {
+            let player;
+            try {
+                player = this.findPlayerByName(battlefield.player.name);
+            } catch (ex) {
+                let size = Math.sqrt(Object.keys(battlefield.cells).length);
+                player   = new Player(battlefield.player.name, size, true);
+
+                this.$html.prepend(player.$html);
+                this.players.push(player);
+            }
+
+            player.setId(battlefield.player.id);
 
             Object.keys(battlefield.cells).forEach(function (index) {
                 let _cell = battlefield.cells[index],
                     cell  = this.findPlayerCellByCriteria({ playerId: player.id, coordinate: _cell.coordinate });
 
-                if (undefined !== cell) {
-                    cell.setId(_cell.id).setFlags(_cell.flags);
-                }
+                cell.setId(_cell.id).setFlags(_cell.flags);
             }, this);
         }, this);
     }
@@ -128,7 +145,7 @@ class Game extends APIRequestService {
      */
     findPlayerCellByCriteria(criteria) {
         for (let player of this.players) {
-            if (undefined !== criteria.playerId && criteria.playerId !== player.id) {
+            if (undefined !== criteria.playerId && criteria.playerId != player.id) {
                 continue;
             }
 

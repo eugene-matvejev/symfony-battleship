@@ -6,8 +6,12 @@ imports:
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    battleship_game.game_results_per_page: 5
     locale: en
+    battleship_game.setting.min_game_size: 7
+    battleship_game.setting.max_game_size: 12
+    battleship_game.setting.min_opponents_count: 1 # Multiplayer in WIP!
+    battleship_game.setting.max_opponents_count: 1 # Multiplayer in WIP!
+    battleship_game.setting.game_results_per_page: 5
 
 framework:
     #esi:             ~

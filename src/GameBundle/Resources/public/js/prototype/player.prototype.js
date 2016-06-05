@@ -3,10 +3,10 @@
 class Player {
     /**
      * @param {string}  playerName
-     * @param {boolean} isCPUPlayer
      * @param {number}  battlefieldSize
+     * @param {boolean} [isCPUPlayer]
      */
-    constructor(playerName, isCPUPlayer, battlefieldSize) {
+    constructor(playerName, battlefieldSize, isCPUPlayer) {
         this.$html = $(this.constructor.resources.layout);
         /** by default: type: human (0x00) */
         this.setName(playerName)
@@ -61,25 +61,6 @@ class Player {
         let flag = this.constructor.resources.flags.ai;
 
         return (this.flags & flag) === flag;
-    }
-
-    /**
-     * @returns {{
-     *      id: {number},
-     *      flags: {number},
-     *      name: {string},
-     *      battlefield: {number}
-     *      cells: {id: {number}, coordinate: {string}, flags: {number}}[]
-     * }}
-     */
-    getSerializationView() {
-        return {
-            id: this.id,
-            flags: this.flags,
-            name: this.name,
-            battlefield: this.battlefield.id,
-            cells: this.battlefield.cells.map(cell => cell.getSerializationView())
-        };
     }
 }
 

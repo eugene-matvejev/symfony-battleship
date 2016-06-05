@@ -144,6 +144,16 @@ abstract class IntegrationTestSuite extends WebTestCase
         return $method->invokeArgs($object, $methodArguments);
     }
 
+    public static function getRootDirectory() : string
+    {
+        return dirname(__DIR__);
+    }
+
+    public static function getSharedFixturesDirectory() : string
+    {
+        return static::getRootDirectory() . '/shared-fixtures';
+    }
+
     /**
      * return content of the file in located in tests/shared-fixtures directory
      *
@@ -153,6 +163,6 @@ abstract class IntegrationTestSuite extends WebTestCase
      */
     public static function getSharedFixtureContent(string $filename) : string
     {
-        return file_get_contents(__DIR__ . "/../shared-fixtures/$filename");
+        return file_get_contents(static::getSharedFixturesDirectory() . "/$filename");
     }
 }
