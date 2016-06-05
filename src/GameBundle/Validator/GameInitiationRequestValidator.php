@@ -70,7 +70,6 @@ class GameInitiationRequestValidator
         return $this->isBetween($value, $this->minBattlefieldSize, $this->maxBattlefieldSize);
     }
 
-    // TODO: replace name with ID
     protected function validatePlayerName(string $value) : bool
     {
         return !empty($value);
