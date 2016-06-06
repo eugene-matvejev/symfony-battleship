@@ -18,15 +18,8 @@
     </php>
 
     <testsuites>
-        <testsuite name="integration tests">
-            <directory>./tests/phpunit/*Bundle/Controller</directory>
-        </testsuite>
-        <testsuite name="unit tests">
-            <directory>./tests/phpunit/*Bundle/Entity</directory>
-            <directory>./tests/phpunit/*Bundle/Model</directory>
-            <directory>./tests/phpunit/*Bundle/Service</directory>
-            <directory>./tests/phpunit/*Bundle/Request</directory>
-            <directory>./tests/phpunit/*Bundle/Response</directory>
+        <testsuite name="mandatory test suite">
+            <directory>./tests/phpunit/*Bundle/*</directory>
         </testsuite>
     </testsuites>
 
