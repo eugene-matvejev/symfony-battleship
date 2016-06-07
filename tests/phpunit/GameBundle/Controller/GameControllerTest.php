@@ -216,7 +216,6 @@ class GameControllerTest extends IntegrationTestSuite
      * @test
      *
      * @depends successfulInitAction_JSON
-     * @depends successfulTurnAction
      */
     public function unsuccessfulTurnActionOnDeadCell(array $response)
     {
@@ -231,6 +230,8 @@ class GameControllerTest extends IntegrationTestSuite
                         [],
                         ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
                     );
+                    $this->assertUnsuccessfulResponse($client->getResponse());
+                    break 2;
                 }
             }
         }
