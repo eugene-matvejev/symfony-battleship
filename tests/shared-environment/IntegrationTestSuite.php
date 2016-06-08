@@ -165,4 +165,9 @@ abstract class IntegrationTestSuite extends WebTestCase
     {
         return file_get_contents(static::getSharedFixturesDirectory() . "/$filename");
     }
+
+    protected static function getKernelClass() : string
+    {
+        return \AppKernel::class;
+    }
 }
