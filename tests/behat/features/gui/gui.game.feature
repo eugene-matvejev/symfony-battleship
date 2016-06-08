@@ -1,4 +1,4 @@
-Feature: Game GUI
+Feature: Battleship Game: GUI: entry page
 
   @gui
   Scenario: verify index page
