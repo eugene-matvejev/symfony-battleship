@@ -6,8 +6,6 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use EM\Tests\Environment\IntegrationTestSuite;
 use Symfony\Bundle\FrameworkBundle\Client;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\HttpFoundation\File\File;
 
 abstract class AbstractContainerAwareContext extends IntegrationTestSuite implements Context, SnippetAcceptingContext
 {
@@ -56,13 +54,13 @@ abstract class AbstractContainerAwareContext extends IntegrationTestSuite implem
     }
 
     /**
-     * @BeforeScenario
+     * @Then observe response status code :statusCode
+     *
+     * @param int $statusCode
      */
-    public static function beforeEachScenario()
+    public function observeResponseStatusCode(int $statusCode)
     {
-        parent::setUpBeforeClass();
-
-        static::$_client = clone static::$client;
+        $this->assertEquals($statusCode, static::$_client->getResponse()->getStatusCode());
     }
 
     /**
