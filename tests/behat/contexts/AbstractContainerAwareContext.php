@@ -72,25 +72,25 @@ abstract class AbstractContainerAwareContext extends IntegrationTestSuite implem
      */
     protected static function getKernelClass()
     {
-        if (isset($_SERVER['KERNEL_DIR'])) {
-            return parent::getKernelClass();
-        }
+//        if (isset($_SERVER['KERNEL_DIR'])) {
+//            return parent::getKernelClass();
+//        }
+//
+//        $finder = new Finder();
+//        $finder->name('*Kernel.php')->depth(0)->in(dirname(__DIR__, 3) . '/app');
+//        $results = iterator_to_array($finder);
+//        if (empty($results)) {
+//            throw new \RuntimeException('Either set KERNEL_DIR or use default Symfony structure');
+//        }
 
-        $finder = new Finder();
-        $finder->name('*Kernel.php')->depth(0)->in(__DIR__ . '/../../../app');
-        $results = iterator_to_array($finder);
-        if (!count($results)) {
-            throw new \RuntimeException('Either set KERNEL_DIR or use default Symfony structure');
-        }
+//        /**
+//         * @var File $file
+//         */
+//        $file = current($results);
+//        $class = $file->getBasename('.php');
+//
+//        require_once $file;
 
-        /**
-         * @var File $file
-         */
-        $file = current($results);
-        $class = $file->getBasename('.php');
-
-        require_once $file;
-
-        return $class;
+        return \AppKernel::class;
     }
 }
