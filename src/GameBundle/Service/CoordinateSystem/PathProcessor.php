@@ -21,13 +21,13 @@ class PathProcessor
     const PATH_LEFT_DOWN  = self::PATH_LEFT | self::PATH_DOWN;
     const PATH_RIGHT_UP   = self::PATH_RIGHT | self::PATH_UP;
     const PATH_RIGHT_DOWN = self::PATH_RIGHT | self::PATH_DOWN;
-    const PRIMARY_PATHS   = [
+    const PRIMARY_PATHS  = [
         self::PATH_LEFT,
         self::PATH_RIGHT,
         self::PATH_UP,
         self::PATH_DOWN
     ];
-    const EXTENDED_PATHS  = [
+    const EXTENDED_PATHS = [
         self::PATH_LEFT,
         self::PATH_RIGHT,
         self::PATH_UP,
@@ -69,7 +69,7 @@ class PathProcessor
     }
 
     /**
-     * sets path and reset's current coordinate to origin
+     * sets path and reset current coordinate to origin
      *
      * @param int $path
      *
@@ -89,13 +89,15 @@ class PathProcessor
     }
 
     /**
-     * set next current coordinate according path and return it
+     * calculate next coordinate by path and set it as current coordinate and return it
      *
      * LEFT-UP   (--letter, --number)  UP (--number)  RIGHT-UP   (++letter, --number)
      * LEFT      (--letter)               UNCHANGED   RIGHT      (++letter)
      * LEFT-DOWN (--letter, ++number) DOWN (++number) RIGHT-DOWN (++letter, ++number)
+     *
+     * @return string
      */
-    public function getNextCurrentCoordinate() : string
+    public function getNextCoordinate() : string
     {
         $number = substr($this->currentCoordinate, 1);
         $letter = substr($this->currentCoordinate, 0, 1);
@@ -127,7 +129,7 @@ class PathProcessor
         foreach (self::EXTENDED_PATHS as $path) {
             $this
                 ->setPath($path)
-                ->getNextCurrentCoordinate();
+                ->getNextCoordinate();
 
             try {
                 $cell = $this->getCellByCurrentCoordinate($battlefield, $excludeFlag);
@@ -161,7 +163,7 @@ class PathProcessor
         throw new CellException("{$battlefield->getId()} do not contain cell with coordinate: {$this->currentCoordinate}");
     }
 
-    protected function isPathContainsBytes(int $flag) : bool
+    protected function isPathContainsDirection(int $flag) : bool
     {
         return ($this->path & $flag) === $flag;
     }
