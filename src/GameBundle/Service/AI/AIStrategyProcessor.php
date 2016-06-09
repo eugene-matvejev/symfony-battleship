@@ -47,13 +47,13 @@ class AIStrategyProcessor
     {
         $cells = [];
         $battlefield = $cell->getBattlefield();
-        $processor = new PathProcessor($cell);
+        $processor = new PathProcessor($cell->getCoordinate());
 
         foreach ($paths as $path) {
             $processor->setPath($path);
 
             /** @var Cell $cell */
-            while (null !== $cell = $battlefield->getCellByCoordinate($processor->getNextCoordinate())) {
+            while (null !== $cell = $battlefield->getCellByCoordinate($processor->getNextCurrentCoordinate())) {
                 /** if it is marked as skipped or dead water - skip processing */
                 if ($cell->hasFlag(CellModel::FLAG_SKIP) || (!$cell->hasFlag(CellModel::FLAG_SHIP) && $cell->hasFlag(CellModel::FLAG_DEAD))) {
                     break;

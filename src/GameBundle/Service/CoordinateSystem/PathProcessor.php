@@ -2,7 +2,10 @@
 
 namespace EM\GameBundle\Service\CoordinateSystem;
 
+use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
+use EM\GameBundle\Exception\CellException;
+use EM\GameBundle\Model\CellModel;
 
 /**
  * @since 11.0
@@ -35,28 +38,47 @@ class PathProcessor
         self::PATH_RIGHT_DOWN
     ];
     /**
-     * @var Cell
-     */
-    private $cell;
-    /**
      * @var int
      */
-    private $path = self::PATH_NONE;
+    private $path;
+    /**
+     * @var string
+     */
+    private $originCoordinate;
     /**
      * @var string
      */
     private $currentCoordinate;
 
-    public function __construct(Cell $cell)
+    public function __construct(string $coordinate)
     {
-        $this->cell = $cell;
-        $this->currentCoordinate = $cell->getCoordinate();
+        $this->setOriginCoordinate($coordinate);
     }
 
+    public function getOriginCoordinate() : string
+    {
+        return $this->originCoordinate;
+    }
+
+    public function setOriginCoordinate(string $coordinate) : self
+    {
+        $this->currentCoordinate = $this->originCoordinate = $coordinate;
+        $this->path = static::PATH_NONE;
+
+        return $this;
+    }
+
+    /**
+     * sets path and reset's current coordinate to origin
+     *
+     * @param int $path
+     *
+     * @return PathProcessor
+     */
     public function setPath(int $path) : self
     {
         $this->path = $path;
-        $this->currentCoordinate = $this->cell->getCoordinate();
+        $this->currentCoordinate = $this->originCoordinate;
 
         return $this;
     }
@@ -67,11 +89,13 @@ class PathProcessor
     }
 
     /**
+     * set next current coordinate according path and return it
+     *
      * LEFT-UP   (--letter, --number)  UP (--number)  RIGHT-UP   (++letter, --number)
      * LEFT      (--letter)               UNCHANGED   RIGHT      (++letter)
      * LEFT-DOWN (--letter, ++number) DOWN (++number) RIGHT-DOWN (++letter, ++number)
      */
-    public function getNextCoordinate() : string
+    public function getNextCurrentCoordinate() : string
     {
         $number = substr($this->currentCoordinate, 1);
         $letter = substr($this->currentCoordinate, 0, 1);
@@ -92,34 +116,51 @@ class PathProcessor
     }
 
     /**
-     * @param int|null $excludeFlag [optional] - cells with this flag will be ignored
+     * @param Battlefield $battlefield
+     * @param int|null    $excludeFlag [optional] - cells with this flag will be ignored
      *
      * @return Cell[]
      */
-    public function getAdjacentCells(int $excludeFlag = null) : array
+    public function getAdjacentCells(Battlefield $battlefield, int $excludeFlag = CellModel::FLAG_NONE) : array
     {
         $cells = [];
-        $battlefield = $this->cell->getBattlefield();
-        foreach (self::EXTENDED_PATHS as $way) {
-            $this->setPath($way);
+        foreach (self::EXTENDED_PATHS as $path) {
+            $this
+                ->setPath($path)
+                ->getNextCurrentCoordinate();
 
-            if (null !== $cell = $battlefield->getCellByCoordinate($this->getNextCoordinate())) {
-                if ($excludeFlag && $cell->hasFlag($excludeFlag)) {
-                    continue;
-                }
-
-                $cells[$cell->getCoordinate()] = $cell;
+            try {
+                $cell = $this->getCellByCurrentCoordinate($battlefield, $excludeFlag);
+            } catch (CellException $e) {
+                continue;
             }
+
+            $cells[$cell->getCoordinate()] = $cell;
         }
 
         return $cells;
     }
 
     /**
-     * @param int $flag
+     * @param Battlefield $battlefield
+     * @param int         $excludeFlag - cells with this flag will be ignored
      *
-     * @return bool
+     * @return Cell
+     * @throws CellException
      */
+    protected function getCellByCurrentCoordinate(Battlefield $battlefield, int $excludeFlag) : Cell
+    {
+        if (null !== $cell = $battlefield->getCellByCoordinate($this->currentCoordinate)) {
+            if ($excludeFlag && $cell->hasFlag($excludeFlag)) {
+                throw new CellException("{$cell->getId()} had $excludeFlag");
+            }
+
+            return $cell;
+        }
+
+        throw new CellException("{$battlefield->getId()} do not contain cell with coordinate: {$this->currentCoordinate}");
+    }
+
     protected function isPathContainsBytes(int $flag) : bool
     {
         return ($this->path & $flag) === $flag;

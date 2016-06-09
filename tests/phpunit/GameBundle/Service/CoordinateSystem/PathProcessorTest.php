@@ -133,7 +133,7 @@ class PathProcessorTest extends IntegrationTestSuite
      */
     private function invokeIsPathContainsBytesMethod(int $path, int $bytes)
     {
-        $processor = (new PathProcessor(MockFactory::getCellMock('B2')))
+        $processor = (new PathProcessor('B2'))
             ->setPath($path);
 
         return $this->invokeMethod($processor, 'isPathContainsBytes', [$bytes]);
@@ -147,7 +147,7 @@ class PathProcessorTest extends IntegrationTestSuite
      */
     public function getAdjacentCellsNoFlags()
     {
-        $cells = (new PathProcessor(MockFactory::getBattlefieldMock()->getCellByCoordinate('B2')))->getAdjacentCells();
+        $cells = (new PathProcessor('B2'))->getAdjacentCells(MockFactory::getBattlefieldMock());
 
         $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
         $this->assertCount(8, $cells);
@@ -166,7 +166,7 @@ class PathProcessorTest extends IntegrationTestSuite
      */
     public function getAdjacentCellsWith_FLAG_DEAD_OnNotDeadCells()
     {
-        $cells = (new PathProcessor(MockFactory::getBattlefieldMock()->getCellByCoordinate('B2')))->getAdjacentCells(CellModel::FLAG_DEAD);
+        $cells = (new PathProcessor('B2'))->getAdjacentCells(MockFactory::getBattlefieldMock(), CellModel::FLAG_DEAD);
 
         $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
         $this->assertCount(8, $cells);
@@ -197,7 +197,7 @@ class PathProcessorTest extends IntegrationTestSuite
             $battlefield->getCellByCoordinate($coordinate)->setFlags($flag);
         }
 
-        $cells = (new PathProcessor($battlefield->getCellByCoordinate('B2')))->getAdjacentCells(CellModel::FLAG_DEAD);
+        $cells = (new PathProcessor('B2'))->getAdjacentCells($battlefield, CellModel::FLAG_DEAD);
 
         $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
         $this->assertCount(5, $cells);
@@ -228,18 +228,18 @@ class PathProcessorTest extends IntegrationTestSuite
             PathProcessor::PATH_RIGHT_DOWN => 'E5'
         ];
 
-        $processor = new PathProcessor(MockFactory::getCellMock('D4'));
+        $processor = new PathProcessor('D4');
         foreach ($expectedCoordinatesByPath as $path => $expectedCoordinate) {
             $processor->setPath($path);
 
             $this->assertEquals('D4', $processor->getCurrentCoordinate());
 
-            $this->assertEquals($expectedCoordinate, $processor->getNextCoordinate());
+            $this->assertEquals($expectedCoordinate, $processor->getNextCurrentCoordinate());
             $this->assertEquals($expectedCoordinate, $processor->getCurrentCoordinate());
 
             /** if PathProcessor::PATH_NONE then coordinate should not change */
             if (PathProcessor::PATH_NONE !== $path) {
-                $this->assertNotEquals($expectedCoordinate, $processor->getNextCoordinate());
+                $this->assertNotEquals($expectedCoordinate, $processor->getNextCurrentCoordinate());
                 $this->assertNotEquals($expectedCoordinate, $processor->getCurrentCoordinate());
             } else {
                 $this->assertEquals('D4', $processor->getCurrentCoordinate());
