@@ -25,9 +25,10 @@ abstract class AbstractContainerAwareContext extends IntegrationTestSuite implem
     public function requestApiRouteViaWith(string $route, string $method, string $paramKey, string $paramValue)
     {
         $routeParams = [];
-        if (!empty($paramKey) && !empty($paramValue)) {
+        if (!empty($paramKey) && !empty($paramValue) & '~' !== $paramKey && '~' !== $paramValue) {
             $routeParams[$paramKey] = $paramValue;
         }
+
         static::$_client->request(
             $method,
             static::$router->generate($route, $routeParams),
