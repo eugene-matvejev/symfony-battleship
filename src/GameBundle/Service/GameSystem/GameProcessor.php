@@ -2,11 +2,9 @@
 
 namespace EM\GameBundle\Service\GameSystem;
 
-use EM\GameBundle\Entity\Battlefield;
-use EM\GameBundle\Entity\Cell;
-use EM\GameBundle\Entity\Game;
-use EM\GameBundle\Entity\GameResult;
-use EM\GameBundle\Entity\Player;
+use EM\GameBundle\Entity\{
+    Battlefield, Cell, Game, GameResult
+};
 use EM\GameBundle\Exception\CellException;
 use EM\GameBundle\Exception\PlayerException;
 use EM\GameBundle\Model\BattlefieldModel;
