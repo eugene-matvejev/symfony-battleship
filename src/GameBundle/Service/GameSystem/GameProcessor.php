@@ -85,45 +85,25 @@ class GameProcessor
             return $response;
         }
 
-        foreach ($game->getBattlefields() as $playerBattlefield) {
-            $player = $playerBattlefield->getPlayer();
-
-            foreach ($game->getBattlefields() as $battlefield) {
-                if ($playerBattlefield === $battlefield) {
-                    /** do not process player's turn on own battlefield */
+        foreach ($game->getBattlefields() as $turnOwnerBattlefield) {
+            foreach ($game->getBattlefields() as $targetBattlefield) {
+                if ($turnOwnerBattlefield === $targetBattlefield) {
                     continue;
                 }
 
-                $_cell = $this->processPlayerTurn($player, $battlefield, $cell);
+                $_cell = $this->processPlayerTurn($targetBattlefield, $cell);
 
                 if (CellModel::isShipDead($_cell)) {
+                    $this->markWaterAroundShipSkipped($_cell);
 
-                    $processor = new PathProcessor($_cell->getCoordinate());
-                    $cells = $processor->getAdjacentCells($_cell->getBattlefield(), 4, CellModel::FLAG_SHIP);
-                    $cells[$_cell->getCoordinate()] = $_cell;
-                    ksort($cells);
+                    if (!BattlefieldModel::hasUnfinishedShips($targetBattlefield)) {
+                        $result = (new GameResult())
+                            ->setPlayer($turnOwnerBattlefield->getPlayer());
+                        $game->setResult($result);
+                        $response->setResult($result);
 
-                    $_cells = [];
-                    foreach ($cells as $shipCell) {
-                        $__cells = $processor->reset($shipCell->getCoordinate())->getAdjacentCells($battlefield, 1, 0, CellModel::FLAG_SHIP);
-                        $_cells = array_merge(
-                            $_cells,
-                            $__cells
-                        );
-
-                        foreach ($_cells as $waterCell) {
-                            CellModel::switchPhase($waterCell, CellModel::FLAG_SKIP);
-                        }
+                        break 2;
                     }
-                }
-
-                if (!BattlefieldModel::hasUnfinishedShips($battlefield)) {
-                    $result = (new GameResult())
-                        ->setPlayer($player);
-                    $game->setResult($result);
-                    $response->setResult($result);
-
-                    break 2;
                 }
             }
         }
@@ -133,17 +113,31 @@ class GameProcessor
         return $response;
     }
 
+    private function markWaterAroundShipSkipped(Cell $cell)
+    {
+        $processor = new PathProcessor($cell->getCoordinate());
+        $battlefield = $cell->getBattlefield();
+
+        $cells = $processor->getAdjacentCells($cell->getBattlefield(), 4, CellModel::FLAG_SHIP);
+        $cells[$cell->getCoordinate()] = $cell;
+
+        foreach ($cells as $cell) {
+            foreach ($processor->reset($cell->getCoordinate())->getAdjacentCells($battlefield, 1, 0, CellModel::FLAG_SHIP) as $waterCell) {
+                CellModel::switchPhase($waterCell, CellModel::FLAG_SKIP);
+            }
+        }
+    }
+
     /**
-     * @param Player      $player
      * @param Battlefield $battlefield
-     * @param Cell        $cell
+     * @param Cell        $cell - this cell will be attacked if it will be human player's turn
      *
      * @return Cell
      */
-    private function processPlayerTurn(Player $player, Battlefield $battlefield, Cell $cell) : Cell
+    private function processPlayerTurn(Battlefield $battlefield, Cell $cell) : Cell
     {
-        return PlayerModel::isAIControlled($player)
-            ? $this->ai->processCPUTurn($battlefield)
-            : CellModel::switchPhase($cell);
+        return PlayerModel::isAIControlled($battlefield->getPlayer())
+            ? CellModel::switchPhase($cell)
+            : $this->ai->processCPUTurn($battlefield);
     }
 }
