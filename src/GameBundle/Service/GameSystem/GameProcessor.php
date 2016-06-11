@@ -15,6 +15,7 @@ use EM\GameBundle\Model\PlayerModel;
 use EM\GameBundle\Request\GameInitiationRequest;
 use EM\GameBundle\Response\GameTurnResponse;
 use EM\GameBundle\Service\AI\AIService;
+use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 
 /**
  * @since 10.0
@@ -42,7 +43,7 @@ class GameProcessor
             $player = $this->playerModel->createOnRequestAIControlled("CPU {$i}");
 
             /** hard-code ship into B2 for testing purposes */
-            $battlefield = BattlefieldModel::generate($size,  ['B2'])
+            $battlefield = BattlefieldModel::generate($size, ['B2'])
                 ->setPlayer($player);
             $game->addBattlefield($battlefield);
         }
@@ -61,6 +62,7 @@ class GameProcessor
 
         /** for test purposes only - mark player cell as damaged */
         $battlefield->getCellByCoordinate('A2')->setFlags(CellModel::FLAG_DEAD_SHIP);
+        $battlefield->getCellByCoordinate('A1')->setFlags(CellModel::FLAG_DEAD_SHIP);
 
         return $game;
     }
@@ -93,8 +95,27 @@ class GameProcessor
                 }
 
                 $_cell = $this->processPlayerTurn($player, $battlefield, $cell);
-                /** to mark cells around dead ship as skipped */
-                CellModel::isShipDead($_cell);
+
+                if (CellModel::isShipDead($_cell)) {
+
+                    $processor = new PathProcessor($_cell->getCoordinate());
+                    $cells = $processor->getAdjacentCells($_cell->getBattlefield(), 4, CellModel::FLAG_SHIP);
+                    $cells[$_cell->getCoordinate()] = $_cell;
+                    ksort($cells);
+
+                    $_cells = [];
+                    foreach ($cells as $shipCell) {
+                        $__cells = $processor->reset($shipCell->getCoordinate())->getAdjacentCells($battlefield, 1, 0, CellModel::FLAG_SHIP);
+                        $_cells = array_merge(
+                            $_cells,
+                            $__cells
+                        );
+
+                        foreach ($_cells as $waterCell) {
+                            CellModel::switchPhase($waterCell, CellModel::FLAG_SKIP);
+                        }
+                    }
+                }
 
                 if (!BattlefieldModel::hasUnfinishedShips($battlefield)) {
                     $result = (new GameResult())
