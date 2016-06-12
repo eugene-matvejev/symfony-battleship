@@ -22,7 +22,6 @@ class GameInitiationRequestValidatorTest extends IntegrationTestSuite
         static::$validator = static::$container->get('battleship_game.validator.game_initiation_request');
     }
 
-    /*********************************** VALIDATION ***********************************/
     /**
      * @see GameInitiationRequestValidator::validate
      *
@@ -43,7 +42,7 @@ class GameInitiationRequestValidatorTest extends IntegrationTestSuite
         foreach (static::getListOfInvalidFixtureNames() as $fixtureName) {
             $this->assertFalse(
                 static::$validator->validate($this->getInvalidGameRequestFixtureContent($fixtureName)),
-                "failed on {$fixtureName}"
+                "fail turn return false by validating {$fixtureName} fixture"
             );
         }
     }
