@@ -40,4 +40,56 @@ class BattlefieldModelTest extends \PHPUnit_Framework_TestCase
         $battlefield->getCellByCoordinate('A1')->setFlags(CellModel::FLAG_DEAD_SHIP);
         $this->assertFalse(BattlefieldModel::hasUnfinishedShips($battlefield));
     }
+
+    /**
+     * @see BattlefieldModel::generate
+     * @test
+     */
+    public function generate()
+    {
+        $shipCells = ['A1', 'A3', 'A5'];
+        $battlefield = BattlefieldModel::generate(7, $shipCells);
+
+        $this->assertCount(49, $battlefield->getCells());
+        foreach ($battlefield->getCells() as $cell) {
+            $expectedFlag = in_array($cell->getCoordinate(), $shipCells)
+                ? CellModel::FLAG_SHIP
+                : CellModel::FLAG_NONE;
+
+            $this->assertEquals($expectedFlag, $cell->getFlags());
+        }
+    }
+
+    /**
+     * @see BattlefieldModel::flagWaterAroundShip
+     * @test
+     */
+    public function flagWaterAroundShipOnNonDeadAround()
+    {
+        $battlefield = MockFactory::getBattlefieldMock();
+        $cell = $battlefield->getCellByCoordinate('B2')->setFlags(CellModel::FLAG_SHIP);
+
+        BattlefieldModel::flagWaterAroundShip($cell);
+
+        foreach (['A1', 'A2', 'A3', 'B1', 'B3', 'C1', 'C2', 'C3'] as $coordinate) {
+            $this->assertTrue($battlefield->getCellByCoordinate($coordinate)->hasFlag(CellModel::FLAG_SKIP));
+        }
+    }
+
+    /**
+     * @see BattlefieldModel::flagWaterAroundShip
+     * @test
+     */
+    public function flagWaterAroundShipOnA1AlreadyDead()
+    {
+        $battlefield = MockFactory::getBattlefieldMock();
+        $battlefield->getCellByCoordinate('A1')->setFlags(CellModel::FLAG_DEAD);
+        $cell = $battlefield->getCellByCoordinate('B2')->setFlags(CellModel::FLAG_SHIP);
+
+        BattlefieldModel::flagWaterAroundShip($cell);
+
+        foreach (['A2', 'A3', 'B1', 'B3', 'C1', 'C2', 'C3'] as $coordinate) {
+            $this->assertTrue($battlefield->getCellByCoordinate($coordinate)->hasFlag(CellModel::FLAG_SKIP));
+        }
+    }
 }
