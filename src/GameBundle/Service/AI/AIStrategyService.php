@@ -8,6 +8,8 @@ use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 
 /**
+ * @see   AIStrategyServiceTest
+ *
  * @since 3.0
  */
 class AIStrategyService

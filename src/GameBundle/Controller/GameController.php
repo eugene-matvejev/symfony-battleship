@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * @see   GameControllerTest
+ *
  * @since 1.0
  */
 class GameController extends AbstractAPIController

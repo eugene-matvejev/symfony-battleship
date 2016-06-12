@@ -10,6 +10,8 @@ use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
 
 /**
+ * @see   AIServiceTest
+ *
  * @since 3.0
  */
 class AIService

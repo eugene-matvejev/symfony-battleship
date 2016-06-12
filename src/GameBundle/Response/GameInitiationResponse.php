@@ -9,6 +9,8 @@ use EM\GameBundle\Model\PlayerModel;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
+ * @see   GameInitiationResponseTest
+ *
  * @since 5.0
  *
  * @Serializer\XmlRoot("battlefields")

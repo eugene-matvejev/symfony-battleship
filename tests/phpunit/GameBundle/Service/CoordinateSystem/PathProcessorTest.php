@@ -14,7 +14,7 @@ use EM\Tests\Environment\MockFactory;
 class PathProcessorTest extends IntegrationTestSuite
 {
     /**
-     * primary paths are only: UP, DOWN, LEFT, RIGHT
+     * primary paths are: UP, DOWN, LEFT, RIGHT
      *
      * @see PathProcessor::PRIMARY_PATHS
      * @test
@@ -36,7 +36,7 @@ class PathProcessorTest extends IntegrationTestSuite
     }
 
     /**
-     * extended paths contains primary paths as well as (LEFT|RIGHT)-(UP|DOWN)
+     * extended paths list contains all paths from @see PathProcessor::PRIMARY_PATHS and 4 additional: (LEFT|RIGHT)-(UP|DOWN)
      *
      * @see PathProcessor::EXTENDED_PATHS
      * @test
@@ -84,19 +84,19 @@ class PathProcessorTest extends IntegrationTestSuite
             PathProcessor::PATH_RIGHT_DOWN => [PathProcessor::PATH_RIGHT, PathProcessor::PATH_DOWN]
         ];
 
-        foreach ($fixtures as $path => $set) {
+        foreach ($fixtures as $path => $directions) {
             /** should return true if full direction matches full-direction */
-            $this->assertTrue($this->invokeHasDirection($path, $path));
+            $this->assertTrue($this->invokeHasDirectionMethod($path, $path));
 
-            foreach ($set as $bytes) {
+            foreach ($directions as $direction) {
                 /** should return true if full direction contains direction */
-                $this->assertTrue($this->invokeHasDirection($path, $bytes));
+                $this->assertTrue($this->invokeHasDirectionMethod($path, $direction));
             }
         }
     }
 
     /**
-     * check entire list of paths to do not contain direction
+     * check entire list of paths to do not contain directions
      *
      * @see     PathProcessor::isPathContainsBytes
      * @test
@@ -118,9 +118,9 @@ class PathProcessorTest extends IntegrationTestSuite
             PathProcessor::PATH_RIGHT_DOWN => [PathProcessor::PATH_LEFT, PathProcessor::PATH_UP],
         ];
 
-        foreach ($fixtures as $path => $set) {
-            foreach ($set as $bytes) {
-                $this->assertFalse($this->invokeHasDirection($path, $bytes));
+        foreach ($fixtures as $path => $directions) {
+            foreach ($directions as $direction) {
+                $this->assertFalse($this->invokeHasDirectionMethod($path, $direction));
             }
         }
     }
@@ -131,12 +131,9 @@ class PathProcessorTest extends IntegrationTestSuite
      *
      * @return mixed
      */
-    private function invokeHasDirection(int $path, int $bytes)
+    private function invokeHasDirectionMethod(int $path, int $bytes)
     {
-        $processor = (new PathProcessor('B2'))
-            ->setPath($path);
-
-        return $this->invokeMethod($processor, 'hasDirection', [$bytes]);
+        return $this->invokeMethod((new PathProcessor('B2'))->setPath($path), 'hasDirection', [$bytes]);
     }
 
     /**
@@ -251,6 +248,10 @@ class PathProcessorTest extends IntegrationTestSuite
     }
 
     /**
+     * should:
+     *      find next coordinate by path
+     *      save it to save it as processor's current coordinate
+     *
      * @see     PathProcessor::getNextCoordinate
      * @test
      *
@@ -274,18 +275,8 @@ class PathProcessorTest extends IntegrationTestSuite
         foreach ($expectedNextCoordinatesByPath as $path => $expectedCoordinate) {
             $processor->setPath($path);
 
-            $this->assertEquals('D4', $processor->getOriginCoordinate());
-
             $this->assertEquals($expectedCoordinate, $processor->getNextCoordinate());
             $this->assertEquals($expectedCoordinate, $processor->getCurrentCoordinate());
-
-            /** if PathProcessor::PATH_NONE then coordinate should not change */
-            if (PathProcessor::PATH_NONE !== $path) {
-                $this->assertNotEquals($expectedCoordinate, $processor->getNextCoordinate());
-                $this->assertNotEquals($expectedCoordinate, $processor->getCurrentCoordinate());
-            } else {
-                $this->assertEquals($processor->getOriginCoordinate(), $processor->getCurrentCoordinate());
-            }
         }
     }
 }

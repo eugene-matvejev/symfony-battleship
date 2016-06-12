@@ -18,6 +18,7 @@ class GameInitiationRequestValidatorTest extends IntegrationTestSuite
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
+
         static::$validator = static::$container->get('battleship_game.validator.game_initiation_request');
     }
 

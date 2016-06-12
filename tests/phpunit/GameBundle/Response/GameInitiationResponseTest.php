@@ -18,8 +18,7 @@ class GameInitiationResponseTest extends \PHPUnit_Framework_TestCase
     public function addBattlefield()
     {
         $game = MockFactory::getGameMock();
-        $cpuPlayerBattlefield = $game->getBattlefields()[0];
-        $cpuPlayerBattlefield
+        $game->getBattlefields()[0]
             ->setPlayer(MockFactory::getAIPlayerMock(''))
             ->getCellByCoordinate('A1')->setFlags(CellModel::FLAG_SHIP);
 

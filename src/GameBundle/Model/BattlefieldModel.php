@@ -7,6 +7,8 @@ use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 
 /**
+ * @see   BattlefieldModelTest
+ *
  * @since 2.0
  */
 class BattlefieldModel

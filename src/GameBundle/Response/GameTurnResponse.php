@@ -8,6 +8,8 @@ use EM\GameBundle\Entity\GameResult;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
+ * @see   GameTurnResponseTest
+ *
  * @Serializer\XmlRoot("game-turn-data")
  * @Serializer\AccessorOrder(order="custom", custom={"result","cells"})
  *

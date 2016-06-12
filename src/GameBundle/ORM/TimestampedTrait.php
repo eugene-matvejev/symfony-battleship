@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
+ * @see   TimestampedTraitTest
+ *
  * @since 1.0
  */
 trait TimestampedTrait
