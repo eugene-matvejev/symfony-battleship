@@ -49,15 +49,7 @@ class GameTurnResponse
 
         return $this;
     }
-
-    /**
-     * @return GameResult
-     */
-    public function getResult()
-    {
-        return $this->result;
-    }
-
+    
     public function setResult(GameResult $result) : self
     {
         $this->result = $result;
