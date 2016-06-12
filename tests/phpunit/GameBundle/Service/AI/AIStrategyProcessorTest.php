@@ -124,8 +124,8 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
         $this->assertCount(count($expectedCoordinates), $cells);
         $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
 
-        foreach ($expectedCoordinates as $index => $coordinate) {
-            $this->assertEquals($coordinate, $cells[$index]->getCoordinate());
+        foreach ($cells as $cell) {
+            $this->assertContains($cell->getCoordinate(), $expectedCoordinates);
         }
     }
 }
