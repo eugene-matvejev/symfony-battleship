@@ -89,7 +89,9 @@ class GameProcessor
                     continue;
                 }
 
-                $this->processPlayerTurnOnBattlefield($targetBattlefield, $turnOwnerBattlefield->getPlayer(), $cell);
+                if ($this->processPlayerTurnOnBattlefield($targetBattlefield, $turnOwnerBattlefield->getPlayer(), $cell)) {
+                    return $game;
+                }
             }
         }
 
