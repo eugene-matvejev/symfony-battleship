@@ -2,18 +2,19 @@
 
 namespace EM\GameBundle\Service\GameSystem;
 
-use EM\GameBundle\Entity\{
-    Battlefield, Cell, Game, GameResult
-};
+use EM\GameBundle\Entity\Battlefield;
+use EM\GameBundle\Entity\Cell;
+use EM\GameBundle\Entity\Game;
+use EM\GameBundle\Entity\GameResult;
+use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Exception\CellException;
+use EM\GameBundle\Exception\GameException;
 use EM\GameBundle\Exception\PlayerException;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Model\PlayerModel;
 use EM\GameBundle\Request\GameInitiationRequest;
-use EM\GameBundle\Response\GameTurnResponse;
 use EM\GameBundle\Service\AI\AIService;
-use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 
 /**
  * @since 10.0
@@ -58,7 +59,7 @@ class GameProcessor
         $battlefield->setPlayer($player);
         $game->addBattlefield($battlefield);
 
-        /** for test purposes only - mark player cell as damaged */
+        /** for test purposes only - mark player cells as damaged */
         $battlefield->getCellByCoordinate('A2')->setFlags(CellModel::FLAG_DEAD_SHIP);
         $battlefield->getCellByCoordinate('A1')->setFlags(CellModel::FLAG_DEAD_SHIP);
 
@@ -68,62 +69,54 @@ class GameProcessor
     /**
      * @param Cell $cell
      *
-     * @return GameTurnResponse
+     * @return Game
      * @throws CellException
+     * @throws GameException
      * @throws PlayerException
      */
-    public function processGameTurn(Cell $cell) : GameTurnResponse
+    public function processGameTurn(Cell $cell) : Game
     {
         $game = $cell->getBattlefield()->getGame();
-        $response = new GameTurnResponse();
 
         if (null !== $game->getResult()) {
-            $response->setResult($game->getResult());
-
-            return $response;
+            throw new GameException("game: {$game->getId()} already has result");
         }
 
         foreach ($game->getBattlefields() as $turnOwnerBattlefield) {
             foreach ($game->getBattlefields() as $targetBattlefield) {
+                /** do not process turn on itself */
                 if ($turnOwnerBattlefield === $targetBattlefield) {
                     continue;
                 }
 
-                $_cell = $this->processPlayerTurn($targetBattlefield, $cell);
-
-                if (CellModel::isShipDead($_cell)) {
-                    $this->markWaterAroundShipSkipped($_cell);
-
-                    if (!BattlefieldModel::hasUnfinishedShips($targetBattlefield)) {
-                        $result = (new GameResult())
-                            ->setPlayer($turnOwnerBattlefield->getPlayer());
-                        $game->setResult($result);
-                        $response->setResult($result);
-
-                        break 2;
-                    }
+                if ($this->processPlayerTurnOnBattlefield($targetBattlefield, $turnOwnerBattlefield->getPlayer(), $cell)) {
+                    return $game;
                 }
             }
         }
 
-        $response->setCells(CellModel::getChangedCells());
-
-        return $response;
+        return $game;
     }
 
-    private function markWaterAroundShipSkipped(Cell $cell)
+    protected function processPlayerTurnOnBattlefield(Battlefield $battlefield, Player $player, Cell $cell) : bool
     {
-        $processor = new PathProcessor($cell->getCoordinate());
-        $battlefield = $cell->getBattlefield();
+        $cell = $this->processPlayerTurn($battlefield, $cell);
 
-        $cells = $processor->getAdjacentCells($cell->getBattlefield(), 4, CellModel::FLAG_SHIP);
-        $cells[$cell->getCoordinate()] = $cell;
+        if (CellModel::isShipDead($cell)) {
+            BattlefieldModel::flagWaterAroundShip($cell);
 
-        foreach ($cells as $cell) {
-            foreach ($processor->reset($cell->getCoordinate())->getAdjacentCells($battlefield, 1, 0, CellModel::FLAG_SHIP) as $waterCell) {
-                CellModel::switchPhase($waterCell, CellModel::FLAG_SKIP);
+            if (BattlefieldModel::hasUnfinishedShips($battlefield)) {
+                return false;
             }
+
+            $result = (new GameResult())
+                ->setPlayer($player);
+            $battlefield->getGame()->setResult($result);
+
+            return true;
         }
+
+        return false;
     }
 
     /**

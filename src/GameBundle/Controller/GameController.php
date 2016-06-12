@@ -8,6 +8,7 @@ use EM\GameBundle\Exception\PlayerException;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Request\GameInitiationRequest;
 use EM\GameBundle\Response\GameInitiationResponse;
+use EM\GameBundle\Response\GameTurnResponse;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -74,14 +75,20 @@ class GameController extends AbstractAPIController
             throw new CellException("cell: {$cellId} doesn't already flagged as *DEAD*");
         }
 
-        $data = $this->get('battleship_game.service.game_processor')->processGameTurn($cell);
+        $game = $this->get('battleship_game.service.game_processor')->processGameTurn($cell);
         $om = $this->getDoctrine()->getManager();
+
+        $response = new GameTurnResponse();
+        $response->setCells(CellModel::getChangedCells());
+        if (null !== $game->getResult()) {
+            $response->setResult($game->getResult());
+        }
 
         foreach (CellModel::getChangedCells() as $cell) {
             $om->persist($cell);
         }
         $om->flush();
 
-        return $this->prepareSerializedResponse($data);
+        return $this->prepareSerializedResponse($response);
     }
 }
