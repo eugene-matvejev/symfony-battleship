@@ -4,7 +4,6 @@ namespace EM\Tests\PHPUnit\GameBundle\Validator;
 
 use EM\GameBundle\Validator\GameInitiationRequestValidator;
 use EM\Tests\Environment\IntegrationTestSuite;
-use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @see GameInitiationRequestValidator
