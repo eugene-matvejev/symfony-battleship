@@ -8,6 +8,8 @@ use EM\GameBundle\Exception\CellException;
 use EM\GameBundle\Model\CellModel;
 
 /**
+ * @see   PathProcessorTest
+ *
  * @since 11.0
  */
 class PathProcessor
@@ -60,6 +62,13 @@ class PathProcessor
         return $this->originCoordinate;
     }
 
+    /**
+     * @since 19.0
+     *
+     * @param string|null $coordinate
+     *
+     * @return PathProcessor
+     */
     public function reset(string $coordinate = null) : self
     {
         $this->currentCoordinate = $this->originCoordinate = $coordinate ?? $this->originCoordinate;
@@ -102,15 +111,15 @@ class PathProcessor
         $number = substr($this->currentCoordinate, 1);
         $letter = substr($this->currentCoordinate, 0, 1);
 
-        if ($this->isPathHasDirection(static::PATH_UP)) {
+        if ($this->hasDirection(static::PATH_UP)) {
             --$number;
-        } elseif ($this->isPathHasDirection(static::PATH_DOWN)) {
+        } elseif ($this->hasDirection(static::PATH_DOWN)) {
             ++$number;
         }
 
-        if ($this->isPathHasDirection(static::PATH_RIGHT)) {
+        if ($this->hasDirection(static::PATH_RIGHT)) {
             ++$letter;
-        } elseif ($this->isPathHasDirection(static::PATH_LEFT)) {
+        } elseif ($this->hasDirection(static::PATH_LEFT)) {
             $letter = chr(ord($letter) - 1);
         }
 
@@ -148,7 +157,7 @@ class PathProcessor
     }
 
     /**
-     * @since 18.3
+     * @since 19.0
      *
      * @param Battlefield $battlefield
      * @param int         $onlyFlag    - only with this flag cells will be returned
@@ -178,7 +187,14 @@ class PathProcessor
         throw new CellException("{$battlefield->getId()} do not contain cell with coordinate: {$this->currentCoordinate}");
     }
 
-    protected function isPathHasDirection(int $flag) : bool
+    /**
+     * @since 18.3
+     *
+     * @param int $flag
+     *
+     * @return bool
+     */
+    protected function hasDirection(int $flag) : bool
     {
         return ($this->path & $flag) === $flag;
     }
