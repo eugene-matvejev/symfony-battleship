@@ -7,6 +7,8 @@ use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 
 /**
+ * @see   AIStrategyProcessorTest
+ *
  * @since 8.0
  */
 class AIStrategyProcessor
@@ -34,7 +36,7 @@ class AIStrategyProcessor
             $paths[] = PathProcessor::PATH_DOWN;
         }
 
-        return $this->processCoordinates($cell, $paths);
+        return $this->processPaths($cell, $paths);
     }
 
     /**
@@ -43,7 +45,7 @@ class AIStrategyProcessor
      *
      * @return Cell[]
      */
-    protected function processCoordinates(Cell $cell, array $paths) : array
+    protected function processPaths(Cell $cell, array $paths) : array
     {
         $cells = [];
         $battlefield = $cell->getBattlefield();
