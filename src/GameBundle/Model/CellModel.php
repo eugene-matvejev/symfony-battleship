@@ -19,10 +19,6 @@ class CellModel
      * @var Cell[]
      */
     protected static $changedCells = [];
-    /**
-     * @var Cell[]
-     */
-    protected static $checkedCells = [];
 
     /**
      * @return Cell[]
@@ -49,10 +45,6 @@ class CellModel
 
     public static function isShipDead(Cell $cell) : bool
     {
-        if (isset(static::$checkedCells[$cell->getId()])) {
-            return true;
-        }
-
         if (!$cell->hasFlag(static::FLAG_DEAD_SHIP)) {
             return false;
         }
@@ -62,7 +54,7 @@ class CellModel
                 return false;
             }
         }
-        
+
         return true;
     }
 }

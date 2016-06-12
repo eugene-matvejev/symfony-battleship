@@ -9,9 +9,8 @@ use EM\GameBundle\Model\CellModel;
  */
 class CellModelCleaner extends CellModel
 {
-    public static function resetStaticValues()
+    public static function resetChangedCells()
     {
         static::$changedCells = [];
-        static::$checkedCells = [];
     }
 }

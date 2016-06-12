@@ -189,6 +189,8 @@ class GameControllerTest extends IntegrationTestSuite
             }
 
             foreach ($battlefield->cells as $cell) {
+                CellModelCleaner::resetChangedCells();
+
                 $client = clone static::$client;
                 $client->request(
                     Request::METHOD_PATCH,
@@ -222,6 +224,8 @@ class GameControllerTest extends IntegrationTestSuite
         foreach ($response as $battlefield) {
             if ($battlefield->player->flags === PlayerModel::FLAG_AI_CONTROLLED) {
                 foreach ($battlefield->cells as $cell) {
+                    CellModelCleaner::resetChangedCells();
+
                     $client = clone static::$client;
                     $client->request(
                         Request::METHOD_PATCH,
