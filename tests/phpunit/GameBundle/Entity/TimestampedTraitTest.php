@@ -6,12 +6,12 @@ use EM\Tests\Environment\IntegrationTestSuite;
 use EM\Tests\Environment\MockFactory;
 
 /**
- * @see GameResult
+ * @see TimestampedTrait
  */
-class GameResultTest extends IntegrationTestSuite
+class TimestampedTraitTest extends IntegrationTestSuite
 {
     /**
-     * @see GameResult::setTimestamp
+     * @see TimestampedTrait::setTimestamp
      * @test
      */
     public function setTimestampSetOnPersist()
@@ -22,8 +22,5 @@ class GameResultTest extends IntegrationTestSuite
         static::$om->persist($result->getGame());
 
         $this->assertInstanceOf(\DateTime::class, $result->getTimestamp());
-
-        /** clear persisted record */
-        static::$om->clear();
     }
 }

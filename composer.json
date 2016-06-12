@@ -33,7 +33,7 @@
         "doctrine/orm": "^2.5",
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0",
-        "symfony/symfony": "^3.0.3",
+        "symfony/symfony": "^3.0.6",
         "symfony/monolog-bundle": "^2.8",
         "jms/serializer-bundle": "^1.1",
         "components/jquery": "^2.2",
@@ -97,6 +97,7 @@
                 "database_host": "DATABASE_HOST",
                 "database_port": "DATABASE_PORT",
                 "database_name": "DATABASE_NAME",
+                "database_name_test": "DATABASE_NAME_TEST",
                 "database_user": "DATABASE_USER",
                 "database_password": "DATABASE_PASSWORD"
             }

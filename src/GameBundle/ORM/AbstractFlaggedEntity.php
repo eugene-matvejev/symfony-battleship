@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
+ * @see   AbstractFlaggedEntityTest
+ *
  * @since 13.1
  *
  * @ORM\MappedSuperclass()

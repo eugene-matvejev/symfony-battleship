@@ -1,11 +1,10 @@
-.sass-cache/
 app/config/parameters.yml
-bin/*
+bin/
 !bin/console
-var/*
+var/
 !var/cache/.gitkeep
 !var/logs/.gitkeep
-!var/sessions/.gitkeep
-src/*Bundle/Resources/public/css
+!/var/sessions/.gitkeep
+!/var/SymfonyRequirements.php
 vendor/
 web/bundles/*

@@ -54,6 +54,7 @@ class Game extends APIRequestService {
     parseInitResponse(response) {
         response.forEach(function (battlefield) {
             let player;
+
             try {
                 player = this.findPlayerByName(battlefield.player.name);
             } catch (ex) {
@@ -133,7 +134,7 @@ class Game extends APIRequestService {
             let text = this.constructor.resources.config.text;
 
             this.findPlayerById(response.result.player.id).isAIControlled()
-                ? this.popupMgr.show(text.loss, 'error')
+                ? this.popupMgr.show(text.loss, 'danger')
                 : this.popupMgr.show(text.win, 'success');
         }
     }
@@ -145,7 +146,7 @@ class Game extends APIRequestService {
      */
     findPlayerCellByCriteria(criteria) {
         for (let player of this.players) {
-            if (undefined !== criteria.playerId && criteria.playerId != player.id) {
+            if (undefined !== criteria.playerId && criteria.playerId !== player.id) {
                 continue;
             }
 
@@ -174,7 +175,7 @@ Game.resources.config   = {
             max: 12
         },
         /** @type {Object} */
-        username: /^[a-zA-Z0-9\.\- @]{1,100}$/
+        username: /^[a-zA-Z0-9\.\- @]{3,25}$/
     }
 };
 Game.resources.validate = {

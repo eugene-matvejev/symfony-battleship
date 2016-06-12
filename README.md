@@ -1,11 +1,15 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
 [![Code Climate](https://codeclimate.com/github/eugene-matvejev/battleship-game-api/badges/gpa.svg)](https://codeclimate.com/github/eugene-matvejev/battleship-game-api)
 [![Code Coverage](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
+[![Build Status](https://travis-ci.org/eugene-matvejev/battleship-game-api.svg?branch=master)](https://travis-ci.org/eugene-matvejev/battleship-game-api)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc/mini.png)](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc)
 
-__TDD tests__ [![Build Status](https://travis-ci.org/eugene-matvejev/battleship-game-api.svg?branch=master)](https://travis-ci.org/eugene-matvejev/battleship-game-api) / *PHPUnit*
+__TDD tests__
+ * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - *PHPUnit*
 
-__BDD tests__ [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master)  / *Behat*
+__BDD tests__
+ * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - *Behat*
+ * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - *Kahlan*
 
 __DEMO__ : https://battleship-game-api.herokuapp.com/
 
@@ -46,6 +50,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
  * Behat 3
  * Composer
  * JMS Serializer
+ * API Doc [nelmio/api-doc-bundle]
  * Twig
  * JavaScript ES6 [ECMAScript6]
  * CSS3
@@ -92,7 +97,10 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
  * __optional!__ *php bin/console doctrine:fixtures:load --env=test* __# for testing purposes only__
 
 ### how to execute tests
- * *phpunit -c test* or *php bin/phpunit -c tests* (test database will be wiped and seeded again before test execution)
+ * *php bin/phpunit -c .*
+ * *php bin/behat --strict*
+ * *php bin/kahlan*
+  * __NOTE__: tests interacting with test database [config: "database_name_test" in config.yml], it is wiped and seeded before tests execution
 
 ### /etc/hosts
 ```

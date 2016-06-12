@@ -15,9 +15,9 @@
 {% endblock %}
 
 {% block content %}
-    <div id="game-current-area" data-turn-link="{{ path('battleship.game.api.turn', {'cellId' : 0})|trim('0') }}"
-                                data-init-link="{{ path('battleship.game.api.init') }}">
+    <div id="game-current-area" data-turn-link="{{ path('battleship_game.api.turn', {'cellId' : 0})|trim('0') }}"
+                                data-init-link="{{ path('battleship_game.api.init') }}">
     </div>
     <div id="modal-area"></div>
-    <div id="game-results-area" data-game-results-link="{{ path('battleship.game.api.game.results', {'page' : 0})|trim('0') }}"></div>
+    <div id="game-results-area" data-game-results-link="{{ path('battleship_game.api.game.results', {'page' : 0})|trim('0') }}"></div>
 {% endblock %}

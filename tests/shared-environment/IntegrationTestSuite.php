@@ -46,6 +46,11 @@ abstract class IntegrationTestSuite extends WebTestCase
      */
     protected static $initiated;
 
+    protected function setUp()
+    {
+        static::$om->clear();
+    }
+
     /**
      * @coversNothing
      */
@@ -90,7 +95,7 @@ abstract class IntegrationTestSuite extends WebTestCase
                 echo PHP_EOL . $e->getMessage() . PHP_EOL;
                 echo PHP_EOL . $e->getTraceAsString() . PHP_EOL;
 
-                throw new \Exception();
+                throw $e;
             }
         }
 
@@ -144,6 +149,16 @@ abstract class IntegrationTestSuite extends WebTestCase
         return $method->invokeArgs($object, $methodArguments);
     }
 
+    public static function getRootDirectory() : string
+    {
+        return dirname(__DIR__);
+    }
+
+    public static function getSharedFixturesDirectory() : string
+    {
+        return static::getRootDirectory() . '/shared-fixtures';
+    }
+
     /**
      * return content of the file in located in tests/shared-fixtures directory
      *
@@ -153,6 +168,11 @@ abstract class IntegrationTestSuite extends WebTestCase
      */
     public static function getSharedFixtureContent(string $filename) : string
     {
-        return file_get_contents(__DIR__ . "/../shared-fixtures/$filename");
+        return file_get_contents(static::getSharedFixturesDirectory() . "/$filename");
+    }
+
+    protected static function getKernelClass() : string
+    {
+        return \AppKernel::class;
     }
 }

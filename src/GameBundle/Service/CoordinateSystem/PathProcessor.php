@@ -2,9 +2,14 @@
 
 namespace EM\GameBundle\Service\CoordinateSystem;
 
+use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
+use EM\GameBundle\Exception\CellException;
+use EM\GameBundle\Model\CellModel;
 
 /**
+ * @see   PathProcessorTest
+ *
  * @since 11.0
  */
 class PathProcessor
@@ -35,28 +40,54 @@ class PathProcessor
         self::PATH_RIGHT_DOWN
     ];
     /**
-     * @var Cell
-     */
-    private $cell;
-    /**
      * @var int
      */
-    private $path = self::PATH_NONE;
+    private $path;
+    /**
+     * @var string
+     */
+    private $originCoordinate;
     /**
      * @var string
      */
     private $currentCoordinate;
 
-    public function __construct(Cell $cell)
+    public function __construct(string $coordinate)
     {
-        $this->cell = $cell;
-        $this->currentCoordinate = $cell->getCoordinate();
+        $this->reset($coordinate);
     }
 
+    public function getOriginCoordinate() : string
+    {
+        return $this->originCoordinate;
+    }
+
+    /**
+     * @since 19.0
+     *
+     * @param string|null $coordinate
+     *
+     * @return PathProcessor
+     */
+    public function reset(string $coordinate = null) : self
+    {
+        $this->currentCoordinate = $this->originCoordinate = $coordinate ?? $this->originCoordinate;
+        $this->path = static::PATH_NONE;
+
+        return $this;
+    }
+
+    /**
+     * sets path and reset current coordinate to origin
+     *
+     * @param int $path
+     *
+     * @return PathProcessor
+     */
     public function setPath(int $path) : self
     {
+        $this->reset();
         $this->path = $path;
-        $this->currentCoordinate = $this->cell->getCoordinate();
 
         return $this;
     }
@@ -67,45 +98,66 @@ class PathProcessor
     }
 
     /**
+     * calculate next coordinate by path and set it as current coordinate and return it
+     *
      * LEFT-UP   (--letter, --number)  UP (--number)  RIGHT-UP   (++letter, --number)
      * LEFT      (--letter)               UNCHANGED   RIGHT      (++letter)
      * LEFT-DOWN (--letter, ++number) DOWN (++number) RIGHT-DOWN (++letter, ++number)
+     *
+     * @return string
      */
     public function getNextCoordinate() : string
     {
-        $number = substr($this->currentCoordinate, 1);
-        $letter = substr($this->currentCoordinate, 0, 1);
+        return $this->currentCoordinate = $this->getCoordinateLetterPart() . $this->getCoordinateNumberPart();
+    }
 
-        if ($this->isPathContainsBytes(static::PATH_UP)) {
+    protected function getCoordinateNumberPart() : int
+    {
+        $number = substr($this->currentCoordinate, 1);
+
+        if ($this->hasDirection(static::PATH_UP)) {
             --$number;
-        } elseif ($this->isPathContainsBytes(static::PATH_DOWN)) {
+        } elseif ($this->hasDirection(static::PATH_DOWN)) {
             ++$number;
         }
 
-        if ($this->isPathContainsBytes(static::PATH_RIGHT)) {
+        return $number;
+    }
+
+    protected function getCoordinateLetterPart() : string
+    {
+        $letter = substr($this->currentCoordinate, 0, 1);
+
+        if ($this->hasDirection(static::PATH_RIGHT)) {
             ++$letter;
-        } elseif ($this->isPathContainsBytes(static::PATH_LEFT)) {
+        } elseif ($this->hasDirection(static::PATH_LEFT)) {
             $letter = chr(ord($letter) - 1);
         }
 
-        return $this->currentCoordinate = $letter . $number;
+        return $letter;
     }
 
     /**
-     * @param int|null $excludeFlag [optional] - cells with this flag will be ignored
+     * @param Battlefield $battlefield
+     * @param int         $levels      [optional] - how many levels to check
+     * @param int|null    $onlyFlag    [optional] - cells only with this flag will be returned
+     * @param int|null    $excludeFlag [optional] - cells with this flag will be ignored
      *
      * @return Cell[]
      */
-    public function getAdjacentCells(int $excludeFlag = null) : array
+    public function getAdjacentCells(Battlefield $battlefield, int $levels = 1, int $onlyFlag = CellModel::FLAG_NONE, int $excludeFlag = CellModel::FLAG_NONE) : array
     {
         $cells = [];
-        $battlefield = $this->cell->getBattlefield();
-        foreach (self::EXTENDED_PATHS as $way) {
-            $this->setPath($way);
+        foreach (static::EXTENDED_PATHS as $path) {
+            $this->setPath($path);
 
-            if (null !== $cell = $battlefield->getCellByCoordinate($this->getNextCoordinate())) {
-                if ($excludeFlag && $cell->hasFlag($excludeFlag)) {
-                    continue;
+            for ($i = 0; $i < $levels; $i++) {
+                $this->getNextCoordinate();
+
+                try {
+                    $cell = $this->getCellByCurrentCoordinate($battlefield, $onlyFlag, $excludeFlag);
+                } catch (CellException $e) {
+                    break;
                 }
 
                 $cells[$cell->getCoordinate()] = $cell;
@@ -116,11 +168,44 @@ class PathProcessor
     }
 
     /**
+     * @since 19.0
+     *
+     * @param Battlefield $battlefield
+     * @param int         $onlyFlag    - only with this flag cells will be returned
+     * @param int         $excludeFlag - cells with this flag will be ignored, $onlyFlag has a priority
+     *
+     * @return Cell
+     * @throws CellException
+     */
+    protected function getCellByCurrentCoordinate(Battlefield $battlefield, int $onlyFlag, int $excludeFlag) : Cell
+    {
+        if (null !== $cell = $battlefield->getCellByCoordinate($this->currentCoordinate)) {
+            if ($onlyFlag) {
+                if ($cell->hasFlag($onlyFlag)) {
+                    return $cell;
+                }
+
+                throw new CellException("{$cell->getId()} don't have mandatory flag $onlyFlag");
+            }
+
+            if ($excludeFlag && $cell->hasFlag($excludeFlag)) {
+                throw new CellException("{$cell->getId()} had $excludeFlag");
+            }
+
+            return $cell;
+        }
+
+        throw new CellException("{$battlefield->getId()} do not contain cell with coordinate: {$this->currentCoordinate}");
+    }
+
+    /**
+     * @since 18.3
+     *
      * @param int $flag
      *
      * @return bool
      */
-    protected function isPathContainsBytes(int $flag) : bool
+    protected function hasDirection(int $flag) : bool
     {
         return ($this->path & $flag) === $flag;
     }

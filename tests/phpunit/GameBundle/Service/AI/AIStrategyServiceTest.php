@@ -2,7 +2,6 @@
 
 namespace EM\Tests\PHPUnit\GameBundle\Service\AI;
 
-use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIStrategyService;
 use EM\Tests\Environment\IntegrationTestSuite;
 use EM\Tests\Environment\MockFactory;
@@ -15,11 +14,13 @@ class AIStrategyServiceTest extends IntegrationTestSuite
     /**
      * @var AIStrategyService
      */
-    private $strategyService;
+    protected static $aiStrategyService;
 
-    protected function setUp()
+    public static function setUpBeforeClass()
     {
-        $this->strategyService = static::$container->get('battleship.game.services.ai.strategy.service');
+        parent::setUpBeforeClass();
+
+        static::$aiStrategyService = static::$container->get('battleship_game.service.ai_strategy');
     }
 
     /**
@@ -28,11 +29,6 @@ class AIStrategyServiceTest extends IntegrationTestSuite
      */
     public function chooseCellsOnNoDeadCellsInBattlefield()
     {
-        $battlefield = MockFactory::getBattlefieldMock();
-
-        $cells = $this->strategyService->chooseCells($battlefield);
-        $this->assertCount(0, $cells);
-
-        $battlefield->getCellByCoordinate('B2')->setFlags(CellModel::FLAG_DEAD_SHIP);
+        $this->assertEmpty(static::$aiStrategyService->chooseCells(MockFactory::getBattlefieldMock()));
     }
 }

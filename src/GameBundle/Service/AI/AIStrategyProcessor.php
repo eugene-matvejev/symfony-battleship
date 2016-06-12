@@ -7,6 +7,8 @@ use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 
 /**
+ * @see   AIStrategyProcessorTest
+ *
  * @since 8.0
  */
 class AIStrategyProcessor
@@ -34,7 +36,7 @@ class AIStrategyProcessor
             $paths[] = PathProcessor::PATH_DOWN;
         }
 
-        return $this->processCoordinates($cell, $paths);
+        return $this->processPaths($cell, $paths);
     }
 
     /**
@@ -43,19 +45,19 @@ class AIStrategyProcessor
      *
      * @return Cell[]
      */
-    protected function processCoordinates(Cell $cell, array $paths) : array
+    protected function processPaths(Cell $cell, array $paths) : array
     {
         $cells = [];
         $battlefield = $cell->getBattlefield();
-        $processor = new PathProcessor($cell);
+        $processor = new PathProcessor($cell->getCoordinate());
 
         foreach ($paths as $path) {
             $processor->setPath($path);
 
             /** @var Cell $cell */
             while (null !== $cell = $battlefield->getCellByCoordinate($processor->getNextCoordinate())) {
-                /** if it is marked as skipped or dead water - skip processing */
-                if ($cell->hasFlag(CellModel::FLAG_SKIP) || (!$cell->hasFlag(CellModel::FLAG_SHIP) && $cell->hasFlag(CellModel::FLAG_DEAD))) {
+                /** if it is dead water - skip processing */
+                if (!$cell->hasFlag(CellModel::FLAG_SHIP) && $cell->hasFlag(CellModel::FLAG_DEAD)) {
                     break;
                 }
                 /** if it not marked as dead return it later */

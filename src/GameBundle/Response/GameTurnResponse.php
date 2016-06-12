@@ -3,10 +3,13 @@
 namespace EM\GameBundle\Response;
 
 use EM\GameBundle\Entity\Cell;
+use EM\GameBundle\Entity\Game;
 use EM\GameBundle\Entity\GameResult;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
+ * @see   GameTurnResponseTest
+ *
  * @Serializer\XmlRoot("game-turn-data")
  * @Serializer\AccessorOrder(order="custom", custom={"result","cells"})
  *
@@ -28,6 +31,19 @@ class GameTurnResponse
      * @var GameResult
      */
     private $result;
+
+    /**
+     * @param Cell[] $cells
+     * @param Game   $game
+     */
+    public function __construct(Game $game, array $cells)
+    {
+        if (null !== $game->getResult()) {
+            $this->setResult($game->getResult());
+        }
+
+        $this->setCells($cells);
+    }
 
     /**
      * @return Cell[]

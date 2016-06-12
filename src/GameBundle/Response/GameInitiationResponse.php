@@ -9,6 +9,8 @@ use EM\GameBundle\Model\PlayerModel;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
+ * @see   GameInitiationResponseTest
+ *
  * @since 5.0
  *
  * @Serializer\XmlRoot("battlefields")
@@ -24,6 +26,16 @@ class GameInitiationResponse
      * @var Battlefield[]
      */
     private $battlefields = [];
+
+    /**
+     * @param Collection|Battlefield[] $battlefields
+     */
+    public function __construct(Collection $battlefields)
+    {
+        foreach ($battlefields as $battlefield) {
+            $this->addBattlefield($battlefield);
+        }
+    }
 
     public function addBattlefield(Battlefield $battlefield) : self
     {
@@ -44,19 +56,5 @@ class GameInitiationResponse
     public function getBattlefields() : array
     {
         return $this->battlefields;
-    }
-
-    /**
-     * @param Collection|Battlefield[] $battlefields
-     *
-     * @return GameInitiationResponse
-     */
-    public function setBattlefields(Collection $battlefields) : self
-    {
-        foreach ($battlefields as $battlefield) {
-            $this->addBattlefield($battlefield);
-        }
-
-        return $this;
     }
 }
