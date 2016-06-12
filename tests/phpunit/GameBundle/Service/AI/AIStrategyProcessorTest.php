@@ -90,7 +90,7 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
      */
     public function processHorizontalStrategy()
     {
-        $this->iterateCells(['A2', 'C2'], AIStrategyProcessor::STRATEGY_VERTICAL);
+        $this->iterateCells(['A2', 'C2'], AIStrategyProcessor::STRATEGY_HORIZONTAL);
     }
 
     /**
@@ -124,8 +124,8 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
         $this->assertCount(count($expectedCoordinates), $cells);
         $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
 
-        foreach ($expectedCoordinates as $index => $coordinate) {
-            $this->assertEquals($coordinate, $cells[$index]->getCoordinate());
+        foreach ($cells as $cell) {
+            $this->assertContains($cell->getCoordinate(), $expectedCoordinates);
         }
     }
 }
