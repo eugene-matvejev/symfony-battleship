@@ -39,17 +39,19 @@ class GameInitiationRequestValidator
         $data = json_decode($json);
 
         return
-            $data instanceof \stdClass
-            && $this->validateStructure($data)
+            $this->validateStructure($data)
             && $this->validatePlayerName($data->playerName)
             && $this->validateBattlefieldSize($data->size)
             && $this->validateOpponentsAmount($data->opponents)
             && $this->validateCoordinates($data->coordinates);
     }
 
-    protected function validateStructure(\stdClass $data) : bool
+    protected function validateStructure($data) : bool
     {
-        return isset($data->opponents, $data->playerName, $data->size, $data->coordinates) && is_array($data->coordinates);
+        return
+            $data instanceof \stdClass &&
+            isset($data->opponents, $data->playerName, $data->size, $data->coordinates)
+            && is_array($data->coordinates);
     }
 
     protected function validatePlayerName(string $value) : bool
