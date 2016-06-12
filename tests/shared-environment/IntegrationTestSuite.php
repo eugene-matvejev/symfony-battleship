@@ -46,6 +46,11 @@ abstract class IntegrationTestSuite extends WebTestCase
      */
     protected static $initiated;
 
+    protected function setUp()
+    {
+        static::$om->clear();
+    }
+
     /**
      * @coversNothing
      */

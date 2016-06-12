@@ -22,8 +22,5 @@ class TimestampedTraitTest extends IntegrationTestSuite
         static::$om->persist($result->getGame());
 
         $this->assertInstanceOf(\DateTime::class, $result->getTimestamp());
-
-        /** clear persisted record */
-        static::$om->clear();
     }
 }
