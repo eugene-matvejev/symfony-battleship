@@ -54,8 +54,8 @@ class AIStrategyProcessor
 
             /** @var Cell $cell */
             while (null !== $cell = $battlefield->getCellByCoordinate($processor->getNextCoordinate())) {
-                /** if it is marked as skipped or dead water - skip processing */
-                if ($cell->hasFlag(CellModel::FLAG_SKIP) || (!$cell->hasFlag(CellModel::FLAG_SHIP) && $cell->hasFlag(CellModel::FLAG_DEAD))) {
+                /** if it is dead water - skip processing */
+                if (!$cell->hasFlag(CellModel::FLAG_SHIP) && $cell->hasFlag(CellModel::FLAG_DEAD)) {
                     break;
                 }
                 /** if it not marked as dead return it later */
