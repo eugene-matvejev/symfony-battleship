@@ -21,14 +21,16 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
 
     public static function setUpBeforeClass()
     {
+        parent::setUpBeforeClass();
+
         static::$strategyProcessor = static::$container->get('battleship_game.service.ai_strategy_processor');
     }
 
     /**
-     * @see AIStrategyProcessor::processCoordinates
+     * @see AIStrategyProcessor::processPaths
      * @test
      */
-    public function processCoordinates()
+    public function processPaths()
     {
         $battlefield = MockFactory::getBattlefieldMock();
         $battlefield->getCellByCoordinate('B2')->setFlags(CellModel::FLAG_DEAD_SHIP);
@@ -90,7 +92,7 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
      */
     public function processHorizontalStrategy()
     {
-        $this->iterateCells(['A2', 'C2'], AIStrategyProcessor::STRATEGY_HORIZONTAL);
+        $this->verifyCellsByStrategy(['A2', 'C2'], AIStrategyProcessor::STRATEGY_HORIZONTAL);
     }
 
     /**
@@ -101,7 +103,7 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
      */
     public function processVerticalStrategy()
     {
-        $this->iterateCells(['B1', 'B3'], AIStrategyProcessor::STRATEGY_VERTICAL);
+        $this->verifyCellsByStrategy(['B1', 'B3'], AIStrategyProcessor::STRATEGY_VERTICAL);
     }
 
     /**
@@ -114,10 +116,10 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
      */
     public function processBothStrategy()
     {
-        $this->iterateCells(['A2', 'C2', 'B1', 'B3'], AIStrategyProcessor::STRATEGY_BOTH);
+        $this->verifyCellsByStrategy(['A2', 'C2', 'B1', 'B3'], AIStrategyProcessor::STRATEGY_BOTH);
     }
 
-    protected function iterateCells(array $expectedCoordinates, int $strategy)
+    protected function verifyCellsByStrategy(array $expectedCoordinates, int $strategy)
     {
         $cells = static::$strategyProcessor->process(MockFactory::getBattlefieldMock()->getCellByCoordinate('B2'), $strategy);
 

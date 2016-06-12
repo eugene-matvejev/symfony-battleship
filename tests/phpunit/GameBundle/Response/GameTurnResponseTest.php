@@ -41,6 +41,11 @@ class GameTurnResponseTest extends \PHPUnit_Framework_TestCase
         $this->iterateResponseCells($response);
     }
 
+    /**
+     * because JMS serializer has a bug, array of cells should be indexed via numbers only
+     *
+     * @param GameTurnResponse $response
+     */
     private function iterateResponseCells(GameTurnResponse $response)
     {
         foreach ($response->getCells() as $index => $cell) {

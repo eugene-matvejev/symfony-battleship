@@ -64,6 +64,11 @@ class GameInitiationRequestValidator
         return $this->isBetween($value, $this->minBattlefieldSize, $this->maxBattlefieldSize);
     }
 
+    protected function isBetween(int $value, int $min, int $max) : bool
+    {
+        return $min <= $value && $value <= $max;
+    }
+
     protected function validateOpponentsAmount(int $value) : bool
     {
         return $this->isBetween($value, $this->minOpponents, $this->maxOpponents);
@@ -87,10 +92,5 @@ class GameInitiationRequestValidator
     protected function validateCoordinate(string $coordinate) : bool
     {
         return 0 !== preg_match('/[A-Z][1-9][0-9]*/', $coordinate);
-    }
-
-    protected function isBetween(int $value, int $min, int $max) : bool
-    {
-        return $min <= $value && $value <= $max;
     }
 }

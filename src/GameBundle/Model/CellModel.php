@@ -6,6 +6,8 @@ use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 
 /**
+ * @see   CellModelTest
+ *
  * @since 12.0
  */
 class CellModel

@@ -17,6 +17,8 @@ use EM\GameBundle\Request\GameInitiationRequest;
 use EM\GameBundle\Service\AI\AIService;
 
 /**
+ * @see   GameProcessorTest
+ *
  * @since 10.0
  */
 class GameProcessor

@@ -19,11 +19,13 @@ class GameProcessorTest extends IntegrationTestSuite
     /**
      * @var GameProcessor
      */
-    private $gameProcessor;
+    private static $gameProcessor;
 
-    protected function setUp()
+    public static function setUpBeforeClass()
     {
-        $this->gameProcessor = static::$container->get('battleship_game.service.game_processor');
+        parent::setUpBeforeClass();
+
+        static::$gameProcessor = static::$container->get('battleship_game.service.game_processor');
     }
 
     /**
@@ -40,7 +42,7 @@ class GameProcessorTest extends IntegrationTestSuite
     {
         $game = MockFactory::getGameMock(0, 0);
 
-        $this->invokeMethod($this->gameProcessor, 'attachAIBattlefields', [$game, 2, 7]);
+        $this->invokeMethod(static::$gameProcessor, 'attachAIBattlefields', [$game, 2, 7]);
         $this->assertCount(2, $game->getBattlefields());
 
         foreach ($game->getBattlefields() as $battlefield) {
@@ -70,7 +72,7 @@ class GameProcessorTest extends IntegrationTestSuite
     {
         $request = new GameInitiationRequest(static::getSharedFixtureContent('init-game-request-2-players-7x7.json'));
 
-        $game = $this->gameProcessor->buildGame($request);
+        $game = static::$gameProcessor->buildGame($request);
 
         $this->assertCount(2, $game->getBattlefields());
         foreach ($game->getBattlefields() as $battlefield) {
@@ -97,7 +99,7 @@ class GameProcessorTest extends IntegrationTestSuite
             $battlefield->getCellByCoordinate('A2')->addFlag(CellModel::FLAG_SHIP);
         }
 
-        $game = $this->gameProcessor->processGameTurn($aiBattlefield->getCellByCoordinate('A1'));
+        $game = static::$gameProcessor->processGameTurn($aiBattlefield->getCellByCoordinate('A1'));
 
         foreach ($game->getBattlefields() as $battlefield) {
             $this->assertCount(48, BattlefieldModel::getLiveCells($battlefield));
@@ -128,7 +130,7 @@ class GameProcessorTest extends IntegrationTestSuite
         $game->getBattlefields()[1]->setPlayer(MockFactory::getAIPlayerMock(''));
         $game->getBattlefields()[1]->getCellByCoordinate('A1')->addFlag(CellModel::FLAG_SHIP);
 
-        $game = $this->gameProcessor->processGameTurn($game->getBattlefields()[1]->getCellByCoordinate('A1'));
+        $game = static::$gameProcessor->processGameTurn($game->getBattlefields()[1]->getCellByCoordinate('A1'));
 
         $this->assertNotNull($game->getResult());
         $this->assertInstanceOf(GameResult::class, $game->getResult());
@@ -144,6 +146,6 @@ class GameProcessorTest extends IntegrationTestSuite
      */
     public function processGameTurnOnFinishedGame()
     {
-        $this->gameProcessor->processGameTurn(MockFactory::getGameResultMock()->getGame()->getBattlefields()[0]->getCellByCoordinate('A1'));
+        static::$gameProcessor->processGameTurn(MockFactory::getGameResultMock()->getGame()->getBattlefields()[0]->getCellByCoordinate('A1'));
     }
 }
