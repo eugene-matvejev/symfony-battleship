@@ -90,7 +90,7 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
      */
     public function processHorizontalStrategy()
     {
-        $this->iterateCells(['A2', 'C2'], AIStrategyProcessor::STRATEGY_VERTICAL);
+        $this->iterateCells(['A2', 'C2'], AIStrategyProcessor::STRATEGY_HORIZONTAL);
     }
 
     /**
