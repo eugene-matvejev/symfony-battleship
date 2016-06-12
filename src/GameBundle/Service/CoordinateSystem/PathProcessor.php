@@ -108,8 +108,12 @@ class PathProcessor
      */
     public function getNextCoordinate() : string
     {
+        return $this->currentCoordinate = $this->getCoordinateLetterPart() . $this->getCoordinateNumberPart();
+    }
+
+    protected function getCoordinateNumberPart() : int
+    {
         $number = substr($this->currentCoordinate, 1);
-        $letter = substr($this->currentCoordinate, 0, 1);
 
         if ($this->hasDirection(static::PATH_UP)) {
             --$number;
@@ -117,13 +121,20 @@ class PathProcessor
             ++$number;
         }
 
+        return $number;
+    }
+
+    protected function getCoordinateLetterPart() : string
+    {
+        $letter = substr($this->currentCoordinate, 0, 1);
+
         if ($this->hasDirection(static::PATH_RIGHT)) {
             ++$letter;
         } elseif ($this->hasDirection(static::PATH_LEFT)) {
             $letter = chr(ord($letter) - 1);
         }
 
-        return $this->currentCoordinate = $letter . $number;
+        return $letter;
     }
 
     /**
