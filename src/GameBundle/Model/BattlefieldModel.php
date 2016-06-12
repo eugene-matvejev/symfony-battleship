@@ -4,6 +4,7 @@ namespace EM\GameBundle\Model;
 
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
+use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 
 /**
  * @since 2.0
@@ -11,6 +12,7 @@ use EM\GameBundle\Entity\Cell;
 class BattlefieldModel
 {
     const INDEX_START = 'A';
+
     /**
      * @param Battlefield $battlefield
      *
@@ -54,5 +56,20 @@ class BattlefieldModel
         }
 
         return $battlefield;
+    }
+
+    public static function flagWaterAroundShip(Cell $cell)
+    {
+        $processor = new PathProcessor($cell->getCoordinate());
+        $battlefield = $cell->getBattlefield();
+
+        $cells = $processor->getAdjacentCells($cell->getBattlefield(), 4, CellModel::FLAG_SHIP);
+        $cells[$cell->getCoordinate()] = $cell;
+
+        foreach ($cells as $cell) {
+            foreach ($processor->reset($cell->getCoordinate())->getAdjacentCells($battlefield, 1, 0, CellModel::FLAG_SHIP) as $waterCell) {
+                CellModel::switchPhase($waterCell, CellModel::FLAG_SKIP);
+            }
+        }
     }
 }

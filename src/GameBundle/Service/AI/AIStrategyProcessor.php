@@ -47,7 +47,7 @@ class AIStrategyProcessor
     {
         $cells = [];
         $battlefield = $cell->getBattlefield();
-        $processor = new PathProcessor($cell);
+        $processor = new PathProcessor($cell->getCoordinate());
 
         foreach ($paths as $path) {
             $processor->setPath($path);

@@ -8,12 +8,12 @@ use EM\GameBundle\Entity\Game;
 use EM\GameBundle\Entity\GameResult;
 use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Exception\CellException;
+use EM\GameBundle\Exception\GameException;
 use EM\GameBundle\Exception\PlayerException;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Model\PlayerModel;
 use EM\GameBundle\Request\GameInitiationRequest;
-use EM\GameBundle\Response\GameTurnResponse;
 use EM\GameBundle\Service\AI\AIService;
 
 /**
@@ -42,7 +42,7 @@ class GameProcessor
             $player = $this->playerModel->createOnRequestAIControlled("CPU {$i}");
 
             /** hard-code ship into B2 for testing purposes */
-            $battlefield = BattlefieldModel::generate($size,  ['B2'])
+            $battlefield = BattlefieldModel::generate($size, ['B2'])
                 ->setPlayer($player);
             $game->addBattlefield($battlefield);
         }
@@ -59,8 +59,9 @@ class GameProcessor
         $battlefield->setPlayer($player);
         $game->addBattlefield($battlefield);
 
-        /** for test purposes only - mark player cell as damaged */
+        /** for test purposes only - mark player cells as damaged */
         $battlefield->getCellByCoordinate('A2')->setFlags(CellModel::FLAG_DEAD_SHIP);
+        $battlefield->getCellByCoordinate('A1')->setFlags(CellModel::FLAG_DEAD_SHIP);
 
         return $game;
     }
@@ -68,61 +69,66 @@ class GameProcessor
     /**
      * @param Cell $cell
      *
-     * @return GameTurnResponse
+     * @return Game
      * @throws CellException
+     * @throws GameException
      * @throws PlayerException
      */
-    public function processGameTurn(Cell $cell) : GameTurnResponse
+    public function processGameTurn(Cell $cell) : Game
     {
         $game = $cell->getBattlefield()->getGame();
-        $response = new GameTurnResponse();
 
         if (null !== $game->getResult()) {
-            $response->setResult($game->getResult());
-
-            return $response;
+            throw new GameException("game: {$game->getId()} already has result");
         }
 
-        foreach ($game->getBattlefields() as $playerBattlefield) {
-            $player = $playerBattlefield->getPlayer();
-
-            foreach ($game->getBattlefields() as $battlefield) {
-                if ($playerBattlefield === $battlefield) {
-                    /** do not process player's turn on own battlefield */
+        foreach ($game->getBattlefields() as $turnOwnerBattlefield) {
+            foreach ($game->getBattlefields() as $targetBattlefield) {
+                /** do not process turn on itself */
+                if ($turnOwnerBattlefield === $targetBattlefield) {
                     continue;
                 }
 
-                $_cell = $this->processPlayerTurn($player, $battlefield, $cell);
-                /** to mark cells around dead ship as skipped */
-                CellModel::isShipDead($_cell);
-
-                if (!BattlefieldModel::hasUnfinishedShips($battlefield)) {
-                    $result = (new GameResult())
-                        ->setPlayer($player);
-                    $game->setResult($result);
-                    $response->setResult($result);
-
-                    break 2;
+                if ($this->processPlayerTurnOnBattlefield($targetBattlefield, $turnOwnerBattlefield->getPlayer(), $cell)) {
+                    return $game;
                 }
             }
         }
 
-        $response->setCells(CellModel::getChangedCells());
+        return $game;
+    }
 
-        return $response;
+    protected function processPlayerTurnOnBattlefield(Battlefield $battlefield, Player $player, Cell $cell) : bool
+    {
+        $cell = $this->processPlayerTurn($battlefield, $cell);
+
+        if (CellModel::isShipDead($cell)) {
+            BattlefieldModel::flagWaterAroundShip($cell);
+
+            if (BattlefieldModel::hasUnfinishedShips($battlefield)) {
+                return false;
+            }
+
+            $result = (new GameResult())
+                ->setPlayer($player);
+            $battlefield->getGame()->setResult($result);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
-     * @param Player      $player
      * @param Battlefield $battlefield
-     * @param Cell        $cell
+     * @param Cell        $cell - this cell will be attacked if it will be human player's turn
      *
      * @return Cell
      */
-    private function processPlayerTurn(Player $player, Battlefield $battlefield, Cell $cell) : Cell
+    private function processPlayerTurn(Battlefield $battlefield, Cell $cell) : Cell
     {
-        return PlayerModel::isAIControlled($player)
-            ? $this->ai->processCPUTurn($battlefield)
-            : CellModel::switchPhase($cell);
+        return PlayerModel::isAIControlled($battlefield->getPlayer())
+            ? CellModel::switchPhase($cell)
+            : $this->ai->processCPUTurn($battlefield);
     }
 }
