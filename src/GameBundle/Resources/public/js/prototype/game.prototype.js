@@ -175,7 +175,7 @@ Game.resources.config   = {
             max: 12
         },
         /** @type {Object} */
-        username: /^[a-zA-Z0-9\.\- @]{1,100}$/
+        username: /^[a-zA-Z0-9\.\- @]{3,25}$/
     }
 };
 Game.resources.validate = {
