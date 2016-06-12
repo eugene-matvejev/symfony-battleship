@@ -78,17 +78,11 @@ class GameController extends AbstractAPIController
         $game = $this->get('battleship_game.service.game_processor')->processGameTurn($cell);
         $om = $this->getDoctrine()->getManager();
 
-        $response = new GameTurnResponse();
-        $response->setCells(CellModel::getChangedCells());
-        if (null !== $game->getResult()) {
-            $response->setResult($game->getResult());
-        }
-
         foreach (CellModel::getChangedCells() as $cell) {
             $om->persist($cell);
         }
         $om->flush();
 
-        return $this->prepareSerializedResponse($response);
+        return $this->prepareSerializedResponse(new GameTurnResponse($game, CellModel::getChangedCells()));
     }
 }
