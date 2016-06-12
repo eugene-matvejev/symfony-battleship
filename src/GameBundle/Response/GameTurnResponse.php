@@ -3,6 +3,7 @@
 namespace EM\GameBundle\Response;
 
 use EM\GameBundle\Entity\Cell;
+use EM\GameBundle\Entity\Game;
 use EM\GameBundle\Entity\GameResult;
 use JMS\Serializer\Annotation as Serializer;
 
@@ -30,6 +31,19 @@ class GameTurnResponse
     private $result;
 
     /**
+     * @param Cell[] $cells
+     * @param Game   $game
+     */
+    public function __construct(Game $game, array $cells)
+    {
+        if (null !== $game->getResult()) {
+            $this->setResult($game->getResult());
+        }
+
+        $this->setCells($cells);
+    }
+
+    /**
      * @return Cell[]
      */
     public function getCells() : array
@@ -49,7 +63,15 @@ class GameTurnResponse
 
         return $this;
     }
-    
+
+    /**
+     * @return GameResult
+     */
+    public function getResult()
+    {
+        return $this->result;
+    }
+
     public function setResult(GameResult $result) : self
     {
         $this->result = $result;
