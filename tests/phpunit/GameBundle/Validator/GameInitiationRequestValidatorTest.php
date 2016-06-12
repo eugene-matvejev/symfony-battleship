@@ -22,13 +22,12 @@ class GameInitiationRequestValidatorTest extends IntegrationTestSuite
         static::$validator = static::$container->get('battleship_game.validator.game_initiation_request');
     }
 
-    /*********************************** VALIDATION ***********************************/
     /**
      * @see GameInitiationRequestValidator::validate
      *
      * @test
      */
-    public function validateOnValid()
+    public function validateOnValidFixture()
     {
         $this->assertTrue(static::$validator->validate($this->getSharedFixtureContent('init-game-request-2-players-7x7.json')));
     }
@@ -38,7 +37,7 @@ class GameInitiationRequestValidatorTest extends IntegrationTestSuite
      *
      * @test
      */
-    public function validateOnInvalid()
+    public function validateOnInvalidFixture()
     {
         foreach (static::getListOfInvalidFixtureNames() as $fixtureName) {
             $this->assertFalse(

@@ -3,6 +3,8 @@
 namespace EM\GameBundle\Validator;
 
 /**
+ * @see   GameInitiationRequestValidatorTest
+ *
  * @since 18.0
  */
 class GameInitiationRequestValidator
@@ -38,7 +40,7 @@ class GameInitiationRequestValidator
 
         return
             $this->validateStructure($data)
-            && $this->validatePlayerName($data->playerName)
+            && $this->validatePlayerName($data->playerName) // will be replaced by Authorization header which will reflect Player.id content
             && $this->validateBattlefieldSize($data->size)
             && $this->validateOpponentsAmount($data->opponents)
             && $this->validateCoordinates($data->coordinates);
