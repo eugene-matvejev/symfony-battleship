@@ -58,7 +58,10 @@ class GameProcessorTest extends IntegrationTestSuite
     }
 
     /**
-     * should initiate Game with 7x7 with two Battlefields
+     * should:
+     *      initiate game for player and opponent(s) with specific size
+     *      each battlefield should have ships
+     *      should have at least one AI controlled opponent
      *
      * @see GameProcessor::buildGame
      * @test
@@ -86,28 +89,24 @@ class GameProcessorTest extends IntegrationTestSuite
     public function processGameTurnOnUnfinishedGame()
     {
         $game = MockFactory::getGameMock();
-        $game->getBattlefields()[0]->setPlayer(MockFactory::getAIPlayerMock(''));
-
-        /** because CellModel::changedCells are indexed by Cell Id */
-        $i = 0;
-        foreach ($game->getBattlefields() as $battlefield) {
-            foreach ($battlefield->getCells() as $cell) {
-                $cell->setId(++$i);
-            }
-
-            $battlefield->getCellByCoordinate('A5')->addFlag(CellModel::FLAG_SHIP);
-            $battlefield->getCellByCoordinate('A6')->addFlag(CellModel::FLAG_SHIP);
-            $battlefield->getCellByCoordinate('A7')->addFlag(CellModel::FLAG_SHIP);
-        }
+        $aiBattlefield = $game->getBattlefields()[0];
+        $aiBattlefield->setPlayer(MockFactory::getAIPlayerMock(''));
 
         foreach ($game->getBattlefields() as $battlefield) {
-            $response = $this->gameProcessor->processGameTurn($battlefield->getCellByCoordinate('A1'));
-
-            $this->assertGreaterThanOrEqual(1, count($response->getCells()));
-            null !== $game->getResult()
-                ? $this->assertInstanceOf(GameResult::class, $response->getResult())
-                : $this->assertGreaterThanOrEqual(2, count($response->getCells()));
+            $battlefield->getCellByCoordinate('A1')->addFlag(CellModel::FLAG_SHIP);
+            $battlefield->getCellByCoordinate('A2')->addFlag(CellModel::FLAG_SHIP);
         }
+
+        $game = $this->gameProcessor->processGameTurn($aiBattlefield->getCellByCoordinate('A1'));
+
+        foreach ($game->getBattlefields() as $battlefield) {
+            $this->assertCount(48, BattlefieldModel::getLiveCells($battlefield));
+            /** as one cell should be dead */
+            $this->assertTrue(BattlefieldModel::hasUnfinishedShips($battlefield));
+        }
+
+        $this->assertTrue($aiBattlefield->getCellByCoordinate('A1')->hasFlag(CellModel::FLAG_DEAD_SHIP));
+        $this->assertNull($game->getResult());
     }
 
     /**
@@ -129,29 +128,22 @@ class GameProcessorTest extends IntegrationTestSuite
         $game->getBattlefields()[1]->setPlayer(MockFactory::getAIPlayerMock(''));
         $game->getBattlefields()[1]->getCellByCoordinate('A1')->addFlag(CellModel::FLAG_SHIP);
 
-        $cell = $game->getBattlefields()[1]->getCellByCoordinate('A1');
+        $game = $this->gameProcessor->processGameTurn($game->getBattlefields()[1]->getCellByCoordinate('A1'));
 
-        $response = $this->gameProcessor->processGameTurn($cell);
-
-        $this->assertNotNull($response->getResult());
-        $this->assertInstanceOf(GameResult::class, $response->getResult());
+        $this->assertNotNull($game->getResult());
+        $this->assertInstanceOf(GameResult::class, $game->getResult());
     }
 
     /**
-     * invoke game processing method on unfinished game to Win Game
+     * invoke game processing method on finished game should throw exception
      *
      * @see GameProcessor::processGameTurn
      * @test
+     *
+     * @expectedException \EM\GameBundle\Exception\GameException
      */
     public function processGameTurnOnFinishedGame()
     {
-        $game = MockFactory::getGameMock()->setResult(MockFactory::getGameResultMock());
-
-        foreach ($game->getBattlefields() as $battlefield) {
-            $response = $this->gameProcessor->processGameTurn($battlefield->getCellByCoordinate('A1'));
-
-            $this->assertCount(0, $response->getCells());
-            $this->assertInstanceOf(GameResult::class, $response->getResult());
-        }
+        $this->gameProcessor->processGameTurn(MockFactory::getGameResultMock()->getGame()->getBattlefields()[0]->getCellByCoordinate('A1'));
     }
 }
