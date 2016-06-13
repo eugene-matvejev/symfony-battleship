@@ -88,7 +88,7 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
      * @see     AIStrategyProcessor::process
      * @test
      *
-     * @depends processCoordinates
+     * @depends processPaths
      */
     public function processHorizontalStrategy()
     {
@@ -99,7 +99,7 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
      * @see     AIStrategyProcessor::process
      * @test
      *
-     * @depends processCoordinates
+     * @depends processPaths
      */
     public function processVerticalStrategy()
     {
@@ -110,9 +110,9 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
      * @see     AIStrategyProcessor::process
      * @test
      *
+     * @depends processPaths
      * @depends processHorizontalStrategy
      * @depends processVerticalStrategy
-     * @depends processCoordinates
      */
     public function processBothStrategy()
     {
