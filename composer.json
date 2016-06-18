@@ -38,7 +38,9 @@
         "jms/serializer-bundle": "^1.1",
         "components/jquery": "^2.2",
         "twitter/bootstrap": "^3.3",
-        "nelmio/api-doc-bundle": "^2.12"
+        "nelmio/api-doc-bundle": "^2.12",
+        "eugene-matvejev/css-compiler": "^0.1",
+        "leafo/scssphp-compass": "@dev"
     },
     "require-dev": {
         "composer/composer": "^1.0",
