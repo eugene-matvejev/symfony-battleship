@@ -5,46 +5,29 @@ namespace EM\GameBundle\Service\AI;
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Service\AI\Strategy\RandomStrategy;
-use EM\GameBundle\Service\AI\Strategy\XStrategy;
-use EM\GameBundle\Service\AI\Strategy\YStrategy;
-use EM\GameBundle\Service\CoordinateSystem\CoordinateService;
+use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 
 /**
+ * @see   AIStrategyServiceTest
+ *
  * @since 3.0
  */
 class AIStrategyService
 {
-    const STRATEGY_X = 0;
-    const STRATEGY_Y = 1;
-    const STRATEGY_RAND = 2;
+    const STRATEGY_MAP = [
+        PathProcessor::PATH_LEFT  => AIStrategyProcessor::STRATEGY_HORIZONTAL,
+        PathProcessor::PATH_RIGHT => AIStrategyProcessor::STRATEGY_HORIZONTAL,
+        PathProcessor::PATH_UP    => AIStrategyProcessor::STRATEGY_VERTICAL,
+        PathProcessor::PATH_DOWN  => AIStrategyProcessor::STRATEGY_VERTICAL
+    ];
     /**
-     * @var XStrategy
+     * @var AIStrategyProcessor
      */
-    private $xStrategy;
-    /**
-     * @var YStrategy
-     */
-    private $yStrategy;
-    /**
-     * @var RandomStrategy
-     */
-    private $randStrategy;
-    /**
-     * @var CellModel
-     */
-    private $cellModel;
-    /**
-     * @var Cell[]
-     */
-    private $checkedCells = [];
+    private $processor;
 
-    public function __construct(CellModel $model, XStrategy $xStrategy, YStrategy $yStrategy, RandomStrategy $randomStrategy)
+    public function __construct(AIStrategyProcessor $processor)
     {
-        $this->cellModel = $model;
-        $this->xStrategy = $xStrategy;
-        $this->yStrategy = $yStrategy;
-        $this->randStrategy = $randomStrategy;
+        $this->processor = $processor;
     }
 
     /**
@@ -52,21 +35,14 @@ class AIStrategyService
      *
      * @return Cell[]
      */
-    public function attack(Battlefield $battlefield) : array
+    public function chooseCells(Battlefield $battlefield) : array
     {
         foreach ($battlefield->getCells() as $cell) {
-            if ($cell->getState()->getId() !== CellModel::STATE_SHIP_DIED || isset($this->checkedCells[$cell->getId()]) || $this->isShipDead($cell)) {
+            if (!$cell->hasFlag(CellModel::FLAG_DEAD_SHIP) || CellModel::isShipDead($cell)) {
                 continue;
             }
 
-            switch ($this->decideStrategy($cell)) {
-                case self::STRATEGY_X:
-                    return $this->xStrategy->verify($cell);
-                case self::STRATEGY_Y:
-                    return $this->yStrategy->verify($cell);
-                case self::STRATEGY_RAND:
-                    return $this->randStrategy->verify($cell);
-            }
+            return $this->processor->process($cell, $this->chooseStrategy($cell));
         }
 
         return [];
@@ -79,62 +55,22 @@ class AIStrategyService
      *
      * @return int
      */
-    private function decideStrategy(Cell $cell) : int
+    private function chooseStrategy(Cell $cell) : int
     {
-        $coordinates = [
-            self::STRATEGY_X => CoordinateService::STRATEGY_X,
-            self::STRATEGY_Y => CoordinateService::STRATEGY_Y
-        ];
+        $processor = new PathProcessor($cell->getCoordinate());
 
-        $service = new CoordinateService($cell);
-        foreach ($coordinates as $strategy => $ways) {
-            foreach ($ways as $way) {
-                $service->setWay($way)->calculateNextCoordinate();
+        $battlefield = $cell->getBattlefield();
+        foreach (static::STRATEGY_MAP as $way => $strategy) {
+            $processor->setPath($way);
 
-                if (null !== $_cell = $cell->getBattlefield()->getCellByCoordinate($service->getValue())) {
-                    if ($_cell->getState()->getId() === CellModel::STATE_SHIP_DIED) {
-                        return $strategy;
-                    }
+            /** @var Cell $cell */
+            if (null !== $cell = $battlefield->getCellByCoordinate($processor->getNextCoordinate())) {
+                if ($cell->hasFlag(CellModel::FLAG_DEAD_SHIP)) {
+                    return $strategy;
                 }
             }
         }
 
-        return self::STRATEGY_RAND;
-    }
-
-    public function isShipDead(Cell $cell) : bool
-    {
-        if (!isset($this->checkedCells[$cell->getId()]) && $cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
-            return false;
-        }
-
-        $cells = [$cell];
-        $this->checkedCells[$cell->getId()] = $cell;
-
-        $service = new CoordinateService($cell);
-        foreach (CoordinateService::ALL_BASIC_WAYS as $way) {
-            $service->setWay($way)->calculateNextCoordinate();
-
-            while (null !== $_cell = $cell->getBattlefield()->getCellByCoordinate($service->getValue())) {
-                if (!in_array($_cell->getState()->getId(), CellModel::STATES_SHIP)) {
-                    break;
-                }
-                if ($_cell->getState()->getId() !== CellModel::STATE_SHIP_DIED) {
-                    return false;
-                }
-
-                $service->calculateNextCoordinate();
-                $cells[] = $cell;
-                $this->checkedCells[$cell->getId()] = $cell;
-            }
-        }
-
-        foreach ($cells as $cell) {
-            foreach ((new CoordinateService($cell))->getAdjacentCells() as $_cell) {
-                $this->cellModel->switchStateToSkipped($_cell);
-            }
-        }
-
-        return true;
+        return AIStrategyProcessor::STRATEGY_BOTH;
     }
 }

@@ -68,7 +68,7 @@ body > .container {
 .page-header {
     font-size: 24px;
     margin: 0;
-    padding: 40px 0px 0px 20px;
+    padding: 40px 0 0 20px;
 }
 
 .page-header,
@@ -170,4 +170,14 @@ body > .container {
 
 .pagination-area {
     text-align: center;
+}
+
+#modal-area .help-block {
+
+    font-size: 14px;
+    font-style: italic;
+}
+
+a.history-title {
+    color: #F5DEB3;
 }

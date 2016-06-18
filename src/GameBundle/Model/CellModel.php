@@ -3,79 +3,60 @@
 namespace EM\GameBundle\Model;
 
 use EM\GameBundle\Entity\Cell;
-use EM\GameBundle\Entity\CellState;
-use EM\GameBundle\Repository\CellStateRepository;
+use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 
 /**
- * @since 2.0
+ * @see   CellModelTest
+ *
+ * @since 12.0
  */
 class CellModel
 {
-    const STATE_WATER_LIVE = 1;
-    const STATE_WATER_DIED = 2;
-    const STATE_SHIP_LIVE  = 3;
-    const STATE_SHIP_DIED  = 4;
-    const STATE_WATER_SKIP = 5;
-    /** instead of functions, as const array is faster */
-    const STATES_WATER = [self::STATE_WATER_LIVE, self::STATE_WATER_DIED];
-    const STATES_SHIP  = [self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED];
-    const STATES_LIVE  = [self::STATE_WATER_LIVE, self::STATE_SHIP_LIVE];
-    const STATES_DIED  = [self::STATE_WATER_DIED, self::STATE_SHIP_DIED];
-    const STATES_ALL   = [self::STATE_WATER_LIVE, self::STATE_WATER_DIED, self::STATE_SHIP_LIVE, self::STATE_SHIP_DIED, self::STATE_WATER_SKIP];
-
-    /**
-     * @var CellState[]
-     */
-    private static $cachedStates;
+    const FLAG_NONE      = 0x00;
+    const FLAG_DEAD      = 0x01;
+    const FLAG_SHIP      = 0x02;
+    const FLAG_SKIP      = 0x04 | self::FLAG_DEAD;
+    const FLAG_DEAD_SHIP = self::FLAG_SHIP | self::FLAG_DEAD;
     /**
      * @var Cell[]
      */
-    private static $changedCells = [];
-
-    public function __construct(CellStateRepository $repository)
-    {
-        if (null === self::$cachedStates) {
-            self::$cachedStates = $repository->getAllIndexed();
-        }
-    }
-
-    /**
-     * @return CellState[]
-     */
-    public function getAllStates() : array
-    {
-        return self::$cachedStates;
-    }
+    protected static $changedCells = [];
 
     /**
      * @return Cell[]
      */
     public static function getChangedCells() : array
     {
-        return self::$changedCells;
+        return static::$changedCells;
     }
 
-    public function switchState(Cell $cell, int $customState = null) : Cell
+    /**
+     * @param Cell $cell
+     * @param int  $additionalFlag - additional flag which will be applied with CellModel::FLAG_DEAD
+     *
+     * @return Cell
+     */
+    public static function switchPhase(Cell $cell, int $additionalFlag = self::FLAG_NONE) : Cell
     {
-        $oldState = $cell->getState()->getId();
-        switch ($cell->getState()->getId()) {
-            case self::STATE_WATER_LIVE:
-                $cell->setState(self::$cachedStates[$customState ?? self::STATE_WATER_DIED]);
-                break;
-            case self::STATE_SHIP_LIVE:
-                $cell->setState(self::$cachedStates[self::STATE_SHIP_DIED]);
-                break;
-        }
-
-        if($cell->getState()->getId() !== $oldState) {
-            self::$changedCells[] = $cell;
+        if (!$cell->hasFlag(CellModel::FLAG_DEAD)) {
+            static::$changedCells[$cell->getId()] = $cell->addFlag($additionalFlag | CellModel::FLAG_DEAD);
         }
 
         return $cell;
     }
 
-    public function switchStateToSkipped(Cell $cell) : Cell
+    public static function isShipDead(Cell $cell) : bool
     {
-        return $this->switchState($cell, self::STATE_WATER_SKIP);
+        if (!$cell->hasFlag(static::FLAG_DEAD_SHIP)) {
+            return false;
+        }
+
+        foreach ((new PathProcessor($cell->getCoordinate()))->getAdjacentCells($cell->getBattlefield(), 4, static::FLAG_SHIP) as $cell) {
+            if (!$cell->hasFlag(static::FLAG_DEAD_SHIP)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

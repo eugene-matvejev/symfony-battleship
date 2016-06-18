@@ -1,6 +1,7 @@
-#foundation:
-#    resource: "@FoundationBundle/Resources/config/routing.yml"
-#    prefix:   /
-game:
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/documentation
+
+battleship-game:
     resource: "@GameBundle/Resources/config/routing.yml"
     prefix:   /

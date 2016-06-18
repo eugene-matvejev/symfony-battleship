@@ -2,34 +2,72 @@
 
 namespace EM\GameBundle\Model;
 
-use EM\GameBundle\Entity\PlayerType;
-use EM\GameBundle\Repository\PlayerTypeRepository;
+use Doctrine\ORM\EntityRepository;
+use EM\GameBundle\Entity\Player;
+use EM\GameBundle\Exception\PlayerException;
 
 /**
  * @since 2.0
  */
 class PlayerModel
 {
-    const TYPE_CPU   = 1;
-    const TYPE_HUMAN = 2;
-    const TYPES_ALL  = [self::TYPE_CPU, self::TYPE_HUMAN];
+    const FLAG_NONE          = 0x00;
+    const FLAG_AI_CONTROLLED = 0x01;
     /**
-     * @var PlayerType[]
+     * @var EntityRepository
      */
-    private static $cachedTypes;
+    private $repository;
 
-    public function __construct(PlayerTypeRepository $repository)
+    public function __construct(EntityRepository $repository)
     {
-        if (null === self::$cachedTypes) {
-            self::$cachedTypes = $repository->getAllIndexed();
-        }
+        $this->repository = $repository;
     }
 
     /**
-     * @return PlayerType[]
+     * @param string $name
+     *
+     * @return Player
+     * @throws PlayerException
      */
-    public function getTypes() : array
+    public function createOnRequestAIControlled(string $name) : Player
     {
-        return self::$cachedTypes;
+        return $this->createOnRequest($name, true);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return Player
+     * @throws PlayerException
+     */
+    public function createOnRequestHumanControlled(string $name) : Player
+    {
+        return $this->createOnRequest($name);
+    }
+
+    /**
+     * @param string $name
+     * @param bool   $controlledByAI
+     *
+     * @return Player
+     * @throws PlayerException
+     */
+    protected function createOnRequest(string $name, bool $controlledByAI = false) : Player
+    {
+        /** @var Player $player */
+        $player = $this->repository->findOneBy(['name' => $name]);
+
+        if (null !== $player && $controlledByAI !== static::isAIControlled($player)) {
+            throw new PlayerException("player with '$name' already exists and controlledByAI do not match");
+        }
+
+        return $player ?? (new Player())
+            ->setName($name)
+            ->setFlags($controlledByAI ? static::FLAG_AI_CONTROLLED : static::FLAG_NONE);
+    }
+
+    public static function isAIControlled(Player $player) : bool
+    {
+        return $player->hasFlag(self::FLAG_AI_CONTROLLED);
     }
 }

@@ -1,51 +1,115 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
+[![Code Climate](https://codeclimate.com/github/eugene-matvejev/battleship-game-api/badges/gpa.svg)](https://codeclimate.com/github/eugene-matvejev/battleship-game-api)
+[![Code Coverage](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
 [![Build Status](https://travis-ci.org/eugene-matvejev/battleship-game-api.svg?branch=master)](https://travis-ci.org/eugene-matvejev/battleship-game-api)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc/mini.png)](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc)
 
+__TDD tests__
+ * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - *PHPUnit*
+
+__BDD tests__
+ * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - *Behat*
+ * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - *Kahlan*
+
+__DEMO__ : https://battleship-game-api.herokuapp.com/
 
 # Battleship Game API
-### Spare time project, Work in Progress! Highly experimental!!!
-#### Project aim
- * deliver some preview about my technical knowledge before job interview
-  * try 'cutting edge' technologies and approaches.
+##### THIS IS SPARE TIME PROJECT, WORK IN PROGRESS! HIGHLY EXPERIMENTAL!!!
+#### project purpose:
+ * try out "cutting edge" technologies and approaches such as PHP7, SF3, ES6 and Continuous Integration/Deployment
+ * simulate database loading e.g. up to 500 transactions per request
+ * deliver preview about my technical knowledge before the job interview
 
-### game cheat-code:
- * CPU have only one-cell ship which is hardcoded at __B2__ cell
-  * if you will hit it __B2__ cell - it will be instant win
-   * it is done to easier tests manual testing, as the project is far from 'finished' stage, as I keep trying polish it.
+#### game cheat-code:
+* purpose: make manual testing easier (as the project is far from final stage, I keep polishing it)
+ * AI player have only one ship, which is one-cell ship which is located at __B2__ cell
+  * if you will hit __B2__ cell - you will win
 
-### plans for future:
- * deliver back-end as OpenAPI using SF3, PHP7, Doctrine2, Various databases
-  * try to create it later as well on Silex.
- * separate front-ent side using single-page-application model AngularJS 2 / Backbone / React
-  * front-end already behave as single-page-application (SPA)
- * make simple and flexible database support e.g. MariaDB, MySQL, MongoDB
- * implement phpunit, behat tests, consider kahlan and phpspec as well
+#### future plans:
+ * deliver back-end as RESTful API using SF3, PHP7, Doctrine2 with various database engines support
+ * separate front-end into separate repository and rewrite it using React or AngularJS 2
+  * front-end is already behave as single-page-application [SPA] 
+ 
+# software requirements
+ * supported database engines:
+  * MySQL >= 5.5
+  * MariaDB >= 9.0
+  * PostgreSQL >= 9.3
+  * SQLite >= 3
+ * WIP:
+  * MongoDB
+ * Composer >= 1.0.3
+ * http server: apache/nginx with PHP7
 
-# Software requirements
- * database: MySQL => 5.5 or MariaDB >= 9.*
-  * MongoDB support WIP 
- * http server: apache/nginx with php >= 7.0.1
- * composer
-
-### Key Technologies
- * PHP 7.0.1 (because 7.0.0 had bugged primitive types)
- * Symfony Framework 3 (SF3)
- * Doctrine 2
+# technology stack
+### key technologies:
+ * PHP7 (7.0.0 - 7.0.4 || >= 7.0.6 [7.0.5 had bugged SPL])
+ * Symfony Framework 3 [SF3]
+ * Doctrine 2 [with Fixtures]
  * PHPUnit 5
+ * Behat 3
  * Composer
+ * JMS Serializer
+ * API Doc [nelmio/api-doc-bundle]
  * Twig
+ * JavaScript ES6 [ECMAScript6]
+ * CSS3
+ * jQuery 2
  * Twitter Bootstrap 3
- * Monolog
- * EMCAScript6 (JavaScript ES6)
 
-# How to install
+### used patterns:
+ * Front Controller
+ * MVC
+ * ORM
+ * Data Mapper
+ * Builder
+ * Strategy
+ * Factory
+ * Singleton
+ * Delegation
+ * Registry
+ * Service Locator
+ * Event Dispatcher
+ * Dependency Injection
+
+### PHP-FIG:
+ * PSR-2
+ * PSR-4
+
+# workflow
+ * new functionality is added into master branch only by pull requests from feature branches
+ * result of each pull request is ready-to-use release, using Continuous Delivery principles, follow semantic visioning
+ * each pull request/push trigger various CI engines such as Travis, Circle, Scrutinizer, Sensiolabs Insight, CodeCov, Jenkins, SonarQube
+ * __gitflow__:
+  * master branch: contains release-ready source
+  * heroku branch: reflects current deployed app at heroku (prototype of Continuous Delivery and Continuous Deployment)
+  * prototype!_* branches contains new idea [merged pull request of prototype branch is always next *major* version release]
+  * %major%.%minor%.%patch%: feature branches [example: 15.2.3]
+
+# how to install
  * copy *app/config/parameters.yml.dist* to *app/config/parameters.yml* and amend database settings
- * *composer install* (will create databases as well as run migrations)
- * *php bin/console battleship:database:seed --env=prod* (to seed database with necessary data e.g. cell states, player types)
- * *php bin/console assets:install* (as need dump assets once)
- * apache virtual host config:
- ```
+ * *composer install* __# to fetch dependencies and initial commands__
+  * __NOTE!__ composer is configured to create databases if they not exists and run apply migrations using production env.__
+ * __optional!__ *composer dump-autoload --optimize* __# to generate "hash-map" autoloader__
+  * __NOTE!__ production uses __APC autoloader__
+ * __optional!__ *php bin/console assets:install* __# to dump assets as hard copies__
+  * __NOTE!__ by default assets are installed as symlinks
+ * __optional!__ *php bin/console doctrine:fixtures:load --env=test* __# for testing purposes only__
+
+### how to execute tests
+ * *php bin/phpunit -c .*
+ * *php bin/behat --strict*
+ * *php bin/kahlan*
+  * __NOTE__: tests interacting with test database [config: "database_name_test" in config.yml], it is wiped and seeded before tests execution
+
+### /etc/hosts
+```
+127.0.0.1       api.game.local
+::1             api.game.local
+```
+
+### apache virtual host config:
+```
 <VirtualHost 127.0.0.1:80 ::1:80>
     DocumentRoot "%PROJECT_ROOT_DIRECTORY%/web"
     ErrorLog "%PROJECT_ROOT_DIRECTORY%/var/logs/apache_log"
@@ -129,29 +193,4 @@
         </IfModule>
     </Directory>
 </VirtualHost>
- ```
-
-### How to launch tests
- * *phpunit -c app* or *php bin/phpunit -c tests* (fixtures will wipe and populate database)
-
-### used patterns
- * Front Controller
- * MVC
- * ORM
- * Data Mapper
- * Builder
- * Strategy
- * Factory
- * Singleton
- * Service Locator
- * Registry
- * Event Dispatcher
- * Dependency Injection
-
-### github usage:
- * semantic versioning with pull-requests into the master branch
-
-### used standarts:
- * PHP-FIG:
-  * ../PSR-2
-  * ../PSR-4
+```

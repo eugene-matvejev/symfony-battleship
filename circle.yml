@@ -1,0 +1,14 @@
+machine:
+    php:
+        version: "7.0.4"
+
+dependencies:
+    pre:
+        - "cp app/config/parameters.yml.dist app/config/parameters.yml"
+        - "composer install --no-progress --no-interaction"
+
+test:
+    override:
+        - "php bin/phpunit -c phpunit.xml --colors=always --verbose --coverage-clover=coverage.xml"
+        - "php bin/behat --strict"
+        - "php bin/kahlan"

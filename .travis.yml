@@ -1,19 +1,17 @@
-language: php
+language: "php"
 php:
-  - '7.0'
-#  - hhvm
-
-before_script:
-  - cp app/config/parameters.yml.dist app/config/parameters.yml
-  - composer install
-
-env:
-  global:
-    - MIN_PHP=7.0.1
-
-script:
-  - php bin/phpunit -c tests/phpunit.xml --colors=always || (echo -e "\e[41mFAILED\e[0m {}" && $(exit 1));
+    - '7.0.4'
 
 services:
-  - mongodb
-  - mysql
+    - "mysql"
+
+before_script:
+    - "cp app/config/parameters.yml.dist app/config/parameters.yml"
+    - "composer install --no-progress --no-interaction"
+
+script:
+    - "php bin/phpunit -c phpunit.xml --colors=always --verbose --coverage-clover=coverage.xml"
+
+after_success:
+    - "CODECLIMATE_REPO_TOKEN=2f804dfe85a65f7f14d8be5d36f38bcbf07a5f2fcf6852ceb19327e7931a8d49 ./bin/test-reporter --coverage-report=\"./coverage.xml\""
+    - "bash <(curl -s https://codecov.io/bash)"

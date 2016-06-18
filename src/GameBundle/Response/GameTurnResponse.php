@@ -3,32 +3,46 @@
 namespace EM\GameBundle\Response;
 
 use EM\GameBundle\Entity\Cell;
+use EM\GameBundle\Entity\Game;
 use EM\GameBundle\Entity\GameResult;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
+ * @see   GameTurnResponseTest
+ *
+ * @Serializer\XmlRoot("game-turn-data")
+ * @Serializer\AccessorOrder(order="custom", custom={"result","cells"})
+ *
  * @since 5.0
  */
 class GameTurnResponse implements GameResponseInterface
 {
     /**
-     * @var array
+     * @Serializer\Type("array<EM\GameBundle\Entity\Cell>")
+     * @Serializer\XmlList(entry="cell")
+     * @Serializer\XmlKeyValuePairs()
+     *
+     * @var Cell[]
      */
     private $cells = [];
     /**
+     * @Serializer\Type("EM\GameBundle\Entity\GameResult")
+     *
      * @var GameResult
      */
     private $result;
 
     /**
      * @param Cell[] $cells
-     *
-     * @return GameTurnResponse
+     * @param Game   $game
      */
-    public function setCells(array $cells) : self
+    public function __construct(Game $game, array $cells)
     {
-        $this->cells = $cells;
+        if (null !== $game->getResult()) {
+            $this->setResult($game->getResult());
+        }
 
-        return $this;
+        $this->setCells($cells);
     }
 
     /**
@@ -40,6 +54,19 @@ class GameTurnResponse implements GameResponseInterface
     }
 
     /**
+     * @param Cell[] $cells
+     *
+     * @return GameTurnResponse
+     */
+    public function setCells(array $cells) : self
+    {
+        /** because JMS serializer don't work properly without array_values */
+        $this->cells = array_values($cells);
+
+        return $this;
+    }
+
+    /**
      * @return GameResult
      */
     public function getResult()
@@ -47,7 +74,7 @@ class GameTurnResponse implements GameResponseInterface
         return $this->result;
     }
 
-    public function setGameResult(GameResult $result) : self
+    public function setResult(GameResult $result) : self
     {
         $this->result = $result;
 

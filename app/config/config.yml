@@ -1,13 +1,17 @@
 imports:
-    - { resource: parameters.common.yml }
     - { resource: parameters.yml }
-    - { resource: security.yml }
+#    - { resource: security.yml }
     - { resource: services.yml }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+    battleship_game.setting.min_game_size: 7
+    battleship_game.setting.max_game_size: 12
+    battleship_game.setting.min_opponents_count: 1 # Multiplayer in WIP!
+    battleship_game.setting.max_opponents_count: 1 # Multiplayer in WIP!
+    battleship_game.setting.game_results_per_page: 5
 
 framework:
     #esi:             ~
@@ -27,6 +31,7 @@ framework:
     trusted_hosts:   ~
     trusted_proxies: ~
     session:
+        name:        "battleship-game"
         # handler_id set to null will use default session handler from php.ini
         handler_id:  ~
         save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
@@ -36,81 +41,67 @@ framework:
 
 # Twig Configuration
 twig:
-    debug:            %kernel.debug%
-    strict_variables: %kernel.debug%
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
 
 # Doctrine Configuration
 doctrine:
     dbal:
-        driver:   pdo_mysql
-        host:     %database_host%
-        port:     %database_port%
-        dbname:   %database_name%
-        user:     %database_user%
-        password: %database_password%
-        charset:  %database_encoding%
+        driver:   "%database_driver%"
+        host:     "%database_host%"
+        port:     "%database_port%"
+        dbname:   "%database_name%"
+        user:     "%database_user%"
+        password: "%database_password%"
+        charset:  "%database_encoding%"
+#       for SQLite Only
+#        path:     "%kernel.cache_dir%/sqlite.db.cache"
         # if using pdo_sqlite as your database driver:
-        #   1. add the path in parameters.yml
-        #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
-        #   2. Uncomment database_path in parameters.yml.dist
-        #   3. Uncomment next line:
-        #     path:     "%database_path%"
+        # 1. add the path in parameters.yml
+        #   e.g. database_path: "%kernel.root_dir%/data/data.db3"
+        # 2. Uncomment database_path in parameters.yml.dist
+        # 3. Uncomment next line:
+        #   path: "%database_path%"
         server_version: 5
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
 
-#swiftmailer:
-#  transport: "%mailer_transport%"
-#  host:      "%mailer_host%"
-#  username:  "%mailer_user%"
-#  password:  "%mailer_password%"
-#  spool:     { type: memory }
-
 doctrine_migrations:
     dir_name: "%kernel.root_dir%/DoctrineMigrations"
     namespace: Application\Migrations
     table_name: __doctrine_migrations
-    name: Application Migrations
+    name: Doctrine Migrations
 
-jms_serializer:
-    handlers:
-        datetime:
-            default_format: "c" # ISO8601
-            default_timezone: "UTC" # defaults to whatever timezone set in php.ini or via date_default_timezone_set
+# left for example purposes
+#jms_serializer:
+#    handlers:
+#        datetime:
+#            default_format: "c" # ISO8601
+#            default_timezone: "UTC" # defaults to whatever timezone set in php.ini or via date_default_timezone_set
+#
+#    property_naming:
+#        separator:  _
+#        lower_case: true
+#
+#    metadata:
+#        cache: file
+#        debug: "%kernel.debug%"
+#        file_cache:
+#            dir: "%kernel.cache_dir%/serializer"
+#
+#        # Using auto-detection, the mapping files for each bundle will be expected in the Resources/config/serializer directory.
+#        #
+#        # example:
+#        #      class: EM\GameBundle\Entity\Game
+#        # expected path: @GameBundle/Resources/config/serializer/Entity.Game.(yml|xml|php)
+#        auto_detection: false
+#
+#        # if you don't want to use auto-detection, you can also define the namespace prefix and the corresponding directory explicitly
+#        directories:
+#            game-bundle-entity:
+#                namespace_prefix: "EM\\GameBundle\\Entity\\"
+#                path: "@GameBundle/Resources/config/serializer/entity"
 
-    property_naming:
-        separator:  _
-        lower_case: true
-
-    metadata:
-        cache: file
-        debug: "%kernel.debug%"
-        file_cache:
-            dir: "%kernel.cache_dir%/serializer"
-
-        # Using auto-detection, the mapping files for each bundle will be
-        # expected in the Resources/config/serializer directory.
-        #
-        # Example:
-        # class: My\FooBundle\Entity\User
-        # expected path: @MyFooBundle/Resources/config/serializer/Entity.User.(yml|xml|php)
-        auto_detection: false
-
-        # if you don't want to use auto-detection, you can also define the
-        # namespace prefix and the corresponding directory explicitly
-        directories:
-            game-bundle-entity:
-                namespace_prefix: "EM\\GameBundle\\Entity\\"
-                path: "@GameBundle/Resources/config/serializer/entity"
-            game-bundle-response:
-                namespace_prefix: "EM\\GameBundle\\Response\\"
-                path: "@GameBundle/Resources/config/serializer/response"
-
-#  visitors:
-#    json:
-#      options: 0 # json_encode options bitmask
-#    xml:
-#      doctype_whitelist:
-#        - '<!DOCTYPE authorized SYSTEM "http://some_url">' # an authorized document type for xml deserialization
+nelmio_api_doc: ~

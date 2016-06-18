@@ -3,20 +3,30 @@
 namespace EM\GameBundle\Response;
 
 use EM\GameBundle\Entity\GameResult;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @since 5.0
+ *
+ * @Serializer\XmlRoot("game-results")
+ * @Serializer\AccessorOrder(order="custom", custom={"results","meta"})
  */
 class GameResultsResponse implements GameResponseInterface
 {
     const META_INDEX_CURRENT_PAGE = 'currentPage';
     const META_INDEX_TOTAL_PAGES  = 'totalPages';
     /**
+     * @Serializer\Type("array<EM\GameBundle\Entity\GameResult>")
+     * @Serializer\XmlList(entry="result")
+     *
      * @var GameResult[]
      */
     private $results = [];
     /**
-     * @var string[]
+     * @Serializer\Type("array<string, integer>")
+     * @Serializer\XmlKeyValuePairs()
+     *
+     * @var int[]
      */
     private $meta = [];
 
@@ -31,7 +41,7 @@ class GameResultsResponse implements GameResponseInterface
     /**
      * @param GameResult[] $results
      *
-     * @return $this
+     * @return GameResultsResponse
      */
     public function setResults(array $results) : self
     {
@@ -41,14 +51,14 @@ class GameResultsResponse implements GameResponseInterface
     }
 
     /**
-     * @return string[]
+     * @return int[]
      */
     public function getMeta() : array
     {
         return $this->meta;
     }
 
-    protected function setMeta(string $key, string $value) : self
+    protected function setMeta(string $key, int $value) : self
     {
         $this->meta[$key] = $value;
 

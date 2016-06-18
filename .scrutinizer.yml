@@ -1,0 +1,24 @@
+checks:
+    php: true
+
+coding_style:
+    php: {  }
+
+filter:
+    excluded_paths: ["app/*", "bin/*", "tests/*", "vendor/*", "web/*", "kahlan-config.php"]
+
+build:
+    dependencies:
+        before:
+            -
+                command: "cp app/config/parameters.yml.dist app/config/parameters.yml"
+    environment:
+        php:
+            version: "7.0.4"
+    tests:
+        override:
+            -
+                command: "php bin/phpunit -c phpunit.xml --colors=always --verbose --coverage-clover=coverage.xml"
+                coverage:
+                    file: "coverage.xml"
+                    format: "php-clover"

@@ -1,21 +1,20 @@
 parameters:
-# production DB
-  database_host: 127.0.0.1
-  database_port: 3306
-  database_name: symfony_game_live
-  database_user: root
-  database_encoding: UTF8
-  database_password: null
-# test DB
-  database_host_test: 127.0.0.1
-  database_port_test: 3306
-  database_name_test: symfony_game_test
-  database_user_test: root
-  database_password_test: null
+    database_encoding: UTF8
+    database_host: 127.0.0.1
+    database_port: 3306
+    database_user: root
+    database_password: ~
+# MYSQL / MariaDB
+    database_driver: pdo_mysql
+## SQLite
+#    database_driver: pdo_sqlite
+#    database_port: 3306
+## PostgreSQL
+#    database_driver: pdo_pgsql
+#    database_port: 5432
+## ######## prod DB
+    database_name: symfony_game_live
+## ######## test DB
+    database_name_test: symfony_game_test
 
-#  mailer_transport: smtp
-#  mailer_host: 127.0.0.1
-#  mailer_user: null
-#  mailer_password: null
-
-  secret: df9407f9746333d83748c24bcc65255304069b6d
+    secret: df9407f9746333d83748c24bcc65255304069b6d

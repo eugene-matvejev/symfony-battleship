@@ -5,32 +5,25 @@ namespace EM\GameBundle\Service\AI;
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Exception\AIException;
+use EM\GameBundle\Exception\CellException;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
 
 /**
+ * @see   AIServiceTest
+ *
  * @since 3.0
  */
 class AIService
 {
     /**
-     * @var CellModel
-     */
-    private $cellModel;
-    /**
      * @var AIStrategyService
      */
     private $strategyService;
 
-    public function __construct(CellModel $model, AIStrategyService $service)
+    public function __construct(AIStrategyService $service)
     {
-        $this->cellModel = $model;
         $this->strategyService = $service;
-    }
-
-    public function getStrategyService() : AIStrategyService
-    {
-        return $this->strategyService;
     }
 
     /**
@@ -38,36 +31,35 @@ class AIService
      *
      * @return Cell
      * @throws AIException
+     * @throws CellException
      */
-    public function turn(Battlefield $battlefield) : Cell
+    public function processCPUTurn(Battlefield $battlefield) : Cell
     {
+        $cells = $this->strategyService->chooseCells($battlefield);
+
         try {
-            $cells = $this->strategyService->attack($battlefield);
+            return self::pickCellToAttack($cells);
+        } catch (CellException $e) {
+            $cells = BattlefieldModel::getLiveCells($battlefield);
 
-            if (null === $cell = $this->chooseCellToAttack($cells)) {
-                $cells = BattlefieldModel::getLiveCells($battlefield);
-                $cell = $this->chooseCellToAttack($cells);
-            }
-
-            return $cell;
-        } catch (AIException $e) {
-            /**
-             * if strategy service unable to find damaged-unfinished ships, it returns empty array
-             * exception will be thrown, but AI should continue to look for cell which it gonna hit,
-             * so it should continue with random cell which have live status
-             */
+            return self::pickCellToAttack($cells);
         }
     }
 
     /**
      * @param Cell[] $cells
      *
-     * @return Cell|null
+     * @return Cell
      * @throws AIException
+     * @throws CellException
      */
-    private function chooseCellToAttack(array $cells)
+    private static function pickCellToAttack(array $cells) : Cell
     {
-        return empty($cells) ? null : $this->attackCell($cells[array_rand($cells, 1)]);
+        if (empty($cells)) {
+            throw new CellException('no cells provided');
+        }
+
+        return self::attackCell($cells[array_rand($cells, 1)]);
     }
 
     /**
@@ -76,12 +68,12 @@ class AIService
      * @return Cell
      * @throws AIException
      */
-    private function attackCell(Cell $cell) : Cell
+    private static function attackCell(Cell $cell) : Cell
     {
-        if (!in_array($cell->getState()->getId(), CellModel::STATES_LIVE)) {
-            throw new AIException(__CLASS__ . ':' . __FUNCTION__ . " cell: {$cell->getId()} have wrong state: {$cell->getState()->getId()}");
+        if ($cell->hasFlag(CellModel::FLAG_DEAD)) {
+            throw new AIException("cell: {$cell->getId()} already flagged as *DEAD*");
         }
 
-        return $this->cellModel->switchState($cell);
+        return CellModel::switchPhase($cell);
     }
 }

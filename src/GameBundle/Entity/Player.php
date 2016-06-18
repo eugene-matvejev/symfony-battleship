@@ -3,36 +3,42 @@
 namespace EM\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use EM\GameBundle\ORM\IdentifiableInterface;
-use EM\GameBundle\ORM\IdentifiableTrait;
-use EM\GameBundle\ORM\NameableInterface;
-use EM\GameBundle\ORM\NameableTrait;
+use EM\GameBundle\ORM\AbstractFlaggedEntity;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @since 1.0
  *
  * @ORM\Entity()
- * @ORM\Table(name="players")
+ * @ORM\Table(
+ *      name="players",
+ *      indexes={
+ *          @ORM\Index(name="INDEX_PLAYER_NAME", columns={"name"})
+ *      }
+ * )
+ *
+ * @Serializer\AccessorOrder(order="custom", custom={"id", "flag", "name"})
+ * @Serializer\XmlRoot("player")
  */
-class Player implements IdentifiableInterface, NameableInterface
+class Player extends AbstractFlaggedEntity
 {
-    use IdentifiableTrait, NameableTrait;
     /**
-     * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\PlayerType", fetch="EAGER")
-     * @ORM\JoinColumn(name="type", referencedColumnName="id", nullable=false)
+     * @ORM\Column(name="name", type="string", length=25)
      *
-     * @var PlayerType
+     * @Serializer\Type("string")
+     *
+     * @var string
      */
-    private $type;
+    protected $name;
 
-    public function getType() : PlayerType
+    public function getName() : string
     {
-        return $this->type;
+        return $this->name;
     }
 
-    public function setType(PlayerType $type) : self
+    public function setName(string $name) : self
     {
-        $this->type = $type;
+        $this->name = $name;
 
         return $this;
     }

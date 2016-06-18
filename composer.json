@@ -1,6 +1,6 @@
 {
-    "name": "eugenematvejev/battleship-game-api",
-    "description": "Spare time project (API part), highly experimental! the aim is to get done API on SF3, and front-end as SPA",
+    "name": "eugene-matvejev/battleship-game-api",
+    "description": "Battleship API, more info: please check README.md",
     "license": "MIT",
     "type": "project",
     "autoload": {
@@ -14,51 +14,69 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "EM\\Tests\\PHPUnit\\": "tests/phpunit"
+            "EM\\Tests\\Environment\\": "tests/shared-environment",
+            "EM\\Tests\\PHPUnit\\": "tests/phpunit",
+            "EM\\Tests\\Behat\\": "tests/behat/contexts"
         }
     },
     "authors": [
-        { "name": "Eugene Matvejev", "email": "eugene.matvejev@gmail.com" }
+        {
+            "name": "Eugene Matvejev",
+            "email": "eugene.matvejev@gmail.com"
+        }
     ],
     "require": {
-        "php": ">=7.0.1",
-        "doctrine/doctrine-bundle": "~1.6.1",
-        "doctrine/doctrine-migrations-bundle": "~1.1.1",
-        "doctrine/orm": "~2.5.4",
+        "php": "7.0.0 - 7.0.4 || >= 7.0.6",
+        "incenteev/composer-parameter-handler": "^2.1",
+        "doctrine/doctrine-bundle": "^1.6",
+        "doctrine/doctrine-migrations-bundle": "^1.1",
+        "doctrine/orm": "^2.5",
         "sensio/distribution-bundle": "^5.0",
-        "sensio/framework-extra-bundle": "~3.0",
-        "symfony/symfony": "~3.0.1",
-        "symfony/monolog-bundle": "~2.8.2",
-        "jms/serializer-bundle": "^1.1"
+        "sensio/framework-extra-bundle": "^3.0",
+        "symfony/symfony": "^3.0.6",
+        "symfony/monolog-bundle": "^2.8",
+        "jms/serializer-bundle": "^1.1",
+        "components/jquery": "^2.2",
+        "twitter/bootstrap": "^3.3",
+        "nelmio/api-doc-bundle": "^2.12"
     },
     "require-dev": {
-        "composer/composer": "1.0.0-alpha11",
+        "composer/composer": "^1.0",
+        "behat/behat": "^3.1",
         "doctrine/doctrine-fixtures-bundle": "^2.3",
         "sensio/generator-bundle": "^3.0",
-        "phpunit/phpunit": "^5.1"
+        "phpunit/phpunit": "^5.1",
+        "codeclimate/php-test-reporter": "^0.3.2",
+        "crysalead/kahlan": "^2.5"
     },
     "scripts": {
-        "post-install-cmd": [
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "EM\\FoundationBundle\\Command\\DatabaseProvisionCommand::initDatabases",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+        "post-install-cmd": "@deployment-events",
+        "post-update-cmd": "@deployment-events",
+        "non-heroku-deployment-events": [
+            "php bin/console doctrine:database:create --if-not-exists",
+            "php bin/console doctrine:migrations:migrate --no-interaction"
         ],
-        "post-update-cmd": [
+        "deployment-events": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "EM\\FoundationBundle\\Command\\DatabaseProvisionCommand::initDatabases",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget",
+            "@non-heroku-deployment-events",
+            "mkdir -p web/bundles/vendor/jquery",
+            "cp vendor/components/jquery/jquery.min.js web/bundles/vendor/jquery/jquery.min.js",
+            "mkdir -p web/bundles/vendor/twitter-bootstrap",
+            "cp -r vendor/twitter/bootstrap/dist/* web/bundles/vendor/twitter-bootstrap"
+        ],
+        "compile": [
+            "rm web/app_dev.php",
+            "php bin/console assets:install",
+            "php bin/console doctrine:schema:drop --full-database --force",
+            "php bin/console doctrine:migrations:migrate --no-interaction"
         ]
     },
     "config": {
-        "platform": {
-            "php": "7.0.1"
-        },
         "bin-dir": "bin/"
     },
     "extra": {
@@ -66,6 +84,22 @@
         "symfony-bin-dir": "bin",
         "symfony-var-dir": "var",
         "symfony-web-dir": "web",
-        "symfony-assets-install": "symlink"
+        "symfony-tests-dir": "tests",
+        "symfony-assets-install": "symlink",
+        "incenteev-parameters": {
+            "file": "app/config/parameters.yml",
+            "dist-file": "app/config/parameters.yml.dist",
+            "env-map": {
+                "secret": "SECRET_SYMFONY_TOKEN",
+                "database_driver": "DATABASE_ENGINE",
+                "database_encoding": "DATABASE_ENCODING",
+                "database_host": "DATABASE_HOST",
+                "database_port": "DATABASE_PORT",
+                "database_name": "DATABASE_NAME",
+                "database_name_test": "DATABASE_NAME_TEST",
+                "database_user": "DATABASE_USER",
+                "database_password": "DATABASE_PASSWORD"
+            }
+        }
     }
 }

@@ -9,16 +9,12 @@
          convertNoticesToExceptions  = "true"
          convertWarningsToExceptions = "true"
          processIsolation            = "false"
-         stopOnFailure               = "false"
+         stopOnFailure               = "true"
          syntaxCheck                 = "false"
          bootstrap                   = "./app/autoload.php"
 >
-    <php>
-        <server name="KERNEL_DIR" value="app/" />
-    </php>
-
     <testsuites>
-        <testsuite name="Project Test Suite">
+        <testsuite name="mandatory test suite">
             <directory>./tests/phpunit/*Bundle/*</directory>
         </testsuite>
     </testsuites>
@@ -28,7 +24,6 @@
             <directory>./src</directory>
             <exclude>
                 <directory>./src/*Bundle/DataFixtures</directory>
-                <directory>./src/*Bundle/DependencyInjection</directory>
                 <directory>./src/*Bundle/Resources</directory>
             </exclude>
         </whitelist>

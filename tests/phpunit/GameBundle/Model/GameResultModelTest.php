@@ -3,64 +3,56 @@
 namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\Entity\GameResult;
-use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Model\GameResultModel;
 use EM\GameBundle\Response\GameResultsResponse;
-use EM\Tests\PHPUnit\Environment\ExtendedTestCase;
-use EM\Tests\PHPUnit\Environment\MockFactory\Entity\GameMockTrait;
-use EM\Tests\PHPUnit\Environment\MockFactory\Entity\GameResultMockTrait;
+use EM\Tests\Environment\IntegrationTestSuite;
+use EM\Tests\Environment\MockFactory;
 
 /**
  * @see GameResultModel
  */
-class GameResultModelTest extends ExtendedTestCase
+class GameResultModelTest extends IntegrationTestSuite
 {
-    use GameMockTrait, GameResultMockTrait;
     /**
      * @var GameResultModel
      */
-    private $gameResultModel;
+    protected static $gameResultModel;
 
-    protected function setUp()
+    public static function setUpBeforeClass()
     {
-        parent::setUp();
-        $this->gameResultModel = $this->getContainer()->get('battleship.game.services.game.result.model');
+        parent::setUpBeforeClass();
+
+        static::$gameResultModel = static::$container->get('battleship_game.service.game_result_model');
     }
 
     /**
-     * @see GameResultModel::prepareResponse()
+     * @see GameResultModel::prepareResponse
      * @test
      */
     public function prepareResponse()
     {
-        $player = static::$om->getRepository('GameBundle:Player')->find(1);
-        for ($i = 0; $i < 21; $i++) {
-            $game = $this->getGameMock(0);
+        $perPage = static::$container->getParameter('battleship_game.setting.game_results_per_page');
 
-            $result = $this->getGameResultMock()
-                ->setPlayer($player);
-            $game->setResult($result);
-            static::$om->persist($game);
+        /** populated 2 full pages of Game Results + 1 result */
+        for ($i = 0; $i < $perPage * 2 + 1; $i++) {
+            $result = MockFactory::getGameResultMock(2, 0);
+            $player = $result->getGame()->getBattlefields()[0]->getPlayer();
+            $result->setPlayer($player);
+
+            static::$om->persist($result->getGame());
         }
-
         static::$om->flush();
 
-        $response = $this->gameResultModel->prepareResponse(1);
-        $this->assertEquals(3, $response->getMeta()[GameResultsResponse::META_INDEX_TOTAL_PAGES]);
-        $this->assertEquals(1, $response->getMeta()[GameResultsResponse::META_INDEX_CURRENT_PAGE]);
-        $this->assertCount(10, $response->getResults());
-        $this->assertContainsOnlyInstancesOf(GameResult::class, $response->getResults());
+        /** should be 3 pages in total */
+        for ($page = 1; $page < 3; $page++) {
+            $response = static::$gameResultModel->buildResponse($page);
 
-        $response = $this->gameResultModel->prepareResponse(2);
-        $this->assertEquals(3, $response->getMeta()[GameResultsResponse::META_INDEX_TOTAL_PAGES]);
-        $this->assertEquals(2, $response->getMeta()[GameResultsResponse::META_INDEX_CURRENT_PAGE]);
-        $this->assertCount(10, $response->getResults());
-        $this->assertContainsOnlyInstancesOf(GameResult::class, $response->getResults());
+            $this->assertEquals($page, $response->getMeta()[GameResultsResponse::META_INDEX_CURRENT_PAGE]);
+            $this->assertEquals(3, $response->getMeta()[GameResultsResponse::META_INDEX_TOTAL_PAGES]);
 
-        $response = $this->gameResultModel->prepareResponse(3);
-        $this->assertEquals(3, $response->getMeta()[GameResultsResponse::META_INDEX_TOTAL_PAGES]);
-        $this->assertEquals(3, $response->getMeta()[GameResultsResponse::META_INDEX_CURRENT_PAGE]);
-        $this->assertCount(1, $response->getResults());
-        $this->assertContainsOnlyInstancesOf(GameResult::class, $response->getResults());
+            $this->assertInternalType('array', $response->getResults());
+            $this->assertContainsOnlyInstancesOf(GameResult::class, $response->getResults());
+            $this->assertLessThanOrEqual($perPage, count($response->getResults()));
+        }
     }
 }

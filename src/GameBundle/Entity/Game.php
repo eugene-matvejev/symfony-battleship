@@ -5,34 +5,42 @@ namespace EM\GameBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use EM\GameBundle\ORM\IdentifiableInterface;
-use EM\GameBundle\ORM\IdentifiableTrait;
+use EM\GameBundle\ORM\AbstractEntity;
 use EM\GameBundle\ORM\TimestampedInterface;
 use EM\GameBundle\ORM\TimestampedTrait;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @since 1.0
  *
- * @ORM\Entity(readOnly=true)
+ * @ORM\Entity()
  * @ORM\Table(name="games")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
+ *
+ * @Serializer\AccessorOrder(order="custom", custom={"id", "timestamp", "result", "battlefields"})
+ * @Serializer\XmlRoot("game")
  */
-class Game implements IdentifiableInterface, TimestampedInterface
+class Game extends AbstractEntity implements TimestampedInterface
 {
-    use IdentifiableTrait, TimestampedTrait;
+    use TimestampedTrait;
     /**
      * @ORM\OneToMany(targetEntity="EM\GameBundle\Entity\Battlefield", mappedBy="game", cascade={"persist"}, fetch="EAGER", indexBy="id")
      * @ORM\JoinColumn(name="id", referencedColumnName="game", nullable=false)
      *
+     * @Serializer\Type("array<EM\GameBundle\Entity\Battlefield>")
+     * @Serializer\XmlList(entry="battlefield")
+     *
      * @var Collection|Battlefield[]
      */
-    private $battlefields;
+    protected $battlefields;
     /**
      * @ORM\OneToOne(targetEntity="EM\GameBundle\Entity\GameResult", mappedBy="game", cascade={"persist"}, fetch="EAGER")
      *
+     * @Serializer\Type("EM\GameBundle\Entity\GameResult")
+     *
      * @var GameResult
      */
-    private $result;
+    protected $result;
 
     public function __construct()
     {
@@ -43,13 +51,6 @@ class Game implements IdentifiableInterface, TimestampedInterface
     {
         $battlefield->setGame($this);
         $this->battlefields->add($battlefield);
-
-        return $this;
-    }
-
-    public function removeBattlefield(Battlefield $battlefield) : self
-    {
-        $this->battlefields->removeElement($battlefield);
 
         return $this;
     }

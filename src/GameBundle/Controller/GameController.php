@@ -2,11 +2,20 @@
 
 namespace EM\GameBundle\Controller;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
+use EM\GameBundle\Exception\CellException;
+use EM\GameBundle\Exception\GameRequestException;
+use EM\GameBundle\Exception\PlayerException;
+use EM\GameBundle\Model\CellModel;
+use EM\GameBundle\Request\GameInitiationRequest;
+use EM\GameBundle\Response\GameInitiationResponse;
+use EM\GameBundle\Response\GameTurnResponse;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * @see   GameControllerTest
+ *
  * @since 1.0
  */
 class GameController extends AbstractAPIController
@@ -16,25 +25,66 @@ class GameController extends AbstractAPIController
         return $this->render('@Game/index.html.twig');
     }
 
+    /**
+     * @ApiDoc(
+     *      section = "Game API",
+     *      description = "Creates a new game from the submitted data",
+     *      input = "EM\GameBundle\Request\GameInitiationRequest",
+     *      responseMap = {
+     *          201 = "EM\GameBundle\Response\GameInitiationResponse"
+     *      }
+     * )
+     *
+     * @param Request $request
+     *
+     * @return Response
+     * @throws \Exception
+     */
     public function initAction(Request $request) : Response
     {
-        if (empty($request->getContent())) {
-            return new JsonResponse();
+        if (!$this->get('battleship_game.validator.game_initiation_request')->validate($request->getContent())) {
+            throw new GameRequestException('request validation failed, please check documentation');
         }
 
-        $game = $this->get('battleship.game.services.game.model')->init($request->getContent());
+        $game = $this->get('battleship_game.service.game_processor')->buildGame(new GameInitiationRequest($request->getContent()));
 
-        return $this->prepareSerializedResponse($game, Response::HTTP_CREATED);
+        $om = $this->getDoctrine()->getManager();
+        $om->persist($game);
+        $om->flush();
+
+        return $this->prepareSerializedResponse(new GameInitiationResponse($game->getBattlefields()), Response::HTTP_CREATED);
     }
 
-    public function turnAction(Request $request) : Response
+    /**
+     * @ApiDoc(
+     *      section = "Game API",
+     *      description = "process game turn by cellId",
+     *      output = "EM\GameBundle\Response\GameTurnResponse"
+     * )
+     *
+     * @param int $cellId
+     *
+     * @return Response
+     * @throws CellException
+     * @throws PlayerException
+     */
+    public function turnAction(int $cellId) : Response
     {
-        if (empty($request->getContent())) {
-            return new JsonResponse();
+        if (null === $cell = $this->getDoctrine()->getRepository('GameBundle:Cell')->find($cellId)) {
+            throw new CellException("cell: {$cellId} doesn't exist");
+        }
+        if ($cell->hasFlag(CellModel::FLAG_DEAD)) {
+            throw new CellException("cell: {$cellId} doesn't already flagged as *DEAD*");
         }
 
-        $data = $this->get('battleship.game.services.game.model')->nextTurn($request->getContent());
+        $game = $this->get('battleship_game.service.game_processor')->processGameTurn($cell);
+        $om = $this->getDoctrine()->getManager();
 
-        return $this->prepareSerializedResponse($data);
+        foreach (CellModel::getChangedCells() as $cell) {
+            $om->persist($cell);
+        }
+        $om->flush();
+
+        return $this->prepareSerializedResponse(new GameTurnResponse($game, CellModel::getChangedCells()));
     }
 }

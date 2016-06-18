@@ -3,18 +3,23 @@
 namespace EM\GameBundle\ORM;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
+ * @see   TimestampedTraitTest
+ *
  * @since 1.0
  */
 trait TimestampedTrait
 {
     /**
-     * @ORM\Column(name="timestamp", type="datetime", nullable=false)
+     * @ORM\Column(name="timestamp", type="datetime")
+     *
+     * @Serializer\Type("DateTime")
      *
      * @var \DateTime
      */
-    private $timestamp;
+    protected $timestamp;
 
     public function getTimestamp() : \DateTime
     {

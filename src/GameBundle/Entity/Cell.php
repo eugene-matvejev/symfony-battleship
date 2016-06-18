@@ -3,8 +3,8 @@
 namespace EM\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use EM\GameBundle\ORM\IdentifiableInterface;
-use EM\GameBundle\ORM\IdentifiableTrait;
+use EM\GameBundle\ORM\AbstractFlaggedEntity;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @since 1.0
@@ -13,36 +13,35 @@ use EM\GameBundle\ORM\IdentifiableTrait;
  * @ORM\Table(
  *      name="cells",
  *      indexes={
- *          @ORM\Index(name="INDEX_CELL_BATTLEFIELD", columns={"battlefield"})
+ *          @ORM\Index(name="INDEX_CELLS_BATTLEFIELD", columns={"battlefield"})
  *      },
  *      uniqueConstraints={
- *          @ORM\UniqueConstraint(name="INDEX_BATTLEFIELD_UNIQUE_CELL", columns={"battlefield", "coordinate"})
+ *          @ORM\UniqueConstraint(name="UNIQUE_CELL_PER_BATTLEFIELD", columns={"battlefield", "coordinate"})
  *      }
  * )
+ *
+ * @Serializer\AccessorOrder(order="custom", custom={"id", "coordinate", "flags"})
+ * @Serializer\XmlRoot("cell")
  */
-class Cell implements IdentifiableInterface
+class Cell extends AbstractFlaggedEntity
 {
-    use IdentifiableTrait;
     /**
      * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\Battlefield", inversedBy="cells", fetch="EAGER")
      * @ORM\JoinColumn(name="battlefield", referencedColumnName="id", nullable=false)
      *
+     * @Serializer\Exclude()
+     *
      * @var Battlefield
      */
-    private $battlefield;
+    protected $battlefield;
     /**
-     * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\CellState", fetch="EAGER")
-     * @ORM\JoinColumn(name="state", referencedColumnName="id", nullable=false)
+     * @ORM\Column(name="coordinate", type="string", length=3)
      *
-     * @var CellState
-     */
-    private $state;
-    /**
-     * @ORM\Column(name="coordinate", type="string", nullable=false, length=3)
+     * @Serializer\Type("string")
      *
      * @var string
      */
-    private $coordinate;
+    protected $coordinate;
 
     public function getBattlefield() : Battlefield
     {
@@ -64,18 +63,6 @@ class Cell implements IdentifiableInterface
     public function setCoordinate(string $coordinate) : self
     {
         $this->coordinate = $coordinate;
-
-        return $this;
-    }
-
-    public function getState() : CellState
-    {
-        return $this->state;
-    }
-
-    public function setState(CellState $state) : self
-    {
-        $this->state = $state;
 
         return $this;
     }
