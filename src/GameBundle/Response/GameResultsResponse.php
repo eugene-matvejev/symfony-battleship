@@ -11,7 +11,7 @@ use JMS\Serializer\Annotation as Serializer;
  * @Serializer\XmlRoot("game-results")
  * @Serializer\AccessorOrder(order="custom", custom={"results","meta"})
  */
-class GameResultsResponse implements GameResponseInterface
+class GameResultsResponse
 {
     const META_INDEX_CURRENT_PAGE = 'currentPage';
     const META_INDEX_TOTAL_PAGES  = 'totalPages';

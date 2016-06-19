@@ -15,7 +15,7 @@ use JMS\Serializer\Annotation as Serializer;
  *
  * @since 5.0
  */
-class GameTurnResponse implements GameResponseInterface
+class GameTurnResponse
 {
     /**
      * @Serializer\Type("array<EM\GameBundle\Entity\Cell>")
