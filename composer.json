@@ -33,7 +33,7 @@
         "doctrine/orm": "^2.5",
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0",
-        "symfony/symfony": "^3.0.6",
+        "symfony/symfony": "^3.1",
         "symfony/monolog-bundle": "^2.8",
         "jms/serializer-bundle": "^1.1",
         "nelmio/api-doc-bundle": "^2.12",
@@ -67,11 +67,11 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget",
             "@non-heroku-deployment-events",
+            "EM\\CssCompiler\\Handler\\ScriptHandler::compileCSS",
             "mkdir -p web/assets/vendor/jquery",
             "cp vendor/components/jquery/jquery.min.js web/assets/vendor/jquery/jquery.min.js",
             "mkdir -p web/assets/vendor/twitter-bootstrap",
-            "cp -r vendor/twitter/bootstrap/dist/* web/assets/vendor/twitter-bootstrap",
-            "EM\\CssCompiler\\Handler\\ScriptHandler::compileCSS"
+            "cp -r vendor/twitter/bootstrap/dist/* web/assets/vendor/twitter-bootstrap"
         ],
         "compile": [
             "rm web/app_dev.php",
