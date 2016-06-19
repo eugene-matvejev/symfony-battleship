@@ -19,12 +19,11 @@ Filter::register('app.coverage', function ($chain) {
             'verbosity' => $this->args()->get('coverage'),
             'driver'    => new Coverage\Driver\Xdebug(),
             'path'      => [
-                __DIR__ . '/src',
+                __DIR__ . '/src'
             ],
             'exclude'   => [
                 __DIR__ . '/src/*/Resources',
-                __DIR__ . '/src/*/DataFixtures',
-
+                __DIR__ . '/src/*/DataFixtures'
             ]
         ]);
         $reporters->add('coverage', $coverage);
