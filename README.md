@@ -75,6 +75,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
 ### PHP-FIG:
  * PSR-2
  * PSR-4
+ * PSR-6
 
 # workflow
  * new functionality is added into master branch only by pull requests from feature branches

@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 abstract class AbstractAPIController extends Controller
 {
     /**
-     * build response using JMS Serializer to serialize content
+     * build serialized response using JMS Serializer to serialize content
      *
      * @param mixed    $data
      * @param int      $status

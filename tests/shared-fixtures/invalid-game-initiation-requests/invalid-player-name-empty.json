@@ -1,7 +1,7 @@
 {
-    "playerName": "Human",
+    "playerName": "",
     "opponents": 1,
-    "size": 100500,
+    "size": 7,
     "coordinates": [
         "A1",
         "C1",
