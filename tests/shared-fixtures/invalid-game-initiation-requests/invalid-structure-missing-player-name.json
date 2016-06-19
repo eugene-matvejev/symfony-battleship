@@ -1,7 +1,6 @@
 {
-    "playerName": "",
     "opponents": 1,
-    "size": 70,
+    "size": 7,
     "coordinates": [
         "A1",
         "C1",

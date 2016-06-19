@@ -36,9 +36,12 @@
         "symfony/symfony": "^3.0.6",
         "symfony/monolog-bundle": "^2.8",
         "jms/serializer-bundle": "^1.1",
+        "nelmio/api-doc-bundle": "^2.12",
+        "eugene-matvejev/css-compiler": "^0.1",
+        "leafo/scssphp-compass": "@dev",
+        "leafo/scssphp": "@dev",
         "components/jquery": "^2.2",
-        "twitter/bootstrap": "^3.3",
-        "nelmio/api-doc-bundle": "^2.12"
+        "twitter/bootstrap": "^3.3"
     },
     "require-dev": {
         "composer/composer": "^1.0",
@@ -64,10 +67,11 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget",
             "@non-heroku-deployment-events",
-            "mkdir -p web/bundles/vendor/jquery",
-            "cp vendor/components/jquery/jquery.min.js web/bundles/vendor/jquery/jquery.min.js",
-            "mkdir -p web/bundles/vendor/twitter-bootstrap",
-            "cp -r vendor/twitter/bootstrap/dist/* web/bundles/vendor/twitter-bootstrap"
+            "mkdir -p web/assets/vendor/jquery",
+            "cp vendor/components/jquery/jquery.min.js web/assets/vendor/jquery/jquery.min.js",
+            "mkdir -p web/assets/vendor/twitter-bootstrap",
+            "cp -r vendor/twitter/bootstrap/dist/* web/assets/vendor/twitter-bootstrap",
+            "EM\\CssCompiler\\Handler\\ScriptHandler::compileCSS"
         ],
         "compile": [
             "rm web/app_dev.php",
@@ -100,6 +104,15 @@
                 "database_user": "DATABASE_USER",
                 "database_password": "DATABASE_PASSWORD"
             }
-        }
+        },
+        "css-compiler": [
+            {
+                "format": "compact",
+                "input": [
+                    "src/GameBundle/Resources/assets/scss/partials"
+                ],
+                "output": "web/assets/css/app.css"
+            }
+        ]
     }
 }

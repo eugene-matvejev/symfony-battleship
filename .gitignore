@@ -4,7 +4,8 @@ bin/
 var/
 !var/cache/.gitkeep
 !var/logs/.gitkeep
-!/var/sessions/.gitkeep
-!/var/SymfonyRequirements.php
+!var/sessions/.gitkeep
+!var/SymfonyRequirements.php
 vendor/
-web/bundles/*
+web/assets/
+web/bundles/
