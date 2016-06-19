@@ -16,14 +16,14 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
 # Battleship Game API
 ##### THIS IS SPARE TIME PROJECT, WORK IN PROGRESS! HIGHLY EXPERIMENTAL!!!
 #### project purpose:
- * try out "cutting edge" technologies and approaches such as PHP7, SF3, ES6 and Continuous Integration/Deployment
+ * try out "cutting edge" technologies and approaches such as PHP7, SF3, ES6 and Continuous Integration|Deployment
  * simulate database loading e.g. up to 500 transactions per request
  * deliver preview about my technical knowledge before the job interview
 
 #### game cheat-code:
-* purpose: make manual testing easier (as the project is far from final stage, I keep polishing it)
- * AI player have only one ship, which is one-cell ship which is located at __B2__ cell
-  * if you will hit __B2__ cell - you will win
+_purpose: easier manual testing_
+* AI player have only one ship, which is one-cell ship which and located at __B2__ cell
+ * if you will hit __B2__ cell - you will win
 
 #### future plans:
  * deliver back-end as RESTful API using SF3, PHP7, Doctrine2 with various database engines support
@@ -54,6 +54,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
  * Twig
  * JavaScript ES6 [ECMAScript6]
  * CSS3
+ * SASS
  * jQuery 2
  * Twitter Bootstrap 3
 
