@@ -21,6 +21,6 @@ ratings:
 
 exclude_paths:
     - "*app/DoctrineMigrations/*"
-    - "*/public/vendor/*"
-    - "*/vendor/*"
-    - "*/web/*"
+    - "*public/vendor/*"
+    - "*vendor/*"
+    - "*web/*"
