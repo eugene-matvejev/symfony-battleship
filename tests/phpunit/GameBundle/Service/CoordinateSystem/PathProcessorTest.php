@@ -16,12 +16,12 @@ class PathProcessorTest extends IntegrationTestSuite
     /**
      * primary paths are: UP, DOWN, LEFT, RIGHT
      *
-     * @see PathProcessor::PRIMARY_PATHS
+     * @see PathProcessor::$primaryPaths
      * @test
      */
     public function primaryPaths()
     {
-        $this->assertCount(4, PathProcessor::PRIMARY_PATHS);
+        $this->assertCount(4, PathProcessor::$primaryPaths);
 
         $expectedPaths = [
             PathProcessor::PATH_LEFT,
@@ -31,19 +31,19 @@ class PathProcessorTest extends IntegrationTestSuite
         ];
 
         foreach ($expectedPaths as $path) {
-            $this->assertContains($path, PathProcessor::PRIMARY_PATHS);
+            $this->assertContains($path, PathProcessor::$primaryPaths);
         }
     }
 
     /**
      * extended paths list contains all paths from @see PathProcessor::PRIMARY_PATHS and 4 additional: (LEFT|RIGHT)-(UP|DOWN)
      *
-     * @see PathProcessor::EXTENDED_PATHS
+     * @see PathProcessor::$extendedPaths
      * @test
      */
     public function extendedPaths()
     {
-        $this->assertCount(8, PathProcessor::EXTENDED_PATHS);
+        $this->assertCount(8, PathProcessor::$extendedPaths);
 
         $expectedPaths = [
             PathProcessor::PATH_LEFT,
@@ -57,7 +57,7 @@ class PathProcessorTest extends IntegrationTestSuite
         ];
 
         foreach ($expectedPaths as $path) {
-            $this->assertContains($path, PathProcessor::EXTENDED_PATHS);
+            $this->assertContains($path, PathProcessor::$extendedPaths);
         }
     }
 
@@ -111,7 +111,7 @@ class PathProcessorTest extends IntegrationTestSuite
             PathProcessor::PATH_RIGHT      => [PathProcessor::PATH_LEFT],
             PathProcessor::PATH_UP         => [PathProcessor::PATH_DOWN],
             PathProcessor::PATH_DOWN       => [PathProcessor::PATH_UP],
-            PathProcessor::PATH_NONE       => PathProcessor::EXTENDED_PATHS,
+            PathProcessor::PATH_NONE       => PathProcessor::$extendedPaths,
             PathProcessor::PATH_LEFT_UP    => [PathProcessor::PATH_RIGHT, PathProcessor::PATH_DOWN],
             PathProcessor::PATH_LEFT_DOWN  => [PathProcessor::PATH_RIGHT, PathProcessor::PATH_UP],
             PathProcessor::PATH_RIGHT_UP   => [PathProcessor::PATH_LEFT, PathProcessor::PATH_DOWN],
