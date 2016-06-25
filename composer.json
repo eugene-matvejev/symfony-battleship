@@ -62,15 +62,15 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget",
-            "@prepare-front-end-assets",
-            "@optional-scripts"
+            "@prepare-frontend-assets",
+            "@prepare-database"
         ],
-        "optional-scripts": [
+        "prepare-database": [
             "php bin/console doctrine:database:create --if-not-exists",
             "php bin/console doctrine:migrations:migrate --no-interaction"
         ],
-        "prepare-front-end-assets": [
-            "EM\\CssCompiler\\Handler\\ScriptHandler::compileCSS",
+        "prepare-frontend-assets": [
+            "EM\\CssCompiler\\ScriptHandler::generateCSS",
             "mkdir -p web/assets/vendor/jquery",
             "cp vendor/components/jquery/jquery.min.js web/assets/vendor/jquery/jquery.min.js",
             "mkdir -p web/assets/vendor/twitter-bootstrap",
