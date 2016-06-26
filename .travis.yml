@@ -14,6 +14,7 @@ services:
 
 before_script:
     - "cp app/config/parameters.yml.dist app/config/parameters.yml"
+    - "sh .travis.install.sh" #Try to fix HHVM build
     - "composer install --no-progress --no-interaction --ignore-platform-reqs"
 
 script:
