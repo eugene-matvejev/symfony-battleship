@@ -5,7 +5,6 @@ php:
     - "hhvm-3.14"
         sudo: required
         dist: trusty
-        group: edge
 
 services:
     - "mysql"
