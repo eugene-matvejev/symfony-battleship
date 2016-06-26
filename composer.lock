@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ceb70901b7b09d6de225f81d770cf96a",
-    "content-hash": "1356759d1ff8b91f026416aa8c631151",
+    "hash": "e499d285895749a8f8480cbac27d3274",
+    "content-hash": "7f6587b0a897a33287196cecf49cc218",
     "packages": [
         {
             "name": "components/jquery",
@@ -948,34 +948,74 @@
             "time": "2016-01-05 21:34:58"
         },
         {
-            "name": "eugene-matvejev/css-compiler",
-            "version": "0.1.2",
+            "name": "eugene-matvejev/compass",
+            "version": "0.1.6",
             "source": {
                 "type": "git",
-                "url": "https://github.com/learn-symfony/css-compiler.git",
-                "reference": "45f3a7b9cb5da5c09b42b26ffed36a4e1013cf5f"
+                "url": "https://github.com/learn-symfony/compass.git",
+                "reference": "5bbf95921d2fe687b91badd3c7fa372e17940e98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/learn-symfony/css-compiler/zipball/45f3a7b9cb5da5c09b42b26ffed36a4e1013cf5f",
-                "reference": "45f3a7b9cb5da5c09b42b26ffed36a4e1013cf5f",
+                "url": "https://api.github.com/repos/learn-symfony/compass/zipball/5bbf95921d2fe687b91badd3c7fa372e17940e98",
+                "reference": "5bbf95921d2fe687b91badd3c7fa372e17940e98",
                 "shasum": ""
             },
             "require": {
+                "leafo/scssphp": "^0.6"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "compass.inc.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Leaf Corcoran",
+                    "email": "leafot@gmail.com",
+                    "homepage": "http://leafo.net"
+                },
+                {
+                    "name": "Eugene Matvejev",
+                    "email": "eugene.matvejev@gmail.com"
+                }
+            ],
+            "description": "Compass for scssphp",
+            "time": "2016-06-23 20:04:34"
+        },
+        {
+            "name": "eugene-matvejev/css-compiler",
+            "version": "0.1.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/learn-symfony/css-compiler.git",
+                "reference": "ff67587881a114a9a2cc0d161c9712b5e6ebf97c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/learn-symfony/css-compiler/zipball/ff67587881a114a9a2cc0d161c9712b5e6ebf97c",
+                "reference": "ff67587881a114a9a2cc0d161c9712b5e6ebf97c",
+                "shasum": ""
+            },
+            "require": {
+                "eugene-matvejev/compass": "^0.1",
                 "leafo/lessphp": "^0.5",
-                "leafo/scssphp-compass": "dev-master",
-                "php": ">= 5.5.9"
+                "php": ">= 5.5.9 || 7.0.0 - 7.0.4 || >= 7.0.6"
             },
             "require-dev": {
                 "composer/composer": "^1.1",
-                "phpunit/phpunit": "^5.4"
+                "phpunit/phpunit": "^4.8 || ^5.3"
             },
             "type": "lib",
             "autoload": {
                 "psr-4": {
-                    "EM\\CssCompiler\\Handler\\": "",
                     "EM\\CssCompiler\\": "src/"
-                }
+                },
+                "classmap": [
+                    "ScriptHandler.php"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -988,7 +1028,7 @@
                 }
             ],
             "description": "compiles SASS and LESS assets on composer's callback",
-            "time": "2016-06-19 07:32:12"
+            "time": "2016-06-25 20:00:51"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -1364,16 +1404,16 @@
         },
         {
             "name": "leafo/scssphp",
-            "version": "dev-master",
+            "version": "v0.6.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/leafo/scssphp.git",
-                "reference": "1a8b16a4244fd155aaa4837f117a141c8789a030"
+                "reference": "0649d38dfef6808be1a89040a3312e8bda0b3aed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/leafo/scssphp/zipball/1a8b16a4244fd155aaa4837f117a141c8789a030",
-                "reference": "1a8b16a4244fd155aaa4837f117a141c8789a030",
+                "url": "https://api.github.com/repos/leafo/scssphp/zipball/0649d38dfef6808be1a89040a3312e8bda0b3aed",
+                "reference": "0649d38dfef6808be1a89040a3312e8bda0b3aed",
                 "shasum": ""
             },
             "require": {
@@ -1413,42 +1453,7 @@
                 "scss",
                 "stylesheet"
             ],
-            "time": "2016-06-16 20:04:32"
-        },
-        {
-            "name": "leafo/scssphp-compass",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/leafo/scssphp-compass.git",
-                "reference": "f1631ddb17731326863954d99b39694f0bbed6ec"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/leafo/scssphp-compass/zipball/f1631ddb17731326863954d99b39694f0bbed6ec",
-                "reference": "f1631ddb17731326863954d99b39694f0bbed6ec",
-                "shasum": ""
-            },
-            "require": {
-                "leafo/scssphp": "dev-master"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "compass.inc.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "authors": [
-                {
-                    "name": "Leaf Corcoran",
-                    "email": "leafot@gmail.com",
-                    "homepage": "http://leafo.net"
-                }
-            ],
-            "description": "Compass for scssphp",
-            "homepage": "http://leafo.net/scssphp/",
-            "time": "2012-08-02 02:04:32"
+            "time": "2016-06-20 15:25:08"
         },
         {
             "name": "michelf/php-markdown",
@@ -2009,16 +2014,16 @@
         },
         {
             "name": "sensio/distribution-bundle",
-            "version": "v5.0.6",
+            "version": "v5.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioDistributionBundle.git",
-                "reference": "ffe306d09c1f2bad721237f63b2169d1b78253d0"
+                "reference": "a9c4723cbdbc6cf7fbfdfde3c639cb1943f0293a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/ffe306d09c1f2bad721237f63b2169d1b78253d0",
-                "reference": "ffe306d09c1f2bad721237f63b2169d1b78253d0",
+                "url": "https://api.github.com/repos/sensiolabs/SensioDistributionBundle/zipball/a9c4723cbdbc6cf7fbfdfde3c639cb1943f0293a",
+                "reference": "a9c4723cbdbc6cf7fbfdfde3c639cb1943f0293a",
                 "shasum": ""
             },
             "require": {
@@ -2057,7 +2062,7 @@
                 "configuration",
                 "distribution"
             ],
-            "time": "2016-04-25 20:50:31"
+            "time": "2016-06-23 16:11:33"
         },
         {
             "name": "sensio/framework-extra-bundle",
@@ -3409,16 +3414,16 @@
         },
         {
             "name": "doctrine/data-fixtures",
-            "version": "v1.2.0",
+            "version": "v1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/data-fixtures.git",
-                "reference": "1bd7eb8720cb600a9cf0a798698fbf4fa2bec9b8"
+                "reference": "b3cae5efef97191a08d53d733260f7eb667c16e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/data-fixtures/zipball/1bd7eb8720cb600a9cf0a798698fbf4fa2bec9b8",
-                "reference": "1bd7eb8720cb600a9cf0a798698fbf4fa2bec9b8",
+                "url": "https://api.github.com/repos/doctrine/data-fixtures/zipball/b3cae5efef97191a08d53d733260f7eb667c16e4",
+                "reference": "b3cae5efef97191a08d53d733260f7eb667c16e4",
                 "shasum": ""
             },
             "require": {
@@ -3441,7 +3446,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1.x-dev"
+                    "dev-master": "1.3.x-dev"
                 }
             },
             "autoload": {
@@ -3464,7 +3469,7 @@
             "keywords": [
                 "database"
             ],
-            "time": "2016-06-19 09:43:21"
+            "time": "2016-06-20 18:08:26"
         },
         {
             "name": "doctrine/doctrine-fixtures-bundle",
@@ -5125,10 +5130,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "leafo/scssphp-compass": 20,
-        "leafo/scssphp": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
