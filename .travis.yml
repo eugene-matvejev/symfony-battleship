@@ -1,20 +1,14 @@
 language: "php"
 
-matrix:
-    include:
-        - php: "hhvm-3.12"
-          sudo: required
-          dist: trusty
-          group: edge
-        - php: "7.0"
-    fast_finish: true
+php:
+    - "7.0"
+    - "hhvm"
 
 services:
     - "mysql"
 
 before_script:
     - "cp app/config/parameters.yml.dist app/config/parameters.yml"
-    - "sh .travis.install.sh" #Try to fix HHVM build
     - "composer install --no-progress --no-interaction --ignore-platform-reqs"
 
 script:
