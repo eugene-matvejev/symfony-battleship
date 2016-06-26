@@ -2,16 +2,13 @@ language: "php"
 
 php:
     - "7.0"
-    - "hhvm-3.14"
-        sudo: required
-        dist: trusty
 
 services:
     - "mysql"
 
 before_script:
     - "cp app/config/parameters.yml.dist app/config/parameters.yml"
-    - "composer install --no-progress --no-interaction --ignore-platform-reqs"
+    - "composer install --no-progress --no-interaction"
 
 script:
     - "php bin/phpunit -c phpunit.xml --colors=always --verbose --coverage-clover=coverage.xml"
