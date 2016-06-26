@@ -14,7 +14,7 @@ use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
  */
 class AIStrategyService
 {
-    const STRATEGY_MAP = [
+    public static $strategyMap = [
         PathProcessor::PATH_LEFT  => AIStrategyProcessor::STRATEGY_HORIZONTAL,
         PathProcessor::PATH_RIGHT => AIStrategyProcessor::STRATEGY_HORIZONTAL,
         PathProcessor::PATH_UP    => AIStrategyProcessor::STRATEGY_VERTICAL,
@@ -60,7 +60,7 @@ class AIStrategyService
         $processor = new PathProcessor($cell->getCoordinate());
 
         $battlefield = $cell->getBattlefield();
-        foreach (static::STRATEGY_MAP as $way => $strategy) {
+        foreach (static::$strategyMap as $way => $strategy) {
             $processor->setPath($way);
 
             /** @var Cell $cell */

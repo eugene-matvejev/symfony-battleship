@@ -16,36 +16,28 @@ class PathProcessorTest extends IntegrationTestSuite
     /**
      * primary paths are: UP, DOWN, LEFT, RIGHT
      *
-     * @see PathProcessor::PRIMARY_PATHS
+     * @see PathProcessor::$primaryPaths
      * @test
      */
     public function primaryPaths()
     {
-        $this->assertCount(4, PathProcessor::PRIMARY_PATHS);
-
-        $expectedPaths = [
+        $this->iteratePaths(PathProcessor::$primaryPaths, [
             PathProcessor::PATH_LEFT,
             PathProcessor::PATH_RIGHT,
             PathProcessor::PATH_UP,
             PathProcessor::PATH_DOWN
-        ];
-
-        foreach ($expectedPaths as $path) {
-            $this->assertContains($path, PathProcessor::PRIMARY_PATHS);
-        }
+        ]);
     }
 
     /**
-     * extended paths list contains all paths from @see PathProcessor::PRIMARY_PATHS and 4 additional: (LEFT|RIGHT)-(UP|DOWN)
+     * extended paths list contains all paths from @see PathProcessor::$primaryPaths and 4 additional: (LEFT|RIGHT)-(UP|DOWN)
      *
-     * @see PathProcessor::EXTENDED_PATHS
+     * @see PathProcessor::$extendedPaths
      * @test
      */
     public function extendedPaths()
     {
-        $this->assertCount(8, PathProcessor::EXTENDED_PATHS);
-
-        $expectedPaths = [
+        $this->iteratePaths(PathProcessor::$extendedPaths, [
             PathProcessor::PATH_LEFT,
             PathProcessor::PATH_RIGHT,
             PathProcessor::PATH_UP,
@@ -54,10 +46,15 @@ class PathProcessorTest extends IntegrationTestSuite
             PathProcessor::PATH_LEFT_DOWN,
             PathProcessor::PATH_RIGHT_UP,
             PathProcessor::PATH_RIGHT_DOWN
-        ];
+        ]);
+    }
+
+    private function iteratePaths(array $actualPaths, array $expectedPaths)
+    {
+        $this->assertCount(count($expectedPaths), $actualPaths);
 
         foreach ($expectedPaths as $path) {
-            $this->assertContains($path, PathProcessor::EXTENDED_PATHS);
+            $this->assertContains($path, $actualPaths);
         }
     }
 
@@ -111,7 +108,7 @@ class PathProcessorTest extends IntegrationTestSuite
             PathProcessor::PATH_RIGHT      => [PathProcessor::PATH_LEFT],
             PathProcessor::PATH_UP         => [PathProcessor::PATH_DOWN],
             PathProcessor::PATH_DOWN       => [PathProcessor::PATH_UP],
-            PathProcessor::PATH_NONE       => PathProcessor::EXTENDED_PATHS,
+            PathProcessor::PATH_NONE       => PathProcessor::$extendedPaths,
             PathProcessor::PATH_LEFT_UP    => [PathProcessor::PATH_RIGHT, PathProcessor::PATH_DOWN],
             PathProcessor::PATH_LEFT_DOWN  => [PathProcessor::PATH_RIGHT, PathProcessor::PATH_UP],
             PathProcessor::PATH_RIGHT_UP   => [PathProcessor::PATH_LEFT, PathProcessor::PATH_DOWN],
@@ -259,7 +256,7 @@ class PathProcessorTest extends IntegrationTestSuite
      */
     public function getNextCoordinate()
     {
-        $expectedNextCoordinatesByPath = [
+        $expectedCoordinateByPath = [
             PathProcessor::PATH_LEFT       => 'C4',
             PathProcessor::PATH_RIGHT      => 'E4',
             PathProcessor::PATH_UP         => 'D3',
@@ -272,7 +269,7 @@ class PathProcessorTest extends IntegrationTestSuite
         ];
 
         $processor = new PathProcessor('D4');
-        foreach ($expectedNextCoordinatesByPath as $path => $expectedCoordinate) {
+        foreach ($expectedCoordinateByPath as $path => $expectedCoordinate) {
             $processor->setPath($path);
 
             $this->assertEquals($expectedCoordinate, $processor->getNextCoordinate());
