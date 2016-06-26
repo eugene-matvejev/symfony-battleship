@@ -23,13 +23,13 @@ class PathProcessor
     const PATH_LEFT_DOWN  = self::PATH_LEFT | self::PATH_DOWN;
     const PATH_RIGHT_UP   = self::PATH_RIGHT | self::PATH_UP;
     const PATH_RIGHT_DOWN = self::PATH_RIGHT | self::PATH_DOWN;
-    const PRIMARY_PATHS   = [
+    public static $primaryPaths = [
         self::PATH_LEFT,
         self::PATH_RIGHT,
         self::PATH_UP,
         self::PATH_DOWN
     ];
-    const EXTENDED_PATHS  = [
+    public static $extendedPaths = [
         self::PATH_LEFT,
         self::PATH_RIGHT,
         self::PATH_UP,
@@ -148,7 +148,7 @@ class PathProcessor
     public function getAdjacentCells(Battlefield $battlefield, int $levels = 1, int $onlyFlag = CellModel::FLAG_NONE, int $excludeFlag = CellModel::FLAG_NONE) : array
     {
         $cells = [];
-        foreach (static::EXTENDED_PATHS as $path) {
+        foreach (static::$extendedPaths as $path) {
             $this->setPath($path);
 
             for ($i = 0; $i < $levels; $i++) {
