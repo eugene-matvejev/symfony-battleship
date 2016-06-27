@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e499d285895749a8f8480cbac27d3274",
-    "content-hash": "7f6587b0a897a33287196cecf49cc218",
+    "hash": "9a66c9b7f2d57dc55468fc46b0ae63d8",
+    "content-hash": "aa1a80759d57a8386e8cfa1bb4460e56",
     "packages": [
         {
             "name": "components/jquery",
@@ -987,16 +987,16 @@
         },
         {
             "name": "eugene-matvejev/css-compiler",
-            "version": "0.1.7",
+            "version": "0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/learn-symfony/css-compiler.git",
-                "reference": "ff67587881a114a9a2cc0d161c9712b5e6ebf97c"
+                "reference": "5204cbd3384aad6160ce1aceb968b58feb058755"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/learn-symfony/css-compiler/zipball/ff67587881a114a9a2cc0d161c9712b5e6ebf97c",
-                "reference": "ff67587881a114a9a2cc0d161c9712b5e6ebf97c",
+                "url": "https://api.github.com/repos/learn-symfony/css-compiler/zipball/5204cbd3384aad6160ce1aceb968b58feb058755",
+                "reference": "5204cbd3384aad6160ce1aceb968b58feb058755",
                 "shasum": ""
             },
             "require": {
@@ -1028,7 +1028,7 @@
                 }
             ],
             "description": "compiles SASS and LESS assets on composer's callback",
-            "time": "2016-06-25 20:00:51"
+            "time": "2016-06-27 09:32:47"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -3163,16 +3163,16 @@
         },
         {
             "name": "composer/composer",
-            "version": "1.1.2",
+            "version": "1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "b2cf67b1a575d7e648c742be2454339232ef32b2"
+                "reference": "30ab6f1c1753267d181839142fafe022313c3c9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/b2cf67b1a575d7e648c742be2454339232ef32b2",
-                "reference": "b2cf67b1a575d7e648c742be2454339232ef32b2",
+                "url": "https://api.github.com/repos/composer/composer/zipball/30ab6f1c1753267d181839142fafe022313c3c9a",
+                "reference": "30ab6f1c1753267d181839142fafe022313c3c9a",
                 "shasum": ""
             },
             "require": {
@@ -3236,7 +3236,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2016-05-31 18:48:12"
+            "time": "2016-06-26 14:42:08"
         },
         {
             "name": "composer/semver",
