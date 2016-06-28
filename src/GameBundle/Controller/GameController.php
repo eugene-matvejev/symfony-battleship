@@ -3,7 +3,7 @@
 namespace EM\GameBundle\Controller;
 
 use EM\GameBundle\Exception\CellException;
-use EM\GameBundle\Exception\PlayerException;
+use EM\GameBundle\Exception\GameProcessorException;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Request\GameInitiationRequest;
 use EM\GameBundle\Response\GameInitiationResponse;
@@ -66,7 +66,7 @@ class GameController extends AbstractAPIController
      *
      * @return Response
      * @throws CellException
-     * @throws PlayerException
+     * @throws GameProcessorException
      */
     public function turnAction(int $cellId) : Response
     {
