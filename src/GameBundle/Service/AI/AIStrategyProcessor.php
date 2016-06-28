@@ -73,16 +73,16 @@ class AIStrategyProcessor
     {
         $processor = (new PathProcessor($coordinate))->setPath($path);
 
-        /** @var Cell $cell */
         while (null !== $cell = $battlefield->getCellByCoordinate($processor->getNextCoordinate())) {
-            /** if it is dead water - terminate processing */
-            if (!$cell->hasFlag(CellModel::FLAG_SHIP) && $cell->hasFlag(CellModel::FLAG_DEAD)) {
+            if ($cell->hasFlag(CellModel::FLAG_DEAD)) {
+                if ($cell->hasFlag(CellModel::FLAG_SHIP)) {
+                    continue;
+                }
+                /** if it is not dead ship - terminate processing */
                 throw new CellException("cell: {$cell->getId()} already dead and is not ship");
             }
-            /** if it not marked as dead return it */
-            if (!$cell->hasFlag(CellModel::FLAG_DEAD)) {
-                return $cell;
-            }
+
+            return $cell;
         }
 
         throw new CellException("unable to find cell using path: {$path} from coordinate: {$coordinate}");
