@@ -5,8 +5,6 @@ namespace EM\Tests\PHPUnit\GameBundle\Model;
 use EM\GameBundle\Entity\GameResult;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Model\PlayerModel;
-use EM\GameBundle\Request\GameInitiationRequest;
 use EM\GameBundle\Service\GameSystem\GameProcessor;
 use EM\Tests\Environment\IntegrationTestSuite;
 use EM\Tests\Environment\MockFactory;
@@ -26,60 +24,6 @@ class GameProcessorTest extends IntegrationTestSuite
         parent::setUpBeforeClass();
 
         static::$gameProcessor = static::$container->get('battleship_game.service.game_processor');
-    }
-
-    /**
-     * should:
-     *      generate X battlefields of Y size
-     *      assign AI controlled player to the generated battlefield
-     *      initiate ship cells for the generated battlefield
-     *      attach generated battlefield to the Game
-     *
-     * @see GameProcessor::attachAIBattlefields
-     * @test
-     */
-    public function attachAIBattlefields()
-    {
-        $game = MockFactory::getGameMock(0, 0);
-
-        $this->invokeMethod(static::$gameProcessor, 'attachAIBattlefields', [$game, 2, 7]);
-        $this->assertCount(2, $game->getBattlefields());
-
-        foreach ($game->getBattlefields() as $battlefield) {
-            $this->assertCount(49, $battlefield->getCells());
-
-            $this->assertTrue(PlayerModel::isAIControlled($battlefield->getPlayer()));
-            $this->assertTrue(BattlefieldModel::hasUnfinishedShips($battlefield));
-
-            foreach ($battlefield->getCells() as $coordinate => $cell) {
-                /** all battlefields associated with AI players currently have hardcoded ship into B2 cell */
-                $expectedFlag = ('B2' === $coordinate) ? CellModel::FLAG_SHIP : CellModel::FLAG_NONE;
-                $this->assertEquals($expectedFlag, $cell->getFlags());
-            }
-        }
-    }
-
-    /**
-     * should:
-     *      initiate game for player and opponent(s) with specific size
-     *      each battlefield should have ships
-     *      should have at least one AI controlled opponent
-     *
-     * @see GameProcessor::buildGame
-     * @test
-     */
-    public function buildGame()
-    {
-        $request = new GameInitiationRequest(static::getSharedFixtureContent('init-game-request-2-players-7x7.json'));
-
-        $game = static::$gameProcessor->buildGame($request);
-
-        $this->assertCount(2, $game->getBattlefields());
-        foreach ($game->getBattlefields() as $battlefield) {
-            $this->assertCount(49, $battlefield->getCells());
-
-            $this->assertTrue(BattlefieldModel::hasUnfinishedShips($battlefield));
-        }
     }
 
     /**
