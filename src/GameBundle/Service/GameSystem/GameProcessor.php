@@ -9,6 +9,7 @@ use EM\GameBundle\Entity\GameResult;
 use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Exception\CellException;
 use EM\GameBundle\Exception\GameException;
+use EM\GameBundle\Exception\GameProcessorException;
 use EM\GameBundle\Exception\PlayerException;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
@@ -38,7 +39,7 @@ class GameProcessor
         $this->playerModel = $playerModel;
     }
 
-    private function attachAIBattlefields(Game $game, int $amount, int $size)
+    protected function attachAIBattlefields(Game $game, int $amount, int $size)
     {
         for ($i = 0; $i < $amount; $i++) {
             $player = $this->playerModel->createOnRequestAIControlled("CPU {$i}");
@@ -72,27 +73,26 @@ class GameProcessor
      * @param Cell $cell
      *
      * @return Game
-     * @throws CellException
-     * @throws GameException
-     * @throws PlayerException
+     * @throws GameProcessorException
      */
     public function processGameTurn(Cell $cell) : Game
     {
         $game = $cell->getBattlefield()->getGame();
 
         if (null !== $game->getResult()) {
-            throw new GameException("game: {$game->getId()} already has result");
+            throw new GameProcessorException("game: {$game->getId()} already has result");
         }
 
-        foreach ($game->getBattlefields() as $turnOwnerBattlefield) {
-            foreach ($game->getBattlefields() as $targetBattlefield) {
-                /** do not process turn on itself */
-                if ($turnOwnerBattlefield === $targetBattlefield) {
-                    continue;
-                }
+        foreach ($game->getBattlefields() as $attackerBattlefield) {
+            $attacker = $attackerBattlefield->getPlayer();
 
-                if ($this->processPlayerTurnOnBattlefield($targetBattlefield, $turnOwnerBattlefield->getPlayer(), $cell)) {
-                    return $game;
+            foreach ($game->getBattlefields() as $battlefield) {
+                try {
+                    if ($this->processPlayerTurnOnBattlefield($battlefield, $attacker, $cell)) {
+                        return $game;
+                    }
+                } catch (GameProcessorException $e) {
+                    continue;
                 }
             }
         }
@@ -100,8 +100,21 @@ class GameProcessor
         return $game;
     }
 
+    /**
+     * @param Battlefield $battlefield
+     * @param Player      $player
+     * @param Cell        $cell
+     *
+     * @return bool
+     * @throws GameProcessorException
+     */
     protected function processPlayerTurnOnBattlefield(Battlefield $battlefield, Player $player, Cell $cell) : bool
     {
+        /** do not process turn on itself */
+        if ($battlefield->getPlayer() === $player) {
+            throw new GameProcessorException('player attacked itself');
+        }
+
         $cell = $this->processPlayerTurn($battlefield, $cell);
 
         if (CellModel::isShipDead($cell)) {
@@ -127,7 +140,7 @@ class GameProcessor
      *
      * @return Cell
      */
-    private function processPlayerTurn(Battlefield $battlefield, Cell $cell) : Cell
+    protected function processPlayerTurn(Battlefield $battlefield, Cell $cell) : Cell
     {
         return PlayerModel::isAIControlled($battlefield->getPlayer())
             ? CellModel::switchPhase($cell)
