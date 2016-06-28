@@ -9,12 +9,16 @@ services:
         arguments:
             - "@battleship_game.repository.game_result"
             - "%battleship_game.setting.limits.per_page.game_results%"
+    # Game Builders
+    battleship_game.service.game_builder:
+        class: EM\GameBundle\Service\GameSystem\GameBuilder
+        arguments:
+            - "@battleship_game.service.player_model"
     # Game Processors
     battleship_game.service.game_processor:
         class: EM\GameBundle\Service\GameSystem\GameProcessor
         arguments:
             - "@battleship_game.service.ai_core"
-            - "@battleship_game.service.player_model"
     # AI
     battleship_game.service.ai_core:
         class: EM\GameBundle\Service\AI\AIService

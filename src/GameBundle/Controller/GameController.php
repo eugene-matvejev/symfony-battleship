@@ -46,7 +46,7 @@ class GameController extends AbstractAPIController
             throw new InvalidArgumentException('request validation failed, please check documentation');
         }
 
-        $game = $this->get('battleship_game.service.game_processor')->buildGame(new GameInitiationRequest($request->getContent()));
+        $game = $this->get('battleship_game.service.game_builder')->buildGame(new GameInitiationRequest($request->getContent()));
 
         $om = $this->getDoctrine()->getManager();
         $om->persist($game);
