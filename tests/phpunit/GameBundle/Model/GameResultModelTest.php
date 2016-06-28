@@ -31,7 +31,7 @@ class GameResultModelTest extends IntegrationTestSuite
      */
     public function prepareResponse()
     {
-        $perPage = static::$container->getParameter('battleship_game.setting.game_results_per_page');
+        $perPage = static::$container->getParameter('battleship_game.setting.limits.per_page.game_results');
 
         /** populated 2 full pages of Game Results + 1 result */
         for ($i = 0; $i < $perPage * 2 + 1; $i++) {
