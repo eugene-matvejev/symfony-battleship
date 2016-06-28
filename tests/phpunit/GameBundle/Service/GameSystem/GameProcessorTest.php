@@ -142,7 +142,7 @@ class GameProcessorTest extends IntegrationTestSuite
      * @see GameProcessor::processGameTurn
      * @test
      *
-     * @expectedException \EM\GameBundle\Exception\GameException
+     * @expectedException \EM\GameBundle\Exception\GameProcessorException
      */
     public function processGameTurnOnFinishedGame()
     {
