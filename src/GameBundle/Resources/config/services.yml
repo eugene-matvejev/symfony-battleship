@@ -8,7 +8,7 @@ services:
         class: EM\GameBundle\Model\GameResultModel
         arguments:
             - "@battleship_game.repository.game_result"
-            - "%battleship_game.setting.game_results_per_page%"
+            - "%battleship_game.setting.limits.per_page.game_results%"
     # Game Processors
     battleship_game.service.game_processor:
         class: EM\GameBundle\Service\GameSystem\GameProcessor
@@ -41,7 +41,7 @@ services:
     battleship_game.validator.game_initiation_request:
         class: EM\GameBundle\Validator\GameInitiationRequestValidator
         arguments:
-            - "%battleship_game.setting.min_game_size%"
-            - "%battleship_game.setting.max_game_size%"
-            - "%battleship_game.setting.min_opponents_count%"
-            - "%battleship_game.setting.max_opponents_count%"
+            - "%battleship_game.setting.game_size.min%"
+            - "%battleship_game.setting.game_size.max%"
+            - "%battleship_game.setting.opponents_count.min%"
+            - "%battleship_game.setting.opponents_count.max%"
