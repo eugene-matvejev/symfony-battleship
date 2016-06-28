@@ -2,6 +2,7 @@
 
 namespace EM\Tests\PHPUnit\GameBundle\Service\AI;
 
+use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIStrategyProcessor;
@@ -27,8 +28,74 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
     }
 
     /**
-     * @see AIStrategyProcessor::processPaths
+     * @see AIStrategyProcessor::processPath
      * @test
+     *
+     * @expectedException \EM\GameBundle\Exception\CellException
+     */
+    public function processPathExpectedExceptionOnNotExistingCell()
+    {
+        $battlefield = MockFactory::getBattlefieldMock();
+
+        $this->invokeProcessPathMethod($battlefield, PathProcessor::PATH_UP, 'A1');
+    }
+
+    /**
+     * @see AIStrategyProcessor::processPath
+     * @test
+     *
+     * @expectedException \EM\GameBundle\Exception\CellException
+     */
+    public function processPathExpectedExceptionOnDeadNonShipCell()
+    {
+        $battlefield = MockFactory::getBattlefieldMock();
+        $battlefield->getCellByCoordinate('A2')->setFlags(CellModel::FLAG_SKIP);
+
+        $this->invokeProcessPathMethod($battlefield, PathProcessor::PATH_DOWN, 'A1');
+    }
+
+    /**
+     * @see AIStrategyProcessor::processPath
+     * @test
+     */
+    public function processPathOnValidCell()
+    {
+        $battlefield = MockFactory::getBattlefieldMock();
+        $battlefield->getCellByCoordinate('A2')->setFlags(CellModel::FLAG_SHIP);
+
+        /** @var Cell $cell */
+        $cell = $this->invokeProcessPathMethod($battlefield, PathProcessor::PATH_DOWN, 'A1');
+        $this->assertEquals($cell->getCoordinate(), 'A2');
+    }
+
+    /**
+     * @see AIStrategyProcessor::processPath
+     * @test
+     */
+    public function processPathOnValidDeadShipCell()
+    {
+        $battlefield = MockFactory::getBattlefieldMock();
+        $battlefield->getCellByCoordinate('A2')->setFlags(CellModel::FLAG_DEAD_SHIP);
+        $battlefield->getCellByCoordinate('A3')->setFlags(CellModel::FLAG_SHIP);
+
+        /** @var Cell $cell */
+        $cell = $this->invokeProcessPathMethod($battlefield, PathProcessor::PATH_DOWN, 'A1');
+        $this->assertEquals($cell->getCoordinate(), 'A3');
+    }
+
+    private function invokeProcessPathMethod(Battlefield $battlefield, int $path, string $coordinate) : Cell
+    {
+        return $this->invokeMethod(static::$strategyProcessor, 'processPath', [$battlefield, $path, $coordinate]);
+    }
+
+    /**
+     * @see     AIStrategyProcessor::processPaths
+     * @test
+     *
+     * @depends processPathExpectedExceptionOnNotExistingCell
+     * @depends processPathExpectedExceptionOnDeadNonShipCell
+     * @depends processPathOnValidCell
+     * @depends processPathOnValidDeadShipCell
      */
     public function processPaths()
     {
