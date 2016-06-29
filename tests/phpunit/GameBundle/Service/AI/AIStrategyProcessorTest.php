@@ -2,6 +2,7 @@
 
 namespace EM\Tests\PHPUnit\GameBundle\Service\AI;
 
+use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIStrategyProcessor;
@@ -17,7 +18,7 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
     /**
      * @var AIStrategyProcessor
      */
-    protected static $strategyProcessor;
+    private static $strategyProcessor;
 
     public static function setUpBeforeClass()
     {
@@ -27,28 +28,94 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
     }
 
     /**
-     * @see AIStrategyProcessor::processPaths
+     * @see AIStrategyProcessor::processPath
+     * @test
+     *
+     * @expectedException \EM\GameBundle\Exception\CellException
+     */
+    public function processPathExpectedExceptionOnNotExistingCell()
+    {
+        $battlefield = MockFactory::getBattlefieldMock();
+
+        $this->invokeProcessPathMethod($battlefield, PathProcessor::PATH_UP, 'A1');
+    }
+
+    /**
+     * @see AIStrategyProcessor::processPath
+     * @test
+     *
+     * @expectedException \EM\GameBundle\Exception\CellException
+     */
+    public function processPathExpectedExceptionOnDeadNonShipCell()
+    {
+        $battlefield = MockFactory::getBattlefieldMock();
+        $battlefield->getCellByCoordinate('A2')->setFlags(CellModel::FLAG_SKIP);
+
+        $this->invokeProcessPathMethod($battlefield, PathProcessor::PATH_DOWN, 'A1');
+    }
+
+    /**
+     * @see AIStrategyProcessor::processPath
      * @test
      */
-    public function processPaths()
+    public function processPathOnValidCell()
+    {
+        $battlefield = MockFactory::getBattlefieldMock();
+        $battlefield->getCellByCoordinate('A2')->setFlags(CellModel::FLAG_SHIP);
+
+        /** @var Cell $cell */
+        $cell = $this->invokeProcessPathMethod($battlefield, PathProcessor::PATH_DOWN, 'A1');
+        $this->assertEquals($cell->getCoordinate(), 'A2');
+    }
+
+    /**
+     * @see AIStrategyProcessor::processPath
+     * @test
+     */
+    public function processPathOnValidDeadShipCell()
+    {
+        $battlefield = MockFactory::getBattlefieldMock();
+        $battlefield->getCellByCoordinate('A2')->setFlags(CellModel::FLAG_DEAD_SHIP);
+        $battlefield->getCellByCoordinate('A3')->setFlags(CellModel::FLAG_SHIP);
+
+        /** @var Cell $cell */
+        $cell = $this->invokeProcessPathMethod($battlefield, PathProcessor::PATH_DOWN, 'A1');
+        $this->assertEquals($cell->getCoordinate(), 'A3');
+    }
+
+    private function invokeProcessPathMethod(Battlefield $battlefield, int $path, string $coordinate) : Cell
+    {
+        return $this->invokeMethod(static::$strategyProcessor, 'processPath', [$battlefield, $path, $coordinate]);
+    }
+
+    /**
+     * @see     AIStrategyProcessor::processPaths
+     * @test
+     *
+     * @depends processPathExpectedExceptionOnNotExistingCell
+     * @depends processPathExpectedExceptionOnDeadNonShipCell
+     * @depends processPathOnValidCell
+     * @depends processPathOnValidDeadShipCell
+     */
+    public function processPathsComplete()
     {
         $battlefield = MockFactory::getBattlefieldMock();
         $battlefield->getCellByCoordinate('B2')->setFlags(CellModel::FLAG_DEAD_SHIP);
 
-        $cells = $this->invokeProcessPathsMethod([$battlefield->getCellByCoordinate('B2'), PathProcessor::$primaryPaths]);
+        $cells = $this->processPaths([$battlefield->getCellByCoordinate('B2'), PathProcessor::$primaryPaths]);
         /** as battlefield is mocked having all cells STATE_WATER_LIVE state */
         $this->assertCount(4, $cells);
         $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
 
         /** as LEFT (A1) cell is dead */
         $battlefield->getCellByCoordinate('A2')->setFlags(CellModel::FLAG_DEAD_SHIP);
-        $cells = $this->invokeProcessPathsMethod([$battlefield->getCellByCoordinate('B2'), PathProcessor::$primaryPaths]);
+        $cells = $this->processPaths([$battlefield->getCellByCoordinate('B2'), PathProcessor::$primaryPaths]);
         $this->assertCount(3, $cells);
 
         /** as entire horizontal row is dead (A1-J10) cell is dead */
         for ($letter = 'C'; $letter < 'G'; $letter++) {
             $battlefield->getCellByCoordinate("{$letter}2")->setFlags(CellModel::FLAG_DEAD_SHIP);
-            $cells = $this->invokeProcessPathsMethod([$battlefield->getCellByCoordinate('B2'), PathProcessor::$primaryPaths]);
+            $cells = $this->processPaths([$battlefield->getCellByCoordinate('B2'), PathProcessor::$primaryPaths]);
             $this->assertCount(3, $cells);
         }
         /** left for explanation purposes */
@@ -56,18 +123,18 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
 //        ...
 //        $battlefield->getCellByCoordinate('F2')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
         $battlefield->getCellByCoordinate('G2')->setFlags(CellModel::FLAG_DEAD_SHIP);
-        $cells = $this->invokeProcessPathsMethod([$battlefield->getCellByCoordinate('B2'), PathProcessor::$primaryPaths]);
+        $cells = $this->processPaths([$battlefield->getCellByCoordinate('B2'), PathProcessor::$primaryPaths]);
         $this->assertCount(2, $cells);
 
         /** as top (B1) cell is dead also */
         $battlefield->getCellByCoordinate('B1')->setFlags(CellModel::FLAG_DEAD_SHIP);
-        $cells = $this->invokeProcessPathsMethod([$battlefield->getCellByCoordinate('B2'), PathProcessor::$primaryPaths]);
+        $cells = $this->processPaths([$battlefield->getCellByCoordinate('B2'), PathProcessor::$primaryPaths]);
         $this->assertCount(1, $cells);
 
         /** as vertical (B1-B10) and horizontal (A1-J10) rows contains only dead cells */
         for ($digit = 3; $digit < 7; $digit++) {
             $battlefield->getCellByCoordinate("B{$digit}")->setFlags(CellModel::FLAG_DEAD_SHIP);
-            $cells = $this->invokeProcessPathsMethod([$battlefield->getCellByCoordinate('B2'), PathProcessor::$primaryPaths]);
+            $cells = $this->processPaths([$battlefield->getCellByCoordinate('B2'), PathProcessor::$primaryPaths]);
             $this->assertCount(1, $cells);
         }
         /** left for explanation purposes */
@@ -75,11 +142,18 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
 //        ...
 //        $battlefield->getCellByCoordinate('B6')->setState($cellStates[CellModel::STATE_SHIP_DIED]);
         $battlefield->getCellByCoordinate('B7')->setFlags(CellModel::FLAG_DEAD_SHIP);
-        $cells = $this->invokeProcessPathsMethod([$battlefield->getCellByCoordinate('B2'), PathProcessor::$primaryPaths]);
+        $cells = $this->processPaths([$battlefield->getCellByCoordinate('B2'), PathProcessor::$primaryPaths]);
         $this->assertEmpty($cells);
     }
 
-    private function invokeProcessPathsMethod(array $args) : array
+    /**
+     * @see AIStrategyProcessor::processPaths
+     *
+     * @param array $args
+     *
+     * @return Cell[]
+     */
+    private function processPaths(array $args) : array
     {
         return $this->invokeMethod(static::$strategyProcessor, 'processPaths', $args);
     }
@@ -88,7 +162,7 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
      * @see     AIStrategyProcessor::process
      * @test
      *
-     * @depends processPaths
+     * @depends processPathsComplete
      */
     public function processHorizontalStrategy()
     {
@@ -99,7 +173,7 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
      * @see     AIStrategyProcessor::process
      * @test
      *
-     * @depends processPaths
+     * @depends processPathsComplete
      */
     public function processVerticalStrategy()
     {
@@ -110,7 +184,6 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
      * @see     AIStrategyProcessor::process
      * @test
      *
-     * @depends processPaths
      * @depends processHorizontalStrategy
      * @depends processVerticalStrategy
      */
@@ -119,7 +192,7 @@ class AIStrategyProcessorTest extends IntegrationTestSuite
         $this->verifyCellsByStrategy(['A2', 'C2', 'B1', 'B3'], AIStrategyProcessor::STRATEGY_BOTH);
     }
 
-    protected function verifyCellsByStrategy(array $expectedCoordinates, int $strategy)
+    private function verifyCellsByStrategy(array $expectedCoordinates, int $strategy)
     {
         $cells = static::$strategyProcessor->process(MockFactory::getBattlefieldMock()->getCellByCoordinate('B2'), $strategy);
 

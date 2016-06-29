@@ -40,7 +40,7 @@ class Battlefield extends AbstractEntity implements PlayerInterface
     /**
      * @ORM\OneToMany(targetEntity="EM\GameBundle\Entity\Cell", mappedBy="battlefield", cascade={"persist"}, fetch="EAGER", indexBy="coordinate")
      *
-     * @Serializer\Type("EM\GameBundle\Entity\Cell")
+     * @Serializer\Type("array<EM\GameBundle\Entity\Cell>")
      * @Serializer\XmlList(entry="cell")
      *
      * @var Collection|Cell[]

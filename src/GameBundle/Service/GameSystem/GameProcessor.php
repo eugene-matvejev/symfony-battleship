@@ -7,13 +7,10 @@ use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Entity\Game;
 use EM\GameBundle\Entity\GameResult;
 use EM\GameBundle\Entity\Player;
-use EM\GameBundle\Exception\CellException;
-use EM\GameBundle\Exception\GameException;
-use EM\GameBundle\Exception\PlayerException;
+use EM\GameBundle\Exception\GameProcessorException;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Model\PlayerModel;
-use EM\GameBundle\Request\GameInitiationRequest;
 use EM\GameBundle\Service\AI\AIService;
 
 /**
@@ -27,95 +24,86 @@ class GameProcessor
      * @var AIService
      */
     private $ai;
-    /**
-     * @var PlayerModel
-     */
-    private $playerModel;
 
-    public function __construct(AIService $ai, PlayerModel $playerModel)
+    public function __construct(AIService $ai)
     {
         $this->ai = $ai;
-        $this->playerModel = $playerModel;
-    }
-
-    private function attachAIBattlefields(Game $game, int $amount, int $size)
-    {
-        for ($i = 0; $i < $amount; $i++) {
-            $player = $this->playerModel->createOnRequestAIControlled("CPU {$i}");
-
-            /** hard-code ship into B2 for testing purposes */
-            $battlefield = BattlefieldModel::generate($size, ['B2'])
-                ->setPlayer($player);
-            $game->addBattlefield($battlefield);
-        }
-    }
-
-    public function buildGame(GameInitiationRequest $request) : Game
-    {
-        $game = new Game();
-        $this->attachAIBattlefields($game, $request->getOpponents(), $request->getSize());
-
-        $player = $this->playerModel->createOnRequestHumanControlled($request->getPlayerName());
-
-        $battlefield = BattlefieldModel::generate($request->getSize(), $request->getCoordinates());
-        $battlefield->setPlayer($player);
-        $game->addBattlefield($battlefield);
-
-        /** for test purposes only - mark player cells as damaged */
-        $battlefield->getCellByCoordinate('A2')->setFlags(CellModel::FLAG_DEAD_SHIP);
-        $battlefield->getCellByCoordinate('A1')->setFlags(CellModel::FLAG_DEAD_SHIP);
-
-        return $game;
     }
 
     /**
      * @param Cell $cell
      *
      * @return Game
-     * @throws CellException
-     * @throws GameException
-     * @throws PlayerException
+     * @throws GameProcessorException
      */
-    public function processGameTurn(Cell $cell) : Game
+    public function processTurn(Cell $cell) : Game
     {
         $game = $cell->getBattlefield()->getGame();
 
         if (null !== $game->getResult()) {
-            throw new GameException("game: {$game->getId()} already has result");
+            throw new GameProcessorException("game: {$game->getId()} already has result");
         }
 
-        foreach ($game->getBattlefields() as $turnOwnerBattlefield) {
-            foreach ($game->getBattlefields() as $targetBattlefield) {
-                /** do not process turn on itself */
-                if ($turnOwnerBattlefield === $targetBattlefield) {
-                    continue;
-                }
+        foreach ($game->getBattlefields() as $battlefield) {
+            $attacker = $battlefield->getPlayer();
+            if ($this->processPlayerTurnOnBattlefields($game, $attacker, $cell)) {
+                $result = (new GameResult())
+                    ->setPlayer($attacker);
+                $game->setResult($result);
 
-                if ($this->processPlayerTurnOnBattlefield($targetBattlefield, $turnOwnerBattlefield->getPlayer(), $cell)) {
-                    return $game;
-                }
+                break;
             }
         }
 
         return $game;
     }
 
-    protected function processPlayerTurnOnBattlefield(Battlefield $battlefield, Player $player, Cell $cell) : bool
+    /**
+     * @since 21.1
+     *
+     * @param Game   $game
+     * @param Player $attacker
+     * @param Cell   $cell
+     *
+     * @return bool - true if game been won, otherwise false
+     */
+    protected function processPlayerTurnOnBattlefields(Game $game, Player $attacker, Cell $cell) : bool
     {
-        $cell = $this->processPlayerTurn($battlefield, $cell);
+        foreach ($game->getBattlefields() as $battlefield) {
+            try {
+                if ($this->processPlayerTurnOnBattlefield($battlefield, $attacker, $cell)) {
+                    return true;
+                }
+            } catch (GameProcessorException $e) {
+                continue;
+            }
+        }
 
+        return false;
+    }
+
+    /**
+     * @since 21.0
+     *
+     * @param Battlefield $battlefield
+     * @param Player      $attacker
+     * @param Cell        $cell
+     *
+     * @return bool - true if target battlefield do not have any life ships, otherwise false
+     * @throws GameProcessorException
+     */
+    protected function processPlayerTurnOnBattlefield(Battlefield $battlefield, Player $attacker, Cell $cell) : bool
+    {
+        /** do not process turn on itself */
+        if ($battlefield->getPlayer() === $attacker) {
+            throw new GameProcessorException('player attacked itself');
+        }
+
+        $cell = $this->processPlayerTurn($battlefield, $cell);
         if (CellModel::isShipDead($cell)) {
             BattlefieldModel::flagWaterAroundShip($cell);
 
-            if (BattlefieldModel::hasUnfinishedShips($battlefield)) {
-                return false;
-            }
-
-            $result = (new GameResult())
-                ->setPlayer($player);
-            $battlefield->getGame()->setResult($result);
-
-            return true;
+            return !BattlefieldModel::hasUnfinishedShips($battlefield);
         }
 
         return false;
@@ -123,11 +111,11 @@ class GameProcessor
 
     /**
      * @param Battlefield $battlefield
-     * @param Cell        $cell - this cell will be attacked if it will be human player's turn
+     * @param Cell        $cell - this cell will be attacked if attacker is human
      *
      * @return Cell
      */
-    private function processPlayerTurn(Battlefield $battlefield, Cell $cell) : Cell
+    protected function processPlayerTurn(Battlefield $battlefield, Cell $cell) : Cell
     {
         return PlayerModel::isAIControlled($battlefield->getPlayer())
             ? CellModel::switchPhase($cell)

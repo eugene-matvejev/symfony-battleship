@@ -3,8 +3,7 @@
 namespace EM\GameBundle\Controller;
 
 use EM\GameBundle\Exception\CellException;
-use EM\GameBundle\Exception\GameRequestException;
-use EM\GameBundle\Exception\PlayerException;
+use EM\GameBundle\Exception\GameProcessorException;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Request\GameInitiationRequest;
 use EM\GameBundle\Response\GameInitiationResponse;
@@ -12,6 +11,7 @@ use EM\GameBundle\Response\GameTurnResponse;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Exception\InvalidArgumentException;
 
 /**
  * @see   GameControllerTest
@@ -43,10 +43,10 @@ class GameController extends AbstractAPIController
     public function initAction(Request $request) : Response
     {
         if (!$this->get('battleship_game.validator.game_initiation_request')->validate($request->getContent())) {
-            throw new GameRequestException('request validation failed, please check documentation');
+            throw new InvalidArgumentException('request validation failed, please check documentation');
         }
 
-        $game = $this->get('battleship_game.service.game_processor')->buildGame(new GameInitiationRequest($request->getContent()));
+        $game = $this->get('battleship_game.service.game_builder')->buildGame(new GameInitiationRequest($request->getContent()));
 
         $om = $this->getDoctrine()->getManager();
         $om->persist($game);
@@ -66,7 +66,7 @@ class GameController extends AbstractAPIController
      *
      * @return Response
      * @throws CellException
-     * @throws PlayerException
+     * @throws GameProcessorException
      */
     public function turnAction(int $cellId) : Response
     {
@@ -77,7 +77,7 @@ class GameController extends AbstractAPIController
             throw new CellException("cell: {$cellId} doesn't already flagged as *DEAD*");
         }
 
-        $game = $this->get('battleship_game.service.game_processor')->processGameTurn($cell);
+        $game = $this->get('battleship_game.service.game_processor')->processTurn($cell);
         $om = $this->getDoctrine()->getManager();
 
         foreach (CellModel::getChangedCells() as $cell) {

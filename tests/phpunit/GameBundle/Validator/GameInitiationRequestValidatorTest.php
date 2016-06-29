@@ -50,16 +50,16 @@ class GameInitiationRequestValidatorTest extends IntegrationTestSuite
     /**
      * @return string[]
      */
-    protected function getListOfInvalidFixtureNames() : array
+    private function getListOfInvalidFixtureNames() : array
     {
         $fixtures = scandir(static::getSharedFixturesDirectory() . '/invalid-game-initiation-requests');
-        /** because 0 and 1 elements contains "." / ".." */
+        /** because 0|1 element is .|.. */
         unset($fixtures[0], $fixtures[1]);
 
         return $fixtures;
     }
 
-    protected function getInvalidGameRequestFixtureContent(string $name) : string
+    private function getInvalidGameRequestFixtureContent(string $name) : string
     {
         return $this->getSharedFixtureContent("invalid-game-initiation-requests/$name");
     }
