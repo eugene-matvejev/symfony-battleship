@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "17802dffcc5e27feea239592effa8c6a",
-    "content-hash": "365b90c445fb18a9aa34c2e3d4fd1835",
+    "hash": "1a9955d4fb95fcfd7fd47099d16ccda2",
+    "content-hash": "31cf7cd42ae0a916473e3ded73aede2b",
     "packages": [
         {
             "name": "components/jquery",
@@ -2763,16 +2763,16 @@
         },
         {
             "name": "zendframework/zend-code",
-            "version": "3.0.3",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-code.git",
-                "reference": "cdd9d0ff36c09772ca787c9c54318115f65d4fab"
+                "reference": "57cfbcf794a79985278d6308325bc86060af588c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-code/zipball/cdd9d0ff36c09772ca787c9c54318115f65d4fab",
-                "reference": "cdd9d0ff36c09772ca787c9c54318115f65d4fab",
+                "url": "https://api.github.com/repos/zendframework/zend-code/zipball/57cfbcf794a79985278d6308325bc86060af588c",
+                "reference": "57cfbcf794a79985278d6308325bc86060af588c",
                 "shasum": ""
             },
             "require": {
@@ -2812,7 +2812,7 @@
                 "code",
                 "zf2"
             ],
-            "time": "2016-06-27 22:07:15"
+            "time": "2016-04-20 17:34:49"
         },
         {
             "name": "zendframework/zend-eventmanager",
