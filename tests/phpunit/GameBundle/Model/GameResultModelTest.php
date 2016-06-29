@@ -16,7 +16,7 @@ class GameResultModelTest extends IntegrationTestSuite
     /**
      * @var GameResultModel
      */
-    protected static $gameResultModel;
+    private static $gameResultModel;
 
     public static function setUpBeforeClass()
     {
