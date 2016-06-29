@@ -61,7 +61,7 @@ class PathProcessorTest extends IntegrationTestSuite
     /**
      * check entire list of paths to contain directions
      *
-     * @see     PathProcessor::isPathHasDirection
+     * @see     PathProcessor::hasDirection
      * @test
      *
      * @depends primaryPaths
@@ -83,11 +83,11 @@ class PathProcessorTest extends IntegrationTestSuite
 
         foreach ($fixtures as $path => $directions) {
             /** should return true if full direction matches full-direction */
-            $this->assertTrue($this->invokeHasDirectionMethod($path, $path));
+            $this->assertTrue($this->hasDirection($path, $path));
 
             foreach ($directions as $direction) {
                 /** should return true if full direction contains direction */
-                $this->assertTrue($this->invokeHasDirectionMethod($path, $direction));
+                $this->assertTrue($this->hasDirection($path, $direction));
             }
         }
     }
@@ -95,7 +95,7 @@ class PathProcessorTest extends IntegrationTestSuite
     /**
      * check entire list of paths to do not contain directions
      *
-     * @see     PathProcessor::isPathContainsBytes
+     * @see     PathProcessor::hasDirection
      * @test
      *
      * @depends primaryPaths
@@ -117,18 +117,20 @@ class PathProcessorTest extends IntegrationTestSuite
 
         foreach ($fixtures as $path => $directions) {
             foreach ($directions as $direction) {
-                $this->assertFalse($this->invokeHasDirectionMethod($path, $direction));
+                $this->assertFalse($this->hasDirection($path, $direction));
             }
         }
     }
 
     /**
+     * @see PathProcessor::hasDirection
+     * 
      * @param int $path
      * @param int $bytes
      *
      * @return mixed
      */
-    private function invokeHasDirectionMethod(int $path, int $bytes)
+    private function hasDirection(int $path, int $bytes)
     {
         return $this->invokeMethod((new PathProcessor('B2'))->setPath($path), 'hasDirection', [$bytes]);
     }
