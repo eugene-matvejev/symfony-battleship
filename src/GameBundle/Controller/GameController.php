@@ -77,7 +77,7 @@ class GameController extends AbstractAPIController
             throw new CellException("cell: {$cellId} doesn't already flagged as *DEAD*");
         }
 
-        $game = $this->get('battleship_game.service.game_processor')->processGameTurn($cell);
+        $game = $this->get('battleship_game.service.game_processor')->processTurn($cell);
         $om = $this->getDoctrine()->getManager();
 
         foreach (CellModel::getChangedCells() as $cell) {
