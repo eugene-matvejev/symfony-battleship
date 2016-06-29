@@ -60,8 +60,8 @@ class AIStrategyService
         $processor = new PathProcessor($cell->getCoordinate());
 
         $battlefield = $cell->getBattlefield();
-        foreach (static::$strategyMap as $way => $strategy) {
-            $processor->setPath($way);
+        foreach (static::$strategyMap as $path => $strategy) {
+            $processor->setPath($path);
 
             /** @var Cell $cell */
             if (null !== $cell = $battlefield->getCellByCoordinate($processor->getNextCoordinate())) {
