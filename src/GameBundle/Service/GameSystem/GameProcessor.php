@@ -50,7 +50,7 @@ class GameProcessor
             foreach ($game->getBattlefields() as $battlefield) {
                 try {
                     if ($this->processPlayerTurnOnBattlefield($battlefield, $attacker, $cell)) {
-                        return $game;
+                        break 2;
                     }
                 } catch (GameProcessorException $e) {
                     continue;
