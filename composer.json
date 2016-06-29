@@ -44,11 +44,10 @@
     "require-dev": {
         "composer/composer": "^1.0",
         "behat/behat": "^3.1",
+        "crysalead/kahlan": "^2.5",
         "doctrine/doctrine-fixtures-bundle": "^2.3",
         "sensio/generator-bundle": "^3.0",
-        "phpunit/phpunit": "^5.1",
-        "codeclimate/php-test-reporter": "^0.3.2",
-        "crysalead/kahlan": "^2.5"
+        "phpunit/phpunit": "^5.1"
     },
     "scripts": {
         "post-update-cmd": "@required-scripts",
