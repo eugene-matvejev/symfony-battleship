@@ -108,10 +108,10 @@ class PathProcessor
      */
     public function getNextCoordinate() : string
     {
-        return $this->currentCoordinate = $this->getCoordinateLetterPart() . $this->getCoordinateNumberPart();
+        return $this->currentCoordinate = $this->getNextCoordinateLetterPart() . $this->getNextCoordinateNumberPart();
     }
 
-    protected function getCoordinateNumberPart() : int
+    protected function getNextCoordinateNumberPart() : int
     {
         $number = substr($this->currentCoordinate, 1);
 
@@ -124,7 +124,7 @@ class PathProcessor
         return $number;
     }
 
-    protected function getCoordinateLetterPart() : string
+    protected function getNextCoordinateLetterPart() : string
     {
         $letter = substr($this->currentCoordinate, 0, 1);
 
@@ -177,34 +177,6 @@ class PathProcessor
         }
 
         return $cells;
-    }
-
-    /**
-     * @since 21.2
-     *
-     * @param Battlefield $battlefield
-     * @param int         $flag
-     * @param int         $levels
-     *
-     * @return array
-     */
-    public function getFlaggedAdjacentCells(Battlefield $battlefield, int $flag, int $levels = 1) : array
-    {
-        return $this->getAdjacentCells($battlefield, $levels, $flag);
-    }
-
-    /**
-     * @since 21.2
-     *
-     * @param Battlefield $battlefield
-     * @param int         $flag
-     * @param int         $levels
-     *
-     * @return array
-     */
-    public function getNotFlaggedAdjacentCells(Battlefield $battlefield, int $flag, int $levels = 1) : array
-    {
-        return $this->getAdjacentCells($battlefield, $levels, CellModel::FLAG_NONE, $flag);
     }
 
     /**
