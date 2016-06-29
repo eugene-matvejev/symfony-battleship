@@ -16,7 +16,7 @@ class AIStrategyServiceTest extends IntegrationTestSuite
     /**
      * @var AIStrategyService
      */
-    protected static $aiStrategyService;
+    private static $aiStrategyService;
 
     public static function setUpBeforeClass()
     {
