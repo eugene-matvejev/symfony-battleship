@@ -39,7 +39,8 @@
         "nelmio/api-doc-bundle": "^2.12",
         "eugene-matvejev/css-compiler": "~0.2",
         "components/jquery": "^2.2",
-        "twitter/bootstrap": "^3.3"
+        "twitter/bootstrap": "^3.3",
+        "zendframework/zend-code": "3.0.2"
     },
     "require-dev": {
         "composer/composer": "^1.0",
@@ -47,8 +48,7 @@
         "crysalead/kahlan": "^2.5",
         "doctrine/doctrine-fixtures-bundle": "^2.3",
         "sensio/generator-bundle": "^3.0",
-        "phpunit/phpunit": "^5.1",
-        "zendframework/zend-code": "3.0.2"
+        "phpunit/phpunit": "^5.1"
     },
     "scripts": {
         "post-update-cmd": "@required-scripts",
