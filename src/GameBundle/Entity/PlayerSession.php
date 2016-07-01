@@ -27,9 +27,21 @@ class PlayerSession extends AbstractEntity implements PlayerInterface, Timestamp
 {
     use PlayerTrait, TimestampedTrait;
     /**
-     * @ORM\Column(name="name", type="string", length=40)
+     * @ORM\Column(name="hash", type="string", length=40)
      *
      * @var string
      */
     protected $hash;
+
+    public function getHash() : string
+    {
+        return $this->hash;
+    }
+
+    public function setHash(string $hash) : self
+    {
+        $this->hash = $hash;
+
+        return $this;
+    }
 }

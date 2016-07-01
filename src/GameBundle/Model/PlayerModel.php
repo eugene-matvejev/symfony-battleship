@@ -70,4 +70,9 @@ class PlayerModel
     {
         return $player->hasFlag(self::FLAG_AI_CONTROLLED);
     }
+
+    protected function getPasswordHash(string $email, string $password) : string
+    {
+        return sha1("$email:$password");
+    }
 }

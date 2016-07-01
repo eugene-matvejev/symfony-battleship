@@ -17,5 +17,6 @@ class PlayerController extends AbstractAPIController
 
     public function loginAction(Request $request)
     {
+        $this->getUser()
     }
 }
