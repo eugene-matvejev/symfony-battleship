@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1a9955d4fb95fcfd7fd47099d16ccda2",
-    "content-hash": "31cf7cd42ae0a916473e3ded73aede2b",
+    "hash": "10159266f59816aed9e008e2b48ca286",
+    "content-hash": "d2876f5638eec3960b59fb0a0ef2c7ba",
     "packages": [
         {
             "name": "components/jquery",
@@ -2516,16 +2516,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v3.1.1",
+            "version": "v3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "6e1b1497276f8477e9d89b1b6398cf7c7dcebd7d"
+                "reference": "2e98c829524e505a9561ac9e54fa715e8b79905e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/6e1b1497276f8477e9d89b1b6398cf7c7dcebd7d",
-                "reference": "6e1b1497276f8477e9d89b1b6398cf7c7dcebd7d",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/2e98c829524e505a9561ac9e54fa715e8b79905e",
+                "reference": "2e98c829524e505a9561ac9e54fa715e8b79905e",
                 "shasum": ""
             },
             "require": {
@@ -2597,7 +2597,7 @@
                 "doctrine/dbal": "~2.4",
                 "doctrine/doctrine-bundle": "~1.4",
                 "doctrine/orm": "~2.4,>=2.4.5",
-                "egulias/email-validator": "~1.2",
+                "egulias/email-validator": "~1.2,>=1.2.1",
                 "monolog/monolog": "~1.11",
                 "ocramius/proxy-manager": "~0.4|~1.0|~2.0",
                 "phpdocumentor/reflection-docblock": "^3.0",
@@ -2647,7 +2647,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2016-06-15 05:59:11"
+            "time": "2016-06-30 17:16:26"
         },
         {
             "name": "twig/twig",
