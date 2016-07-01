@@ -124,13 +124,13 @@ class PathProcessorTest extends IntegrationTestSuite
 
     /**
      * @see PathProcessor::hasDirection
-     * 
+     *
      * @param int $path
      * @param int $bytes
      *
-     * @return mixed
+     * @return bool
      */
-    private function hasDirection(int $path, int $bytes)
+    private function hasDirection(int $path, int $bytes) : bool
     {
         return $this->invokeMethod((new PathProcessor('B2'))->setPath($path), 'hasDirection', [$bytes]);
     }
@@ -179,7 +179,7 @@ class PathProcessorTest extends IntegrationTestSuite
      */
     public function getAdjacentCellsWithDefaults()
     {
-        $this->iterateAdjacentCells(
+        $this->assertAdjacentCellsResult(
             ['A1', 'A2', 'A3', 'B1', 'B3', 'C1', 'C2', 'C3'],
             (new PathProcessor('B2'))->getAdjacentCells(MockFactory::getBattlefieldMock())
         );
@@ -193,7 +193,7 @@ class PathProcessorTest extends IntegrationTestSuite
      */
     public function getAdjacentCellsWithDefaults2LevelDeep()
     {
-        $this->iterateAdjacentCells(
+        $this->assertAdjacentCellsResult(
             ['A1', 'A2', 'A3', 'B1', 'B3', 'B4', 'C1', 'C2', 'C3', 'D2', 'D4'],
             (new PathProcessor('B2'))->getAdjacentCells(MockFactory::getBattlefieldMock(), 2)
         );
@@ -211,7 +211,7 @@ class PathProcessorTest extends IntegrationTestSuite
         $battlefield->getCellByCoordinate('A2')->setFlags(CellModel::FLAG_DEAD);
         $battlefield->getCellByCoordinate('A1')->setFlags(CellModel::FLAG_DEAD_SHIP);
 
-        $this->iterateAdjacentCells(
+        $this->assertAdjacentCellsResult(
             ['A1', 'A2'],
             (new PathProcessor('B2'))->getAdjacentCells($battlefield, 1, CellModel::FLAG_DEAD)
         );
@@ -229,13 +229,13 @@ class PathProcessorTest extends IntegrationTestSuite
         $battlefield->getCellByCoordinate('A2')->setFlags(CellModel::FLAG_DEAD);
         $battlefield->getCellByCoordinate('A1')->setFlags(CellModel::FLAG_DEAD_SHIP);
 
-        $this->iterateAdjacentCells(
+        $this->assertAdjacentCellsResult(
             ['A3', 'B1', 'B3', 'C1', 'C2', 'C3'],
             (new PathProcessor('B2'))->getAdjacentCells($battlefield, 1, CellModel::FLAG_NONE, CellModel::FLAG_DEAD)
         );
     }
 
-    private function iterateAdjacentCells(array $expectedCoordinates, array $cells)
+    private function assertAdjacentCellsResult(array $expectedCoordinates, array $cells)
     {
         $this->assertContainsOnlyInstancesOf(Cell::class, $cells);
         $this->assertCount(count($expectedCoordinates), $cells);
