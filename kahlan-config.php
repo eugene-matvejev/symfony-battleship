@@ -7,9 +7,7 @@ $args = $this->args();
 $args->argument('spec', 'default', 'tests/kahlan');
 $this->args()->set('exclude', ['Symfony', 'Doctrine']);
 
-/**
- * Initializing a custom coverage reporter
- */
+/** Initializing a custom coverage reporter */
 Filter::register('app.coverage', function ($chain) {
     $reporters = $this->reporters();
 
