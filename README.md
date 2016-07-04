@@ -107,7 +107,7 @@ _purpose: easier manual testing_
  * *php bin/phpunit -c .*
  * *php bin/behat --strict*
  * *php bin/kahlan*
-  * __NOTE__: in test enviroment application interact with different database [config: "database_name_test" in config.yml], it's wiped and seeded before tests execution
+  * __NOTE__: in test enviroment application interact with different database [config: "database_name_test" in parameters.yml], it's wiped and seeded before tests execution
 
 ### /etc/hosts
 ```
