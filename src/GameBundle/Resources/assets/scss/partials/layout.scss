@@ -10,13 +10,13 @@ body {
     /*background: linear-gradient(to bottom, rgba(135,224,253,1) 0%,rgba(83,203,241,1) 40%,rgba(5,171,224,1) 100%) center center / cover fixed;*/
 
     background: linear-gradient(to bottom, rgb(32, 23, 99) 0%, rgb(31, 19, 95) 40%, #a94442 100%) center center / cover fixed;
-}
 
-body > .container {
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    margin: 0;
+    & > .container {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+    }
 }
 
 .page-sidebar,
@@ -47,18 +47,17 @@ body > .container {
 
 .page-content {
     padding-left: 275px;
-}
 
-.page-content.toggled {
-    padding-left: 25px;
-}
+    &.toggled {
+        padding-left: 25px;
 
-.page-content.toggled .toggle-btn {
-    opacity: 1;
-}
-
-.page-content:not(.toggled) .toggle-btn {
-    opacity: 0;
+        .toggle-btn {
+            opacity: 1;
+        }
+    }
+    &:not(.toggled) .toggle-btn {
+        opacity: 0;
+    }
 }
 
 .toggle-btn {
@@ -69,42 +68,44 @@ body > .container {
     font-size: 24px;
     margin: 0;
     padding: 40px 0 0 20px;
-}
 
-.page-header,
-.page-header > span {
-    line-height: 32px;
-    height: 75px;
+    &,
+    & > span {
+        line-height: 32px;
+        height: 75px;
+    }
+
 }
 
 .sidebar-nav {
     list-style-type: none;
     padding: 0;
     margin: 0;
-}
 
-.sidebar-nav > li.sidebar-brand span {
-    float: right;
-    padding-right: 10px;
-}
+    & > li {
+        &.sidebar-brand span {
+            float: right;
+            padding-right: 10px;
+        }
 
-.sidebar-nav > li:not(.sidebar-brand) {
-    padding: 10px 15px;
-    font-size: 16px;
-    text-align: right;
-    text-transform: uppercase;
-    background: transparent;
-    clear: both;
-}
+        &:not(.sidebar-brand) {
+            padding: 10px 15px;
+            font-size: 16px;
+            text-align: right;
+            text-transform: uppercase;
+            background: transparent;
+            clear: both;
+        }
+    }
 
-.sidebar-nav > li.selected,
-.sidebar-nav > li:not(.sidebar-brand):not(.no-hover):hover {
-    background: #fff;
-    color: #000;
-}
-
-.sidebar-nav > li:not(.sidebar-brand):not(.selected):hover {
-    cursor: pointer;
+    & > li.selected,
+    & > li:not(.sidebar-brand):not(.no-hover):hover {
+        background: #fff;
+        color: #000;
+    }
+    & > li:not(.sidebar-brand):not(.selected):hover {
+        cursor: pointer;
+    }
 }
 
 .page-content:not(.toggled) .toggle-btn {
@@ -117,12 +118,12 @@ body > .container {
     width: 100%;
     height: 100%;
     position: absolute;
-}
 
-.page-loading > .loading-animation {
-    margin: auto;
-    top: 50%;
-    zoom: 4;
+    & > .loading-animation {
+        margin: auto;
+        top: 50%;
+        zoom: 4;
+    }
 }
 
 .no-scroll-mode {
@@ -146,20 +147,23 @@ body > .container {
     float: right;
     margin: 10px;
     font-size: 24px;
-}
 
-#notification-area > .notification-control:hover {
-    font-weight: bolder;
-    cursor: pointer;
+    &:hover {
+        font-weight: bolder;
+        cursor: pointer;
+    }
 }
 
 #modal-area {
     color: #000;
-}
+    h4, label {
+        text-transform: uppercase;
+    }
 
-#modal-area h4,
-#modal-area label {
-    text-transform: uppercase;
+    .help-block {
+        font-size: 14px;
+        font-style: italic;
+    }
 }
 
 .container-fluid {
@@ -172,8 +176,6 @@ body > .container {
     text-align: center;
 }
 
-#modal-area .help-block {
-
-    font-size: 14px;
-    font-style: italic;
+a.history-title {
+    color: #F5DEB3;
 }

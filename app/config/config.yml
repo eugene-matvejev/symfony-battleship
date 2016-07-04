@@ -6,8 +6,12 @@ imports:
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    battleship_game.game_results_per_page: 5
     locale: en
+    battleship_game.setting.game_size.min: 7
+    battleship_game.setting.game_size.max: 12
+    battleship_game.setting.opponents_count.min: 1 # Multiplayer in WIP!
+    battleship_game.setting.opponents_count.max: 1 # Multiplayer in WIP!
+    battleship_game.setting.limits.per_page.game_results: 5
 
 framework:
     #esi:             ~
@@ -99,3 +103,5 @@ doctrine_migrations:
 #            game-bundle-entity:
 #                namespace_prefix: "EM\\GameBundle\\Entity\\"
 #                path: "@GameBundle/Resources/config/serializer/entity"
+
+nelmio_api_doc: ~

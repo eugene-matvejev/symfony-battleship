@@ -16,7 +16,7 @@
         "psr-4": {
             "EM\\Tests\\Environment\\": "tests/shared-environment",
             "EM\\Tests\\PHPUnit\\": "tests/phpunit",
-            "EM\\Tests\\Behat\\": "tests/behat/bootstrap"
+            "EM\\Tests\\Behat\\": "tests/behat/contexts"
         }
     },
     "authors": [
@@ -33,39 +33,45 @@
         "doctrine/orm": "^2.5",
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0",
-        "symfony/symfony": "^3.0.3",
+        "symfony/symfony": "^3.1",
         "symfony/monolog-bundle": "^2.8",
         "jms/serializer-bundle": "^1.1",
+        "nelmio/api-doc-bundle": "^2.12",
+        "eugene-matvejev/css-compiler": "~0.2",
         "components/jquery": "^2.2",
         "twitter/bootstrap": "^3.3"
     },
     "require-dev": {
         "composer/composer": "^1.0",
         "behat/behat": "^3.1",
+        "crysalead/kahlan": "^2.5",
         "doctrine/doctrine-fixtures-bundle": "^2.3",
         "sensio/generator-bundle": "^3.0",
-        "phpunit/phpunit": "^5.1",
-        "codeclimate/php-test-reporter": "^0.3.2",
-        "crysalead/kahlan": "^2.5"
+        "phpunit/phpunit": "^5.1"
     },
     "scripts": {
-        "post-install-cmd": "@deployment-events",
-        "post-update-cmd": "@deployment-events",
-        "non-heroku-deployment-events": [
-            "php bin/console doctrine:migrations:migrate --no-interaction"
-        ],
-        "deployment-events": [
+        "post-update-cmd": "@required-scripts",
+        "post-install-cmd": "@required-scripts",
+        "required-scripts": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget",
-            "@non-heroku-deployment-events",
-            "mkdir -p web/bundles/vendor/jquery",
-            "cp vendor/components/jquery/jquery.min.js web/bundles/vendor/jquery/jquery.min.js",
-            "mkdir -p web/bundles/vendor/twitter-bootstrap",
-            "cp -r vendor/twitter/bootstrap/dist/* web/bundles/vendor/twitter-bootstrap"
+            "@prepare-frontend-assets",
+            "@prepare-database"
+        ],
+        "prepare-database": [
+            "php bin/console doctrine:database:create --if-not-exists",
+            "php bin/console doctrine:migrations:migrate --no-interaction"
+        ],
+        "prepare-frontend-assets": [
+            "EM\\CssCompiler\\ScriptHandler::generateCSS",
+            "mkdir -p web/assets/vendor/jquery",
+            "cp vendor/components/jquery/jquery.min.js web/assets/vendor/jquery/jquery.min.js",
+            "mkdir -p web/assets/vendor/twitter-bootstrap",
+            "cp -r vendor/twitter/bootstrap/dist/* web/assets/vendor/twitter-bootstrap"
         ],
         "compile": [
             "rm web/app_dev.php",
@@ -94,9 +100,19 @@
                 "database_host": "DATABASE_HOST",
                 "database_port": "DATABASE_PORT",
                 "database_name": "DATABASE_NAME",
+                "database_name_test": "DATABASE_NAME_TEST",
                 "database_user": "DATABASE_USER",
                 "database_password": "DATABASE_PASSWORD"
             }
-        }
+        },
+        "css-compiler": [
+            {
+                "format": "compact",
+                "input": [
+                    "src/GameBundle/Resources/assets/scss/partials"
+                ],
+                "output": "web/assets/css/app.css"
+            }
+        ]
     }
 }

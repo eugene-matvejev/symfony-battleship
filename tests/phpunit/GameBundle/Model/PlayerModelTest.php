@@ -14,38 +14,16 @@ class PlayerModelTest extends IntegrationTestSuite
     /**
      * @var PlayerModel
      */
-    private $playerModel;
+    private static $playerModel;
 
-    protected function setUp()
+    public static function setUpBeforeClass()
     {
-        $this->playerModel = static::$container->get('battleship.game.services.player.model');
+        parent::setUpBeforeClass();
+
+        static::$playerModel = static::$container->get('battleship_game.service.player_model');
     }
 
-    /**
-     * @see PlayerModel::createOnRequest
-     * @test
-     */
-    public function createOnRequestOnExistingPlayer()
-    {
-        $player = $this->playerModel->createOnRequest('CPU');
-
-        $this->assertEquals('CPU', $player->getName());
-        $this->assertNotNull($player->getId());
-    }
-
-    /**
-     * @see     PlayerModel::createOnRequest
-     * @test
-     *
-     * @depends createOnRequestOnExistingPlayer
-     */
-    public function createOnRequestOnNonExistingPlayer()
-    {
-        $player = $this->playerModel->createOnRequest('NON-EXISTING-USER');
-
-        $this->assertEquals('NON-EXISTING-USER', $player->getName());
-        $this->assertNull($player->getId());
-    }
+    /*********************************** STATIC HELPERS ***********************************/
 
     /**
      * should return false if player is not marked by @see PlayerModel::FLAG_AI_CONTROLLED flag
@@ -67,5 +45,118 @@ class PlayerModelTest extends IntegrationTestSuite
     public function isAIControlledOnFlagAIControlled()
     {
         $this->assertTrue(PlayerModel::isAIControlled(MockFactory::getAIPlayerMock('')));
+    }
+
+    /*********************************** AI CONTROLLED PLAYER ***********************************/
+    /**
+     * should return existing player controlled by AI, as it existed before
+     *
+     * @see      PlayerModel::createOnRequestAIControlled
+     * @test
+     *
+     * @depends  isAIControlledOnFlagNone
+     * @requires isAIControlledOnFlagAIControlled
+     */
+    public function createOnRequestAIControlledOnExistingPlayer()
+    {
+        $player = static::$playerModel->createOnRequestAIControlled('CPU');
+
+        $this->assertEquals('CPU', $player->getName());
+        $this->assertTrue(PlayerModel::isAIControlled($player));
+
+        /** because player is already persisted */
+        $this->assertNotNull($player->getId());
+    }
+
+    /**
+     * should return new player controlled by AI, as it didn't exist before
+     *
+     * @see      PlayerModel::createOnRequestAIControlled
+     * @test
+     *
+     * @depends  isAIControlledOnFlagNone
+     * @requires isAIControlledOnFlagAIControlled
+     */
+    public function createOnRequestAIControlledOnNonExistingPlayer()
+    {
+        $player = static::$playerModel->createOnRequestAIControlled('NON-EXISTING-CPU-PLAYER');
+
+        $this->assertEquals('NON-EXISTING-CPU-PLAYER', $player->getName());
+        $this->assertTrue(PlayerModel::isAIControlled($player));
+
+        /** because player is not persisted yet */
+        $this->assertNull($player->getId());
+    }
+
+    /**
+     * should throw exception, because existed Player is not controlled By AI
+     *
+     * @see      PlayerModel::createOnRequestAIControlled
+     * @test
+     *
+     * @expectedException \EM\GameBundle\Exception\PlayerException
+     *
+     * @depends  isAIControlledOnFlagNone
+     * @requires isAIControlledOnFlagAIControlled
+     */
+    public function createOnRequestAIControlledOnNonExistingHumanPlayer()
+    {
+        static::$playerModel->createOnRequestAIControlled('Human');
+    }
+    /*********************************** HUMAN PLAYER ***********************************/
+    /**
+     * should return existing player controlled by Human, as it existed before
+     *
+     * @see      PlayerModel::createOnRequestHumanControlled
+     * @test
+     *
+     * @depends  isAIControlledOnFlagNone
+     * @requires isAIControlledOnFlagAIControlled
+     */
+    public function createOnRequestHumanControlledOnExistingPlayer()
+    {
+        $player = static::$playerModel->createOnRequestHumanControlled('Human');
+
+        $this->assertEquals('Human', $player->getName());
+        $this->assertFalse(PlayerModel::isAIControlled($player));
+
+        /** because player is already persisted */
+        $this->assertNotNull($player->getId());
+    }
+
+    /**
+     * should return new player controlled by Human, as it didn't exist before
+     *
+     * @see      PlayerModel::createOnRequestHumanControlled
+     * @test
+     *
+     * @depends  isAIControlledOnFlagNone
+     * @requires isAIControlledOnFlagAIControlled
+     */
+    public function createOnRequestHumanControlledOnNonExistingPlayer()
+    {
+        $player = static::$playerModel->createOnRequestHumanControlled('NON-EXISTING-HUMAN-PLAYER');
+
+        $this->assertEquals('NON-EXISTING-HUMAN-PLAYER', $player->getName());
+        $this->assertFalse(PlayerModel::isAIControlled($player));
+
+        /** because player is not persisted yet */
+        $this->assertNull($player->getId());
+    }
+
+    /**
+     * should throw exception, because existed Player is not controlled By AI
+     *
+     * @see      PlayerModel::createOnRequestHumanControlled
+     * @test
+     *
+     * @expectedException \EM\GameBundle\Exception\PlayerException
+     *
+     * @depends  isAIControlledOnFlagNone
+     * @requires isAIControlledOnFlagAIControlled
+     */
+    public function createOnRequestHumanControlledOnNonExistingAIPlayer()
+    {
+        static::$playerModel->createOnRequestHumanControlled('CPU');
     }
 }

@@ -3,6 +3,8 @@
 namespace EM\Tests\PHPUnit\GameBundle\Service\AI;
 
 use EM\GameBundle\Entity\Cell;
+use EM\GameBundle\Exception\AIException;
+use EM\GameBundle\Exception\CellException;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIService;
 use EM\Tests\Environment\IntegrationTestSuite;
@@ -16,11 +18,13 @@ class AIServiceTest extends IntegrationTestSuite
     /**
      * @var AIService
      */
-    protected $ai;
+    private static $ai;
 
-    protected function setUp()
+    public static function setUpBeforeClass()
     {
-        $this->ai = static::$container->get('battleship.game.services.ai.core.service');
+        parent::setUpBeforeClass();
+
+        static::$ai = static::$container->get('battleship_game.service.ai_core');
     }
 
     /**
@@ -31,35 +35,42 @@ class AIServiceTest extends IntegrationTestSuite
      */
     public function pickCellToAttackExpectedException()
     {
-        $cells = [];
-        $this->invokeMethod($this->ai, 'pickCellToAttack', [$cells]);
+        $this->pickCellToAttack([]);
     }
 
     /**
      * @see AIService::pickCellToAttack
      * @test
      */
-    public function pickCellToAttack()
+    public function pickCellToAttackExpectedCell()
     {
-        $cells = [
-            MockFactory::getCellMock('A1'),
-            MockFactory::getCellMock('A2')
-        ];
-        /** @var Cell $cell */
-        $cell = $this->invokeMethod($this->ai, 'pickCellToAttack', [$cells]);
-        $this->assertInstanceOf(Cell::class, $cell);
+        $cell = $this->pickCellToAttack([MockFactory::getCellMock('A1'), MockFactory::getCellMock('A2')]);
         $this->assertTrue($cell->hasFlag(CellModel::FLAG_DEAD));
+    }
+
+    /**
+     * @see AIService::pickCellToAttack
+     *
+     * @param Cell[] $cells
+     *
+     * @return Cell
+     * @throws CellException
+     */
+    private function pickCellToAttack(array $cells) : Cell
+    {
+        return $this->invokeMethod(static::$ai, 'pickCellToAttack', [$cells]);
     }
 
     /**
      * @see     AIService::processCPUTurn
      * @test
      *
-     * @depends pickCellToAttack
+     * @depends pickCellToAttackExpectedException
+     * @depends pickCellToAttackExpectedCell
      */
     public function processCPUTurnHorizontalStrategy()
     {
-        $this->invokeProcessCPUTurnMethod(
+        $this->assertProcessCPUTurnResult(
             [
                 CellModel::FLAG_DEAD_SHIP => ['A1', 'B1'],
                 CellModel::FLAG_SHIP      => ['C1', 'D1']
@@ -77,11 +88,12 @@ class AIServiceTest extends IntegrationTestSuite
      * @see     AIService::processCPUTurn
      * @test
      *
-     * @depends pickCellToAttack
+     * @depends pickCellToAttackExpectedException
+     * @depends pickCellToAttackExpectedCell
      */
     public function processCPUTurnVerticalStrategy()
     {
-        $this->invokeProcessCPUTurnMethod(
+        $this->assertProcessCPUTurnResult(
             [
                 CellModel::FLAG_DEAD_SHIP => ['A1', 'A2'],
                 CellModel::FLAG_SHIP      => ['A3', 'A4']
@@ -99,11 +111,12 @@ class AIServiceTest extends IntegrationTestSuite
      * @see     AIService::processCPUTurn
      * @test
      *
-     * @depends pickCellToAttack
+     * @depends pickCellToAttackExpectedException
+     * @depends pickCellToAttackExpectedCell
      */
     public function processCPUTurnBothStrategy()
     {
-        $this->invokeProcessCPUTurnMethod(
+        $this->assertProcessCPUTurnResult(
             [
                 CellModel::FLAG_DEAD_SHIP => ['A1'],
                 CellModel::FLAG_SHIP      => ['A2'],
@@ -117,22 +130,25 @@ class AIServiceTest extends IntegrationTestSuite
         );
     }
 
-    private function invokeProcessCPUTurnMethod(array $cellsToAlter, array $expectedMasks)
+    /**
+     * @see     AIService::processCPUTurn
+     *
+     * @param array $coordinatesCollection
+     * @param array $expectedFlags
+     */
+    private function assertProcessCPUTurnResult(array $coordinatesCollection, array $expectedFlags)
     {
         $battlefield = MockFactory::getBattlefieldMock();
-        foreach ($cellsToAlter as $mask => $coordinates) {
+        foreach ($coordinatesCollection as $flag => $coordinates) {
             foreach ($coordinates as $coordinate) {
-                $battlefield->getCellByCoordinate($coordinate)->setFlags($mask);
+                $battlefield->getCellByCoordinate($coordinate)->setFlags($flag);
             }
         }
 
-        $this->ai->processCPUTurn($battlefield);
+        static::$ai->processCPUTurn($battlefield);
+
         foreach ($battlefield->getCells() as $cell) {
-            $this->assertEquals(
-                $expectedMasks[$cell->getCoordinate()] ?? CellModel::FLAG_NONE,
-                $cell->getFlags(),
-                "cell {$cell->getCoordinate()} have unexpected state: {$cell->getFlags()}"
-            );
+            $this->assertEquals($expectedFlags[$cell->getCoordinate()] ?? CellModel::FLAG_NONE, $cell->getFlags());
         }
     }
 
@@ -140,9 +156,9 @@ class AIServiceTest extends IntegrationTestSuite
      * @see AIService::attackCell
      * @test
      */
-    public function attackCell_FLAG_NONE()
+    public function attackCellOnFlagNone()
     {
-        $this->invokeAttackCellMethod(CellModel::FLAG_NONE, CellModel::FLAG_DEAD);
+        $this->attackCell(CellModel::FLAG_NONE, CellModel::FLAG_DEAD);
     }
 
     /**
@@ -151,29 +167,18 @@ class AIServiceTest extends IntegrationTestSuite
      *
      * @expectedException \EM\GameBundle\Exception\AIException
      */
-    public function exceptionOnAttackCell_FLAG_DEAD()
+    public function expectedExceptionOnAttackCellOnFlagDead()
     {
-        $this->invokeAttackCellMethod(CellModel::FLAG_DEAD, CellModel::FLAG_DEAD);
+        $this->attackCell(CellModel::FLAG_DEAD, CellModel::FLAG_DEAD);
     }
 
     /**
      * @see AIService::attackCell
      * @test
      */
-    public function attackCell_FLAG_SHIP()
+    public function attackCellOnFlagShip()
     {
-        $this->invokeAttackCellMethod(CellModel::FLAG_SHIP, CellModel::FLAG_DEAD_SHIP);
-    }
-
-    /**
-     * @see AIService::attackCell
-     * @test
-     *
-     * @expectedException \EM\GameBundle\Exception\AIException
-     */
-    public function exceptionOnAttackCell_FLAG_DEAD_SHIP()
-    {
-        $this->invokeAttackCellMethod(CellModel::FLAG_DEAD_SHIP, CellModel::FLAG_DEAD_SHIP);
+        $this->attackCell(CellModel::FLAG_SHIP, CellModel::FLAG_DEAD_SHIP);
     }
 
     /**
@@ -182,17 +187,34 @@ class AIServiceTest extends IntegrationTestSuite
      *
      * @expectedException \EM\GameBundle\Exception\AIException
      */
-    public function exceptionOnAttackCell_FLAG_SKIP()
+    public function expectedExceptionOnAttackCellOnFlagDeadShip()
     {
-        $this->invokeAttackCellMethod(CellModel::FLAG_SKIP, CellModel::FLAG_SKIP);
+        $this->attackCell(CellModel::FLAG_DEAD_SHIP, CellModel::FLAG_DEAD_SHIP);
     }
 
-    private function invokeAttackCellMethod(int $cellMask, int $expectedMask)
+    /**
+     * @see AIService::attackCell
+     * @test
+     *
+     * @expectedException \EM\GameBundle\Exception\AIException
+     */
+    public function expectedExceptionOnAttackCellOnFlagSkip()
     {
-        $cell = MockFactory::getCellMock('A1', $cellMask);
-        $returnedCell = $this->invokeMethod($this->ai, 'attackCell', [$cell]);
+        $this->attackCell(CellModel::FLAG_SKIP, CellModel::FLAG_SKIP);
+    }
 
-        $this->assertSame($cell, $returnedCell);
-        $this->assertEquals($expectedMask, $cell->getFlags());
+    /**
+     * @see AIService::attackCell
+     *
+     * @param int $cellFlag
+     * @param int $expectedFlag
+     *
+     * @throws AIException
+     */
+    private function attackCell(int $cellFlag, int $expectedFlag)
+    {
+        $cell = $this->invokeMethod(static::$ai, 'attackCell', [MockFactory::getCellMock('A1', $cellFlag)]);
+
+        $this->assertEquals($expectedFlag, $cell->getFlags());
     }
 }

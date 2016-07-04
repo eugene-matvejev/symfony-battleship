@@ -8,11 +8,13 @@ use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 
 /**
+ * @see   AIStrategyServiceTest
+ *
  * @since 3.0
  */
 class AIStrategyService
 {
-    const STRATEGY_MAP = [
+    public static $strategyMap = [
         PathProcessor::PATH_LEFT  => AIStrategyProcessor::STRATEGY_HORIZONTAL,
         PathProcessor::PATH_RIGHT => AIStrategyProcessor::STRATEGY_HORIZONTAL,
         PathProcessor::PATH_UP    => AIStrategyProcessor::STRATEGY_VERTICAL,
@@ -55,16 +57,16 @@ class AIStrategyService
      */
     private function chooseStrategy(Cell $cell) : int
     {
-        $processor = new PathProcessor($cell);
+        $processor = new PathProcessor($cell->getCoordinate());
 
         $battlefield = $cell->getBattlefield();
-        foreach (self::STRATEGY_MAP as $way => $strategyId) {
-            $processor->setPath($way);
+        foreach (static::$strategyMap as $path => $strategy) {
+            $processor->setPath($path);
 
             /** @var Cell $cell */
             if (null !== $cell = $battlefield->getCellByCoordinate($processor->getNextCoordinate())) {
                 if ($cell->hasFlag(CellModel::FLAG_DEAD_SHIP)) {
-                    return $strategyId;
+                    return $strategy;
                 }
             }
         }

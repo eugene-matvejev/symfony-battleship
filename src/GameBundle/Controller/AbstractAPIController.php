@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 abstract class AbstractAPIController extends Controller
 {
     /**
-     * serialize data using JMS Serializer
+     * build serialized response using JMS Serializer to serialize content
      *
      * @param mixed    $data
      * @param int      $status
@@ -19,7 +19,7 @@ abstract class AbstractAPIController extends Controller
      *
      * @return Response
      */
-    protected function buildSerializedResponse($data, int $status = Response::HTTP_OK, array $headers = []) : Response
+    protected function prepareSerializedResponse($data, int $status = Response::HTTP_OK, array $headers = []) : Response
     {
         $header = $this->get('request_stack')->getMasterRequest()->headers->get('accept');
         $format = false !== strpos($header, 'application/xml') ? 'xml' : 'json';

@@ -4,6 +4,7 @@ namespace EM\GameBundle\Model;
 
 use Doctrine\ORM\EntityRepository;
 use EM\GameBundle\Entity\Player;
+use EM\GameBundle\Exception\PlayerException;
 
 /**
  * @since 2.0
@@ -22,22 +23,51 @@ class PlayerModel
         $this->repository = $repository;
     }
 
-    public function createOnRequest(string $name, int $flags = self::FLAG_NONE) : Player
+    /**
+     * @param string $name
+     *
+     * @return Player
+     * @throws PlayerException
+     */
+    public function createOnRequestAIControlled(string $name) : Player
     {
+        return $this->createOnRequest($name, true);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return Player
+     * @throws PlayerException
+     */
+    public function createOnRequestHumanControlled(string $name) : Player
+    {
+        return $this->createOnRequest($name);
+    }
+
+    /**
+     * @param string $name
+     * @param bool   $controlledByAI
+     *
+     * @return Player
+     * @throws PlayerException
+     */
+    protected function createOnRequest(string $name, bool $controlledByAI = false) : Player
+    {
+        /** @var Player $player */
         $player = $this->repository->findOneBy(['name' => $name]);
+
+        if (null !== $player && $controlledByAI !== static::isAIControlled($player)) {
+            throw new PlayerException("player with '$name' already exists and controlledByAI do not match");
+        }
 
         return $player ?? (new Player())
             ->setName($name)
-            ->setFlags(static::createAIControlled($flags) ? static::FLAG_AI_CONTROLLED : static::FLAG_NONE);
+            ->setFlags($controlledByAI ? static::FLAG_AI_CONTROLLED : static::FLAG_NONE);
     }
 
     public static function isAIControlled(Player $player) : bool
     {
         return $player->hasFlag(self::FLAG_AI_CONTROLLED);
-    }
-
-    public static function createAIControlled(int $flags) : bool
-    {
-        return ($flags & PlayerModel::FLAG_AI_CONTROLLED) === PlayerModel::FLAG_AI_CONTROLLED;
     }
 }

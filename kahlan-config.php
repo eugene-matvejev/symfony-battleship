@@ -7,9 +7,7 @@ $args = $this->args();
 $args->argument('spec', 'default', 'tests/kahlan');
 $this->args()->set('exclude', ['Symfony', 'Doctrine']);
 
-/**
- * Initializing a custom coverage reporter
- */
+/** Initializing a custom coverage reporter */
 Filter::register('app.coverage', function ($chain) {
     $reporters = $this->reporters();
 
@@ -19,12 +17,11 @@ Filter::register('app.coverage', function ($chain) {
             'verbosity' => $this->args()->get('coverage'),
             'driver'    => new Coverage\Driver\Xdebug(),
             'path'      => [
-                __DIR__ . '/src',
+                __DIR__ . '/src'
             ],
             'exclude'   => [
                 __DIR__ . '/src/*/Resources',
-                __DIR__ . '/src/*/DataFixtures',
-
+                __DIR__ . '/src/*/DataFixtures'
             ]
         ]);
         $reporters->add('coverage', $coverage);

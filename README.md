@@ -1,25 +1,33 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
 [![Code Climate](https://codeclimate.com/github/eugene-matvejev/battleship-game-api/badges/gpa.svg)](https://codeclimate.com/github/eugene-matvejev/battleship-game-api)
-[![Code Coverage](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
+[![Build Status](https://travis-ci.org/eugene-matvejev/battleship-game-api.svg?branch=master)](https://travis-ci.org/eugene-matvejev/battleship-game-api)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc/mini.png)](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc)
 
-__TDD tests__ [![Build Status](https://travis-ci.org/eugene-matvejev/battleship-game-api.svg?branch=master)](https://travis-ci.org/eugene-matvejev/battleship-game-api) / *PHPUnit*
+__TDD tests__
+ * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - *PHPUnit*
 
-__BDD tests__ [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master)  / *Behat*
+__BDD tests__
+ * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - *Behat*
+ * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - *Kahlan*
+
+__Test Coverage__
+
+[![Code Coverage](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
+[![codecov](https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/master/graph/badge.svg)](https://codecov.io/gh/eugene-matvejev/battleship-game-api)
 
 __DEMO__ : https://battleship-game-api.herokuapp.com/
 
 # Battleship Game API
 ##### THIS IS SPARE TIME PROJECT, WORK IN PROGRESS! HIGHLY EXPERIMENTAL!!!
 #### project purpose:
- * try out "cutting edge" technologies and approaches such as PHP7, SF3, ES6 and Continuous Integration/Deployment
+ * try out "cutting edge" technologies and approaches such as PHP7, SF3, ES6 and Continuous Integration|Deployment
  * simulate database loading e.g. up to 500 transactions per request
  * deliver preview about my technical knowledge before the job interview
 
 #### game cheat-code:
-* purpose: make manual testing easier (as the project is far from final stage, I keep polishing it)
- * AI player have only one ship, which is one-cell ship which is located at __B2__ cell
-  * if you will hit __B2__ cell - you will win
+_purpose: easier manual testing_
+* AI player have only one ship, which is one-cell ship which and located at __B2__ cell
+ * if you will hit __B2__ cell - you will win
 
 #### future plans:
  * deliver back-end as RESTful API using SF3, PHP7, Doctrine2 with various database engines support
@@ -46,9 +54,11 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
  * Behat 3
  * Composer
  * JMS Serializer
+ * API Doc [nelmio/api-doc-bundle]
  * Twig
  * JavaScript ES6 [ECMAScript6]
  * CSS3
+ * SASS
  * jQuery 2
  * Twitter Bootstrap 3
 
@@ -70,29 +80,34 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
 ### PHP-FIG:
  * PSR-2
  * PSR-4
+ * PSR-6
 
 # workflow
- * new functionality is added into master branch only by pull requests from feature branches
- * result of each pull request is ready-to-use release, using Continuous Delivery principles, follow semantic visioning
- * each pull request/push trigger various CI engines such as Travis, Circle, Scrutinizer, Sensiolabs Insight, CodeCov, Jenkins, SonarQube
+ * new functionality is added into master branch only by pull requests
+ * result of each pull request is ready-to-use release, using Continuous Delivery principles
+ * pull requests are named using semantic visioning
+ * each pull request triggers various CI engines such as Travis, Circle, CodeShip, Scrutinizer, Sensiolabs Insight, CodeCov
  * __gitflow__:
-  * master branch: contains release-ready source
-  * heroku branch: reflects current deployed app at heroku (prototype of Continuous Delivery and Continuous Deployment)
+  * master branch: stable, contains release-ready source
+  * heroku branch: reflects current deployed app at heroku (prototype of Continuous Delivery|Deployment)
   * prototype!_* branches contains new idea [merged pull request of prototype branch is always next *major* version release]
   * %major%.%minor%.%patch%: feature branches [example: 15.2.3]
 
 # how to install
  * copy *app/config/parameters.yml.dist* to *app/config/parameters.yml* and amend database settings
  * *composer install* __# to fetch dependencies and initial commands__
-  * __NOTE!__ composer is configured to create databases if they not exists and run apply migrations using production env.__
+  * __NOTE!__ composer is configured to create database if doesn't exists and apply migrations; using production env.__
  * __optional!__ *composer dump-autoload --optimize* __# to generate "hash-map" autoloader__
-  * __NOTE!__ production uses __APC autoloader__
+  * __NOTE!__ production env. uses __APC autoloader__
  * __optional!__ *php bin/console assets:install* __# to dump assets as hard copies__
   * __NOTE!__ by default assets are installed as symlinks
  * __optional!__ *php bin/console doctrine:fixtures:load --env=test* __# for testing purposes only__
 
 ### how to execute tests
- * *phpunit -c test* or *php bin/phpunit -c tests* (test database will be wiped and seeded again before test execution)
+ * *php bin/phpunit -c .*
+ * *php bin/behat --strict*
+ * *php bin/kahlan*
+  * __NOTE__: in test enviroment application interact with different database [config: "database_name_test" in config.yml], it's wiped and seeded before tests execution
 
 ### /etc/hosts
 ```
