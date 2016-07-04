@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "10159266f59816aed9e008e2b48ca286",
-    "content-hash": "d2876f5638eec3960b59fb0a0ef2c7ba",
+    "hash": "17802dffcc5e27feea239592effa8c6a",
+    "content-hash": "365b90c445fb18a9aa34c2e3d4fd1835",
     "packages": [
         {
             "name": "components/jquery",
@@ -987,16 +987,16 @@
         },
         {
             "name": "eugene-matvejev/css-compiler",
-            "version": "0.2.0",
+            "version": "0.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/learn-symfony/css-compiler.git",
-                "reference": "5204cbd3384aad6160ce1aceb968b58feb058755"
+                "reference": "8b4c8570df4bc91a48926f50eb6a9add3137e110"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/learn-symfony/css-compiler/zipball/5204cbd3384aad6160ce1aceb968b58feb058755",
-                "reference": "5204cbd3384aad6160ce1aceb968b58feb058755",
+                "url": "https://api.github.com/repos/learn-symfony/css-compiler/zipball/8b4c8570df4bc91a48926f50eb6a9add3137e110",
+                "reference": "8b4c8570df4bc91a48926f50eb6a9add3137e110",
                 "shasum": ""
             },
             "require": {
@@ -1012,10 +1012,7 @@
             "autoload": {
                 "psr-4": {
                     "EM\\CssCompiler\\": "src/"
-                },
-                "classmap": [
-                    "ScriptHandler.php"
-                ]
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1028,7 +1025,7 @@
                 }
             ],
             "description": "compiles SASS and LESS assets on composer's callback",
-            "time": "2016-06-27 09:32:47"
+            "time": "2016-07-04 13:52:28"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -1508,16 +1505,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.19.0",
+            "version": "1.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "5f56ed5212dc509c8dc8caeba2715732abb32dbf"
+                "reference": "55841909e2bcde01b5318c35f2b74f8ecc86e037"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/5f56ed5212dc509c8dc8caeba2715732abb32dbf",
-                "reference": "5f56ed5212dc509c8dc8caeba2715732abb32dbf",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/55841909e2bcde01b5318c35f2b74f8ecc86e037",
+                "reference": "55841909e2bcde01b5318c35f2b74f8ecc86e037",
                 "shasum": ""
             },
             "require": {
@@ -1536,8 +1533,8 @@
                 "php-console/php-console": "^3.1.3",
                 "phpunit/phpunit": "~4.5",
                 "phpunit/phpunit-mock-objects": "2.3.0",
-                "raven/raven": "^0.13",
                 "ruflin/elastica": ">=0.90 <3.0",
+                "sentry/sentry": "^0.13",
                 "swiftmailer/swiftmailer": "~5.3"
             },
             "suggest": {
@@ -1549,9 +1546,9 @@
                 "mongodb/mongodb": "Allow sending log messages to a MongoDB server via PHP Driver",
                 "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
                 "php-console/php-console": "Allow sending log messages to Google Chrome",
-                "raven/raven": "Allow sending log messages to a Sentry server",
                 "rollbar/rollbar": "Allow sending log messages to Rollbar",
-                "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
+                "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
+                "sentry/sentry": "Allow sending log messages to a Sentry server"
             },
             "type": "library",
             "extra": {
@@ -1582,7 +1579,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2016-04-12 18:29:35"
+            "time": "2016-07-02 14:02:10"
         },
         {
             "name": "nelmio/api-doc-bundle",
@@ -1718,28 +1715,28 @@
         },
         {
             "name": "ocramius/proxy-manager",
-            "version": "2.0.2",
+            "version": "2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ocramius/ProxyManager.git",
-                "reference": "001e730968f17cb36816ad68914994341d16e029"
+                "reference": "51c7fdd99dba53808aaab21b34f7a55b302c160c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ocramius/ProxyManager/zipball/001e730968f17cb36816ad68914994341d16e029",
-                "reference": "001e730968f17cb36816ad68914994341d16e029",
+                "url": "https://api.github.com/repos/Ocramius/ProxyManager/zipball/51c7fdd99dba53808aaab21b34f7a55b302c160c",
+                "reference": "51c7fdd99dba53808aaab21b34f7a55b302c160c",
                 "shasum": ""
             },
             "require": {
                 "ocramius/package-versions": "^1.0",
                 "php": "7.0.0 - 7.0.5 || ^7.0.7",
-                "zendframework/zend-code": "~3.0"
+                "zendframework/zend-code": "3.0.0 - 3.0.2 || ^3.0.4"
             },
             "require-dev": {
                 "couscous/couscous": "^1.4.0",
                 "ext-phar": "*",
-                "phpunit/phpunit": "^5.1.3",
-                "squizlabs/php_codesniffer": "^2.5.1"
+                "phpunit/phpunit": "^5.3.4",
+                "squizlabs/php_codesniffer": "^2.6.0"
             },
             "suggest": {
                 "ocramius/generated-hydrator": "To have very fast object to array to object conversion for ghost objects",
@@ -1778,7 +1775,7 @@
                 "proxy pattern",
                 "service proxies"
             ],
-            "time": "2016-05-27 01:59:56"
+            "time": "2016-07-01 12:11:54"
         },
         {
             "name": "paragonie/random_compat",
@@ -2763,16 +2760,16 @@
         },
         {
             "name": "zendframework/zend-code",
-            "version": "3.0.2",
+            "version": "3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-code.git",
-                "reference": "57cfbcf794a79985278d6308325bc86060af588c"
+                "reference": "c5272131d3acb0f470a2462ed088fca3b6ba61c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-code/zipball/57cfbcf794a79985278d6308325bc86060af588c",
-                "reference": "57cfbcf794a79985278d6308325bc86060af588c",
+                "url": "https://api.github.com/repos/zendframework/zend-code/zipball/c5272131d3acb0f470a2462ed088fca3b6ba61c2",
+                "reference": "c5272131d3acb0f470a2462ed088fca3b6ba61c2",
                 "shasum": ""
             },
             "require": {
@@ -2812,7 +2809,7 @@
                 "code",
                 "zf2"
             ],
-            "time": "2016-04-20 17:34:49"
+            "time": "2016-06-30 22:35:27"
         },
         {
             "name": "zendframework/zend-eventmanager",
