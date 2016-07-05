@@ -104,8 +104,7 @@ abstract class IntegrationTestSuite extends WebTestCase
 
     public function assertSuccessfulResponse(Response $response)
     {
-        $this->assertGreaterThanOrEqual(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertLessThan(Response::HTTP_MULTIPLE_CHOICES, $response->getStatusCode());
+        $this->assertTrue($response->isSuccessful());
     }
 
     public function assertSuccessfulJSONResponse(Response $response)
@@ -125,8 +124,7 @@ abstract class IntegrationTestSuite extends WebTestCase
 
     public function assertUnsuccessfulResponse(Response $response)
     {
-        $this->assertGreaterThanOrEqual(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        $this->assertLessThanOrEqual(Response::HTTP_NETWORK_AUTHENTICATION_REQUIRED, $response->getStatusCode());
+        $this->assertTrue($response->isClientError() || $response->isServerError());
     }
 
     /**
