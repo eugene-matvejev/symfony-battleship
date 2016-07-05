@@ -109,7 +109,7 @@
             {
                 "format": "compact",
                 "input": [
-                    "src/GameBundle/Resources/assets/scss/partials"
+                    "src/GameBundle/Resources/assets/scss/app.scss"
                 ],
                 "output": "web/assets/css/app.css"
             }
