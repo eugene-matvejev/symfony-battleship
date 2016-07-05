@@ -63,8 +63,6 @@
             "@prepare-database"
         ],
         "prepare-database": [
-            "php bin/console doctrine:database:create --if-not-exists",
-            "php bin/console doctrine:migrations:migrate --no-interaction"
         ],
         "prepare-frontend-assets": [
             "EM\\CssCompiler\\ScriptHandler::generateCSS",
