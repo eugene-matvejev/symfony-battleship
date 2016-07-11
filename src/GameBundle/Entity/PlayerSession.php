@@ -11,7 +11,7 @@ use EM\GameBundle\ORM\TimestampedTrait;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
- * @since 1.0
+ * @since 22.0
  *
  * @ORM\Entity()
  * @ORM\Table(
@@ -20,6 +20,7 @@ use JMS\Serializer\Annotation as Serializer;
  *          @ORM\Index(name="INDEX_SESSION_HASH", columns={"hash"})
  *      }
  * )
+ * @ORM\HasLifecycleCallbacks()
  *
  * @Serializer\ExclusionPolicy("ALL")
  */
@@ -28,6 +29,8 @@ class PlayerSession extends AbstractEntity implements PlayerInterface, Timestamp
     use PlayerTrait, TimestampedTrait;
     /**
      * @ORM\Column(name="hash", type="string", length=40)
+     * @Serializer\Expose()
+     * @Serializer\Type("string")
      *
      * @var string
      */

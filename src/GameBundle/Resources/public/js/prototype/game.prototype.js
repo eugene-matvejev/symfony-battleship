@@ -173,7 +173,9 @@ Game.resources.config   = {
         battlefield: {
             min: 7,
             max: 12
-        }
+        },
+        /** @type {Object} */
+        username: /^[a-zA-Z0-9\.\- @]{3,25}$/
     }
 };
 Game.resources.validate = {

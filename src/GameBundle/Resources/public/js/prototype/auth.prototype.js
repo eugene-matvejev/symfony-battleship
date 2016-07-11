@@ -1,7 +1,9 @@
 'use strict';
 
-class Auth {
+class Auth extends APIRequestService {
     constructor() {
+        super();
+
         let token = this.loadToken();
         if (null !== token) {
             this.setToken(token);
@@ -27,6 +29,10 @@ class Auth {
 
     parseAuthorizationResponse() {
 
+    }
+
+    submit(email, password) {
+        this.request('POST', )
     }
 
     //
@@ -80,7 +86,7 @@ Auth.resources.html   = {
                     <div class="modal-footer"> \
                         <a class="pull-left hidden" href="#form-action-register">already have an account</a>
                         <a class="pull-left" href="#form-action-login">not registered?</a>
-                        <button type="button" id="button-auth-form" class="btn btn-primary" disabled="disabled">submit</button> \
+                        <button type="button" id="button-form-submit" class="btn btn-primary" disabled="disabled">submit</button> \
                     </div> \
                 </div> \
             </div> \

@@ -4,6 +4,7 @@ namespace EM\GameBundle\Model;
 
 use Doctrine\ORM\EntityRepository;
 use EM\GameBundle\Entity\Player;
+use EM\GameBundle\Entity\PlayerSession;
 use EM\GameBundle\Exception\PlayerException;
 
 /**
@@ -17,53 +18,15 @@ class PlayerModel
      * @var EntityRepository
      */
     private $repository;
+    /**
+     * @var string
+     */
+    private $salt;
 
-    public function __construct(EntityRepository $repository)
+    public function __construct(EntityRepository $repository, string $salt)
     {
         $this->repository = $repository;
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return Player
-     * @throws PlayerException
-     */
-    public function createOnRequestAIControlled(string $name) : Player
-    {
-        return $this->createOnRequest($name, true);
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return Player
-     * @throws PlayerException
-     */
-    public function createOnRequestHumanControlled(string $name) : Player
-    {
-        return $this->createOnRequest($name);
-    }
-
-    /**
-     * @param string $name
-     * @param bool   $controlledByAI
-     *
-     * @return Player
-     * @throws PlayerException
-     */
-    protected function createOnRequest(string $name, bool $controlledByAI = false) : Player
-    {
-        /** @var Player $player */
-        $player = $this->repository->findOneBy(['name' => $name]);
-
-        if (null !== $player && $controlledByAI !== static::isAIControlled($player)) {
-            throw new PlayerException("player with '$name' already exists and controlledByAI do not match");
-        }
-
-        return $player ?? (new Player())
-            ->setName($name)
-            ->setFlags($controlledByAI ? static::FLAG_AI_CONTROLLED : static::FLAG_NONE);
+        $this->salt = $salt;
     }
 
     public static function isAIControlled(Player $player) : bool
@@ -71,8 +34,55 @@ class PlayerModel
         return $player->hasFlag(self::FLAG_AI_CONTROLLED);
     }
 
-    protected function getPasswordHash(string $email, string $password) : string
+
+    /**
+     * @param string $email
+     *
+     * @return Player
+     * @throws PlayerException
+     */
+    public function createOnRequestAIControlled(string $email) : Player
     {
-        return sha1("$email:$password");
+        return $this->createOnRequest($email, '', true);
+    }
+
+    /**
+     * @param string $email
+     * @param string $password
+     *
+     * @return Player
+     * @throws PlayerException
+     */
+    public function createOnRequestHumanControlled(string $email, string $password) : Player
+    {
+        return $this->createOnRequest($email, $password);
+    }
+
+    public function generatePasswordHash(string $username, string $password) : string
+    {
+        return sha1("{$username}:{$password}:{$this->salt}");
+    }
+
+    /**
+     * @param string $email
+     * @param string $password
+     * @param bool   $controlledByAI
+     *
+     * @return Player
+     * @throws PlayerException
+     */
+    protected function createOnRequest(string $email, string $password, bool $controlledByAI = false) : Player
+    {
+        /** @var Player $player */
+        $player = $this->repository->findOneBy(['email' => $email]);
+
+        if (null !== $player && $controlledByAI !== static::isAIControlled($player)) {
+            throw new PlayerException("player with '$email' already exists and 'controlledByAI' do not match");
+        }
+
+        return $player ?? (new Player())
+            ->setEmail($email)
+            ->setPasswordHash($this->generatePasswordHash($email, $password))
+            ->setFlags($controlledByAI ? static::FLAG_AI_CONTROLLED : static::FLAG_NONE);
     }
 }

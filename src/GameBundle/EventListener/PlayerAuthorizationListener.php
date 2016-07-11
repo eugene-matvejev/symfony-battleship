@@ -4,7 +4,6 @@ namespace EM\GameBundle\EventListener;
 
 use EM\GameBundle\Model\PlayerSessionModel;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
 class PlayerAuthorizationListener
 {
@@ -31,33 +30,8 @@ class PlayerAuthorizationListener
         } else {
             $token = $request->headers->get(static::AUTHORIZATION_HEADER);
 
-            try {
-                $session = $this->model->find($token);
-                $request->getSession()->set('_security_main', $session);
-            } catch (BadCredentialsException $e) {
-                $request->getSession()->set('_security_main', null);
-            }
+            $session = $this->model->find($token);
+            $request->getSession()->set('_security_main', $session);
         }
-
-//        if (!$this->isWeb($request)) {
-//            return;
-//        }
-        // Emulate session exist. Need for \Symfony\Component\Security\Http\Firewall\ContextListener for first time site open
-//        if (!$request->hasPreviousSession()) {
-//            $request->cookies->set($request->getSession()->getName(), 'emulate');
-//        }
-
-//        $token = $event->getRequest()->cookies->get($this->cookieKey);
-////        $token = $this->getTokenHash($token);
-//        if()
-//        if (empty($token)) {
-//            $request->getSession()->set('_security_main', null);
-//        } else {
-//            $user = (new User())
-//                ->setRubyToken($token)
-//                ->setTimezoneFromRequest($event->getRequest());
-//            $token = new UsernamePasswordToken($user, null, 'main');
-//            $request->getSession()->set('_security_main', serialize($token));
-//        }
     }
 }

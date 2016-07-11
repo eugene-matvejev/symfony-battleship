@@ -15,10 +15,12 @@ services:
         class: EM\GameBundle\Model\PlayerModel
         arguments:
             - "@battleship_game.repository.player"
+            - "%%secret%"
     battleship_game.service.player_session_model:
         class: EM\GameBundle\Model\PlayerSessionModel
         arguments:
             - "@battleship_game.repository.player_session"
+            - "@battleship_game.service.player_model"
             - "%%secret%"
     battleship_game.service.game_result_model:
         class: EM\GameBundle\Model\GameResultModel

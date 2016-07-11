@@ -14,3 +14,11 @@ battleship_game.api.turn:
     methods:  [PATCH]
     requirements:
         cellId: \d+
+battleship_game.api.player_create:
+    path:     player/create
+    defaults: { _controller: "GameBundle:Player:register" }
+    methods:  [POST]
+battleship_game.api.player_login:
+    path:     player/login
+    defaults: { _controller: "GameBundle:Player:login" }
+    methods:  [POST]
