@@ -21,7 +21,7 @@ class GameResultController extends AbstractAPIController
      * )
      *
      * @param int $page
-     * @Security("has_role(ADMIN)")
+     * @Security("has_role('PLAYER')")
      *
      * @return Response
      */
