@@ -6,8 +6,6 @@ use EM\GameBundle\Entity\GameResult;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
- * @see   GameResultControllerTest
- *
  * @since 5.0
  *
  * @Serializer\XmlRoot("game-results")

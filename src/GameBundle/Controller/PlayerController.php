@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @see   GameController
+ * @see   PlayerControllerTest
  *
  * @since 22.0
  */

@@ -33,11 +33,6 @@ class PlayerModel
         return sha1("{$username}:{$password}:{$this->salt}");
     }
 
-    public static function isAIControlled(Player $player) : bool
-    {
-        return $player->hasFlag(self::FLAG_AI_CONTROLLED);
-    }
-
     /**
      * @param string $email
      *
@@ -82,5 +77,10 @@ class PlayerModel
             ->setEmail($email)
             ->setPasswordHash($this->generatePasswordHash($email, $password))
             ->setFlags($controlledByAI ? static::FLAG_AI_CONTROLLED : static::FLAG_NONE);
+    }
+
+    public static function isAIControlled(Player $player) : bool
+    {
+        return $player->hasFlag(self::FLAG_AI_CONTROLLED);
     }
 }
