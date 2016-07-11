@@ -7,6 +7,7 @@ use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Entity\Game;
 use EM\GameBundle\Entity\GameResult;
 use EM\GameBundle\Entity\Player;
+use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Model\PlayerModel;
 
@@ -17,15 +18,8 @@ class MockFactory
 {
     public static function getBattlefieldMock(int $size = 7) : Battlefield
     {
-        $battlefield = (new Battlefield())
+        $battlefield = BattlefieldModel::generate($size)
             ->setPlayer(static::getPlayerMock(''));
-
-        /** cell's coordinate pattern: /[A-Z][1-9][0-9]/ */
-        for ($x = 0, $letter = 'A'; $x < $size; $letter++, $x++) {
-            for ($digit = 0; $digit < $size;) {
-                $battlefield->addCell(static::getCellMock($letter . (++$digit)));
-            }
-        }
 
         return $battlefield;
     }
@@ -56,15 +50,15 @@ class MockFactory
         return $gameResult;
     }
 
-    public static function getPlayerMock(string $name, int $flags = PlayerModel::FLAG_NONE) : Player
+    public static function getPlayerMock(string $email, int $flags = PlayerModel::FLAG_NONE) : Player
     {
         return (new Player())
-            ->setName($name)
+            ->setEmail($email)
             ->setFlags($flags);
     }
 
-    public static function getAIPlayerMock(string $name) : Player
+    public static function getAIPlayerMock(string $email) : Player
     {
-        return static::getPlayerMock($name, PlayerModel::FLAG_AI_CONTROLLED);
+        return static::getPlayerMock($email, PlayerModel::FLAG_AI_CONTROLLED);
     }
 }
