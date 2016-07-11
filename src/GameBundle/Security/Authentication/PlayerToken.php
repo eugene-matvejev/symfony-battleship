@@ -6,6 +6,9 @@ use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Entity\PlayerSession;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 
+/**
+ * @since 22.0
+ */
 class PlayerToken extends AbstractToken
 {
     protected $user;

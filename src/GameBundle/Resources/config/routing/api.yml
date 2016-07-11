@@ -22,3 +22,9 @@ battleship_game.api.player_login:
     path:     player/login
     defaults: { _controller: "GameBundle:Player:login" }
     methods:  [POST]
+battleship_game.api.player_logout:
+    path:     player/logout/{hash}
+    defaults: { _controller: "GameBundle:Player:logout" }
+    methods:  [DELETE]
+    requirements:
+        hash: \[0-9a-Z]{40}\

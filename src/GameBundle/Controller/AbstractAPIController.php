@@ -3,7 +3,7 @@
 namespace EM\GameBundle\Controller;
 
 use EM\GameBundle\Entity\PlayerSession;
-use EM\GameBundle\EventListener\PlayerAuthorizationListener;
+use EM\GameBundle\Model\PlayerSessionModel;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,7 +25,7 @@ abstract class AbstractAPIController extends Controller
     {
         $session = $this->get('session')->get('_security_main');
         if ($session instanceof PlayerSession) {
-            $headers[PlayerAuthorizationListener::AUTHORIZATION_HEADER] = $session->getHash();
+            $headers[PlayerSessionModel::AUTHORIZATION_HEADER] = $session->getHash();
         }
 
         $header = $this->get('request_stack')->getMasterRequest()->headers->get('accept');

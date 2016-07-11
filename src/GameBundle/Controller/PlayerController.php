@@ -5,6 +5,7 @@ namespace EM\GameBundle\Controller;
 use EM\GameBundle\Entity\PlayerSession;
 use EM\GameBundle\Exception\PlayerException;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -53,6 +54,7 @@ class PlayerController extends AbstractAPIController
 
         return $this->prepareSerializedResponse($player, Response::HTTP_CREATED);
     }
+
     /**
      * @ApiDoc(
      *      section = "API: Foundation",
@@ -68,7 +70,6 @@ class PlayerController extends AbstractAPIController
      * @return Response
      * @throws PlayerException
      */
-
     public function loginAction(Request $request)
     {
         $json = json_decode($request->getContent());
@@ -82,6 +83,35 @@ class PlayerController extends AbstractAPIController
         $om->flush();
 
         return $this->prepareSerializedResponse($session->getPlayer());
+    }
+
+    /**
+     * @Security("has_role('PLAYER')")
+     * @ApiDoc(
+     *      section = "API: Foundation",
+     *      description = "deletes session from database",
+     *      input = "",
+     *      responseMap = {
+     *          202 = ""
+     *      }
+     * )
+     *
+     * @param Request $request
+     *
+     * @return Response
+     * @throws PlayerException
+     */
+    public function logoutAction(Request $request)
+    {
+        $json = json_decode($request->getContent());
+
+        $session = $this->get('battleship_game.service.player_session_model')->authenticate($json->email, $json->password);
+
+        $om = $this->getDoctrine()->getManager();
+        $om->detach($session);
+        $om->flush();
+
+        return $this->prepareSerializedResponse([], Response::HTTP_ACCEPTED);
     }
 
     protected function setPlayerSession(PlayerSession $session)

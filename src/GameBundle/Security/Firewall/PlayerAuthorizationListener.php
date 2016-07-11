@@ -9,9 +9,11 @@ use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterfac
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 
+/**
+ * @since 22.0
+ */
 class PlayerAuthorizationListener implements ListenerInterface
 {
-    const AUTHORIZATION_HEADER = 'x-wsse';
     /**
      * @var TokenStorageInterface
      */
@@ -39,10 +41,10 @@ class PlayerAuthorizationListener implements ListenerInterface
         }
 
         $request = $event->getRequest();
-        if (!$request->headers->has(static::AUTHORIZATION_HEADER)) {
+        if (!$request->headers->has(PlayerSessionModel::AUTHORIZATION_HEADER)) {
             $request->getSession()->set('_security_main', null);
         } else {
-            $sessionHash = $request->headers->get(static::AUTHORIZATION_HEADER);
+            $sessionHash = $request->headers->get(PlayerSessionModel::AUTHORIZATION_HEADER);
 
             $session = $this->model->find($sessionHash);
             $request->getSession()->set('_security_main', $session);

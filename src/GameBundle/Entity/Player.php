@@ -32,6 +32,8 @@ class Player extends AbstractFlaggedEntity
      */
     protected $email;
     /**
+     * @since 22.0
+     *
      * @ORM\Column(name="passwordHash", type="string", length=40)
      *
      * @Serializer\Exclude()

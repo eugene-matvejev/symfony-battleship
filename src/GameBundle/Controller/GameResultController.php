@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 class GameResultController extends AbstractAPIController
 {
     /**
+     * @Security("has_role('PLAYER')")
      * @ApiDoc(
      *      section = "API: Game: Results",
      *      description = "returns game results ordered by date in desc. order",
@@ -21,7 +22,6 @@ class GameResultController extends AbstractAPIController
      * )
      *
      * @param int $page
-     * @Security("has_role('PLAYER')")
      *
      * @return Response
      */

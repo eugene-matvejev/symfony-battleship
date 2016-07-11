@@ -4,7 +4,6 @@ namespace EM\GameBundle\Model;
 
 use Doctrine\ORM\EntityRepository;
 use EM\GameBundle\Entity\Player;
-use EM\GameBundle\Entity\PlayerSession;
 use EM\GameBundle\Exception\PlayerException;
 
 /**
@@ -29,11 +28,15 @@ class PlayerModel
         $this->salt = $salt;
     }
 
+    public function generatePasswordHash(string $username, string $password) : string
+    {
+        return sha1("{$username}:{$password}:{$this->salt}");
+    }
+
     public static function isAIControlled(Player $player) : bool
     {
         return $player->hasFlag(self::FLAG_AI_CONTROLLED);
     }
-
 
     /**
      * @param string $email
@@ -56,11 +59,6 @@ class PlayerModel
     public function createOnRequestHumanControlled(string $email, string $password) : Player
     {
         return $this->createOnRequest($email, $password);
-    }
-
-    public function generatePasswordHash(string $username, string $password) : string
-    {
-        return sha1("{$username}:{$password}:{$this->salt}");
     }
 
     /**

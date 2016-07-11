@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\Exception\CredentialsExpiredException;
 class PlayerSessionModel
 {
     const TTL = 60 * 60 * 24 * 30;
+    const AUTHORIZATION_HEADER = 'x-wsse';
     /**
      * @var EntityRepository
      */
