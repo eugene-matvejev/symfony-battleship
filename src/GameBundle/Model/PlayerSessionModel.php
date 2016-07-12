@@ -2,7 +2,7 @@
 
 namespace EM\GameBundle\Model;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Common\Persistence\ObjectRepository;
 use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Entity\PlayerSession;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
@@ -13,18 +13,22 @@ use Symfony\Component\Security\Core\Exception\CredentialsExpiredException;
  */
 class PlayerSessionModel
 {
-    const TTL = 60 * 60 * 24 * 30;
+    const TTL                  = 60 * 60 * 24 * 30;
     const AUTHORIZATION_HEADER = 'x-wsse';
     /**
-     * @var EntityRepository
+     * @var ObjectRepository
      */
     protected $repository;
+    /**
+     * @var PlayerModel
+     */
+    protected $model;
     /**
      * @var string
      */
     protected $salt;
 
-    public function __construct(EntityRepository $repository, PlayerModel $model, string $salt)
+    public function __construct(ObjectRepository $repository, PlayerModel $model, string $salt)
     {
         $this->repository = $repository;
         $this->model = $model;
@@ -49,15 +53,6 @@ class PlayerSessionModel
         return $this->create($player);
     }
 
-    public function create(Player $player) : PlayerSession
-    {
-        $session = (new PlayerSession())
-            ->setPlayer($player)
-            ->setHash($this->createSessionHash($player));
-
-        return $session;
-    }
-
     /**
      * @param string $hash
      *
@@ -79,7 +74,16 @@ class PlayerSessionModel
         throw new BadCredentialsException();
     }
 
-    protected function createSessionHash(Player $player) : string
+    protected function create(Player $player) : PlayerSession
+    {
+        $session = (new PlayerSession())
+            ->setPlayer($player)
+            ->setHash($this->generateSessionHash($player));
+
+        return $session;
+    }
+
+    protected function generateSessionHash(Player $player) : string
     {
         return sha1("{$player->getEmail()}:{$player->getPasswordHash()}:{$this->salt}:" . microtime(true));
     }

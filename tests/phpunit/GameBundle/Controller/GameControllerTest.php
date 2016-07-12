@@ -34,15 +34,29 @@ class GameControllerTest extends IntegrationTestSuite
     public function unsuccessfulInitAction()
     {
         foreach (['application/xml', 'application/json'] as $acceptHeader) {
-            $client = clone static::$client;
-            $client->request(
+            $client = $this->requestAuthorized(
                 Request::METHOD_POST,
                 static::$router->generate('battleship_game.api.init'),
                 [],
                 [],
                 ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => $acceptHeader]
             );
+
             $this->assertUnsuccessfulResponse($client->getResponse());
+
+//            $client = clone static::$client;
+//            $client->request(
+//                Request::METHOD_POST,
+//                static::$router->generate('battleship_game.api.init'),
+//                [],
+//                [],
+//                [
+//                    'CONTENT_TYPE' => 'application/json',
+//                    'HTTP_accept' => $acceptHeader,
+//                    'HTTP_'. PlayerSessionModel::AUTHORIZATION_HEADER => static::$om->getRepository('GameBundle:PlayerSession')->find(1)->getHash()
+//                ]
+//            );
+//            $this->assertUnsuccessfulResponse($client->getResponse());
         }
     }
 
@@ -54,8 +68,7 @@ class GameControllerTest extends IntegrationTestSuite
      */
     public function successfulInitAction_JSON()
     {
-        $client = clone static::$client;
-        $client->request(
+        $client = $this->requestAuthorized(
             Request::METHOD_POST,
             static::$router->generate('battleship_game.api.init'),
             [],
@@ -63,32 +76,46 @@ class GameControllerTest extends IntegrationTestSuite
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json'],
             static::getSharedFixtureContent('init-game-request-2-players-7x7.json')
         );
+
         $this->assertSuccessfulJSONResponse($client->getResponse());
 
         $response = json_decode($client->getResponse()->getContent());
-        $this->assertInternalType('array', $response);
 
-        foreach ($response as $battlefield) {
-            $this->assertInternalType('int', $battlefield->id);
-            $this->assertInstanceOf(\stdClass::class, $battlefield->player);
-
-            $this->assertInternalType('int', $battlefield->player->id);
-            $this->assertInternalType('int', $battlefield->player->flags);
-            $this->assertInternalType('string', $battlefield->player->name);
-
-            $this->assertCount(49, (array)$battlefield->cells);
-            foreach ($battlefield->cells as $coordinate => $cell) {
-                $this->assertInternalType('string', $coordinate);
-
-                $this->assertInternalType('int', $cell->id);
-                $this->assertInternalType('int', $cell->flags);
-                $this->assertInternalType('string', $cell->coordinate);
-
-                /** as CPU fields should have CellModel::FLAG_NONE on initiation */
-                $expected = $battlefield->player->flags == PlayerModel::FLAG_AI_CONTROLLED ? CellModel::FLAG_NONE : $cell->flags;
-                $this->assertEquals($expected, $cell->flags);
-            }
-        }
+//        $client = clone static::$client;
+//        $client->request(
+//            Request::METHOD_POST,
+//            static::$router->generate('battleship_game.api.init'),
+//            [],
+//            [],
+//            ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json'],
+//            static::getSharedFixtureContent('init-game-request-2-players-7x7.json')
+//        );
+//        $this->assertSuccessfulJSONResponse($client->getResponse());
+//
+//        $response = json_decode($client->getResponse()->getContent());
+//        $this->assertInternalType('array', $response);
+//
+//        foreach ($response as $battlefield) {
+//            $this->assertInternalType('int', $battlefield->id);
+//            $this->assertInstanceOf(\stdClass::class, $battlefield->player);
+//
+//            $this->assertInternalType('int', $battlefield->player->id);
+//            $this->assertInternalType('int', $battlefield->player->flags);
+//            $this->assertInternalType('string', $battlefield->player->name);
+//
+//            $this->assertCount(49, (array)$battlefield->cells);
+//            foreach ($battlefield->cells as $coordinate => $cell) {
+//                $this->assertInternalType('string', $coordinate);
+//
+//                $this->assertInternalType('int', $cell->id);
+//                $this->assertInternalType('int', $cell->flags);
+//                $this->assertInternalType('string', $cell->coordinate);
+//
+//                /** as CPU fields should have CellModel::FLAG_NONE on initiation */
+//                $expected = $battlefield->player->flags == PlayerModel::FLAG_AI_CONTROLLED ? CellModel::FLAG_NONE : $cell->flags;
+//                $this->assertEquals($expected, $cell->flags);
+//            }
+//        }
 
         /** pass the response to the dependant class */
         return $response;

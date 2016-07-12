@@ -4,6 +4,7 @@ namespace EM\Tests\Environment;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Persistence\ObjectManager;
+use EM\GameBundle\Model\PlayerSessionModel;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
@@ -147,6 +148,17 @@ abstract class IntegrationTestSuite extends WebTestCase
         return $method->invokeArgs($object, $methodArguments);
     }
 
+    protected function requestAuthorized($method, $uri, array $parameters = [], array $files = [], array $server = [], $content = null, $changeHistory = true) : Client
+    {
+        $client = static::$client;
+        $server['HTTP_' . PlayerSessionModel::AUTHORIZATION_HEADER] = static::$om->getRepository('GameBundle:PlayerSession')->find(1)->getHash();
+
+        $client->request($method, $uri, $parameters, $files, $server, $content, $changeHistory);
+
+        return $client;
+    }
+
+    /*** ****************************** HELPERS ****************************** ***/
     public static function getRootDirectory() : string
     {
         return dirname(__DIR__);
