@@ -1,26 +1,5 @@
 services:
     # Event Listeners
-#    battleship.game.response.listener:
-#        class: EM\GameBundle\EventListener\GameResponseListener
-#        tags:
-#            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
-#    battleship_game.listener.on_kernel_request:
-#        class: EM\GameBundle\EventListener\PlayerAuthorizationListener
-#        arguments:
-#            - "@battleship_game.service.player_session_model"
-#        tags:
-#            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
-#    battleship_game.listener.post_voter:
-#        class: EM\GameBundle\Model\
-#        arguments:
-#            - "@security.access.decision_manager"
-#        public:     false
-#        tags:
-#           - { name: security.voter }
-#    battleship_game.authentication.provider:
-#        class: Babylon\ApiBundle\Security\Authentication\Provider\Provider
-#        arguments: ['', @security.encoder_factory]
-
     battleship_game.authentication.listener:
         class: EM\GameBundle\Security\Firewall\PlayerAuthorizationListener
         arguments:
@@ -28,8 +7,7 @@ services:
             - "@security.authentication.manager"
             - "@battleship_game.service.player_session_model"
         tags:
-            - { name: kernel.event_listener, event: kernel.request, method: handle }
-
+            - { name: kernel.event_listener, event: kernel.request }
    # Models
     battleship_game.service.player_model:
         class: EM\GameBundle\Model\PlayerModel
