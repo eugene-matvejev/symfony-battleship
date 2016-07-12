@@ -21,9 +21,9 @@ $(document).ready(function () {
 
     // /** open modal for new game when page is loaded */
     // game.modalMgr.updateHTML(game.constructor.resources.html.modal).show();
-    // /** initiate game when page is loaded */
-    // game.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="game-current-area"]'));
-    // game.init('Human', 7);
+    /** initiate game when page is loaded */
+    game.pageMgr.switchSection(document.querySelector('.page-sidebar li[data-section="game-current-area"]'));
+    game.init('Human', 7);
 
     $('#game-current-area')
         .on('click', '.player-area[data-player-flag="1"] .battlefield-cell[data-flags="0"]', function (e) {
