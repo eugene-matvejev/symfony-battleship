@@ -1,8 +1,7 @@
 <?php
 
-namespace EM\GameBundle\Controller;
+namespace EM\FoundationBundle\Controller;
 
-use EM\GameBundle\Entity\PlayerSession;
 use EM\GameBundle\Exception\PlayerException;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -16,13 +15,18 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PlayerController extends AbstractAPIController
 {
+    public function indexAction() : Response
+    {
+        return $this->render('@Foundation/index.html.twig');
+    }
+
     /**
      * @ApiDoc(
      *      section = "API: Foundation",
      *      description = "Creates a new player from submitted data",
      *      input = "",
      *      responseMap = {
-     *          201 = "EM\GameBundle\Entity\Player"
+     *          201 = "EM\GameBundle\Entity\PlayerSession"
      *      }
      * )
      *
@@ -43,16 +47,11 @@ class PlayerController extends AbstractAPIController
             throw new PlayerException("player with {$json->email} already exists");
         }
 
-        $session = $this->get('battleship_game.service.player_session_model')->create($player);
-
         $om = $this->getDoctrine()->getManager();
         $om->persist($player);
-        $om->persist($session);
-        $this->setPlayerSession($session);
-
         $om->flush();
 
-        return $this->prepareSerializedResponse($player, Response::HTTP_CREATED);
+        return $this->processLogin($json->email, $json->password);
     }
 
     /**
@@ -61,7 +60,7 @@ class PlayerController extends AbstractAPIController
      *      description = "authenticate and returns player details",
      *      input = "",
      *      responseMap = {
-     *          200 = "EM\GameBundle\Entity\Player"
+     *          201 = "EM\GameBundle\Entity\PlayerSession"
      *      }
      * )
      *
@@ -70,19 +69,23 @@ class PlayerController extends AbstractAPIController
      * @return Response
      * @throws PlayerException
      */
-    public function loginAction(Request $request)
+    public function loginAction(Request $request) : Response
     {
         $json = json_decode($request->getContent());
 
-        $session = $this->get('battleship_game.service.player_session_model')->authenticate($json->email, $json->password);
+        return $this->processLogin($json->email, $json->password);
+    }
+
+    protected function processLogin(string $email, string $password) : Response
+    {
+        $session = $this->get('battleship_game.service.player_session_model')->authenticate($email, $password);
 
         $om = $this->getDoctrine()->getManager();
         $om->persist($session);
-        $this->setPlayerSession($session);
 
         $om->flush();
 
-        return $this->prepareSerializedResponse($session->getPlayer());
+        return $this->prepareSerializedResponse($session, Response::HTTP_CREATED);
     }
 
     /**
@@ -101,7 +104,7 @@ class PlayerController extends AbstractAPIController
      * @return Response
      * @throws PlayerException
      */
-    public function logoutAction(Request $request)
+    public function logoutAction(Request $request) : Response
     {
         $json = json_decode($request->getContent());
 
@@ -112,10 +115,5 @@ class PlayerController extends AbstractAPIController
         $om->flush();
 
         return $this->prepareSerializedResponse([], Response::HTTP_ACCEPTED);
-    }
-
-    protected function setPlayerSession(PlayerSession $session)
-    {
-        $this->container->get('session')->set('_security_main', $session);
     }
 }

@@ -1,0 +1,14 @@
+foundation_bundle.api.player_create:
+    path:     player/register
+    defaults: { _controller: "FoundationBundle:Player:register" }
+    methods:  [POST]
+foundation_bundle.api.player_login:
+    path:     player/login
+    defaults: { _controller: "FoundationBundle:Player:login" }
+    methods:  [POST]
+foundation_bundle.api.player_logout:
+    path:     player/logout/{hash}
+    defaults: { _controller: "FoundationBundle:Player:logout" }
+    methods:  [DELETE]
+    requirements:
+        hash: \[0-9a-Z]{40}\

@@ -1,13 +1,4 @@
 services:
-    # Event Listeners
-    battleship_game.authentication.listener:
-        class: EM\GameBundle\Security\Firewall\AuthenticationListener
-        arguments:
-            - "@security.token_storage"
-            - "@security.authentication.manager"
-            - "@battleship_game.service.player_session_model"
-        tags:
-            - { name: kernel.event_listener, event: kernel.request }
    # Models
     battleship_game.service.player_model:
         class: EM\GameBundle\Model\PlayerModel

@@ -79,7 +79,7 @@ class PlayerSessionModel
         $session = (new PlayerSession())
             ->setPlayer($player)
             ->setHash($this->generateSessionHash($player));
-
+        
         return $session;
     }
 

@@ -1,0 +1,6 @@
+battleship_game.api:
+    resource: "@FoundationBundle/Resources/config/routing/api.yml"
+    prefix:   api/
+battleship_game.gui:
+    resource: "@FoundationBundle/Resources/config/routing/gui.yml"
+    prefix:   /

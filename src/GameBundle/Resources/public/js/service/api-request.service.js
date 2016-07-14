@@ -20,6 +20,9 @@ class APIRequestService {
             contentType: 'application/json; charset=utf-8',
             accepts: 'application/json',
             dataType: 'json',
+            headers: {
+                'x-wsse': 'asd'
+            },
             method: requestMethod,
             url: requestURL,
             data: requestData,
