@@ -14,20 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 class GameControllerTest extends IntegrationTestSuite
 {
     /**
-     * @see GameController::indexAction
-     * @test
-     */
-    public function indexActionOnNonAuthorized()
-    {
-        $client = $this->getNonAuthorizedClient();
-        $client->request(
-            Request::METHOD_GET,
-            static::$router->generate('battleship_game.gui.index')
-        );
-        $this->assertSuccessfulResponse($client->getResponse());
-    }
-
-    /**
      * @see GameController::initAction
      * @test
      */

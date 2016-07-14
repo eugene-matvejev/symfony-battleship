@@ -17,7 +17,7 @@ class GameResultControllerTest extends IntegrationTestSuite
      */
     public function orderedByDateAction()
     {
-        $client = clone static::$client;
+        $client = $this->getAuthorizedClient();
         $client->request(
             Request::METHOD_GET,
             static::$router->generate('battleship_game.api.game.results', ['page' => 1]),

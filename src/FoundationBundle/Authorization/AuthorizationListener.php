@@ -28,25 +28,19 @@ class AuthorizationListener implements ListenerInterface
         $this->model = $model;
     }
 
-    public function handle(GetResponseEvent $event)
+    public function handle(GetResponseEvent $event) : bool
     {
-        if (!$event->isMasterRequest()) {
-            return;
-        }
-
-        $request = $event->getRequest();
-        if ($request->headers->has(PlayerSessionModel::AUTHORIZATION_HEADER)) {
-//            $request->getSession()->set('_security_main', null);
-//        } else {
-            $sessionHash = $request->headers->get(PlayerSessionModel::AUTHORIZATION_HEADER);
+        if (!$event->isMasterRequest() || !$event->getRequest()->headers->has(PlayerSessionModel::SESSION_HEADER)) {
+            $sessionHash = $event->getRequest()->headers->get(PlayerSessionModel::SESSION_HEADER);
 
             $session = $this->model->find($sessionHash);
-//            $request->getSession()->set('_security_main', $session);
 
             $token = (new PlayerSessionToken(['PLAYER']))
                 ->setSession($session);
 
             $this->storage->setToken($token);
         }
+
+        return false;
     }
 }
