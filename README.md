@@ -96,7 +96,7 @@ _purpose: easier manual testing_
 # how to install
  * copy *app/config/parameters.yml.dist* to *app/config/parameters.yml* and amend database settings
  * *composer install* __# to fetch dependencies and initial commands__
-  * __NOTE!__ composer is configured to create database if doesn't exists and apply migrations; using production env.__
+  * __NOTE!__ composer is configured to create database if doesn't exists and apply migrations; __using production env.__
  * __optional!__ *composer dump-autoload --optimize* __# to generate "hash-map" autoloader__
   * __NOTE!__ production env. uses __APC autoloader__
  * __optional!__ *php bin/console assets:install* __# to dump assets as hard copies__
