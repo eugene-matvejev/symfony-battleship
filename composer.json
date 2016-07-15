@@ -36,10 +36,7 @@
         "symfony/symfony": "^3.1",
         "symfony/monolog-bundle": "^2.8",
         "jms/serializer-bundle": "^1.1",
-        "nelmio/api-doc-bundle": "^2.12",
-        "eugene-matvejev/css-compiler": "~0.2",
-        "components/jquery": "^2.2",
-        "twitter/bootstrap": "^3.3"
+        "nelmio/api-doc-bundle": "^2.12"
     },
     "require-dev": {
         "composer/composer": "^1.0",
@@ -59,19 +56,11 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget",
-            "@prepare-frontend-assets",
             "@prepare-database"
         ],
         "prepare-database": [
             "php bin/console doctrine:database:create --if-not-exists",
             "php bin/console doctrine:migrations:migrate --no-interaction"
-        ],
-        "prepare-frontend-assets": [
-            "EM\\CssCompiler\\ScriptHandler::generateCSS",
-            "mkdir -p web/assets/vendor/jquery",
-            "cp vendor/components/jquery/jquery.min.js web/assets/vendor/jquery/jquery.min.js",
-            "mkdir -p web/assets/vendor/twitter-bootstrap",
-            "cp -r vendor/twitter/bootstrap/dist/* web/assets/vendor/twitter-bootstrap"
         ],
         "compile": [
             "rm web/app_dev.php",
@@ -104,15 +93,6 @@
                 "database_user": "DATABASE_USER",
                 "database_password": "DATABASE_PASSWORD"
             }
-        },
-        "css-compiler": [
-            {
-                "format": "compact",
-                "input": [
-                    "src/GameBundle/Resources/assets/scss/app.scss"
-                ],
-                "output": "web/assets/css/app.css"
-            }
-        ]
+        }
     }
 }

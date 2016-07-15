@@ -24,7 +24,7 @@ class GameControllerTest extends IntegrationTestSuite
             Request::METHOD_GET,
             static::$router->generate('battleship_game.gui.index')
         );
-        $this->assertSuccessfulResponse($client->getResponse());
+        $this->assertRedirectedResponse($client->getResponse());
     }
 
     /**
