@@ -152,6 +152,12 @@ _purpose: easier manual testing_
         <IfModule mod_rewrite.c>
             RewriteEngine On
 
+            # CORS support.
+            RewriteCond %{REQUEST_METHOD} OPTIONS
+            RewriteRule ^(.*)$ $1 [R=200,L]
+            Header always set Access-Control-Allow-Origin "*"
+            Header always set Access-Control-Allow-Methods "POST, GET, PATCH, OPTIONS"
+
             # Determine the RewriteBase automatically and set it as environment variable.
             # If you are using Apache aliases to do mass virtual hosting or installed the
             # project in a subdirectory, the base path will be prepended to allow proper
