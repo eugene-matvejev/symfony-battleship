@@ -1,6 +1,5 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
 [![Code Climate](https://codeclimate.com/github/eugene-matvejev/battleship-game-api/badges/gpa.svg)](https://codeclimate.com/github/eugene-matvejev/battleship-game-api)
-[![Code Coverage](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
 [![Build Status](https://travis-ci.org/eugene-matvejev/battleship-game-api.svg?branch=master)](https://travis-ci.org/eugene-matvejev/battleship-game-api)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc/mini.png)](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc)
 
@@ -10,6 +9,11 @@ __TDD tests__
 __BDD tests__
  * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - *Behat*
  * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - *Kahlan*
+
+__Test Coverage__
+
+[![Code Coverage](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
+[![codecov](https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/master/graph/badge.svg)](https://codecov.io/gh/eugene-matvejev/battleship-game-api)
 
 __DEMO__ : https://battleship-game-api.herokuapp.com/
 
@@ -92,7 +96,7 @@ _purpose: easier manual testing_
 # how to install
  * copy *app/config/parameters.yml.dist* to *app/config/parameters.yml* and amend database settings
  * *composer install* __# to fetch dependencies and initial commands__
-  * __NOTE!__ composer is configured to create database if doesn't exists and apply migrations; using production env.__
+  * __NOTE!__ composer is configured to create database if doesn't exists and apply migrations; __using production env.__
  * __optional!__ *composer dump-autoload --optimize* __# to generate "hash-map" autoloader__
   * __NOTE!__ production env. uses __APC autoloader__
  * __optional!__ *php bin/console assets:install* __# to dump assets as hard copies__
@@ -103,7 +107,7 @@ _purpose: easier manual testing_
  * *php bin/phpunit -c .*
  * *php bin/behat --strict*
  * *php bin/kahlan*
-  * __NOTE__: in test enviroment application interact with different database [config: "database_name_test" in config.yml], it's wiped and seeded before tests execution
+  * __NOTE__: in test enviroment application interact with different database [config: "database_name_test" in parameters.yml], it's wiped and seeded before tests execution
 
 ### /etc/hosts
 ```
