@@ -84,19 +84,19 @@ _purpose: easier manual testing_
   * pull requests follows [semantic vesion](http://semver.org/)
 
 # how to install
- * __$ composer install*__ # to fetches dependencies, executes mandatory deployment commands__
+ * __$ composer install__ # to fetches dependencies, executes mandatory deployment commands__
   * __NOTE!__ composer is configured to generate __parameters.yml__ using [incenteev/composer-parameter-handler](https://github.com/Incenteev/ParameterHandler)
   * __NOTE!__ composer is configured to create database [if not exists] and apply migrations; __using prod. env.__
- * __optional!__ *composer dump-autoload --optimize* __# to generate optimized "hash-map" autoloader__
+ * optional! __$ composer dump-autoload --optimize__ # to generate optimized "hash-map" autoloader
   * __NOTE!__ prod. env. uses __APC autoloader__
- * __optional!__ *php bin/console assets:install* __# to dump assets as hard copies__
+ * optional __$ php bin/console assets:install__ # to dump assets as hard copies
   * __NOTE!__ by default assets are installed as symlinks
- * __optional!__ *php bin/console doctrine:fixtures:load --env=test* __# for testing purposes only__
+ * optional! __php bin/console doctrine:fixtures:load --env=test__ # for testing purposes only
 
 ### how to execute tests
- * *php bin/phpunit -c .*
- * *php bin/behat --strict*
- * *php bin/kahlan*
+ * *$ php bin/phpunit -c .*
+ * *$ php bin/behat --strict*
+ * *$ php bin/kahlan*
   * __NOTE__: application booted in test enviroment interact with different database [config: "database_name_test" in parameters.yml]
   * __NOTE 2__: test database is wiped and seeded before tests execution
 
