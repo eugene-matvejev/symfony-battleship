@@ -78,27 +78,28 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ (API)
  * new functionality merged into master branch only via pull requests
  * each pull request have callback to trigger CI engines such as Travis, Circle, CodeShip, Scrutinizer, Sensiolabs Insight, CodeCov
  * result of each pull request is ready-to-use release - using Continuous Delivery principles
-* __gitflow__:
+
+#gitflow
   * __master__ branch: stable source code, contains release-ready source
   * __heroku__ branch: reflects current deployed app at heroku [Continuous Deployment]
-  * __prototype_*__ branches contains new ideas [merged pull request of prototype branch is always next _major_ version release]
+  * __prototype_*__ branch: contains new idea [pull request of prototype branch is always next _major_ version release]
   * pull requests follows [semantic vesion](http://semver.org/)
 
 # how to install
  * __$ composer install__ # to fetches dependencies, executes mandatory deployment commands
-  * _NOTE_ composer is configured to generate __parameters.yml__ using [incenteev/composer-parameter-handler](https://github.com/Incenteev/ParameterHandler)
-  * _NOTE 2_ composer is configured to create database [if not exists] and apply migrations; __using prod. env.__
- * optional! __$ composer dump-autoload --optimize__ # to generate [class-map autoloader](https://getcomposer.org/doc/03-cli.md#dump-autoload)
-  * _NOTE_ prod. env. uses [APC autoloader](http://symfony.com/doc/current/book/performance.html)
- * optional __$ php bin/console assets:install__ # to dump assets as hard copies
-  * _NOTE_ by default assets are installed as symlinks
+  * _NOTE:_ composer is configured to generate __parameters.yml__ using [incenteev/composer-parameter-handler](https://github.com/Incenteev/ParameterHandler)
+  * _NOTE:_ composer is configured to create database [if not exists] and apply migrations; __using prod. env.__
+ * optional: __$ composer dump-autoload --optimize__ # to generate [class-map autoloader](https://getcomposer.org/doc/03-cli.md#dump-autoload)
+  * _NOTE:_ prod. env. uses [APC autoloader](http://symfony.com/doc/current/book/performance.html)
+ * optional: __$ php bin/console assets:install__ # to dump assets as hard copies
+  * _NOTE:_ by default assets are installed as symlinks
 
 ### how to execute tests
  * _$ php bin/phpunit -c ._
  * _$ php bin/behat --strict_
  * _$ php bin/kahlan_
-  * _NOTE_: database\_name\_test in parameters.yml reflects database name for test env.
-  * _NOTE 2_: test database is wiped and seeded before tests execution
+  * _NOTE:_ database\_name\_test in parameters.yml reflects database name for test env.
+  * _NOTE:_ test database is wiped and seeded before tests execution
 
 ### /etc/hosts
 ```
