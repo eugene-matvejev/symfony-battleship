@@ -8,11 +8,15 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20160507000000 extends AbstractMigration
+class Version20160717004000 extends AbstractMigration
 {
+    /**
+     * @param Schema $schema
+     */
     public function up(Schema $schema)
     {
-        $this->skipIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on "postgresql"');
+        // this up() migration is auto-generated, please modify it to your needs
+        $this->skipIf($this->connection->getDatabasePlatform()->getName() != 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
         $this->addSql('CREATE TABLE battlefields (id SERIAL NOT NULL, game INT NOT NULL, player INT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX INDEX_BATTLEFIELDS_GAME ON battlefields (game)');
@@ -25,7 +29,7 @@ class Version20160507000000 extends AbstractMigration
         $this->addSql('CREATE UNIQUE INDEX UNIQ_A619B3B232B318C ON game_results (game)');
         $this->addSql('CREATE INDEX INDEX_GAME_RESULT_GAME ON game_results (game)');
         $this->addSql('CREATE INDEX INDEX_GAME_RESULT_WINNER ON game_results (player)');
-        $this->addSql('CREATE TABLE players (id SERIAL NOT NULL, name VARCHAR(100) NOT NULL, flags INT NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE players (id SERIAL NOT NULL, name VARCHAR(25) NOT NULL, flags INT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX INDEX_PLAYER_NAME ON players (name)');
         $this->addSql('ALTER TABLE battlefields ADD CONSTRAINT FK_EDE65EA6232B318C FOREIGN KEY (game) REFERENCES games (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE battlefields ADD CONSTRAINT FK_EDE65EA698197A65 FOREIGN KEY (player) REFERENCES players (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
@@ -34,9 +38,13 @@ class Version20160507000000 extends AbstractMigration
         $this->addSql('ALTER TABLE game_results ADD CONSTRAINT FK_A619B3B98197A65 FOREIGN KEY (player) REFERENCES players (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
 
+    /**
+     * @param Schema $schema
+     */
     public function down(Schema $schema)
     {
-        $this->skipIf($this->connection->getDatabasePlatform()->getName() !== 'postgresql', 'Migration can only be executed safely on "postgresql"');
+        // this down() migration is auto-generated, please modify it to your needs
+        $this->skipIf($this->connection->getDatabasePlatform()->getName() != 'postgresql', 'Migration can only be executed safely on \'postgresql\'.');
 
         $this->addSql('CREATE SCHEMA public');
         $this->addSql('ALTER TABLE cells DROP CONSTRAINT FK_55C1CBD851B7F6D5');

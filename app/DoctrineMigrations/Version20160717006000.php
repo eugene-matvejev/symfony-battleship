@@ -8,11 +8,15 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20160521000000 extends AbstractMigration
+class Version20160717006000 extends AbstractMigration
 {
+    /**
+     * @param Schema $schema
+     */
     public function up(Schema $schema)
     {
-        $this->skipIf($this->connection->getDatabasePlatform()->getName() !== 'sqlite', 'Migration can only be executed safely on "sqlite"');
+        // this up() migration is auto-generated, please modify it to your needs
+        $this->skipIf($this->connection->getDatabasePlatform()->getName() != 'sqlite', 'Migration can only be executed safely on \'sqlite\'.');
 
         $this->addSql('CREATE TABLE battlefields (id INTEGER NOT NULL, game INTEGER NOT NULL, player INTEGER NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX INDEX_BATTLEFIELDS_GAME ON battlefields (game)');
@@ -25,13 +29,17 @@ class Version20160521000000 extends AbstractMigration
         $this->addSql('CREATE UNIQUE INDEX UNIQ_A619B3B232B318C ON game_results (game)');
         $this->addSql('CREATE INDEX INDEX_GAME_RESULT_GAME ON game_results (game)');
         $this->addSql('CREATE INDEX INDEX_GAME_RESULT_WINNER ON game_results (player)');
-        $this->addSql('CREATE TABLE players (id INTEGER NOT NULL, name VARCHAR(100) NOT NULL, flags INTEGER NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE players (id INTEGER NOT NULL, name VARCHAR(25) NOT NULL, flags INTEGER NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX INDEX_PLAYER_NAME ON players (name)');
     }
 
+    /**
+     * @param Schema $schema
+     */
     public function down(Schema $schema)
     {
-        $this->skipIf($this->connection->getDatabasePlatform()->getName() !== 'sqlite', 'Migration can only be executed safely on "sqlite"');
+        // this down() migration is auto-generated, please modify it to your needs
+        $this->skipIf($this->connection->getDatabasePlatform()->getName() != 'sqlite', 'Migration can only be executed safely on \'sqlite\'.');
 
         $this->addSql('DROP TABLE battlefields');
         $this->addSql('DROP TABLE cells');
