@@ -85,19 +85,19 @@ _purpose: easier manual testing_
 
 # how to install
  * __$ composer install__ # to fetches dependencies, executes mandatory deployment commands__
-  * __NOTE!__ composer is configured to generate __parameters.yml__ using [incenteev/composer-parameter-handler](https://github.com/Incenteev/ParameterHandler)
-  * __NOTE!__ composer is configured to create database [if not exists] and apply migrations; __using prod. env.__
- * optional! __$ composer dump-autoload --optimize__ # to generate optimized "hash-map" autoloader
-  * __NOTE!__ prod. env. uses __APC autoloader__
+  * _NOTE_ composer is configured to generate __parameters.yml__ using [incenteev/composer-parameter-handler](https://github.com/Incenteev/ParameterHandler)
+  * _NOTE_ composer is configured to create database [if not exists] and apply migrations; __using prod. env.__
+ * optional! __$ composer dump-autoload --optimize__ # to generate [class-map autoloader](https://getcomposer.org/doc/03-cli.md#dump-autoload)
+  * _NOTE_ prod. env. uses __APC autoloader__
  * optional __$ php bin/console assets:install__ # to dump assets as hard copies
-  * __NOTE!__ by default assets are installed as symlinks
+  * _NOTE_ by default assets are installed as symlinks
 
 ### how to execute tests
  * *$ php bin/phpunit -c .*
  * *$ php bin/behat --strict*
  * *$ php bin/kahlan*
-  * __NOTE__: application booted in test enviroment interact with different database [config: "database_name_test" in parameters.yml]
-  * __NOTE 2__: test database is wiped and seeded before tests execution
+  * _NOTE_: database_name_test in parameters.yml reflects database name for test env.
+  * _NOTE 2_: test database is wiped and seeded before tests execution
 
 ### /etc/hosts
 ```
