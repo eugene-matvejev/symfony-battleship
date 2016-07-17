@@ -4,9 +4,8 @@ php:
     - "7.0"
 
 env:
-  - DB=mysql    DATABASE_ENGINE=pdo_mysql DATABASE_PORT=3306
-  - DB=mariadb  DATABASE_ENGINE=pdo_mysql DATABASE_PORT=3306
-  - DB=postgres DATABASE_ENGINE=pdo_pgsql DATABASE_PORT=5432 DATABASE_USER=postgres
+  - DATABASE_ENGINE=pdo_mysql DATABASE_PORT=3306
+  - DATABASE_ENGINE=pdo_pgsql DATABASE_PORT=5432 DATABASE_USER=postgres
 
 before_script:
     - "cp app/config/parameters.yml.dist app/config/parameters.yml"
