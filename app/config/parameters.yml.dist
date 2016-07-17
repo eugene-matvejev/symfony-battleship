@@ -1,5 +1,6 @@
 parameters:
     database_encoding: UTF8
+#    database_path: "%kernel.cache_dir%/sqlite.db.cache"
     database_host: 127.0.0.1
     database_port: 3306
     database_user: root
@@ -16,6 +17,4 @@ parameters:
     database_name: symfony_game_live
 ## ######## test DB
     database_name_test: symfony_game_test
-
-#    database_path: "%kernel.cache_dir%/sqlite.db.cache"
     secret: df9407f9746333d83748c24bcc65255304069b6d
