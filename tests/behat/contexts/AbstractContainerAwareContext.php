@@ -47,6 +47,14 @@ abstract class AbstractContainerAwareContext extends IntegrationTestSuite implem
     }
 
     /**
+     * @Then observe redirected response
+     */
+    public function observeRedirectedResponse()
+    {
+        $this->assertRedirectedResponse(static::$_client->getResponse());
+    }
+
+    /**
      * @Then observe unsuccessful response
      */
     public function observeUnsuccessfulResponse()

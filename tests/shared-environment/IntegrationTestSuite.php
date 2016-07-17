@@ -108,6 +108,11 @@ abstract class IntegrationTestSuite extends WebTestCase
         $this->assertTrue($response->isSuccessful());
     }
 
+    public function assertRedirectedResponse(Response $response)
+    {
+        $this->assertTrue($response->isRedirection());
+    }
+
     public function assertSuccessfulJSONResponse(Response $response)
     {
         $this->assertSuccessfulResponse($response);
