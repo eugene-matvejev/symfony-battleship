@@ -77,11 +77,11 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ (API)
 # workflow
  * new functionality merged into master branch only via pull requests
  * each pull request have callback to trigger CI engines such as Travis, Circle, CodeShip, Scrutinizer, Sensiolabs Insight, CodeCov
-  * result of each pull request is ready-to-use release - using Continuous Delivery principles
+ * result of each pull request is ready-to-use release - using Continuous Delivery principles
 * __gitflow__:
-  * master branch: stable source code, contains release-ready source
-  * heroku branch: reflects current deployed app at heroku [Continuous Deployment]
-  * prototype_* branches contains new ideas [merged pull request of prototype branch is always next _major_ version release]
+  * __master__ branch: stable source code, contains release-ready source
+  * __heroku__ branch: reflects current deployed app at heroku [Continuous Deployment]
+  * __prototype_*__ branches contains new ideas [merged pull request of prototype branch is always next _major_ version release]
   * pull requests follows [semantic vesion](http://semver.org/)
 
 # how to install
