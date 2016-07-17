@@ -91,7 +91,6 @@ _purpose: easier manual testing_
   * __NOTE!__ prod. env. uses __APC autoloader__
  * optional __$ php bin/console assets:install__ # to dump assets as hard copies
   * __NOTE!__ by default assets are installed as symlinks
- * optional! __php bin/console doctrine:fixtures:load --env=test__ # for testing purposes only
 
 ### how to execute tests
  * *$ php bin/phpunit -c .*
