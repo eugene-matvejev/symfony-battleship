@@ -84,11 +84,11 @@ _purpose: easier manual testing_
   * pull requests follows [semantic vesion](http://semver.org/)
 
 # how to install
- * __$ composer install__ # to fetches dependencies, executes mandatory deployment commands__
+ * __$ composer install__ # to fetches dependencies, executes mandatory deployment commands
   * _NOTE_ composer is configured to generate __parameters.yml__ using [incenteev/composer-parameter-handler](https://github.com/Incenteev/ParameterHandler)
-  * _NOTE_ composer is configured to create database [if not exists] and apply migrations; __using prod. env.__
+  * _NOTE 2_ composer is configured to create database [if not exists] and apply migrations; __using prod. env.__
  * optional! __$ composer dump-autoload --optimize__ # to generate [class-map autoloader](https://getcomposer.org/doc/03-cli.md#dump-autoload)
-  * _NOTE_ prod. env. uses __APC autoloader__
+  * _NOTE_ prod. env. uses [APC autoloader](http://symfony.com/doc/current/book/performance.html)
  * optional __$ php bin/console assets:install__ # to dump assets as hard copies
   * _NOTE_ by default assets are installed as symlinks
 
