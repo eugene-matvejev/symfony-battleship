@@ -43,14 +43,15 @@ _purpose: easier manual testing_
 # technology stack
 ### key technologies:
  * PHP7 (7.0.0 - 7.0.4 || >= 7.0.6 [7.0.5 had bugged SPL])
- * Symfony Framework 3.1 [SF3]
- * Doctrine 2 [with Fixtures]
- * PHPUnit 5
- * Behat 3
- * Composer
- * JMS Serializer
- * API Doc [nelmio/api-doc-bundle]
- * Twig
+ * [Symfony Framework 3](http://symfony.com) [SF3]
+ * [Doctrine 2](http://doctrine-orm.readthedocs.io/en/latest) with [Fixtures](http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html)
+ * [PHPUnit 5](https://phpunit.de)
+ * [Behat 3](http://docs.behat.org/en/v3.0)
+ * [Kahlan](http://kahlan.readthedocs.io/en/latest)
+ * [Composer](https://getcomposer.org)
+ * [JMS Serializer](http://jmsyst.com/bundles/JMSSerializerBundle)
+ * [API Doc](https://packagist.org/packages/nelmio/api-doc-bundle)
+ * [Twig](http://twig.sensiolabs.org/)
 
 ### used patterns:
  * Front Controller
