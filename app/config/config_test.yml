@@ -14,4 +14,4 @@ web_profiler:
 
 doctrine:
     dbal:
-        dbname:   "%database_name_test%"
+        dbname: "%database_name_test%"
