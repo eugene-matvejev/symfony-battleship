@@ -49,7 +49,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ (API)
  * [Composer](https://getcomposer.org)
  * [JMS Serializer](http://jmsyst.com/bundles/JMSSerializerBundle)
  * [API Doc](https://packagist.org/packages/nelmio/api-doc-bundle)
- * [Twig](http://twig.sensiolabs.org/)
+ * [Twig](http://twig.sensiolabs.org)
  * [PHPUnit 5](https://phpunit.de)
  * [Behat 3](http://docs.behat.org/en/v3.0)
  * [Kahlan](http://kahlan.readthedocs.io/en/latest)
@@ -83,7 +83,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ (API)
   * __master__ branch: stable source code, contains release-ready source
   * __heroku__ branch: reflects current deployed app at heroku [Continuous Deployment]
   * __prototype_*__ branch: contains new idea [pull request of prototype branch is always next _major_ version release]
-  * pull requests follows [semantic vesion](http://semver.org/)
+  * pull requests follows [semantic vesion](http://semver.org)
 
 # how to install
  * __$ composer install__ # to fetches dependencies, executes mandatory deployment commands
