@@ -2,6 +2,7 @@
 
 namespace EM\GameBundle\Controller;
 
+use EM\FoundationBundle\Controller\AbstractAPIController;
 use EM\GameBundle\Exception\CellException;
 use EM\GameBundle\Exception\GameProcessorException;
 use EM\GameBundle\Model\CellModel;
@@ -21,11 +22,6 @@ use Symfony\Component\Validator\Exception\InvalidArgumentException;
  */
 class GameController extends AbstractAPIController
 {
-    public function indexAction() : Response
-    {
-        return $this->redirectToRoute('nelmio_api_doc_index', ['view' => 'default']);
-    }
-
     /**
      * @Security("has_role('PLAYER')")
      * @ApiDoc(

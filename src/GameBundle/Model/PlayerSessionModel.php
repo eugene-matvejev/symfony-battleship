@@ -13,8 +13,8 @@ use Symfony\Component\Security\Core\Exception\CredentialsExpiredException;
  */
 class PlayerSessionModel
 {
-    const TTL                  = 60 * 60 * 24 * 30;
-    const AUTHORIZATION_HEADER = 'x-wsse';
+    const TTL            = 60 * 60 * 24 * 30;
+    const SESSION_HEADER = 'x-wsse';
     /**
      * @var ObjectRepository
      */
@@ -46,7 +46,7 @@ class PlayerSessionModel
     {
         $player = $this->model->createOnRequestHumanControlled($email, $password);
 
-        if (null === $player->getId() || $player->getPasswordHash() !== $this->model->generatePasswordHash($player->getEmail(), $password)) {
+        if ($player->getPasswordHash() !== $this->model->generatePasswordHash($player->getEmail(), $password)) {
             throw new BadCredentialsException();
         }
 
@@ -62,7 +62,6 @@ class PlayerSessionModel
      */
     public function find(string $hash) : PlayerSession
     {
-        /** @var PlayerSession $session */
         if (null !== $session = $this->repository->findOneBy(['hash' => $hash])) {
             if ($session->getTimestamp()->getTimestamp() + static::TTL >= time()) {
                 return $session;

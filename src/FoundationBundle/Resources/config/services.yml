@@ -1,0 +1,9 @@
+services:
+    # Event Listeners
+    foundation.authorization.listener:
+        class: EM\FoundationBundle\Authorization\AuthorizationListener
+        arguments:
+            - "@security.token_storage"
+            - "@battleship_game.service.player_session_model"
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: handle }
