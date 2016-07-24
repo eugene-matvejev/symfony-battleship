@@ -23,7 +23,7 @@ class GameController extends AbstractAPIController
 {
     public function indexAction() : Response
     {
-        return $this->render('@Game/index.html.twig');
+        return $this->redirectToRoute('nelmio_api_doc_index', ['view' => 'default']);
     }
 
     /**
