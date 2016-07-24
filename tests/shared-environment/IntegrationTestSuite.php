@@ -73,7 +73,7 @@ abstract class IntegrationTestSuite extends WebTestCase
 
         $commands = [
             /** reset database */
-            'doctrine:database:drop'      => ['--force' => true],
+            'doctrine:database:drop'      => ['--force' => true, '--if-exists' => true],
             'doctrine:database:create'    => [],
             /** keep database schema up-to-date */
             'doctrine:migrations:migrate' => [],
