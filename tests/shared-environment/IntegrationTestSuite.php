@@ -72,14 +72,13 @@ abstract class IntegrationTestSuite extends WebTestCase
         static::$om = static::$doctrine->getManager();
 
         $commands = [
-            /** reset test database */
-            'doctrine:database:create'    => ['--if-not-exists' => true],
-            /** PostgreSQL have some limitations, that is why not simple drop database */
-            'doctrine:schema:drop'        => ['--full-database' => true, '--force' => true],
+            /** reset database */
+            'doctrine:database:drop'      => ['--force' => true],
+            'doctrine:database:create'    => [],
             /** keep database schema up-to-date */
             'doctrine:migrations:migrate' => [],
             /** seed database with core data */
-            'doctrine:fixtures:load'      => ['--append' => true]
+            'doctrine:fixtures:load'      => []
         ];
 
         foreach ($commands as $command => $args) {
