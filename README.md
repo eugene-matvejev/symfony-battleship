@@ -1,14 +1,15 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
 [![Code Climate](https://codeclimate.com/github/eugene-matvejev/battleship-game-api/badges/gpa.svg)](https://codeclimate.com/github/eugene-matvejev/battleship-game-api)
 [![Build Status](https://travis-ci.org/eugene-matvejev/battleship-game-api.svg?branch=master)](https://travis-ci.org/eugene-matvejev/battleship-game-api)
+[![Build Status](https://codeship.com/projects/e893a4f0-0b28-0134-b0ad-129a07c0a376/status?branch=master)](https://codeship.com/projects/155781)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc/mini.png)](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc)
 
 __TDD tests__
- * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - *PHPUnit*
+ * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - _PHPUnit_
 
 __BDD tests__
- * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - *Behat*
- * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - *Kahlan*
+ * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - _Behat_
+ * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - _Kahlan_
 
 __Test Coverage__
 
@@ -20,13 +21,14 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ (API)
 # Battleship Game API
 ##### THIS IS SPARE TIME PROJECT, WORK IN PROGRESS! HIGHLY EXPERIMENTAL!!!
 #### project purpose:
- * try out "cutting edge" technologies and approaches such as PHP7, SF3, Doctrine2, Test Automation and Continuous Integration|Deployment
- * simulate database loading e.g. ~500 transactions per request
+ * try out:
+  * _cutting edge_ technologies such as PHP7, SF3, Doctrine2
+  * _modern_ approaches such as Test Automation, Continuous Integration|Deployment
+ * simulate database loading [~500 transactions per request]
  * deliver preview about my technical knowledge before the job interview
 
 #### game cheat-code:
-_purpose: easier manual testing_
-* AI player have only one ship, which is one-cell ship which and located at __B2__ cell
+* AI players have only one ship[single-cell] which is located at __B2__ cell [_purpose: easier manual testing_]
  * if you will hit __B2__ cell - you will win
 
 # software requirements
@@ -37,20 +39,21 @@ _purpose: easier manual testing_
   * SQLite >= 3
  * WIP:
   * MongoDB
- * Composer >= 1.0.3
  * http server: apache/nginx with PHP7
+ * Composer >= 1.0.3
 
 # technology stack
 ### key technologies:
  * PHP7 (7.0.0 - 7.0.4 || >= 7.0.6 [7.0.5 had bugged SPL])
- * Symfony Framework 3.1 [SF3]
- * Doctrine 2 [with Fixtures]
- * PHPUnit 5
- * Behat 3
- * Composer
- * JMS Serializer
- * API Doc [nelmio/api-doc-bundle]
- * Twig
+ * [Symfony Framework 3](http://symfony.com) [SF3]
+ * [Doctrine 2](http://doctrine-orm.readthedocs.io/en/latest) with [Fixtures](http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html)
+ * [Composer](https://getcomposer.org)
+ * [JMS Serializer](http://jmsyst.com/bundles/JMSSerializerBundle)
+ * [API Doc](https://packagist.org/packages/nelmio/api-doc-bundle)
+ * [Twig](http://twig.sensiolabs.org)
+ * [PHPUnit 5](https://phpunit.de)
+ * [Behat 3](http://docs.behat.org/en/v3.0)
+ * [Kahlan](http://kahlan.readthedocs.io/en/latest)
 
 ### used patterns:
  * Front Controller
@@ -73,32 +76,31 @@ _purpose: easier manual testing_
  * PSR-6
 
 # workflow
- * new functionality is added into master branch only via pull requests
- * result of each pull request is ready-to-use release, using Continuous Delivery principles
- * pull requests are named using semantic visioning
- * each pull request triggers various CI engines such as Travis, Circle, CodeShip, Scrutinizer, Sensiolabs Insight, CodeCov
- * __gitflow__:
-  * master branch: stable, contains release-ready source
-  * heroku branch: reflects current deployed app at heroku [Continuous Deployment]
-  * prototype_* branches contains new idea [merged pull request of prototype branch is always next *major* version release]
-  * pull requests follows [semantic vesion](http://semver.org/)
+ * new functionality merged into master branch only via pull requests
+ * each pull request have callback to trigger CI engines such as Travis, Circle, CodeShip, Scrutinizer, Sensiolabs Insight, CodeCov
+ * result of each pull request is ready-to-use release - using Continuous Delivery principles
+
+#gitflow
+  * __master__ branch: stable source code, contains release-ready source
+  * __heroku__ branch: reflects current deployed app at heroku [Continuous Deployment]
+  * __prototype_*__ branch: contains new idea [pull request of prototype branch is always next _major_ version release]
+  * pull requests follows [semantic vesion](http://semver.org)
 
 # how to install
- * copy *app/config/parameters.yml.dist* to *app/config/parameters.yml* and amend database settings
- * *composer install* __ # to fetches dependencies, executes mandatory deployment commands__
-  * __NOTE!__ composer is configured to create database if doesn't exists and apply migrations; __using production env.__
- * __optional!__ *composer dump-autoload --optimize* __# to generate optimized "hash-map" autoloader__
-  * __NOTE!__ production env. uses __APC autoloader__
- * __optional!__ *php bin/console assets:install* __# to dump assets as hard copies__
-  * __NOTE!__ by default assets are installed as symlinks
- * __optional!__ *php bin/console doctrine:fixtures:load --env=test* __# for testing purposes only__
+ * __$ composer install__ # to fetches dependencies, executes mandatory deployment commands
+  * _NOTE:_ composer is configured to generate __parameters.yml__ using [incenteev/composer-parameter-handler](https://github.com/Incenteev/ParameterHandler)
+  * _NOTE:_ composer is configured to create database [if not exists] and apply migrations; __using prod. env.__
+ * optional: __$ composer dump-autoload --optimize__ # to generate [class-map autoloader](https://getcomposer.org/doc/03-cli.md#dump-autoload)
+  * _NOTE:_ prod. env. uses [APC autoloader](http://symfony.com/doc/current/book/performance.html)
+ * optional: __$ php bin/console assets:install__ # to dump assets as hard copies
+  * _NOTE:_ by default assets are installed as symlinks
 
 ### how to execute tests
- * *php bin/phpunit -c .*
- * *php bin/behat --strict*
- * *php bin/kahlan*
-  * __NOTE__: application booted in test enviroment interact with different database [config: "database_name_test" in parameters.yml]
-  * __NOTE 2__: test database is wiped and seeded before tests execution
+ * _$ php bin/phpunit -c ._
+ * _$ php bin/behat --strict_
+ * _$ php bin/kahlan_
+  * _NOTE:_ database\_name\_test in parameters.yml reflects database name for test env.
+  * _NOTE:_ test database is wiped and seeded before tests execution
 
 ### /etc/hosts
 ```

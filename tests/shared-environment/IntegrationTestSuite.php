@@ -4,7 +4,6 @@ namespace EM\Tests\Environment;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Persistence\ObjectManager;
-use EM\GameBundle\Model\PlayerSessionModel;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
@@ -46,10 +45,6 @@ abstract class IntegrationTestSuite extends WebTestCase
      * @var bool
      */
     protected static $initiated;
-    /**
-     * @var string
-     */
-    private static $authHeader = 'HTTP_' . PlayerSessionModel::AUTHORIZATION_HEADER;
 
     protected function setUp()
     {
@@ -76,13 +71,18 @@ abstract class IntegrationTestSuite extends WebTestCase
         static::$doctrine = static::$container->get('doctrine');
         static::$om = static::$doctrine->getManager();
 
+        /**
+         * SQLite is not supported yet
+         * @link https://github.com/doctrine/dbal/pull/2402
+         */
         $commands = [
-            /** reset database */
-            'doctrine:database:drop'      => ['--force' => true],
-            'doctrine:database:create'    => [],
-            /** keep database schema up-to-date */
+            /** create test database */
+            'doctrine:database:create'    => ['--if-not-exists' => true],
+            /** reset test database schema */
+            'doctrine:schema:drop'        => ['--full-database' => true, '--force' => true],
+            /** flush test database schema */
             'doctrine:migrations:migrate' => [],
-            /** seed database with core data */
+            /** seed test database with core data */
             'doctrine:fixtures:load'      => []
         ];
 
@@ -156,25 +156,6 @@ abstract class IntegrationTestSuite extends WebTestCase
         return $method->invokeArgs($object, $methodArguments);
     }
 
-    protected function getAuthorizedClient() : Client
-    {
-        return $this->createClientWithAuthHeader(static::$om->getRepository('GameBundle:PlayerSession')->find(1)->getHash());
-    }
-
-    protected function getNonAuthorizedClient() : Client
-    {
-        return $this->createClientWithAuthHeader('');
-    }
-
-    private function createClientWithAuthHeader(string $hash) : Client
-    {
-        $client = static::$client;
-        $client->setServerParameter(static::$authHeader, $hash);
-
-        return $client;
-    }
-
-    /*** ****************************** HELPERS ****************************** ***/
     public static function getRootDirectory() : string
     {
         return dirname(__DIR__);
