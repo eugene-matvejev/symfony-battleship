@@ -1,7 +1,7 @@
 services:
     # Event Listeners
     battleship_game.authentication.listener:
-        class: EM\GameBundle\Security\Firewall\PlayerAuthorizationListener
+        class: EM\GameBundle\Security\Firewall\AuthenticationListener
         arguments:
             - "@security.token_storage"
             - "@security.authentication.manager"

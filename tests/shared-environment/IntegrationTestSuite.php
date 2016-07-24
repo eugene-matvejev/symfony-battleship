@@ -46,6 +46,10 @@ abstract class IntegrationTestSuite extends WebTestCase
      * @var bool
      */
     protected static $initiated;
+    /**
+     * @var string
+     */
+    private static $authHeader = 'HTTP_' . PlayerSessionModel::AUTHORIZATION_HEADER;
 
     protected function setUp()
     {
@@ -153,12 +157,20 @@ abstract class IntegrationTestSuite extends WebTestCase
         return $method->invokeArgs($object, $methodArguments);
     }
 
-    protected function requestAuthorized($method, $uri, array $parameters = [], array $files = [], array $server = [], $content = null, $changeHistory = true) : Client
+    protected function getAuthorizedClient() : Client
+    {
+        return $this->createClientWithAuthHeader(static::$om->getRepository('GameBundle:PlayerSession')->find(1)->getHash());
+    }
+
+    protected function getNonAuthorizedClient() : Client
+    {
+        return $this->createClientWithAuthHeader('');
+    }
+
+    private function createClientWithAuthHeader(string $hash) : Client
     {
         $client = static::$client;
-        $server['HTTP_' . PlayerSessionModel::AUTHORIZATION_HEADER] = static::$om->getRepository('GameBundle:PlayerSession')->find(1)->getHash();
-
-        $client->request($method, $uri, $parameters, $files, $server, $content, $changeHistory);
+        $client->setServerParameter(static::$authHeader, $hash);
 
         return $client;
     }

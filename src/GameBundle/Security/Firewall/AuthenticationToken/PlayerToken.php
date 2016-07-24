@@ -1,6 +1,6 @@
 <?php
 
-namespace EM\GameBundle\Security\Authentication;
+namespace EM\GameBundle\Security\AuthenticationToken;
 
 use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Entity\PlayerSession;
@@ -11,6 +11,9 @@ use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
  */
 class PlayerToken extends AbstractToken
 {
+    /**
+     * @var Player
+     */
     protected $user;
 
     public function getCredentials()
