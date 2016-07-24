@@ -7,21 +7,25 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Model\PlayerModel;
+use EM\GameBundle\Model\PlayerSessionModel;
 
 /**
- * @since 3.5
+ * @since 22.0
  */
-class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface
+class LoadPlayerSessionData extends AbstractFixture implements OrderedFixtureInterface
 {
     /**
      * {@inheritDoc}
      */
     public function load(ObjectManager $om)
     {
-        $model = new PlayerModel($om->getRepository('GameBundle:Player'), 'fixtures');
+        $model = new PlayerSessionModel(
+            $om->getRepository('GameBundle:PlayerSession'),
+            new PlayerModel($om->getRepository('GameBundle:Player'), 'fixtures'),
+            'fixtures'
+        );
 
-        $om->persist($model->createOnRequestHumanControlled('human', 'password'));
-        $om->persist($model->createOnRequestAIControlled('cpu'));
+        $om->persist($model->authenticate('human', 'password'));
 
         $om->flush();
     }
@@ -31,6 +35,6 @@ class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface
      */
     public function getOrder()
     {
-        return 1;
+        return 2;
     }
 }

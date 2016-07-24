@@ -1,9 +1,25 @@
 services:
-    # Models
+    # Event Listeners
+    battleship_game.authentication.listener:
+        class: EM\GameBundle\Security\Firewall\PlayerAuthorizationListener
+        arguments:
+            - "@security.token_storage"
+            - "@security.authentication.manager"
+            - "@battleship_game.service.player_session_model"
+        tags:
+            - { name: kernel.event_listener, event: kernel.request }
+   # Models
     battleship_game.service.player_model:
         class: EM\GameBundle\Model\PlayerModel
         arguments:
             - "@battleship_game.repository.player"
+            - "%%secret%"
+    battleship_game.service.player_session_model:
+        class: EM\GameBundle\Model\PlayerSessionModel
+        arguments:
+            - "@battleship_game.repository.player_session"
+            - "@battleship_game.service.player_model"
+            - "%%secret%"
     battleship_game.service.game_result_model:
         class: EM\GameBundle\Model\GameResultModel
         arguments:
@@ -36,6 +52,11 @@ services:
         factory: ["@doctrine.orm.entity_manager", getRepository]
         arguments:
             - EM\GameBundle\Entity\Player
+    battleship_game.repository.player_session:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - EM\GameBundle\Entity\PlayerSession
     battleship_game.repository.game_result:
         class: EM\GameBundle\Repository\GameResultRepository
         factory: ["@doctrine.orm.entity_manager", getRepository]

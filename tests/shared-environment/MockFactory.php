@@ -50,15 +50,15 @@ class MockFactory
         return $gameResult;
     }
 
-    public static function getPlayerMock(string $name, int $flags = PlayerModel::FLAG_NONE) : Player
+    public static function getPlayerMock(string $email, int $flags = PlayerModel::FLAG_NONE) : Player
     {
         return (new Player())
-            ->setName($name)
+            ->setEmail($email)
             ->setFlags($flags);
     }
 
-    public static function getAIPlayerMock(string $name) : Player
+    public static function getAIPlayerMock(string $email) : Player
     {
-        return static::getPlayerMock($name, PlayerModel::FLAG_AI_CONTROLLED);
+        return static::getPlayerMock($email, PlayerModel::FLAG_AI_CONTROLLED);
     }
 }

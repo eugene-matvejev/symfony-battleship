@@ -3,6 +3,7 @@
 namespace EM\GameBundle\Controller;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 class GameResultController extends AbstractAPIController
 {
     /**
+     * @Security("has_role('PLAYER')")
      * @ApiDoc(
      *      section = "API: Game: Results",
      *      description = "returns game results ordered by date in desc. order",

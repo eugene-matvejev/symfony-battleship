@@ -3,6 +3,7 @@
 namespace EM\GameBundle\Service\GameSystem;
 
 use EM\GameBundle\Entity\Game;
+use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Model\PlayerModel;
@@ -37,13 +38,11 @@ class GameBuilder
         }
     }
 
-    public function buildGame(GameInitiationRequest $request) : Game
+    public function buildGame(GameInitiationRequest $request, Player $player) : Game
     {
         $game = new Game();
         $this->attachAIBattlefields($game, $request->getOpponents(), $request->getSize());
-
-        $player = $this->playerModel->createOnRequestHumanControlled($request->getPlayerName());
-
+        
         $battlefield = BattlefieldModel::generate($request->getSize(), $request->getCoordinates());
         $battlefield->setPlayer($player);
         $game->addBattlefield($battlefield);

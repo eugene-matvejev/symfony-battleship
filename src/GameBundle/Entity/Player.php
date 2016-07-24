@@ -13,7 +13,8 @@ use JMS\Serializer\Annotation as Serializer;
  * @ORM\Table(
  *      name="players",
  *      indexes={
- *          @ORM\Index(name="INDEX_PLAYER_NAME", columns={"name"})
+ *          @ORM\Index(name="INDEX_PLAYER_EMAIL", columns={"email"}),
+ *          @ORM\Index(name="INDEX_PLAYER_EMAIL_AND_PASSWORD", columns={"email", "passwordHash"}),
  *      }
  * )
  *
@@ -23,22 +24,44 @@ use JMS\Serializer\Annotation as Serializer;
 class Player extends AbstractFlaggedEntity
 {
     /**
-     * @ORM\Column(name="name", type="string", length=25)
+     * @ORM\Column(name="email", type="string", length=25)
      *
      * @Serializer\Type("string")
      *
      * @var string
      */
-    protected $name;
+    protected $email;
+    /**
+     * @since 22.0
+     *
+     * @ORM\Column(name="passwordHash", type="string", length=40)
+     *
+     * @Serializer\Exclude()
+     *
+     * @var string
+     */
+    protected $passwordHash;
 
-    public function getName() : string
+    public function getEmail() : string
     {
-        return $this->name;
+        return $this->email;
     }
 
-    public function setName(string $name) : self
+    public function setEmail(string $email) : self
     {
-        $this->name = $name;
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getPasswordHash() : string
+    {
+        return $this->passwordHash;
+    }
+
+    public function setPasswordHash(string $hash) : self
+    {
+        $this->passwordHash = $hash;
 
         return $this;
     }
