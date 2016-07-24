@@ -17,9 +17,9 @@ class GameControllerTest extends IntegrationTestSuite
      * @see GameController::indexAction
      * @test
      */
-    public function indexAction()
+    public function indexActionOnNonAuthorized()
     {
-        $client = clone static::$client;
+        $client = $this->getNonAuthorizedClient();
         $client->request(
             Request::METHOD_GET,
             static::$router->generate('battleship_game.gui.index')
@@ -34,7 +34,8 @@ class GameControllerTest extends IntegrationTestSuite
     public function unsuccessfulInitAction()
     {
         foreach (['application/xml', 'application/json'] as $acceptHeader) {
-            $client = $this->requestAuthorized(
+            $client = $this->getAuthorizedClient();
+            $client->request(
                 Request::METHOD_POST,
                 static::$router->generate('battleship_game.api.init'),
                 [],
@@ -68,7 +69,8 @@ class GameControllerTest extends IntegrationTestSuite
      */
     public function successfulInitAction_JSON()
     {
-        $client = $this->requestAuthorized(
+        $client = $this->getAuthorizedClient();
+        $client->request(
             Request::METHOD_POST,
             static::$router->generate('battleship_game.api.init'),
             [],
@@ -129,8 +131,7 @@ class GameControllerTest extends IntegrationTestSuite
      */
     public function successfulInitAction_XML()
     {
-        $client = clone static::$client;
-
+        $client = $this->getAuthorizedClient();
         $client->request(
             Request::METHOD_POST,
             static::$router->generate('battleship_game.api.init'),
@@ -185,8 +186,8 @@ class GameControllerTest extends IntegrationTestSuite
      */
     public function unsuccessfulTurnActionOnNotExistingCell()
     {
-        $client = clone static::$client;
         foreach (['application/xml', 'application/json'] as $acceptHeader) {
+            $client = $this->getAuthorizedClient();
             $client->request(
                 Request::METHOD_PATCH,
                 static::$router->generate('battleship_game.api.turn', ['cellId' => 0]),
@@ -218,7 +219,7 @@ class GameControllerTest extends IntegrationTestSuite
             foreach ($battlefield->cells as $cell) {
                 CellModelCleaner::resetChangedCells();
 
-                $client = clone static::$client;
+                $client = $this->getAuthorizedClient();
                 $client->request(
                     Request::METHOD_PATCH,
                     static::$router->generate('battleship_game.api.turn', ['cellId' => $cell->id]),
@@ -253,7 +254,7 @@ class GameControllerTest extends IntegrationTestSuite
                 foreach ($battlefield->cells as $cell) {
                     CellModelCleaner::resetChangedCells();
 
-                    $client = clone static::$client;
+                    $client = $this->getAuthorizedClient();
                     $client->request(
                         Request::METHOD_PATCH,
                         static::$router->generate('battleship_game.api.turn', ['cellId' => $cell->id]),
@@ -261,6 +262,7 @@ class GameControllerTest extends IntegrationTestSuite
                         [],
                         ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
                     );
+
                     $this->assertUnsuccessfulResponse($client->getResponse());
                     break 2;
                 }

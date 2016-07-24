@@ -3,7 +3,7 @@
 namespace EM\GameBundle\Security\Firewall;
 
 use EM\GameBundle\Model\PlayerSessionModel;
-use EM\GameBundle\Security\Authentication\PlayerToken;
+use EM\GameBundle\Security\AuthenticationToken\PlayerToken;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -12,7 +12,7 @@ use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 /**
  * @since 22.0
  */
-class PlayerAuthorizationListener implements ListenerInterface
+class AuthenticationListener implements ListenerInterface
 {
     /**
      * @var TokenStorageInterface
