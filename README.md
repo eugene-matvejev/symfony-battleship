@@ -114,7 +114,7 @@ _purpose: easier manual testing_
 
     ServerName api.game.local
     ServerAlias api.game.local
-    <Directory %PROJECT_ROOT_DIRECTORY%/web>
+    <Directory "%PROJECT_ROOT_DIRECTORY%/web">
         AllowOverride All
         Order Allow,Deny
         Allow from All

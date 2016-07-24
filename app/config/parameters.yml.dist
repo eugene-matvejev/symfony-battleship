@@ -18,4 +18,5 @@ parameters:
     database_name_test: symfony_game_test
 
 #    database_path: "%kernel.cache_dir%/sqlite.db.cache"
+    database_path: ~
     secret: df9407f9746333d83748c24bcc65255304069b6d
