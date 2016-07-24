@@ -93,6 +93,7 @@
                 "database_name": "DATABASE_NAME",
                 "database_name_test": "DATABASE_NAME_TEST",
                 "database_user": "DATABASE_USER",
+                "database_path": "DATABASE_PATH",
                 "database_password": "DATABASE_PASSWORD"
             }
         }
