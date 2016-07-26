@@ -14,20 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 class GameControllerTest extends IntegrationTestSuite
 {
     /**
-     * @see GameController::indexAction
-     * @test
-     */
-    public function indexAction()
-    {
-        $client = clone static::$client;
-        $client->request(
-            Request::METHOD_GET,
-            static::$router->generate('battleship_game.gui.index')
-        );
-        $this->assertRedirectedResponse($client->getResponse());
-    }
-
-    /**
      * @see GameController::initAction
      * @test
      */

@@ -2,6 +2,9 @@ NelmioApiDocBundle:
     resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
     prefix:   /api/documentation
 
+foundation:
+    resource: "@FoundationBundle/Resources/config/routing.yml"
+    prefix:   /
 battleship-game:
     resource: "@GameBundle/Resources/config/routing.yml"
     prefix:   /

@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             /** CUSTOM BUNDLES */
+            new EM\FoundationBundle\FoundationBundle(),
             new EM\GameBundle\GameBundle()
         ];
 
