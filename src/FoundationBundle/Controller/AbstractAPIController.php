@@ -11,13 +11,13 @@ use Symfony\Component\HttpFoundation\Response;
 abstract class AbstractAPIController extends Controller
 {
     /**
-     * build serialized response using JMS Serializer to serialize content
+     * build serialized response using @see Serializer [JMS Serializer] to serialize content
      *
      * @param mixed    $data
      * @param int      $status
      * @param string[] $headers
      *
-     * @return Response
+     * @return Response 
      */
     protected function prepareSerializedResponse($data, int $status = Response::HTTP_OK, array $headers = []) : Response
     {
