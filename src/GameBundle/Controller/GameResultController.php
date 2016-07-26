@@ -2,6 +2,7 @@
 
 namespace EM\GameBundle\Controller;
 
+use EM\FoundationBundle\Controller\AbstractAPIController;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Response;
 

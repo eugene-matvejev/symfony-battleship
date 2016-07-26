@@ -1,12 +1,12 @@
 <?php
 
-namespace EM\GameBundle\Controller;
+namespace EM\FoundationBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @since 5.0
+ * @since 22.3
  */
 abstract class AbstractAPIController extends Controller
 {
