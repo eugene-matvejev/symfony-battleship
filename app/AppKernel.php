@@ -8,6 +8,7 @@ class AppKernel extends Kernel
     public function registerBundles()
     {
         $bundles = [
+            /** FRAMEWORK */
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
@@ -18,7 +19,7 @@ class AppKernel extends Kernel
             /** 3rd PARTY */
             new JMS\SerializerBundle\JMSSerializerBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
-            /** CUSTOM BUNDLES */
+            /** APPLICATION BUNDLES */
             new EM\FoundationBundle\FoundationBundle(),
             new EM\GameBundle\GameBundle()
         ];
