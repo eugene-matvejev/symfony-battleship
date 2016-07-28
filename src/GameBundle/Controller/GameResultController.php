@@ -15,7 +15,7 @@ class GameResultController extends AbstractAPIController
 {
     /**
      * @ApiDoc(
-     *      section = "API: Game: Results",
+     *      section = "Game:: Results",
      *      description = "returns game results ordered by date in desc. order",
      *      output = "EM\GameBundle\Response\GameResultsResponse"
      * )
