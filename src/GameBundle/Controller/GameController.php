@@ -25,7 +25,7 @@ class GameController extends AbstractAPIController
     /**
      * @Security("has_role('PLAYER')")
      * @ApiDoc(
-     *      section = "API: Game: Mechanics",
+     *      section = "Game:: Mechanics",
      *      description = "Creates a new game from the submitted data",
      *      input = "EM\GameBundle\Request\GameInitiationRequest",
      *      responseMap = {
@@ -59,7 +59,7 @@ class GameController extends AbstractAPIController
     /**
      * @Security("has_role('PLAYER')")
      * @ApiDoc(
-     *      section = "API: Game: Mechanics",
+     *      section = "Game:: Mechanics",
      *      description = "process game turn by cellId",
      *      output = "EM\GameBundle\Response\GameTurnResponse"
      * )
