@@ -1,6 +1,7 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
 [![Code Climate](https://codeclimate.com/github/eugene-matvejev/battleship-game-api/badges/gpa.svg)](https://codeclimate.com/github/eugene-matvejev/battleship-game-api)
 [![Build Status](https://travis-ci.org/eugene-matvejev/battleship-game-api.svg?branch=master)](https://travis-ci.org/eugene-matvejev/battleship-game-api)
+[![Build Status](https://codeship.com/projects/e893a4f0-0b28-0134-b0ad-129a07c0a376/status?branch=master)](https://codeship.com/projects/155781)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc/mini.png)](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc)
 
 __TDD tests__
@@ -46,13 +47,13 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ (API)
  * PHP7 (7.0.0 - 7.0.4 || >= 7.0.6 [7.0.5 had bugged SPL])
  * [Symfony Framework 3](http://symfony.com) [SF3]
  * [Doctrine 2](http://doctrine-orm.readthedocs.io/en/latest) with [Fixtures](http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html)
- * [PHPUnit 5](https://phpunit.de)
- * [Behat 3](http://docs.behat.org/en/v3.0)
- * [Kahlan](http://kahlan.readthedocs.io/en/latest)
  * [Composer](https://getcomposer.org)
  * [JMS Serializer](http://jmsyst.com/bundles/JMSSerializerBundle)
  * [API Doc](https://packagist.org/packages/nelmio/api-doc-bundle)
- * [Twig](http://twig.sensiolabs.org/)
+ * [Twig](http://twig.sensiolabs.org)
+ * [PHPUnit 5](https://phpunit.de)
+ * [Behat 3](http://docs.behat.org/en/v3.0)
+ * [Kahlan](http://kahlan.readthedocs.io/en/latest)
 
 ### used patterns:
  * Front Controller
@@ -83,7 +84,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ (API)
   * __master__ branch: stable source code, contains release-ready source
   * __heroku__ branch: reflects current deployed app at heroku [Continuous Deployment]
   * __prototype_*__ branch: contains new idea [pull request of prototype branch is always next _major_ version release]
-  * pull requests follows [semantic vesion](http://semver.org/)
+  * pull requests follows [semantic vesion](http://semver.org)
 
 # how to install
  * __$ composer install__ # to fetches dependencies, executes mandatory deployment commands
