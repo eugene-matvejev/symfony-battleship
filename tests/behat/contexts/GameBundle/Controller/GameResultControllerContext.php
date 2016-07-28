@@ -4,13 +4,12 @@ namespace EM\Tests\Behat\GameBundle\Controller;
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
-use EM\GameBundle\Controller\GameResultController;
-use EM\Tests\Behat\AbstractContainerAwareContext;
+use EM\Tests\Behat\CommonControllerContext;
 
 /**
  * @see GameResultController
  */
-class GameResultControllerContext extends AbstractContainerAwareContext implements Context, SnippetAcceptingContext
+class GameResultControllerContext extends CommonControllerContext implements Context, SnippetAcceptingContext
 {
     /**
      * @Then observe :expectedAmount results in page :page
@@ -25,13 +24,5 @@ class GameResultControllerContext extends AbstractContainerAwareContext implemen
         $this->assertInstanceOf(\stdClass::class, $response->meta);
         $this->assertEquals($page, $response->meta->currentPage);
         $this->assertCount($expectedAmount, $response->results);
-    }
-
-    /**
-     * @Then observe JSON successful response
-     */
-    public function observeJsonSuccessfulResponse()
-    {
-        $this->assertSuccessfulJSONResponse(self::$_client->getResponse());
     }
 }

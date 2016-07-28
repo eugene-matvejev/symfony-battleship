@@ -19,7 +19,7 @@ class PlayerControllerTest extends IntegrationTestSuite
         $client = clone static::$client;
         $client->request(
             Request::METHOD_GET,
-            static::$router->generate('battleship_game.gui.index')
+            static::$router->generate('foundation_bundle.gui.index')
         );
         $this->assertRedirectedResponse($client->getResponse());
     }
