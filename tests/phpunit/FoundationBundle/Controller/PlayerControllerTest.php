@@ -20,9 +20,10 @@ class PlayerControllerTest extends IntegrationTestSuite
         $client = $this->getNonAuthorizedClient();
         $client->request(
             Request::METHOD_GET,
-            static::$router->generate('battleship_game.gui.index')
+            static::$router->generate('foundation_bundle.gui.index')
         );
-        $this->assertSuccessfulResponse($client->getResponse());
+        $this->assertRedirectedResponse($client->getResponse());
+
     }
 
     /**
@@ -157,4 +158,3 @@ class PlayerControllerTest extends IntegrationTestSuite
         return $client->getResponse();
     }
 }
-

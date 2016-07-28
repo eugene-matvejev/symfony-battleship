@@ -11,16 +11,18 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @see   PlayerControllerTest
  *
- * @since 22.0
+ * @since 22.3
  */
 class PlayerController extends AbstractAPIController
 {
     public function indexAction() : Response
     {
-        return $this->render('@Foundation/index.html.twig');
+        return $this->redirectToRoute('nelmio_api_doc_index', ['view' => 'default']);
     }
 
     /**
+     * @since 23.0
+     *
      * @ApiDoc(
      *      section = "API: Foundation",
      *      description = "Creates a new player from submitted data",
@@ -55,6 +57,28 @@ class PlayerController extends AbstractAPIController
     }
 
     /**
+     * @since 23.0
+     *
+     * @param string $email
+     * @param string $password
+     *
+     * @return Response
+     */
+    protected function processLogin(string $email, string $password) : Response
+    {
+        $session = $this->get('battleship_game.service.player_session_model')->authenticate($email, $password);
+
+        $om = $this->getDoctrine()->getManager();
+        $om->persist($session);
+
+        $om->flush();
+
+        return $this->prepareSerializedResponse($session, Response::HTTP_CREATED);
+    }
+
+    /**
+     * @since 23.0
+     *
      * @ApiDoc(
      *      section = "API: Foundation",
      *      description = "authenticate and returns player details",
@@ -76,19 +100,9 @@ class PlayerController extends AbstractAPIController
         return $this->processLogin($json->email, $json->password);
     }
 
-    protected function processLogin(string $email, string $password) : Response
-    {
-        $session = $this->get('battleship_game.service.player_session_model')->authenticate($email, $password);
-
-        $om = $this->getDoctrine()->getManager();
-        $om->persist($session);
-
-        $om->flush();
-
-        return $this->prepareSerializedResponse($session, Response::HTTP_CREATED);
-    }
-
     /**
+     * @since 23.0
+     *
      * @Security("has_role('PLAYER')")
      * @ApiDoc(
      *      section = "API: Foundation",

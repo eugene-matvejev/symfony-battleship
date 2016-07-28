@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 
 /**
- * @since 22.0
+ * @since 23.0
  */
 class AuthorizationListener implements ListenerInterface
 {
