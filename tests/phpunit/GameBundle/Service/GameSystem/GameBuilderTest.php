@@ -69,7 +69,7 @@ class GameBuilderTest extends IntegrationTestSuite
      */
     public function buildGame()
     {
-        $request = new GameInitiationRequest(static::getSharedFixtureContent('init-game-request-2-players-7x7.json'));
+        $request = new GameInitiationRequest($this->getSharedFixtureContent('game-initiation-requests/valid/2-players-7x7.json'));
 
         $game = static::$gameBuilder->buildGame($request);
 

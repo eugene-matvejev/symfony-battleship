@@ -5,7 +5,6 @@ namespace EM\Tests\PHPUnit\GameBundle\Validator;
 use EM\GameBundle\Validator\GameInitiationRequestValidator;
 use EM\Tests\Environment\IntegrationTestSuite;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * @see GameInitiationRequestValidator
@@ -74,9 +73,8 @@ class GameInitiationRequestValidatorTest extends IntegrationTestSuite
         $finder->files()->in("{$this->getSharedFixturesDirectory()}/$path");
 
         $arr = [];
-        /** @var SplFileInfo $file */
         foreach ($finder as $file) {
-            $arr[] = [$file->getPath(), $file->getContents()];
+            $arr[] = [$file->getRealPath(), $file->getContents()];
         }
 
         return $arr;
