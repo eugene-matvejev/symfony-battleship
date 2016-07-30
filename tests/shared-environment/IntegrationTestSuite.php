@@ -54,12 +54,12 @@ abstract class IntegrationTestSuite extends WebTestCase
      *
      * @return string
      */
-    public static function getSharedFixtureContent(string $filename) : string
+    protected function getSharedFixtureContent(string $filename) : string
     {
         return file_get_contents(static::getSharedFixturesDirectory() . "/$filename");
     }
 
-    public static function getSharedFixturesDirectory() : string
+    protected function getSharedFixturesDirectory() : string
     {
         return dirname(__DIR__) . '/shared-fixtures';
     }
