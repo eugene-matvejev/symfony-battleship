@@ -46,10 +46,6 @@ abstract class IntegrationTestSuite extends WebTestCase
      * @var bool
      */
     protected static $initiated;
-    /**
-     * @var string
-     */
-    private static $authHeader = 'HTTP_' . PlayerSessionModel::SESSION_HEADER;
 
     /**
      * return content of the file in located in tests/shared-fixtures directory
@@ -128,16 +124,6 @@ abstract class IntegrationTestSuite extends WebTestCase
         static::$initiated = true;
     }
 
-    protected function getAuthorizedClient() : Client
-    {
-        return $this->createClientWithAuthHeader(static::$om->getRepository('GameBundle:PlayerSession')->find(1)->getHash());
-    }
-
-    protected function getUnauthorizedClient() : Client
-    {
-        return $this->createClientWithAuthHeader('');
-    }
-
     /**
      * able to invoke any non-static of object and return the result and throws exceptions if so
      *
@@ -156,13 +142,5 @@ abstract class IntegrationTestSuite extends WebTestCase
         $method->setAccessible(true);
 
         return $method->invokeArgs($object, $methodArguments);
-    }
-
-    private function createClientWithAuthHeader(string $hash) : Client
-    {
-        $client = static::$client;
-        $client->setServerParameter(static::$authHeader, $hash);
-
-        return $client;
     }
 }
