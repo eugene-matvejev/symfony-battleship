@@ -4,19 +4,20 @@ namespace EM\Tests\Environment;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Persistence\ObjectManager;
+use EM\Tests\Environment\AssertionSuite\ResponseAssertionSuites;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @since 15.2
  */
 abstract class IntegrationTestSuite extends WebTestCase
 {
+    use ResponseAssertionSuites;
     /**
      * @var ContainerInterface
      */
@@ -45,10 +46,31 @@ abstract class IntegrationTestSuite extends WebTestCase
      * @var bool
      */
     protected static $initiated;
+    /**
+     * @var string
+     */
+    private static $authHeader = 'HTTP_' . PlayerSessionModel::SESSION_HEADER;
 
-    protected function setUp()
+    /**
+     * return content of the file in located in tests/shared-fixtures directory
+     *
+     * @param string $filename
+     *
+     * @return string
+     */
+    public static function getSharedFixtureContent(string $filename) : string
     {
-        static::$om->clear();
+        return file_get_contents(static::getSharedFixturesDirectory() . "/$filename");
+    }
+
+    public static function getSharedFixturesDirectory() : string
+    {
+        return dirname(__DIR__) . '/shared-fixtures';
+    }
+
+    protected static function getKernelClass() : string
+    {
+        return \AppKernel::class;
     }
 
     /**
@@ -106,34 +128,14 @@ abstract class IntegrationTestSuite extends WebTestCase
         static::$initiated = true;
     }
 
-    public function assertSuccessfulResponse(Response $response)
+    protected function getAuthorizedClient() : Client
     {
-        $this->assertTrue($response->isSuccessful());
+        return $this->createClientWithAuthHeader(static::$om->getRepository('GameBundle:PlayerSession')->find(1)->getHash());
     }
 
-    public function assertRedirectedResponse(Response $response)
+    protected function getUnauthorizedClient() : Client
     {
-        $this->assertTrue($response->isRedirection());
-    }
-
-    public function assertSuccessfulJSONResponse(Response $response)
-    {
-        $this->assertSuccessfulResponse($response);
-
-        $this->assertJson($response->getContent());
-    }
-
-    public function assertSuccessfulXMLResponse(Response $response)
-    {
-        $this->assertSuccessfulResponse($response);
-
-        $xmlElement = simplexml_load_string($response->getContent(), 'SimpleXMLElement', LIBXML_NOCDATA);
-        $this->assertInstanceOf(\SimpleXMLElement::class, $xmlElement);
-    }
-
-    public function assertUnsuccessfulResponse(Response $response)
-    {
-        $this->assertTrue($response->isClientError() || $response->isServerError());
+        return $this->createClientWithAuthHeader('');
     }
 
     /**
@@ -156,30 +158,11 @@ abstract class IntegrationTestSuite extends WebTestCase
         return $method->invokeArgs($object, $methodArguments);
     }
 
-    public static function getRootDirectory() : string
+    private function createClientWithAuthHeader(string $hash) : Client
     {
-        return dirname(__DIR__);
-    }
+        $client = static::$client;
+        $client->setServerParameter(static::$authHeader, $hash);
 
-    public static function getSharedFixturesDirectory() : string
-    {
-        return static::getRootDirectory() . '/shared-fixtures';
-    }
-
-    /**
-     * return content of the file in located in tests/shared-fixtures directory
-     *
-     * @param string $filename
-     *
-     * @return string
-     */
-    public static function getSharedFixtureContent(string $filename) : string
-    {
-        return file_get_contents(static::getSharedFixturesDirectory() . "/$filename");
-    }
-
-    protected static function getKernelClass() : string
-    {
-        return \AppKernel::class;
+        return $client;
     }
 }
