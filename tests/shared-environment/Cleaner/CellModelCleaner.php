@@ -1,11 +1,11 @@
 <?php
 
-namespace EM\Tests\Environment;
+namespace EM\Tests\Environment\Cleaner;
 
 use EM\GameBundle\Model\CellModel;
 
 /**
- * @since 18.1.3
+ * @since 22.5
  */
 class CellModelCleaner extends CellModel
 {
