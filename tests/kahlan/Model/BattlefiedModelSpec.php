@@ -27,7 +27,6 @@ describe(BattlefieldModel::class, function () {
             $this->battlefield = MockFactory::getBattlefieldMock();
         });
         it('should return 49 cells from 7x7 battlefield as all of them not flagged with CellModel::FLAG_DEAD', function () {
-//            $battlefield = MockFactory::getBattlefieldMock();
             $cells = BattlefieldModel::getLiveCells($this->battlefield);
             expect($cells)
                 ->toBeA('array')
@@ -36,7 +35,6 @@ describe(BattlefieldModel::class, function () {
             $this->iterateRecievedCells($cells);
         });
         it('should return 48 cells from 7x7 battlefield 48 of them not flagged with CellModel::FLAG_DEAD', function () {
-//            $battlefield = MockFactory::getBattlefieldMock();
             $this->battlefield->getCellByCoordinate('A1')->addFlag(CellModel::FLAG_DEAD);
 
             $cells = BattlefieldModel::getLiveCells($this->battlefield);
@@ -47,7 +45,7 @@ describe(BattlefieldModel::class, function () {
             $this->iterateRecievedCells($cells);
         });
         it('should return empty array from 7x7 battlefield all of them flagged with CellModel::FLAG_DEAD', function () {
-//            $battlefield = MockFactory::getBattlefieldMock();
+            /** @var Cell $cell */
             foreach ($this->battlefield->getCells() as $cell) {
                 $cell->addFlag(CellModel::FLAG_DEAD);
             }
