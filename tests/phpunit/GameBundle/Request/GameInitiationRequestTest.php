@@ -8,16 +8,15 @@ use EM\Tests\Environment\IntegrationTestSuite;
 /**
  * @see GameInitiationRequest
  */
-class GameInitiationRequestTest extends \PHPUnit_Framework_TestCase
+class GameInitiationRequestTest extends IntegrationTestSuite
 {
     /**
      * @see GameInitiationRequest::parse
-     *
      * @test
      */
     public function parseOnValid()
     {
-        $fixture = IntegrationTestSuite::getSharedFixtureContent('init-game-request-2-players-7x7.json');
+        $fixture = $this->getSharedFixtureContent('game-initiation-requests/valid/2-players-7x7.json');
         $expected = json_decode($fixture);
         $request = new GameInitiationRequest($fixture);
 

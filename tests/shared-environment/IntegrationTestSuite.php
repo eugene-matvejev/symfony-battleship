@@ -4,19 +4,20 @@ namespace EM\Tests\Environment;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Persistence\ObjectManager;
+use EM\Tests\Environment\AssertionSuite\ResponseAssertionSuites;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @since 15.2
  */
 abstract class IntegrationTestSuite extends WebTestCase
 {
+    use ResponseAssertionSuites;
     /**
      * @var ContainerInterface
      */
@@ -46,9 +47,26 @@ abstract class IntegrationTestSuite extends WebTestCase
      */
     protected static $initiated;
 
-    protected function setUp()
+    /**
+     * return content of the file in located in tests/shared-fixtures directory
+     *
+     * @param string $filename
+     *
+     * @return string
+     */
+    protected function getSharedFixtureContent(string $filename) : string
     {
-        static::$om->clear();
+        return file_get_contents(static::getSharedFixturesDirectory() . "/$filename");
+    }
+
+    protected function getSharedFixturesDirectory() : string
+    {
+        return dirname(__DIR__) . '/shared-fixtures';
+    }
+
+    protected static function getKernelClass() : string
+    {
+        return \AppKernel::class;
     }
 
     /**
@@ -106,36 +124,6 @@ abstract class IntegrationTestSuite extends WebTestCase
         static::$initiated = true;
     }
 
-    public function assertSuccessfulResponse(Response $response)
-    {
-        $this->assertTrue($response->isSuccessful());
-    }
-
-    public function assertRedirectedResponse(Response $response)
-    {
-        $this->assertTrue($response->isRedirection());
-    }
-
-    public function assertSuccessfulJSONResponse(Response $response)
-    {
-        $this->assertSuccessfulResponse($response);
-
-        $this->assertJson($response->getContent());
-    }
-
-    public function assertSuccessfulXMLResponse(Response $response)
-    {
-        $this->assertSuccessfulResponse($response);
-
-        $xmlElement = simplexml_load_string($response->getContent(), 'SimpleXMLElement', LIBXML_NOCDATA);
-        $this->assertInstanceOf(\SimpleXMLElement::class, $xmlElement);
-    }
-
-    public function assertUnsuccessfulResponse(Response $response)
-    {
-        $this->assertTrue($response->isClientError() || $response->isServerError());
-    }
-
     /**
      * able to invoke any non-static of object and return the result and throws exceptions if so
      *
@@ -154,32 +142,5 @@ abstract class IntegrationTestSuite extends WebTestCase
         $method->setAccessible(true);
 
         return $method->invokeArgs($object, $methodArguments);
-    }
-
-    public static function getRootDirectory() : string
-    {
-        return dirname(__DIR__);
-    }
-
-    public static function getSharedFixturesDirectory() : string
-    {
-        return static::getRootDirectory() . '/shared-fixtures';
-    }
-
-    /**
-     * return content of the file in located in tests/shared-fixtures directory
-     *
-     * @param string $filename
-     *
-     * @return string
-     */
-    public static function getSharedFixtureContent(string $filename) : string
-    {
-        return file_get_contents(static::getSharedFixturesDirectory() . "/$filename");
-    }
-
-    protected static function getKernelClass() : string
-    {
-        return \AppKernel::class;
     }
 }
