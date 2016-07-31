@@ -2,17 +2,20 @@
 
 namespace EM\GameBundle\Controller;
 
+use EM\FoundationBundle\Controller\AbstractAPIController;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * @see   GameResultControllerTest
+ *
  * @since 2.0
  */
 class GameResultController extends AbstractAPIController
 {
     /**
      * @ApiDoc(
-     *      section = "Game Result API",
+     *      section = "Game:: Results",
      *      description = "returns game results ordered by date in desc. order",
      *      output = "EM\GameBundle\Response\GameResultsResponse"
      * )
@@ -23,8 +26,8 @@ class GameResultController extends AbstractAPIController
      */
     public function orderedByDateAction(int $page) : Response
     {
-        $data = $this->get('battleship_game.service.game_result_model')->prepareResponse($page);
+        $data = $this->get('battleship_game.service.game_result_model')->buildResponse($page);
 
-        return $this->buildSerializedResponse($data);
+        return $this->prepareSerializedResponse($data);
     }
 }

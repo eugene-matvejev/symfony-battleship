@@ -1,9 +1,14 @@
 language: "php"
-php:
-    - '7.0.4'
 
-services:
-    - "mysql"
+php:
+    - "7.0"
+    - "7.1"
+
+env:
+#  doctrine dabatase abstract layer has bug: https://github.com/doctrine/dbal/pull/2402
+#  - DATABASE_ENGINE=pdo_sqlite DATABASE_PATH = %kernel.cache_dir%/sqlite.db.cache
+  - DATABASE_ENGINE=pdo_mysql DATABASE_PORT=3306
+  - DATABASE_ENGINE=pdo_pgsql DATABASE_PORT=5432 DATABASE_USER=postgres
 
 before_script:
     - "cp app/config/parameters.yml.dist app/config/parameters.yml"
@@ -13,5 +18,4 @@ script:
     - "php bin/phpunit -c phpunit.xml --colors=always --verbose --coverage-clover=coverage.xml"
 
 after_success:
-    - "CODECLIMATE_REPO_TOKEN=2f804dfe85a65f7f14d8be5d36f38bcbf07a5f2fcf6852ceb19327e7931a8d49 ./bin/test-reporter --coverage-report=\"./coverage.xml\""
     - "bash <(curl -s https://codecov.io/bash)"

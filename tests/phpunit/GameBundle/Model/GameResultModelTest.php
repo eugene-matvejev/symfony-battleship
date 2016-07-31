@@ -16,11 +16,13 @@ class GameResultModelTest extends IntegrationTestSuite
     /**
      * @var GameResultModel
      */
-    private $gameResultModel;
+    private static $gameResultModel;
 
-    protected function setUp()
+    public static function setUpBeforeClass()
     {
-        $this->gameResultModel = static::$container->get('battleship_game.service.game_result_model');
+        parent::setUpBeforeClass();
+
+        static::$gameResultModel = static::$container->get('battleship_game.service.game_result_model');
     }
 
     /**
@@ -29,10 +31,10 @@ class GameResultModelTest extends IntegrationTestSuite
      */
     public function prepareResponse()
     {
-        $perPage = static::$container->getParameter('battleship_game.setting.game_results_per_page');
+        $perPage = static::$container->getParameter('battleship_game.setting.limits.per_page.game_results');
 
         /** populated 2 full pages of Game Results + 1 result */
-        for ($i = 0; $i < ($perPage * 2 + 1); $i++) {
+        for ($i = 0; $i < $perPage * 2 + 1; $i++) {
             $result = MockFactory::getGameResultMock(2, 0);
             $player = $result->getGame()->getBattlefields()[0]->getPlayer();
             $result->setPlayer($player);
@@ -43,7 +45,7 @@ class GameResultModelTest extends IntegrationTestSuite
 
         /** should be 3 pages in total */
         for ($page = 1; $page < 3; $page++) {
-            $response = $this->gameResultModel->prepareResponse($page);
+            $response = static::$gameResultModel->buildResponse($page);
 
             $this->assertEquals($page, $response->getMeta()[GameResultsResponse::META_INDEX_CURRENT_PAGE]);
             $this->assertEquals(3, $response->getMeta()[GameResultsResponse::META_INDEX_TOTAL_PAGES]);

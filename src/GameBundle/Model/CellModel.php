@@ -3,10 +3,11 @@
 namespace EM\GameBundle\Model;
 
 use EM\GameBundle\Entity\Cell;
-use EM\GameBundle\Exception\CellException;
 use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 
 /**
+ * @see   CellModelTest
+ *
  * @since 12.0
  */
 class CellModel
@@ -19,18 +20,14 @@ class CellModel
     /**
      * @var Cell[]
      */
-    private static $changedCells = [];
-    /**
-     * @var Cell[]
-     */
-    private static $checkedCells = [];
+    protected static $changedCells = [];
 
     /**
      * @return Cell[]
      */
     public static function getChangedCells() : array
     {
-        return self::$changedCells;
+        return static::$changedCells;
     }
 
     /**
@@ -42,67 +39,24 @@ class CellModel
     public static function switchPhase(Cell $cell, int $additionalFlag = self::FLAG_NONE) : Cell
     {
         if (!$cell->hasFlag(CellModel::FLAG_DEAD)) {
-            self::$changedCells[$cell->getId()] = $cell->addFlag($additionalFlag | CellModel::FLAG_DEAD);
+            static::$changedCells[$cell->getId()] = $cell->addFlag($additionalFlag | CellModel::FLAG_DEAD);
         }
 
         return $cell;
     }
 
-    /**
-     * @param Cell $cell
-     * @param int  $requiredFlag if
-     *
-     * @return Cell[]
-     * @throws CellException
-     */
-    public static function getShipCells(Cell $cell, int $requiredFlag = self::FLAG_NONE) : array
-    {
-        $battlefield = $cell->getBattlefield();
-        $processor = new PathProcessor($cell);
-
-        $cells = [$cell->getCoordinate() => $cell];
-
-        foreach (PathProcessor::PRIMARY_PATHS as $way) {
-            $processor->setPath($way);
-
-            /** @var Cell $cell */
-            while (null !== $cell = $battlefield->getCellByCoordinate($processor->getNextCoordinate())) {
-                if (isset($cells[$cell->getCoordinate()]) || !$cell->hasFlag(self::FLAG_SHIP)) {
-                    break;
-                }
-                if (!$cell->hasFlag($requiredFlag)) {
-                    throw new CellException("ship cell: {$cell->getId()} missed required flag: {$requiredFlag}");
-                }
-
-                $cells[$cell->getCoordinate()] = $cell;
-            }
-        }
-
-        return $cells;
-    }
-
     public static function isShipDead(Cell $cell) : bool
     {
-        if (isset(self::$checkedCells[$cell->getId()])) {
-            return true;
-        }
-
-        if (!$cell->hasFlag(self::FLAG_DEAD_SHIP)) {
+        if (!$cell->hasFlag(static::FLAG_DEAD_SHIP)) {
             return false;
         }
 
-        try {
-            foreach (static::getShipCells($cell, self::FLAG_DEAD) as $shipCell) {
-                self::$checkedCells[$cell->getId()] = $shipCell;
-
-                foreach ((new PathProcessor($shipCell))->getAdjacentCells(CellModel::FLAG_SHIP) as $waterCell) {
-                    self::switchPhase($waterCell, static::FLAG_SKIP);
-                }
+        foreach ((new PathProcessor($cell->getCoordinate()))->getAdjacentCells($cell->getBattlefield(), 4, static::FLAG_SHIP) as $cell) {
+            if (!$cell->hasFlag(static::FLAG_DEAD_SHIP)) {
+                return false;
             }
-
-            return true;
-        } catch (CellException $e) {
-            return false;
         }
+
+        return true;
     }
 }

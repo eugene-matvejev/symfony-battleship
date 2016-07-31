@@ -4,6 +4,7 @@ namespace EM\Tests\PHPUnit\GameBundle\Controller;
 
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Model\PlayerModel;
+use EM\Tests\Environment\Cleaner\CellModelCleaner;
 use EM\Tests\Environment\IntegrationTestSuite;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -12,20 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class GameControllerTest extends IntegrationTestSuite
 {
-    /**
-     * @see GameController::indexAction
-     * @test
-     */
-    public function indexAction()
-    {
-        $client = clone static::$client;
-        $client->request(
-            Request::METHOD_GET,
-            static::$router->generate('battleship_game.gui.index')
-        );
-        $this->assertSuccessfulResponse($client->getResponse());
-    }
-
     /**
      * @see GameController::initAction
      * @test
@@ -60,7 +47,7 @@ class GameControllerTest extends IntegrationTestSuite
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json'],
-            static::getSharedFixtureContent('init-game-request-2-players-7x7.json')
+            static::getSharedFixtureContent('game-initiation-requests/valid/2-players-7x7.json')
         );
         $this->assertSuccessfulJSONResponse($client->getResponse());
 
@@ -109,7 +96,7 @@ class GameControllerTest extends IntegrationTestSuite
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/xml'],
-            static::getSharedFixtureContent('init-game-request-2-players-7x7.json')
+            static::getSharedFixtureContent('game-initiation-requests/valid/2-players-7x7.json')
         );
         $this->assertSuccessfulXMLResponse($client->getResponse());
 
@@ -155,7 +142,7 @@ class GameControllerTest extends IntegrationTestSuite
      * @depends successfulInitAction_JSON
      * @depends successfulInitAction_XML
      */
-    public function unsuccessfulTurnAction()
+    public function unsuccessfulTurnActionOnNotExistingCell()
     {
         $client = clone static::$client;
         foreach (['application/xml', 'application/json'] as $acceptHeader) {
@@ -183,8 +170,48 @@ class GameControllerTest extends IntegrationTestSuite
     public function successfulTurnAction(array $response)
     {
         foreach ($response as $battlefield) {
+            if ($battlefield->player->flags !== PlayerModel::FLAG_AI_CONTROLLED) {
+                continue;
+            }
+
+            foreach ($battlefield->cells as $cell) {
+                CellModelCleaner::resetChangedCells();
+
+                $client = clone static::$client;
+                $client->request(
+                    Request::METHOD_PATCH,
+                    static::$router->generate('battleship_game.api.turn', ['cellId' => $cell->id]),
+                    [],
+                    [],
+                    ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
+                );
+                $this->assertSuccessfulJSONResponse($client->getResponse());
+
+                $parsed = json_decode($client->getResponse()->getContent());
+                if (isset($parsed->result)) {
+                    return;
+                }
+            }
+        }
+    }
+
+    /**
+     * simulate human interaction until game has been finished
+     *
+     * @var     \stdClass[] $response
+     *
+     * @see     GameController::turnAction
+     * @test
+     *
+     * @depends successfulInitAction_JSON
+     */
+    public function unsuccessfulTurnActionOnDeadCell(array $response)
+    {
+        foreach ($response as $battlefield) {
             if ($battlefield->player->flags === PlayerModel::FLAG_AI_CONTROLLED) {
                 foreach ($battlefield->cells as $cell) {
+                    CellModelCleaner::resetChangedCells();
+
                     $client = clone static::$client;
                     $client->request(
                         Request::METHOD_PATCH,
@@ -193,12 +220,8 @@ class GameControllerTest extends IntegrationTestSuite
                         [],
                         ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
                     );
-                    $this->assertSuccessfulJSONResponse($client->getResponse());
-
-                    $parsed = json_decode($client->getResponse()->getContent());
-                    if (isset($parsed->result)) {
-                        return;
-                    }
+                    $this->assertUnsuccessfulResponse($client->getResponse());
+                    break 2;
                 }
             }
         }

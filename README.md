@@ -1,35 +1,36 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
 [![Code Climate](https://codeclimate.com/github/eugene-matvejev/battleship-game-api/badges/gpa.svg)](https://codeclimate.com/github/eugene-matvejev/battleship-game-api)
-[![Code Coverage](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
 [![Build Status](https://travis-ci.org/eugene-matvejev/battleship-game-api.svg?branch=master)](https://travis-ci.org/eugene-matvejev/battleship-game-api)
+[![Build Status](https://codeship.com/projects/e893a4f0-0b28-0134-b0ad-129a07c0a376/status?branch=master)](https://codeship.com/projects/155781)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc/mini.png)](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc)
 
 __TDD tests__
- * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - *PHPUnit*
+ * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - _PHPUnit_
 
 __BDD tests__
- * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - *Behat*
- * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - *Kahlan*
+ * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - _Behat_
+ * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - _Kahlan_
 
-__DEMO__ : https://battleship-game-api.herokuapp.com/
+__Test Coverage__
+
+[![Code Coverage](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
+[![codecov](https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/master/graph/badge.svg)](https://codecov.io/gh/eugene-matvejev/battleship-game-api)
+
+__DEMO__ : https://battleship-game-api.herokuapp.com/ (API)
 
 # Battleship Game API
 ##### THIS IS SPARE TIME PROJECT, WORK IN PROGRESS! HIGHLY EXPERIMENTAL!!!
 #### project purpose:
- * try out "cutting edge" technologies and approaches such as PHP7, SF3, ES6 and Continuous Integration/Deployment
- * simulate database loading e.g. up to 500 transactions per request
+ * try out:
+  * _cutting edge_ technologies such as PHP7, SF3, Doctrine2
+  * _modern_ approaches such as Test Automation, Continuous Integration|Deployment
+ * simulate database loading [~500 transactions per request]
  * deliver preview about my technical knowledge before the job interview
 
 #### game cheat-code:
-* purpose: make manual testing easier (as the project is far from final stage, I keep polishing it)
- * AI player have only one ship, which is one-cell ship which is located at __B2__ cell
-  * if you will hit __B2__ cell - you will win
+* AI players have only one ship[single-cell] which is located at __B2__ cell [_purpose: easier manual testing_]
+ * if you will hit __B2__ cell - you will win
 
-#### future plans:
- * deliver back-end as RESTful API using SF3, PHP7, Doctrine2 with various database engines support
- * separate front-end into separate repository and rewrite it using React or AngularJS 2
-  * front-end is already behave as single-page-application [SPA] 
- 
 # software requirements
  * supported database engines:
   * MySQL >= 5.5
@@ -38,24 +39,21 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
   * SQLite >= 3
  * WIP:
   * MongoDB
- * Composer >= 1.0.3
  * http server: apache/nginx with PHP7
+ * Composer >= 1.0.3
 
 # technology stack
 ### key technologies:
  * PHP7 (7.0.0 - 7.0.4 || >= 7.0.6 [7.0.5 had bugged SPL])
- * Symfony Framework 3 [SF3]
- * Doctrine 2 [with Fixtures]
- * PHPUnit 5
- * Behat 3
- * Composer
- * JMS Serializer
- * API Doc [nelmio/api-doc-bundle]
- * Twig
- * JavaScript ES6 [ECMAScript6]
- * CSS3
- * jQuery 2
- * Twitter Bootstrap 3
+ * [Symfony Framework 3](http://symfony.com) [SF3]
+ * [Doctrine 2](http://doctrine-orm.readthedocs.io/en/latest) with [Fixtures](http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html)
+ * [Composer](https://getcomposer.org)
+ * [JMS Serializer](http://jmsyst.com/bundles/JMSSerializerBundle)
+ * [API Doc](https://packagist.org/packages/nelmio/api-doc-bundle)
+ * [Twig](http://twig.sensiolabs.org)
+ * [PHPUnit 5](https://phpunit.de)
+ * [Behat 3](http://docs.behat.org/en/v3.0)
+ * [Kahlan](http://kahlan.readthedocs.io/en/latest)
 
 ### used patterns:
  * Front Controller
@@ -75,32 +73,34 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
 ### PHP-FIG:
  * PSR-2
  * PSR-4
+ * PSR-6
 
 # workflow
- * new functionality is added into master branch only by pull requests from feature branches
- * result of each pull request is ready-to-use release, using Continuous Delivery principles, follow semantic visioning
- * each pull request/push trigger various CI engines such as Travis, Circle, Scrutinizer, Sensiolabs Insight, CodeCov, Jenkins, SonarQube
- * __gitflow__:
-  * master branch: contains release-ready source
-  * heroku branch: reflects current deployed app at heroku (prototype of Continuous Delivery and Continuous Deployment)
-  * prototype!_* branches contains new idea [merged pull request of prototype branch is always next *major* version release]
-  * %major%.%minor%.%patch%: feature branches [example: 15.2.3]
+ * new functionality merged into master branch only via pull requests
+ * each pull request have callback to trigger CI engines such as Travis, Circle, CodeShip, Scrutinizer, Sensiolabs Insight, CodeCov
+ * result of each pull request is ready-to-use release - using Continuous Delivery principles
+
+#gitflow
+  * __master__ branch: stable source code, contains release-ready source
+  * __heroku__ branch: reflects current deployed app at heroku [Continuous Deployment]
+  * __prototype_*__ branch: contains new idea [pull request of prototype branch is always next _major_ version release]
+  * pull requests follows [semantic vesion](http://semver.org)
 
 # how to install
- * copy *app/config/parameters.yml.dist* to *app/config/parameters.yml* and amend database settings
- * *composer install* __# to fetch dependencies and initial commands__
-  * __NOTE!__ composer is configured to create databases if they not exists and run apply migrations using production env.__
- * __optional!__ *composer dump-autoload --optimize* __# to generate "hash-map" autoloader__
-  * __NOTE!__ production uses __APC autoloader__
- * __optional!__ *php bin/console assets:install* __# to dump assets as hard copies__
-  * __NOTE!__ by default assets are installed as symlinks
- * __optional!__ *php bin/console doctrine:fixtures:load --env=test* __# for testing purposes only__
+ * __$ composer install__ # to fetches dependencies, executes mandatory deployment commands
+  * _NOTE:_ composer is configured to generate __parameters.yml__ using [incenteev/composer-parameter-handler](https://github.com/Incenteev/ParameterHandler)
+  * _NOTE:_ composer is configured to create database [if not exists] and apply migrations; __using prod. env.__
+ * optional: __$ composer dump-autoload --optimize__ # to generate [class-map autoloader](https://getcomposer.org/doc/03-cli.md#dump-autoload)
+  * _NOTE:_ prod. env. uses [APC autoloader](http://symfony.com/doc/current/book/performance.html)
+ * optional: __$ php bin/console assets:install__ # to dump assets as hard copies
+  * _NOTE:_ by default assets are installed as symlinks
 
 ### how to execute tests
- * *php bin/phpunit -c .*
- * *php bin/behat --strict*
- * *php bin/kahlan*
-  * __NOTE__: tests interacting with test database [config: "database_name_test" in config.yml], it is wiped and seeded before tests execution
+ * _$ php bin/phpunit -c ._
+ * _$ php bin/behat --strict_
+ * _$ php bin/kahlan_
+  * _NOTE:_ database\_name\_test in parameters.yml reflects database name for test env.
+  * _NOTE:_ test database is wiped and seeded before tests execution
 
 ### /etc/hosts
 ```
@@ -116,7 +116,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
 
     ServerName api.game.local
     ServerAlias api.game.local
-    <Directory %PROJECT_ROOT_DIRECTORY%/web>
+    <Directory "%PROJECT_ROOT_DIRECTORY%/web">
         AllowOverride All
         Order Allow,Deny
         Allow from All
@@ -144,6 +144,12 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/
 
         <IfModule mod_rewrite.c>
             RewriteEngine On
+
+            # CORS support.
+            RewriteCond %{REQUEST_METHOD} OPTIONS
+            RewriteRule ^(.*)$ $1 [R=200,L]
+            Header always set Access-Control-Allow-Origin "*"
+            Header always set Access-Control-Allow-Methods "POST, GET, PATCH, OPTIONS"
 
             # Determine the RewriteBase automatically and set it as environment variable.
             # If you are using Apache aliases to do mass virtual hosting or installed the

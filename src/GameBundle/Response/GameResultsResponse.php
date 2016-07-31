@@ -14,7 +14,7 @@ use JMS\Serializer\Annotation as Serializer;
 class GameResultsResponse
 {
     const META_INDEX_CURRENT_PAGE = 'currentPage';
-    const META_INDEX_TOTAL_PAGES = 'totalPages';
+    const META_INDEX_TOTAL_PAGES  = 'totalPages';
     /**
      * @Serializer\Type("array<EM\GameBundle\Entity\GameResult>")
      * @Serializer\XmlList(entry="result")

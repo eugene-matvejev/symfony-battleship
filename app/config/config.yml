@@ -7,11 +7,11 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
-    battleship_game.setting.min_game_size: 7
-    battleship_game.setting.max_game_size: 12
-    battleship_game.setting.min_opponents_count: 1 # Multiplayer in WIP!
-    battleship_game.setting.max_opponents_count: 1 # Multiplayer in WIP!
-    battleship_game.setting.game_results_per_page: 5
+    battleship_game.setting.game_size.min: 7
+    battleship_game.setting.game_size.max: 12
+    battleship_game.setting.opponents_count.min: 1 # Multiplayer in WIP!
+    battleship_game.setting.opponents_count.max: 1 # Multiplayer in WIP!
+    battleship_game.setting.limits.per_page.game_results: 5
 
 framework:
     #esi:             ~
@@ -54,14 +54,7 @@ doctrine:
         user:     "%database_user%"
         password: "%database_password%"
         charset:  "%database_encoding%"
-#       for SQLite Only
-#        path:     "%kernel.cache_dir%/sqlite.db.cache"
-        # if using pdo_sqlite as your database driver:
-        # 1. add the path in parameters.yml
-        #   e.g. database_path: "%kernel.root_dir%/data/data.db3"
-        # 2. Uncomment database_path in parameters.yml.dist
-        # 3. Uncomment next line:
-        #   path: "%database_path%"
+        path:     "%database_path%"
         server_version: 5
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"

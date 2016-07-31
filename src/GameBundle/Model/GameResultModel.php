@@ -6,6 +6,8 @@ use EM\GameBundle\Repository\GameResultRepository;
 use EM\GameBundle\Response\GameResultsResponse;
 
 /**
+ * @see   GameResultModelTest
+ *
  * @since 5.0
  */
 class GameResultModel
@@ -25,7 +27,7 @@ class GameResultModel
         $this->resultsPerPage = $recordsPerPage;
     }
 
-    public function prepareResponse(int $currentPage) : GameResultsResponse
+    public function buildResponse(int $currentPage) : GameResultsResponse
     {
         $totalPages = ceil($this->repository->countTotal() / $this->resultsPerPage);
 

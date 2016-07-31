@@ -2,11 +2,15 @@
 
 namespace EM\GameBundle\Service\AI;
 
+use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
+use EM\GameBundle\Exception\CellException;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 
 /**
+ * @see   AIStrategyProcessorTest
+ *
  * @since 8.0
  */
 class AIStrategyProcessor
@@ -34,7 +38,7 @@ class AIStrategyProcessor
             $paths[] = PathProcessor::PATH_DOWN;
         }
 
-        return $this->processCoordinates($cell, $paths);
+        return $this->processPaths($cell, $paths);
     }
 
     /**
@@ -43,29 +47,44 @@ class AIStrategyProcessor
      *
      * @return Cell[]
      */
-    protected function processCoordinates(Cell $cell, array $paths) : array
+    protected function processPaths(Cell $cell, array $paths) : array
     {
         $cells = [];
-        $battlefield = $cell->getBattlefield();
-        $processor = new PathProcessor($cell);
-
         foreach ($paths as $path) {
-            $processor->setPath($path);
-
-            /** @var Cell $cell */
-            while (null !== $cell = $battlefield->getCellByCoordinate($processor->getNextCoordinate())) {
-                /** if it is marked as skipped or dead water - skip processing */
-                if ($cell->hasFlag(CellModel::FLAG_SKIP) || (!$cell->hasFlag(CellModel::FLAG_SHIP) && $cell->hasFlag(CellModel::FLAG_DEAD))) {
-                    break;
-                }
-                /** if it not marked as dead return it later */
-                if (!$cell->hasFlag(CellModel::FLAG_DEAD)) {
-                    $cells[] = $cell;
-                    break;
-                }
+            try {
+                $cells[] = $this->processPath($cell->getBattlefield(), $path, $cell->getCoordinate());
+            } catch (CellException $e) {
+                continue;
             }
         }
 
         return $cells;
+    }
+
+    /**
+     * @param Battlefield $battlefield
+     * @param int         $path
+     * @param string      $coordinate
+     *
+     * @return Cell
+     * @throws CellException
+     */
+    protected function processPath(Battlefield $battlefield, int $path, string $coordinate) : Cell
+    {
+        $processor = (new PathProcessor($coordinate))->setPath($path);
+
+        while (null !== $cell = $battlefield->getCellByCoordinate($processor->getNextCoordinate())) {
+            if ($cell->hasFlag(CellModel::FLAG_DEAD)) {
+                if ($cell->hasFlag(CellModel::FLAG_SHIP)) {
+                    continue;
+                }
+                /** if it is not dead ship - terminate processing */
+                throw new CellException("cell: {$cell->getId()} already dead and is not ship");
+            }
+
+            return $cell;
+        }
+
+        throw new CellException("unable to find cell using path: {$path} from coordinate: {$coordinate}");
     }
 }

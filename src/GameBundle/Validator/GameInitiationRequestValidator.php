@@ -2,10 +2,12 @@
 
 namespace EM\GameBundle\Validator;
 
-use JMS\Serializer\Annotation as Serializer;
-
 /**
+ * @see   GameInitiationRequestValidatorTest
+ *
  * @since 18.0
+ *
+ * @see   GameInitiationRequestValidatorTest
  */
 class GameInitiationRequestValidator
 {
@@ -26,12 +28,6 @@ class GameInitiationRequestValidator
      */
     private $maxOpponents;
 
-    /**
-     * @param int $minBattlefieldSize
-     * @param int $maxBattlefieldSize
-     * @param int $minOpponents
-     * @param int $maxOpponents
-     */
     public function __construct(int $minBattlefieldSize, int $maxBattlefieldSize, int $minOpponents, int $maxOpponents)
     {
         $this->minBattlefieldSize = $minBattlefieldSize;
@@ -45,24 +41,24 @@ class GameInitiationRequestValidator
         $data = json_decode($json);
 
         return
-            $data instanceof \stdClass
-            && $this->validateStructure($data)
+            $this->validateStructure($data)
+            && $this->validatePlayerName($data->playerName) // will be replaced by Authorization header which will reflect Player.id content
             && $this->validateBattlefieldSize($data->size)
-            && $this->validatePlayerName($data->playerName)
             && $this->validateOpponentsAmount($data->opponents)
             && $this->validateCoordinates($data->coordinates);
     }
 
-    protected function validateStructure(\stdClass $data) : bool
+    protected function validateStructure($data) : bool
     {
         return
+            $data instanceof \stdClass &&
             isset($data->opponents, $data->playerName, $data->size, $data->coordinates)
             && is_array($data->coordinates);
     }
 
-    protected function validateOpponentsAmount(int $value) : bool
+    protected function validatePlayerName(string $value) : bool
     {
-        return $this->isBetween($value, $this->minOpponents, $this->maxOpponents);
+        return !empty($value);
     }
 
     protected function validateBattlefieldSize(int $value) : bool
@@ -70,10 +66,14 @@ class GameInitiationRequestValidator
         return $this->isBetween($value, $this->minBattlefieldSize, $this->maxBattlefieldSize);
     }
 
-    // TODO: replace name with ID
-    protected function validatePlayerName(string $value) : bool
+    protected function isBetween(int $value, int $min, int $max) : bool
     {
-        return !empty($value);
+        return $min <= $value && $value <= $max;
+    }
+
+    protected function validateOpponentsAmount(int $value) : bool
+    {
+        return $this->isBetween($value, $this->minOpponents, $this->maxOpponents);
     }
 
     protected function validateCoordinates(array $coordinates) : bool
@@ -94,10 +94,5 @@ class GameInitiationRequestValidator
     protected function validateCoordinate(string $coordinate) : bool
     {
         return 0 !== preg_match('/[A-Z][1-9][0-9]*/', $coordinate);
-    }
-
-    protected function isBetween(int $value, int $min, int $max) : bool
-    {
-        return $min <= $value && $value <= $max;
     }
 }
