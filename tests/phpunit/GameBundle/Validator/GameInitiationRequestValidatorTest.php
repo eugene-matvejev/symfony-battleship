@@ -4,6 +4,7 @@ namespace EM\Tests\PHPUnit\GameBundle\Validator;
 
 use EM\GameBundle\Validator\GameInitiationRequestValidator;
 use EM\Tests\Environment\IntegrationTestSuite;
+use Symfony\Component\Finder\Finder;
 
 /**
  * @see GameInitiationRequestValidator
@@ -22,45 +23,60 @@ class GameInitiationRequestValidatorTest extends IntegrationTestSuite
         static::$validator = static::$container->get('battleship_game.validator.game_initiation_request');
     }
 
-    /**
-     * @see GameInitiationRequestValidator::validate
-     *
-     * @test
-     */
-    public function validateOnValidFixture()
+    public function invalidFixturesProvider() : array
     {
-        $this->assertTrue(static::$validator->validate($this->getSharedFixtureContent('init-game-request-2-players-7x7.json')));
+        return $this->fixturesProvider('/game-initiation-requests/invalid');
+    }
+
+    public function validFixturesProvider() : array
+    {
+        return $this->fixturesProvider('/game-initiation-requests/valid');
     }
 
     /**
-     * @see GameInitiationRequestValidator::validate
-     *
+     * @see          GameInitiationRequestValidator::validate
      * @test
+     *
+     * @dataProvider validFixturesProvider
+     *
+     * @param string $fileName
+     * @param string $content
      */
-    public function validateOnInvalidFixture()
+    public function validateOnValidFixture(string $fileName, string $content)
     {
-        foreach (static::getListOfInvalidFixtureNames() as $fixtureName) {
-            $this->assertFalse(
-                static::$validator->validate($this->getInvalidGameRequestFixtureContent($fixtureName)),
-                "fail turn return false by validating {$fixtureName} fixture"
-            );
+        $this->assertTrue(
+            static::$validator->validate($content),
+            "fail to return true by validating {$fileName} fixture"
+        );
+    }
+
+    /**
+     * @see          GameInitiationRequestValidator::validate
+     * @test
+     *
+     * @dataProvider invalidFixturesProvider
+     *
+     * @param string $fileName
+     * @param string $content
+     */
+    public function validateOnInvalidFixture(string $fileName, string $content)
+    {
+        $this->assertFalse(
+            static::$validator->validate($content),
+            "fail to return false by validating {$fileName} fixture"
+        );
+    }
+
+    private function fixturesProvider(string $path) : array
+    {
+        $finder = new Finder();
+        $finder->files()->in("{$this->getSharedFixturesDirectory()}/$path");
+
+        $arr = [];
+        foreach ($finder as $file) {
+            $arr[] = [$file->getRealPath(), $file->getContents()];
         }
-    }
 
-    /**
-     * @return string[]
-     */
-    private function getListOfInvalidFixtureNames() : array
-    {
-        $fixtures = scandir(static::getSharedFixturesDirectory() . '/invalid-game-initiation-requests');
-        /** because 0|1 element is .|.. */
-        unset($fixtures[0], $fixtures[1]);
-
-        return $fixtures;
-    }
-
-    private function getInvalidGameRequestFixtureContent(string $name) : string
-    {
-        return $this->getSharedFixtureContent("invalid-game-initiation-requests/$name");
+        return $arr;
     }
 }

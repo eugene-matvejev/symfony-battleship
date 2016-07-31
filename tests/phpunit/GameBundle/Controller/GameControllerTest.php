@@ -47,7 +47,7 @@ class GameControllerTest extends IntegrationTestSuite
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json'],
-            static::getSharedFixtureContent('init-game-request-2-players-7x7.json')
+            static::getSharedFixtureContent('game-initiation-requests/valid/2-players-7x7.json')
         );
         $this->assertSuccessfulJSONResponse($client->getResponse());
 
@@ -96,7 +96,7 @@ class GameControllerTest extends IntegrationTestSuite
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/xml'],
-            static::getSharedFixtureContent('init-game-request-2-players-7x7.json')
+            static::getSharedFixtureContent('game-initiation-requests/valid/2-players-7x7.json')
         );
         $this->assertSuccessfulXMLResponse($client->getResponse());
 
