@@ -65,14 +65,14 @@ class PathProcessor
     /**
      * @since 19.0
      *
-     * @param string|null $coordinate
+     * @param string $coordinate
      *
      * @return PathProcessor
      */
-    public function reset(string $coordinate = null) : self
+    public function reset(string $coordinate) : self
     {
-        $this->currentCoordinate = $this->originCoordinate = $coordinate ?? $this->originCoordinate;
-        $this->path = static::PATH_NONE;
+        $this->currentCoordinate = $this->originCoordinate = $coordinate;
+        $this->path              = static::PATH_NONE;
 
         return $this;
     }
@@ -86,7 +86,7 @@ class PathProcessor
      */
     public function setPath(int $path) : self
     {
-        $this->reset();
+        $this->reset($this->originCoordinate);
         $this->path = $path;
 
         return $this;
