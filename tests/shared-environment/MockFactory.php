@@ -43,7 +43,7 @@ class MockFactory
 
     public static function getGameResultMock(int $players = 2, int $battlefieldSize = 7) : GameResult
     {
-        $game = static::getGameMock($players, $battlefieldSize);
+        $game       = static::getGameMock($players, $battlefieldSize);
         $gameResult = (new GameResult());
         $game->setResult($gameResult);
 

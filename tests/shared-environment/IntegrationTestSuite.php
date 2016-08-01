@@ -47,23 +47,6 @@ abstract class IntegrationTestSuite extends WebTestCase
      */
     protected static $initiated;
 
-    /**
-     * return content of the file in located in tests/shared-fixtures directory
-     *
-     * @param string $filename
-     *
-     * @return string
-     */
-    protected function getSharedFixtureContent(string $filename) : string
-    {
-        return file_get_contents(static::getSharedFixturesDirectory() . "/$filename");
-    }
-
-    protected function getSharedFixturesDirectory() : string
-    {
-        return dirname(__DIR__) . '/shared-fixtures';
-    }
-
     protected static function getKernelClass() : string
     {
         return \AppKernel::class;
@@ -81,13 +64,13 @@ abstract class IntegrationTestSuite extends WebTestCase
         static::$client = static::createClient();
 
         static::$container = static::$kernel->getContainer();
-        static::$console = new Application(static::$kernel);
+        static::$console   = new Application(static::$kernel);
         static::$console->setAutoExit(false);
 
         static::$router = static::$container->get('router');
 
         static::$doctrine = static::$container->get('doctrine');
-        static::$om = static::$doctrine->getManager();
+        static::$om       = static::$doctrine->getManager();
 
         /**
          * SQLite is not supported yet
@@ -106,10 +89,10 @@ abstract class IntegrationTestSuite extends WebTestCase
 
         foreach ($commands as $command => $args) {
             /** apply common commands options */
-            $args['--env'] = 'test';
-            $args['--quiet'] = true;
+            $args['--env']            = 'test';
+            $args['--quiet']          = true;
             $args['--no-interaction'] = true;
-            $args['command'] = $command;
+            $args['command']          = $command;
             try {
                 static::$console->setCatchExceptions(false);
                 static::$console->run(new ArrayInput($args));
@@ -122,6 +105,23 @@ abstract class IntegrationTestSuite extends WebTestCase
         }
 
         static::$initiated = true;
+    }
+
+    /**
+     * return content of the fixture file in located in tests/shared-fixtures directory
+     *
+     * @param string $filename
+     *
+     * @return string
+     */
+    protected function getSharedFixtureContent(string $filename) : string
+    {
+        return file_get_contents(static::getSharedFixturesDirectory() . "/$filename");
+    }
+
+    protected function getSharedFixturesDirectory() : string
+    {
+        return dirname(__DIR__) . '/shared-fixtures';
     }
 
     /**
