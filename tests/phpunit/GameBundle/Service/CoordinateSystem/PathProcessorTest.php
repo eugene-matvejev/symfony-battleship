@@ -155,7 +155,7 @@ class PathProcessorTest extends IntegrationTestSuite
         $processor = new PathProcessor('B2');
         $processor
             ->setPath(PathProcessor::PATH_DOWN)
-            ->getNextCoordinate();
+            ->calculateNextCoordinate();
 
         $processor->reset('B3');
         $this->assertEquals($processor->getCurrentCoordinate(), 'B3');
@@ -251,7 +251,7 @@ class PathProcessorTest extends IntegrationTestSuite
      *      find "next coordinate "coordinate by path
      *      save "next coordinate" as current coordinate
      *
-     * @see          PathProcessor::getNextCoordinate
+     * @see          PathProcessor::calculateNextCoordinate
      * @test
      *
      * @depends      extendedPaths
@@ -262,13 +262,13 @@ class PathProcessorTest extends IntegrationTestSuite
      * @param int    $path
      * @param string $expectedCoordinate
      */
-    public function getNextCoordinate(string $startCoordinate, int $path, string $expectedCoordinate)
+    public function calculateNextCoordinate(string $startCoordinate, int $path, string $expectedCoordinate)
     {
         $processor = (new PathProcessor($startCoordinate))
             ->setPath($path);
 
         $this->assertEquals($startCoordinate, $processor->getCurrentCoordinate());
-        $this->assertEquals($expectedCoordinate, $processor->getNextCoordinate());
+        $this->assertEquals($expectedCoordinate, $processor->calculateNextCoordinate());
         $this->assertEquals($expectedCoordinate, $processor->getCurrentCoordinate());
     }
 
