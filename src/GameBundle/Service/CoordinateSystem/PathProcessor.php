@@ -111,6 +111,36 @@ class PathProcessor
         return $this->currentCoordinate = $this->getNextCoordinateLetterPart() . $this->getNextCoordinateNumberPart();
     }
 
+    /**
+     * @param Battlefield $battlefield
+     * @param int         $levels      [optional] - how many levels to check
+     * @param int|null    $onlyFlag    [optional] - cells only with this flag will be returned
+     * @param int|null    $excludeFlag [optional] - cells with this flag will be ignored
+     *
+     * @return Cell[]
+     */
+    public function getAdjacentCells(Battlefield $battlefield, int $levels = 1, int $onlyFlag = CellModel::FLAG_NONE, int $excludeFlag = CellModel::FLAG_NONE) : array
+    {
+        $cells = [];
+        foreach (static::$extendedPaths as $path) {
+            $this->setPath($path);
+
+            for ($i = 0; $i < $levels; $i++) {
+                $this->getNextCoordinate();
+
+                try {
+                    $cell = $this->resolveCellGetter($battlefield, $onlyFlag, $excludeFlag);
+                } catch (CellException $e) {
+                    break;
+                }
+
+                $cells[$cell->getCoordinate()] = $cell;
+            }
+        }
+
+        return $cells;
+    }
+
     protected function getNextCoordinateNumberPart() : int
     {
         $number = substr($this->currentCoordinate, 1);
@@ -147,36 +177,6 @@ class PathProcessor
     protected function hasDirection(int $flag) : bool
     {
         return ($this->path & $flag) === $flag;
-    }
-
-    /**
-     * @param Battlefield $battlefield
-     * @param int         $levels      [optional] - how many levels to check
-     * @param int|null    $onlyFlag    [optional] - cells only with this flag will be returned
-     * @param int|null    $excludeFlag [optional] - cells with this flag will be ignored
-     *
-     * @return Cell[]
-     */
-    public function getAdjacentCells(Battlefield $battlefield, int $levels = 1, int $onlyFlag = CellModel::FLAG_NONE, int $excludeFlag = CellModel::FLAG_NONE) : array
-    {
-        $cells = [];
-        foreach (static::$extendedPaths as $path) {
-            $this->setPath($path);
-
-            for ($i = 0; $i < $levels; $i++) {
-                $this->getNextCoordinate();
-
-                try {
-                    $cell = $this->resolveCellGetter($battlefield, $onlyFlag, $excludeFlag);
-                } catch (CellException $e) {
-                    break;
-                }
-
-                $cells[$cell->getCoordinate()] = $cell;
-            }
-        }
-
-        return $cells;
     }
 
     /**
