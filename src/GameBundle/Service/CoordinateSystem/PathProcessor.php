@@ -169,7 +169,7 @@ class PathProcessor
                 $this->calculateNextCoordinate();
 
                 try {
-                    $cell = $this->resolveCellGetter($battlefield, $onlyFlag, $excludeFlag);
+                    $cell = $this->resolveCellFinder($battlefield, $onlyFlag, $excludeFlag);
                 } catch (CellException $e) {
                     break;
                 }
@@ -191,7 +191,7 @@ class PathProcessor
      * @return Cell
      * @throws CellException
      */
-    protected function resolveCellGetter(Battlefield $battlefield, int $onlyFlag, int $excludeFlag) : Cell
+    protected function resolveCellFinder(Battlefield $battlefield, int $onlyFlag, int $excludeFlag) : Cell
     {
         switch (true) {
             case !empty($onlyFlag):
