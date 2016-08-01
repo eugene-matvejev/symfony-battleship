@@ -6,8 +6,6 @@ namespace EM\GameBundle\Validator;
  * @see   GameInitiationRequestValidatorTest
  *
  * @since 18.0
- *
- * @see   GameInitiationRequestValidatorTest
  */
 class GameInitiationRequestValidator
 {
