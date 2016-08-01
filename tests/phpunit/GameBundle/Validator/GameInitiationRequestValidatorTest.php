@@ -23,11 +23,6 @@ class GameInitiationRequestValidatorTest extends IntegrationTestSuite
         static::$validator = static::$container->get('battleship_game.validator.game_initiation_request');
     }
 
-    public function invalidFixturesProvider() : array
-    {
-        return $this->fixturesProvider('/game-initiation-requests/invalid');
-    }
-
     public function validFixturesProvider() : array
     {
         return $this->fixturesProvider('/game-initiation-requests/valid');
@@ -48,6 +43,11 @@ class GameInitiationRequestValidatorTest extends IntegrationTestSuite
             static::$validator->validate($content),
             "fail to return true by validating {$fileName} fixture"
         );
+    }
+
+    public function invalidFixturesProvider() : array
+    {
+        return $this->fixturesProvider('/game-initiation-requests/invalid');
     }
 
     /**
