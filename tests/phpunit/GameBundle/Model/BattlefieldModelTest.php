@@ -47,7 +47,7 @@ class BattlefieldModelTest extends \PHPUnit_Framework_TestCase
      */
     public function generate()
     {
-        $shipCells = ['A1', 'A3', 'A5'];
+        $shipCells   = ['A1', 'A3', 'A5'];
         $battlefield = BattlefieldModel::generate(7, $shipCells);
 
         $this->assertCount(49, $battlefield->getCells());
@@ -67,7 +67,7 @@ class BattlefieldModelTest extends \PHPUnit_Framework_TestCase
     public function flagWaterAroundShipOnNonDeadAround()
     {
         $battlefield = MockFactory::getBattlefieldMock();
-        $cell = $battlefield->getCellByCoordinate('B2')->setFlags(CellModel::FLAG_SHIP);
+        $cell        = $battlefield->getCellByCoordinate('B2')->setFlags(CellModel::FLAG_SHIP);
 
         BattlefieldModel::flagWaterAroundShip($cell);
 

@@ -110,7 +110,7 @@ class GameProcessorTest extends IntegrationTestSuite
      */
     public function processTurnToNotWin()
     {
-        $game = MockFactory::getGameMock();
+        $game          = MockFactory::getGameMock();
         $aiBattlefield = $game->getBattlefields()[0];
         $aiBattlefield->setPlayer(MockFactory::getAIPlayerMock(''));
 

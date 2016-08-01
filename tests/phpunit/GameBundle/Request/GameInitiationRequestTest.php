@@ -16,9 +16,9 @@ class GameInitiationRequestTest extends IntegrationTestSuite
      */
     public function parseOnValid()
     {
-        $fixture = $this->getSharedFixtureContent('game-initiation-requests/valid/2-players-7x7.json');
+        $fixture  = $this->getSharedFixtureContent('game-initiation-requests/valid/2-players-7x7.json');
         $expected = json_decode($fixture);
-        $request = new GameInitiationRequest($fixture);
+        $request  = new GameInitiationRequest($fixture);
 
         $this->assertCount(count($expected->coordinates), $request->getCoordinates());
         $this->assertEquals($expected->size, $request->getSize());
