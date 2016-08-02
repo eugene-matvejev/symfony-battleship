@@ -1,5 +1,6 @@
 machine:
-    php: "7.0.4"
+    php:
+        version: "7.0.4"
 
 dependencies:
     pre:
