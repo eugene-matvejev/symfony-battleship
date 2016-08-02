@@ -64,7 +64,7 @@ class AIStrategyService
             $processor->setPath($path);
 
             /** @var Cell $cell */
-            if (null !== $cell = $battlefield->getCellByCoordinate($processor->getNextCoordinate())) {
+            if (null !== $cell = $battlefield->getCellByCoordinate($processor->calculateNextCoordinate())) {
                 if ($cell->hasFlag(CellModel::FLAG_DEAD_SHIP)) {
                     return $strategy;
                 }
