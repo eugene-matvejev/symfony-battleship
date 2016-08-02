@@ -73,7 +73,7 @@ class AIStrategyProcessor
     {
         $processor = (new PathProcessor($coordinate))->setPath($path);
 
-        while (null !== $cell = $battlefield->getCellByCoordinate($processor->getNextCoordinate())) {
+        while (null !== $cell = $battlefield->getCellByCoordinate($processor->calculateNextCoordinate())) {
             if ($cell->hasFlag(CellModel::FLAG_DEAD)) {
                 if ($cell->hasFlag(CellModel::FLAG_SHIP)) {
                     continue;
