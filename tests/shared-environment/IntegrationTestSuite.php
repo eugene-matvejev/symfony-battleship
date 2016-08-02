@@ -4,6 +4,7 @@ namespace EM\Tests\Environment;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Persistence\ObjectManager;
+use EM\GameBundle\Model\PlayerSessionModel;
 use EM\Tests\Environment\AssertionSuite\ResponseAssertionSuites;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
