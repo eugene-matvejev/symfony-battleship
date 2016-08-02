@@ -120,7 +120,6 @@ class PathProcessorTest extends IntegrationTestSuite
      *
      * @dataProvider hasDirectionNotProvider
      *
-     *
      * @param int   $path
      * @param int[] $directions
      */

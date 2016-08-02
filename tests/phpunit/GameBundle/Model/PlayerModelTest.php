@@ -24,7 +24,6 @@ class PlayerModelTest extends IntegrationTestSuite
     }
 
     /*********************************** STATIC HELPERS ***********************************/
-
     /**
      * should return false if player is not marked by @see PlayerModel::FLAG_AI_CONTROLLED flag
      *
