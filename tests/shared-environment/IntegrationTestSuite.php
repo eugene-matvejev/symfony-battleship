@@ -64,26 +64,25 @@ abstract class IntegrationTestSuite extends WebTestCase
         static::$client = static::createClient();
 
         static::$container = static::$kernel->getContainer();
+        static::$router    = static::$container->get('router');
+        static::$doctrine  = static::$container->get('doctrine');
+        static::$om        = static::$doctrine->getManager();
         static::$console   = new Application(static::$kernel);
         static::$console->setAutoExit(false);
 
-        static::$router = static::$container->get('router');
-
-        static::$doctrine = static::$container->get('doctrine');
-        static::$om       = static::$doctrine->getManager();
-
         /**
          * SQLite is not supported yet
+         *
          * @link https://github.com/doctrine/dbal/pull/2402
          */
         $commands = [
-            /** create test database */
+            /** create test database @see CreateDatabaseDoctrineCommand */
             'doctrine:database:create'    => ['--if-not-exists' => true],
-            /** reset test database schema */
+            /** reset test database schema @see DropSchemaDoctrineCommand */
             'doctrine:schema:drop'        => ['--full-database' => true, '--force' => true],
-            /** flush test database schema */
+            /** flush test database schema @see MigrationsMigrateDoctrineCommand */
             'doctrine:migrations:migrate' => [],
-            /** seed test database with core data */
+            /** seed test database with core data @see LoadDataFixturesDoctrineCommand */
             'doctrine:fixtures:load'      => []
         ];
 
