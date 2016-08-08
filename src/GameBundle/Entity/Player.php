@@ -24,7 +24,7 @@ use JMS\Serializer\Annotation as Serializer;
 class Player extends AbstractFlaggedEntity
 {
     /**
-     * @ORM\Column(name="email", type="string", length=25)
+     * @ORM\Column(name="email", type="string")
      *
      * @Serializer\Type("string")
      *

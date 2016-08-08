@@ -62,6 +62,7 @@ class PlayerSessionModel
      */
     public function find(string $hash) : PlayerSession
     {
+        /** @var PlayerSession $session */
         if (null !== $session = $this->repository->findOneBy(['hash' => $hash])) {
             if ($session->getTimestamp()->getTimestamp() + static::TTL >= time()) {
                 return $session;

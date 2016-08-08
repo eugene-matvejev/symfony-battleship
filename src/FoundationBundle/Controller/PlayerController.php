@@ -2,11 +2,17 @@
 
 namespace EM\FoundationBundle\Controller;
 
+use Doctrine\DBAL\Exception\DatabaseObjectExistsException;
 use EM\GameBundle\Exception\PlayerException;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\ExpressionLanguage\SyntaxError;
+use Symfony\Component\Form\Exception\AlreadySubmittedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * @see   PlayerControllerTest
@@ -46,7 +52,7 @@ class PlayerController extends AbstractAPIController
             ->createOnRequestHumanControlled($json->email, $json->password);
 
         if (null !== $player->getId()) {
-            throw new PlayerException("player with {$json->email} already exists");
+            throw new PlayerException(Response::HTTP_UNPROCESSABLE_ENTITY, "player with {$json->email} already exists");
         }
 
         $om = $this->getDoctrine()->getManager();

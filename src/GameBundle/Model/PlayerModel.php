@@ -51,6 +51,28 @@ class PlayerModel
      * @return Player
      * @throws PlayerException
      */
+    public function register(string $email, string $password) : Player
+    {
+        /** @var Player $player */
+        if (null !== $player = $this->repository->findOneBy(['email' => $email])) {
+            throw new PlayerException("player with '$email' already exists");
+        }
+
+        return (new Player())
+            ->setEmail($email)
+            ->setPasswordHash($this->generatePasswordHash($email, $password))
+            ->setFlags(static::FLAG_NONE);
+
+        //return $this->createOnRequest($email, $password);
+    }
+
+    /**
+     * @param string $email
+     * @param string $password
+     *
+     * @return Player
+     * @throws PlayerException
+     */
     public function createOnRequestHumanControlled(string $email, string $password) : Player
     {
         return $this->createOnRequest($email, $password);

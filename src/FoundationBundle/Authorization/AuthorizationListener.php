@@ -30,7 +30,7 @@ class AuthorizationListener implements ListenerInterface
 
     public function handle(GetResponseEvent $event) : bool
     {
-        if (!$event->isMasterRequest() || !$event->getRequest()->headers->has(PlayerSessionModel::SESSION_HEADER)) {
+        if ($event->isMasterRequest() && $event->getRequest()->headers->get(PlayerSessionModel::SESSION_HEADER)) {
             $sessionHash = $event->getRequest()->headers->get(PlayerSessionModel::SESSION_HEADER);
 
             $session = $this->model->find($sessionHash);

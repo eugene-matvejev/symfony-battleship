@@ -13,6 +13,9 @@ use EM\GameBundle\Model\PlayerModel;
  */
 class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface
 {
+    const TEST_PLAYER_EMAIL    = 'eugene.matvejev@example.com';
+    const TEST_PLAYER_PASSWORD = 'password';
+
     /**
      * {@inheritDoc}
      */
@@ -20,7 +23,7 @@ class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface
     {
         $model = new PlayerModel($om->getRepository('GameBundle:Player'), 'fixtures');
 
-        $om->persist($model->createOnRequestHumanControlled('human', 'password'));
+        $om->persist($model->createOnRequestHumanControlled(static::TEST_PLAYER_EMAIL, static::TEST_PLAYER_PASSWORD));
         $om->persist($model->createOnRequestAIControlled('cpu'));
 
         $om->flush();

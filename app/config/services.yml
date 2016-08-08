@@ -1,0 +1,3 @@
+imports:
+    - { resource: "@FoundationBundle/Resources/config/services.yml" }
+    - { resource: "@GameBundle/Resources/config/services.yml" }
