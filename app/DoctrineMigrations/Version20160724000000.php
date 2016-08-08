@@ -25,6 +25,7 @@ class Version20160724000000 extends AbstractMigration
         $this->addSql('DROP INDEX index_player_name');
         $this->addSql('ALTER TABLE players ADD passwordHash VARCHAR(40) NOT NULL');
         $this->addSql('ALTER TABLE players RENAME COLUMN name TO email');
+        $this->addSql('ALTER TABLE players ALTER email TYPE VARCHAR(255)');
         $this->addSql('CREATE INDEX INDEX_PLAYER_EMAIL ON players (email)');
         $this->addSql('CREATE INDEX INDEX_PLAYER_EMAIL_AND_PASSWORD ON players (email, passwordHash)');
     }
@@ -43,6 +44,7 @@ class Version20160724000000 extends AbstractMigration
         $this->addSql('DROP INDEX INDEX_PLAYER_EMAIL_AND_PASSWORD');
         $this->addSql('ALTER TABLE players DROP passwordHash');
         $this->addSql('ALTER TABLE players RENAME COLUMN email TO name');
+        $this->addSql('ALTER TABLE players ALTER name TYPE VARCHAR(25)');
         $this->addSql('CREATE INDEX index_player_name ON players (name)');
     }
 }
