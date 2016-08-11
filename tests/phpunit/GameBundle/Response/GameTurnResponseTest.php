@@ -3,7 +3,7 @@ namespace EM\Tests\PHPUnit\GameBundle\Response;
 
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Response\GameTurnResponse;
-use EM\Tests\Environment\MockFactory;
+use EM\Tests\Environment\Factory\MockFactory;
 
 /**
  * @see GameTurnResponse

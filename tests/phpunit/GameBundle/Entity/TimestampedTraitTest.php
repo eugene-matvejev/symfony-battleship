@@ -3,7 +3,7 @@
 namespace EM\Tests\PHPUnit\GameBundle\Entity;
 
 use EM\Tests\Environment\IntegrationTestSuite;
-use EM\Tests\Environment\MockFactory;
+use EM\Tests\Environment\Factory\MockFactory;
 
 /**
  * @see TimestampedTrait

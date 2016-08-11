@@ -3,7 +3,7 @@
 namespace EM\Tests\PHPUnit\GameBundle\Entity;
 
 use EM\GameBundle\Model\CellModel;
-use EM\Tests\Environment\MockFactory;
+use EM\Tests\Environment\Factory\MockFactory;
 
 /**
  * @see AbstractFlaggedEntity
