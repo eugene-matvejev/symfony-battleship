@@ -8,7 +8,7 @@ use EM\GameBundle\Model\PlayerModel;
 use EM\GameBundle\Request\GameInitiationRequest;
 use EM\GameBundle\Service\GameSystem\GameBuilder;
 use EM\Tests\Environment\IntegrationTestSuite;
-use EM\Tests\Environment\MockFactory;
+use EM\Tests\Environment\Factory\MockFactory;
 
 /**
  * @see GameBuilder
