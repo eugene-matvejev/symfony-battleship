@@ -8,7 +8,7 @@ use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIStrategyProcessor;
 use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
 use EM\Tests\Environment\IntegrationTestSuite;
-use EM\Tests\Environment\MockFactory;
+use EM\Tests\Environment\Factory\MockFactory;
 
 /**
  * @see AIStrategyProcessor

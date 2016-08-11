@@ -4,7 +4,7 @@ namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\Model\PlayerModel;
 use EM\Tests\Environment\IntegrationTestSuite;
-use EM\Tests\Environment\MockFactory;
+use EM\Tests\Environment\Factory\MockFactory;
 
 /**
  * @see PlayerModel
