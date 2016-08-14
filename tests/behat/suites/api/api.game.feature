@@ -8,5 +8,5 @@ Feature: Battleship Game: API: Game Mechanics
 
     Examples:
       | routeAlias               | routeMethod | routeParam | paramValue | expectedStatusCode |
-      | battleship_game.api.init | POST        | ~          | ~          | 500                |
+      | battleship_game.api.init | POST        | ~          | ~          | 400                |
       | battleship_game.api.turn | PATCH       | cellId     | 1          | 500                |
