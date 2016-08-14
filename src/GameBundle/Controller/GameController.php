@@ -12,6 +12,7 @@ use EM\GameBundle\Response\GameTurnResponse;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\Exception\InvalidArgumentException;
 
 /**
@@ -28,6 +29,9 @@ class GameController extends AbstractAPIController
      *      input = "EM\GameBundle\Request\GameInitiationRequest",
      *      responseMap = {
      *          201 = "EM\GameBundle\Response\GameInitiationResponse"
+     *      },
+     *      statusCodes = {
+     *          400 = "invalid request"
      *      }
      * )
      *
@@ -39,7 +43,7 @@ class GameController extends AbstractAPIController
     public function initAction(Request $request) : Response
     {
         if (!$this->get('battleship_game.validator.game_initiation_request')->validate($request->getContent())) {
-            throw new InvalidArgumentException('request validation failed, please check documentation');
+            throw new HttpException(Response::HTTP_BAD_REQUEST, 'request validation failed, please check documentation');
         }
 
         $game = $this->get('battleship_game.service.game_builder')->buildGame(new GameInitiationRequest($request->getContent()));
