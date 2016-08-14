@@ -55,7 +55,12 @@ class GameController extends AbstractAPIController
      * @ApiDoc(
      *      section = "Game:: Mechanics",
      *      description = "process game turn by cellId",
-     *      output = "EM\GameBundle\Response\GameTurnResponse"
+     *      output = "EM\GameBundle\Response\GameTurnResponse",
+     *      statusCodes = {
+     *          200 = "successful turn",
+     *          404 = "cell does not exists",
+     *          422 = "cell already flagged as DEAD"
+     *      }
      * )
      *
      * @param int $cellId
@@ -67,14 +72,14 @@ class GameController extends AbstractAPIController
     public function turnAction(int $cellId) : Response
     {
         if (null === $cell = $this->getDoctrine()->getRepository('GameBundle:Cell')->find($cellId)) {
-            throw new CellException("cell: {$cellId} doesn't exist");
+            throw new CellException(Response::HTTP_NOT_FOUND, "cell: {$cellId} doesn't exist");
         }
         if ($cell->hasFlag(CellModel::FLAG_DEAD)) {
-            throw new CellException("cell: {$cellId} doesn't already flagged as *DEAD*");
+            throw new CellException(Response::HTTP_UNPROCESSABLE_ENTITY, "cell: {$cellId} doesn't already flagged as *DEAD*");
         }
 
         $game = $this->get('battleship_game.service.game_processor')->processTurn($cell);
-        $om = $this->getDoctrine()->getManager();
+        $om   = $this->getDoctrine()->getManager();
 
         foreach (CellModel::getChangedCells() as $cell) {
             $om->persist($cell);
