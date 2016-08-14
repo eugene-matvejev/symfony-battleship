@@ -2,58 +2,44 @@
 
 namespace EM\Tests\PHPUnit\GameBundle\Controller;
 
-use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Model\PlayerModel;
+use EM\GameBundle\Entity\Battlefield;
 use EM\Tests\Environment\Cleaner\CellModelCleaner;
 use EM\Tests\Environment\IntegrationTestSuite;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @see GameController
  */
 class GameControllerTest extends IntegrationTestSuite
 {
-    /**
-     * @see GameController::initAction
-     * @test
-     */
-    public function unsuccessfulInitAction()
+    public function initActionProvider() : array
     {
-        foreach (['application/xml', 'application/json'] as $acceptHeader) {
-            $client = $this->getAuthorizedClient();
-            $client->request(
-                Request::METHOD_POST,
-                static::$router->generate('battleship_game.api.init'),
-                [],
-                [],
-                ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => $acceptHeader]
-            );
+        $suites = [];
+        $finder = new Finder();
+        $finder->files()->in("{$this->getSharedFixturesDirectory()}/game-initiation-requests");
 
-            $this->assertUnsuccessfulResponse($client->getResponse());
-
-//            $client = clone static::$client;
-//            $client->request(
-//                Request::METHOD_POST,
-//                static::$router->generate('battleship_game.api.init'),
-//                [],
-//                [],
-//                [
-//                    'CONTENT_TYPE' => 'application/json',
-//                    'HTTP_accept' => $acceptHeader,
-//                    'HTTP_'. PlayerSessionModel::AUTHORIZATION_HEADER => static::$om->getRepository('GameBundle:PlayerSession')->find(1)->getHash()
-//                ]
-//            );
-//            $this->assertUnsuccessfulResponse($client->getResponse());
+        foreach ($finder as $file) {
+            $suites[$file->getFilename()] = [
+                $file->getRelativePath() === 'invalid' ? Response::HTTP_BAD_REQUEST : Response::HTTP_CREATED,
+                $file->getContents()
+            ];
         }
+
+        return $suites;
     }
 
     /**
-     * @see     GameController::initAction
+     * @see          GameController::initAction
      * @test
      *
-     * @depends unsuccessfulInitAction
+     * @dataProvider initActionProvider
+     *
+     * @param int    $expectedStatusCode
+     * @param string $content
      */
-    public function successfulInitAction_JSON()
+    public function initAction(int $expectedStatusCode, string $content)
     {
         $client = $this->getAuthorizedClient();
         $client->request(
@@ -62,197 +48,63 @@ class GameControllerTest extends IntegrationTestSuite
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json'],
-            static::getSharedFixtureContent('game-initiation-requests/valid/2-players-7x7.json')
+            $content
         );
 
-        $this->assertSuccessfulJSONResponse($client->getResponse());
+        $this->assertEquals($expectedStatusCode, $client->getResponse()->getStatusCode());
+    }
 
-        $response = json_decode($client->getResponse()->getContent());
-
-//        $client = clone static::$client;
-//        $client->request(
-//            Request::METHOD_POST,
-//            static::$router->generate('battleship_game.api.init'),
-//            [],
-//            [],
-//            ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json'],
-//            static::getSharedFixtureContent('init-game-request-2-players-7x7.json')
-//        );
-//        $this->assertSuccessfulJSONResponse($client->getResponse());
-//
-//        $response = json_decode($client->getResponse()->getContent());
-//        $this->assertInternalType('array', $response);
-//
-//        foreach ($response as $battlefield) {
-//            $this->assertInternalType('int', $battlefield->id);
-//            $this->assertInstanceOf(\stdClass::class, $battlefield->player);
-//
-//            $this->assertInternalType('int', $battlefield->player->id);
-//            $this->assertInternalType('int', $battlefield->player->flags);
-//            $this->assertInternalType('string', $battlefield->player->name);
-//
-//            $this->assertCount(49, (array)$battlefield->cells);
-//            foreach ($battlefield->cells as $coordinate => $cell) {
-//                $this->assertInternalType('string', $coordinate);
-//
-//                $this->assertInternalType('int', $cell->id);
-//                $this->assertInternalType('int', $cell->flags);
-//                $this->assertInternalType('string', $cell->coordinate);
-//
-//                /** as CPU fields should have CellModel::FLAG_NONE on initiation */
-//                $expected = $battlefield->player->flags == PlayerModel::FLAG_AI_CONTROLLED ? CellModel::FLAG_NONE : $cell->flags;
-//                $this->assertEquals($expected, $cell->flags);
-//            }
-//        }
-
-        /** pass the response to the dependant class */
-        return $response;
+    public function turnActionCoordinatesProvider() : array
+    {
+        return [
+            'not existed cell'          => [Response::HTTP_NOT_FOUND, 'A0'],
+            'first request on A1 cell'  => [Response::HTTP_OK, 'A1'],
+            'second request on A1 cell' => [Response::HTTP_UNPROCESSABLE_ENTITY, 'A1'],
+            //'first request on A2 cell'  => [Response::HTTP_OK, 'A2'],
+            //'second request on A2 cell' => [Response::HTTP_UNPROCESSABLE_ENTITY, 'A2'],
+            //'first request on A3 cell'  => [Response::HTTP_OK, 'A3'],
+            //'second request on A3 cell' => [Response::HTTP_UNPROCESSABLE_ENTITY, 'A3'],
+            //'first request on A4 cell'  => [Response::HTTP_OK, 'A4'],
+            //'second request on A4 cell' => [Response::HTTP_UNPROCESSABLE_ENTITY, 'A4'],
+            //'first request on A5 cell'  => [Response::HTTP_OK, 'A5'],
+            //'second request on A5 cell' => [Response::HTTP_UNPROCESSABLE_ENTITY, 'A5'],
+            //'first request on A6 cell'  => [Response::HTTP_OK, 'A6'],
+            //'second request on A6 cell' => [Response::HTTP_UNPROCESSABLE_ENTITY, 'A6'],
+            //'first request on A7 cell'  => [Response::HTTP_OK, 'A7'],
+            //'second request on A7 cell' => [Response::HTTP_UNPROCESSABLE_ENTITY, 'A7']
+        ];
     }
 
     /**
-     * @see     GameController::initAction
+     * @see          GameController::turnAction
      * @test
      *
-     * @depends unsuccessfulInitAction
+     * @dataProvider turnActionCoordinatesProvider
+     *
+     * @param string $coordinate
+     * @param int    $expectedStatusCode
+     *
+     * @group        asdasd
      */
-    public function successfulInitAction_XML()
+    public function turnAction(int $expectedStatusCode, string $coordinate)
     {
+        CellModelCleaner::resetChangedCells();
+
+        $game        = static::$om->getRepository('GameBundle:Game')->findBy([], ['id' => 'ASC'])[0];
+        $player      = static::$om->getRepository('GameBundle:Player')->findOneBy(['email' => 'CPU 0']);
+        $battlefield = static::$om->getRepository('GameBundle:Battlefield')->findOneBy(['player' => $player, 'game' => $game]);
+
+        $cell = $battlefield->getCellByCoordinate($coordinate);
+
         $client = $this->getAuthorizedClient();
         $client->request(
-            Request::METHOD_POST,
-            static::$router->generate('battleship_game.api.init'),
+            Request::METHOD_PATCH,
+            static::$router->generate('battleship_game.api.turn', ['cellId' => $cell ? $cell->getId() : 0]),
             [],
             [],
-            ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/xml'],
-            static::getSharedFixtureContent('game-initiation-requests/valid/2-players-7x7.json')
+            ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
         );
-        $this->assertSuccessfulXMLResponse($client->getResponse());
 
-        $response = simplexml_load_string($client->getResponse()->getContent(), 'SimpleXMLElement', LIBXML_NOCDATA);
-        $this->assertInstanceOf(\SimpleXMLElement::class, $response);
-
-        foreach ($response as $battlefield) {
-            /** @var \SimpleXMLElement $battlefield */
-            $this->assertInstanceOf(\SimpleXMLElement::class, $battlefield);
-            $this->assertEquals('battlefield', $battlefield->getName());
-
-            $player = $battlefield->player;
-            /** @var \SimpleXMLElement $player */
-            $this->assertInstanceOf(\SimpleXMLElement::class, $player);
-
-            $this->assertInternalType('string', (string)$player->id);
-            $this->assertInternalType('string', (string)$player->flags);
-            $this->assertInternalType('string', (string)$player->name);
-
-            $cells = $battlefield->cells->children();
-            $this->assertEquals(49, $cells->count());
-            foreach ($cells as $cell) {
-                $this->assertInstanceOf(\SimpleXMLElement::class, $cell);
-
-                $this->assertInternalType('string', (string)$cell->id);
-                $this->assertInternalType('string', (string)$cell->flags);
-                $this->assertInternalType('string', (string)$cell->coordinate);
-
-                /** as CPU fields should have CellModel::FLAG_NONE on initiation */
-                if ((string)$player->flags == PlayerModel::FLAG_AI_CONTROLLED) {
-                    $this->assertEquals(CellModel::FLAG_NONE, (string)$cell->flags);
-                } else {
-                    $this->assertContains((string)$cell->flags, [CellModel::FLAG_NONE, CellModel::FLAG_SHIP, CellModel::FLAG_DEAD_SHIP]);
-                }
-            }
-        }
-    }
-
-    /**
-     * @see     GameController::turnAction
-     * @test
-     *
-     * @depends successfulInitAction_JSON
-     * @depends successfulInitAction_XML
-     */
-    public function unsuccessfulTurnActionOnNotExistingCell()
-    {
-        foreach (['application/xml', 'application/json'] as $acceptHeader) {
-            $client = $this->getAuthorizedClient();
-            $client->request(
-                Request::METHOD_PATCH,
-                static::$router->generate('battleship_game.api.turn', ['cellId' => 0]),
-                [],
-                [],
-                ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => $acceptHeader]
-            );
-            $this->assertUnsuccessfulResponse($client->getResponse());
-        }
-    }
-
-    /**
-     * simulate human interaction until game has been finished
-     *
-     * @var     \stdClass[] $response
-     *
-     * @see     GameController::turnAction
-     * @test
-     *
-     * @depends successfulInitAction_JSON
-     */
-    public function successfulTurnAction(array $response)
-    {
-        foreach ($response as $battlefield) {
-            if ($battlefield->player->flags !== PlayerModel::FLAG_AI_CONTROLLED) {
-                continue;
-            }
-
-            foreach ($battlefield->cells as $cell) {
-                CellModelCleaner::resetChangedCells();
-
-                $client = $this->getAuthorizedClient();
-                $client->request(
-                    Request::METHOD_PATCH,
-                    static::$router->generate('battleship_game.api.turn', ['cellId' => $cell->id]),
-                    [],
-                    [],
-                    ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
-                );
-                $this->assertSuccessfulJSONResponse($client->getResponse());
-
-                $parsed = json_decode($client->getResponse()->getContent());
-                if (isset($parsed->result)) {
-                    return;
-                }
-            }
-        }
-    }
-
-    /**
-     * simulate human interaction until game has been finished
-     *
-     * @var     \stdClass[] $response
-     *
-     * @see     GameController::turnAction
-     * @test
-     *
-     * @depends successfulInitAction_JSON
-     */
-    public function unsuccessfulTurnActionOnDeadCell(array $response)
-    {
-        foreach ($response as $battlefield) {
-            if ($battlefield->player->flags === PlayerModel::FLAG_AI_CONTROLLED) {
-                foreach ($battlefield->cells as $cell) {
-                    CellModelCleaner::resetChangedCells();
-
-                    $client = $this->getAuthorizedClient();
-                    $client->request(
-                        Request::METHOD_PATCH,
-                        static::$router->generate('battleship_game.api.turn', ['cellId' => $cell->id]),
-                        [],
-                        [],
-                        ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
-                    );
-
-                    $this->assertUnsuccessfulResponse($client->getResponse());
-                    break 2;
-                }
-            }
-        }
+        $this->assertEquals($expectedStatusCode, $client->getResponse()->getStatusCode());
     }
 }

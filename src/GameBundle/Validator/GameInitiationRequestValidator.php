@@ -40,8 +40,8 @@ class GameInitiationRequestValidator
 
         return
             $this->validateStructure($data)
-            && $this->validateBattlefieldSize($data->size)
             && $this->validateOpponentsAmount($data->opponents)
+            && $this->validateBattlefieldSize($data->size)
             && $this->validateCoordinates($data->coordinates);
     }
 
@@ -49,7 +49,7 @@ class GameInitiationRequestValidator
     {
         return
             $data instanceof \stdClass &&
-            isset($data->opponents, $data->playerName, $data->size, $data->coordinates)
+            isset($data->opponents, $data->size, $data->coordinates)
             && is_array($data->coordinates);
     }
 

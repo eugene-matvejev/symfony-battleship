@@ -7,8 +7,9 @@ use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Model\PlayerModel;
 use EM\GameBundle\Request\GameInitiationRequest;
 use EM\GameBundle\Service\GameSystem\GameBuilder;
-use EM\Tests\Environment\IntegrationTestSuite;
 use EM\Tests\Environment\Factory\MockFactory;
+use EM\Tests\Environment\IntegrationTestSuite;
+use Symfony\Component\Finder\Finder;
 
 /**
  * @see GameBuilder
@@ -69,9 +70,9 @@ class GameBuilderTest extends IntegrationTestSuite
      */
     public function buildGame()
     {
-        $request = new GameInitiationRequest($this->getSharedFixtureContent('game-initiation-requests/valid/2-players-7x7.json'));
+        $request = new GameInitiationRequest($this->getSharedFixtureContent('game-initiation-requests/valid/valid-1-opponent-7x7.json'));
 
-        $game = static::$gameBuilder->buildGame($request);
+        $game = static::$gameBuilder->buildGame($request, MockFactory::getPlayerMock(''));
 
         $this->assertCount(2, $game->getBattlefields());
         foreach ($game->getBattlefields() as $battlefield) {

@@ -4,24 +4,41 @@ namespace EM\Tests\PHPUnit\GameBundle\Request;
 
 use EM\GameBundle\Request\GameInitiationRequest;
 use EM\Tests\Environment\IntegrationTestSuite;
+use Symfony\Component\Finder\Finder;
 
 /**
  * @see GameInitiationRequest
  */
 class GameInitiationRequestTest extends IntegrationTestSuite
 {
-    /**
-     * @see GameInitiationRequest::parse
-     * @test
-     */
-    public function parseOnValid()
+    public function parseProvider() : array
     {
-        $fixture  = $this->getSharedFixtureContent('game-initiation-requests/valid/2-players-7x7.json');
-        $expected = json_decode($fixture);
-        $request  = new GameInitiationRequest($fixture);
+        $suites = [];
+        $finder = new Finder();
+        $finder->files()->in("{$this->getSharedFixturesDirectory()}/game-initiation-requests/valid");
+
+        foreach ($finder as $file) {
+            $suites[$file->getFilename()] = [$file->getContents()];
+        }
+
+        return $suites;
+    }
+
+    /**
+     * @see          GameInitiationRequest::parse
+     * @test
+     *
+     * @dataProvider parseProvider
+     *
+     * @param string $content
+     */
+    public function parse(string $content)
+    {
+        $expected = json_decode($content);
+        $request  = new GameInitiationRequest($content);
 
         $this->assertCount(count($expected->coordinates), $request->getCoordinates());
         $this->assertEquals($expected->size, $request->getSize());
-        $this->assertEquals($expected->playerName, $request->getPlayerName());
+        $this->assertEquals($expected->opponents, $request->getOpponents());
     }
 }

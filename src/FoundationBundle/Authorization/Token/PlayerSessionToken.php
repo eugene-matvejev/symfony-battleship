@@ -25,13 +25,9 @@ class PlayerSessionToken extends AbstractToken
         return $this->getUser();
     }
 
-    /**
-     * @param Player $player
-     */
-    public function setUser($player)
+    public function getSession() : PlayerSession
     {
-        $this->user = $player;
-        $this->setAuthenticated(true);
+        return $this->session;
     }
 
     public function setSession(PlayerSession $session) : self
@@ -42,8 +38,20 @@ class PlayerSessionToken extends AbstractToken
         return $this;
     }
 
-    public function getSession() : PlayerSession
+    /**
+     * @param Player $player
+     */
+    public function setUser($player)
     {
-        return $this->session;
+        $this->user = $player;
+        $this->setAuthenticated(true);
+    }
+
+    /**
+     * @return Player
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

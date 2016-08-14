@@ -38,7 +38,7 @@ class GameInitiationRequest
         $data = json_decode($json);
 
         $this->size = $data->size;
-        $this->playerName = $data->playerName;
+        $this->opponents = $data->opponents;
         $this->coordinates = $data->coordinates;
 
         return $this;

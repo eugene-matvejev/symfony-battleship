@@ -54,6 +54,7 @@ class MockFactory
     {
         return (new Player())
             ->setEmail($email)
+            ->setPasswordHash('mockedPassword')
             ->setFlags($flags);
     }
 

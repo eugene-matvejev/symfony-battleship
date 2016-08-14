@@ -2,6 +2,7 @@
 
 namespace EM\Tests\PHPUnit\GameBundle\Model;
 
+use EM\GameBundle\DataFixtures\ORM\LoadPlayerData;
 use EM\GameBundle\Model\PlayerModel;
 use EM\Tests\Environment\IntegrationTestSuite;
 use EM\Tests\Environment\Factory\MockFactory;
@@ -58,9 +59,9 @@ class PlayerModelTest extends IntegrationTestSuite
      */
     public function createOnRequestAIControlledOnExistingPlayer()
     {
-        $player = static::$playerModel->createOnRequestAIControlled('CPU');
+        $player = static::$playerModel->createOnRequestAIControlled('CPU 0');
 
-        $this->assertEquals('CPU', $player->getName());
+        $this->assertEquals('CPU 0', $player->getEmail());
         $this->assertTrue(PlayerModel::isAIControlled($player));
 
         /** because player is already persisted */
@@ -80,7 +81,7 @@ class PlayerModelTest extends IntegrationTestSuite
     {
         $player = static::$playerModel->createOnRequestAIControlled('NON-EXISTING-CPU-PLAYER');
 
-        $this->assertEquals('NON-EXISTING-CPU-PLAYER', $player->getName());
+        $this->assertEquals('NON-EXISTING-CPU-PLAYER', $player->getEmail());
         $this->assertTrue(PlayerModel::isAIControlled($player));
 
         /** because player is not persisted yet */
@@ -114,9 +115,9 @@ class PlayerModelTest extends IntegrationTestSuite
      */
     public function createOnRequestHumanControlledOnExistingPlayer()
     {
-        $player = static::$playerModel->createOnRequestHumanControlled('Human');
+        $player = static::$playerModel->createOnRequestHumanControlled(LoadPlayerData::TEST_PLAYER_EMAIL, '');
 
-        $this->assertEquals('Human', $player->getName());
+        $this->assertEquals(LoadPlayerData::TEST_PLAYER_EMAIL, $player->getEmail());
         $this->assertFalse(PlayerModel::isAIControlled($player));
 
         /** because player is already persisted */
@@ -134,9 +135,9 @@ class PlayerModelTest extends IntegrationTestSuite
      */
     public function createOnRequestHumanControlledOnNonExistingPlayer()
     {
-        $player = static::$playerModel->createOnRequestHumanControlled('NON-EXISTING-HUMAN-PLAYER');
+        $player = static::$playerModel->createOnRequestHumanControlled('NON-EXISTING-HUMAN-PLAYER', '');
 
-        $this->assertEquals('NON-EXISTING-HUMAN-PLAYER', $player->getName());
+        $this->assertEquals('NON-EXISTING-HUMAN-PLAYER', $player->getEmail());
         $this->assertFalse(PlayerModel::isAIControlled($player));
 
         /** because player is not persisted yet */
@@ -156,6 +157,6 @@ class PlayerModelTest extends IntegrationTestSuite
      */
     public function createOnRequestHumanControlledOnNonExistingAIPlayer()
     {
-        static::$playerModel->createOnRequestHumanControlled('CPU');
+        static::$playerModel->createOnRequestHumanControlled('CPU', '');
     }
 }

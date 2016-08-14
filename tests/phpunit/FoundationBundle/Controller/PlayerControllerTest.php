@@ -30,30 +30,29 @@ class PlayerControllerTest extends IntegrationTestSuite
     {
         return [
             'not-existed before' => [
+                Response::HTTP_CREATED,
                 'do.not.exists'. LoadPlayerData::TEST_PLAYER_EMAIL,
-                LoadPlayerData::TEST_PLAYER_PASSWORD,
-                Response::HTTP_CREATED
+                LoadPlayerData::TEST_PLAYER_PASSWORD
             ],
             'existed before'     => [
+                Response::HTTP_UNPROCESSABLE_ENTITY,
                 LoadPlayerData::TEST_PLAYER_EMAIL,
-                LoadPlayerData::TEST_PLAYER_PASSWORD,
-                Response::HTTP_UNPROCESSABLE_ENTITY
+                LoadPlayerData::TEST_PLAYER_PASSWORD
             ]
         ];
     }
 
     /**
-     * @group        asdasd
      * @see PlayerController::registerAction
      * @test
      *
      * @dataProvider registerActionProvider
      *
+     * @param int    $expectedStatusCode
      * @param string $email
      * @param string $password
-     * @param int    $expectedStatusCode
      */
-    public function registerAction(string $email, string $password, int $expectedStatusCode)
+    public function registerAction(int $expectedStatusCode, string $email, string $password)
     {
         $client = $this->getUnauthorizedClient();
         //$client = clone static::$client;

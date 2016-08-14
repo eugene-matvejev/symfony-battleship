@@ -13,6 +13,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\Exception\InvalidArgumentException;
 
 /**
@@ -41,7 +42,7 @@ class GameController extends AbstractAPIController
     public function initAction(Request $request) : Response
     {
         if (!$this->get('battleship_game.validator.game_initiation_request')->validate($request->getContent())) {
-            throw new InvalidArgumentException('request validation failed, please check documentation');
+            throw new HttpException(Response::HTTP_BAD_REQUEST, 'request validation failed, please check documentation');
         }
 
         $game = $this->get('battleship_game.service.game_builder')->buildGame(
@@ -73,10 +74,10 @@ class GameController extends AbstractAPIController
     public function turnAction(int $cellId) : Response
     {
         if (null === $cell = $this->getDoctrine()->getRepository('GameBundle:Cell')->find($cellId)) {
-            throw new CellException("cell: {$cellId} doesn't exist");
+            throw new CellException(Response::HTTP_NOT_FOUND, "cell: {$cellId} doesn't exist");
         }
         if ($cell->hasFlag(CellModel::FLAG_DEAD)) {
-            throw new CellException("cell: {$cellId} doesn't already flagged as *DEAD*");
+            throw new CellException(Response::HTTP_UNPROCESSABLE_ENTITY, "cell: {$cellId} doesn't already flagged as *DEAD*");
         }
 
         $game = $this->get('battleship_game.service.game_processor')->processTurn($cell);

@@ -42,7 +42,7 @@ class GameBuilder
     {
         $game = new Game();
         $this->attachAIBattlefields($game, $request->getOpponents(), $request->getSize());
-        
+
         $battlefield = BattlefieldModel::generate($request->getSize(), $request->getCoordinates());
         $battlefield->setPlayer($player);
         $game->addBattlefield($battlefield);
