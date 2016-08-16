@@ -78,7 +78,7 @@ class GameController extends AbstractAPIController
             throw new CellException(Response::HTTP_NOT_FOUND, "cell: {$cellId} doesn't exist");
         }
         if ($cell->hasFlag(CellModel::FLAG_DEAD)) {
-            throw new CellException(Response::HTTP_UNPROCESSABLE_ENTITY, "cell: {$cellId} doesn't already flagged as *DEAD*");
+            throw new CellException(Response::HTTP_UNPROCESSABLE_ENTITY, "cell: {$cell->getId()} already flagged as *DEAD*");
         }
 
         $game = $this->get('battleship_game.service.game_processor')->processTurn($cell);
