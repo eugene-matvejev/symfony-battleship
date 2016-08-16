@@ -42,7 +42,7 @@ class PlayerModel
      */
     public function createOnRequestHumanControlled(string $name) : Player
     {
-        return $this->createOnRequest($name);
+        return $this->createOnRequest($name, false);
     }
 
     /**
@@ -52,7 +52,7 @@ class PlayerModel
      * @return Player
      * @throws PlayerException
      */
-    protected function createOnRequest(string $name, bool $controlledByAI = false) : Player
+    protected function createOnRequest(string $name, bool $controlledByAI) : Player
     {
         /** @var Player $player */
         $player = $this->repository->findOneBy(['name' => $name]);
