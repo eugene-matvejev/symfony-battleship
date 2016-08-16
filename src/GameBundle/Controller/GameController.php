@@ -3,6 +3,7 @@
 namespace EM\GameBundle\Controller;
 
 use EM\FoundationBundle\Controller\AbstractAPIController;
+use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Exception\CellException;
 use EM\GameBundle\Exception\GameProcessorException;
 use EM\GameBundle\Model\CellModel;
@@ -66,17 +67,14 @@ class GameController extends AbstractAPIController
      *      }
      * )
      *
-     * @param int $cellId
+     * @param Cell $cell
      *
      * @return Response
      * @throws CellException
      * @throws GameProcessorException
      */
-    public function turnAction(int $cellId) : Response
+    public function turnAction(Cell $cell) : Response
     {
-        if (null === $cell = $this->getDoctrine()->getRepository('GameBundle:Cell')->find($cellId)) {
-            throw new CellException(Response::HTTP_NOT_FOUND, "cell: {$cellId} doesn't exist");
-        }
         if ($cell->hasFlag(CellModel::FLAG_DEAD)) {
             throw new CellException(Response::HTTP_UNPROCESSABLE_ENTITY, "cell: {$cell->getId()} already flagged as *DEAD*");
         }
