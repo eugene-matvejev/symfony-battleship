@@ -61,7 +61,7 @@ class GameController extends AbstractAPIController
      *      output = "EM\GameBundle\Response\GameTurnResponse",
      *      statusCodes = {
      *          200 = "successful turn",
-     *          404 = "cell does not exists",
+     *          404 = "cell do not exists",
      *          422 = "cell already flagged as DEAD"
      *      }
      * )
