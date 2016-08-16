@@ -130,12 +130,6 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ (API)
         # to each configured DirectoryIndex file (e.g. index.php, index.html, index.pl).
         DirectoryIndex app.php
 
-        # By default, Apache does not evaluate symbolic links if you did not enable this
-        # feature in your server configuration. Uncomment the following line if you
-        # install assets as symlinks or if you experience problems related to symlinks
-        # when compiling LESS/Sass/CoffeScript assets.
-        # Options FollowSymlinks
-
         # Disabling MultiViews prevents unwanted negotiation, e.g. "/app" should not resolve
         # to the front controller "/app.php" but be rewritten to "/app.php/app".
         <IfModule mod_negotiation.c>
@@ -145,11 +139,11 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ (API)
         <IfModule mod_rewrite.c>
             RewriteEngine On
 
-            # CORS support.
+            # CORS support
             RewriteCond %{REQUEST_METHOD} OPTIONS
             RewriteRule ^(.*)$ $1 [R=200,L]
             Header always set Access-Control-Allow-Origin "*"
-            Header always set Access-Control-Allow-Methods "POST, GET, PATCH, OPTIONS"
+            Header always set Access-Control-Allow-Methods "POST, GET, PATCH"
 
             # Determine the RewriteBase automatically and set it as environment variable.
             # If you are using Apache aliases to do mass virtual hosting or installed the
