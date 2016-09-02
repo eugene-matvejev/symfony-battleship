@@ -7,23 +7,35 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Model\PlayerModel;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * @since 3.5
  */
-class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface
+class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
+    const TEST_HUMAN_PLAYER_EMAIL         = 'Human';
+    const TEST_AI_CONTROLLED_PLAYER_EMAIL = 'CPU 0';
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+    }
+
     /**
      * {@inheritDoc}
      */
     public function load(ObjectManager $om)
     {
-        $om->persist((new Player())
-            ->setName('CPU')
-            ->setFlags(PlayerModel::FLAG_AI_CONTROLLED));
-        $om->persist((new Player())
-            ->setName('Human')
-            ->setFlags(PlayerModel::FLAG_NONE));
+        $model = $this->container->get('battleship_game.service.player_model');
+
+        $om->persist($model->createOnRequestHumanControlled(static::TEST_HUMAN_PLAYER_EMAIL));
+        $om->persist($model->createOnRequestAIControlled(static::TEST_AI_CONTROLLED_PLAYER_EMAIL));
 
         $om->flush();
     }
