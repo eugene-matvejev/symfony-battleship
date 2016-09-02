@@ -1,17 +1,17 @@
 
 [circle.ci-master-badge]: https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg
 [circle.ci-master-link]: https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master
-[codecov.io-master-badge]: https://codeclimate.com/github/eugene-matvejev/battleship-game-api/branch/master/graph/badge.svg
+[codecov.io-master-badge]: https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/master/graph/badge.svg
 [codecov.io-master-link]: https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/master
 
 [circle.ci-heroku-badge]: https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/heroku.svg?style=svg
 [circle.ci-heroku-link]: https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/heroku
-[codecov.io-heroku-badge]: https://codeclimate.com/github/eugene-matvejev/battleship-game-api/branch/heroku/graph/badge.svg
+[codecov.io-heroku-badge]: https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/heroku/graph/badge.svg
 [codecov.io-heroku-link]: https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/heroku
 
 [circle.ci-prototype-badge]: https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/prototype_authorization.svg?style=svg
 [circle.ci-prototype-link]: https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/prototype_authorization
-[codecov.io-prototype-badge]: https://codeclimate.com/github/eugene-matvejev/battleship-game-api/branch/prototype_authorization/graph/badge.svg
+[codecov.io-prototype-badge]: https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/prototype_authorization/graph/badge.svg
 [codecov.io-prototype-link]: https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/prototype_authorization
 
 
