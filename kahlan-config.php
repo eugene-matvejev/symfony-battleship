@@ -5,7 +5,7 @@ use Kahlan\Reporter\Coverage;
 
 $args = $this->args();
 $args->argument('spec', 'default', 'tests/kahlan');
-$this->args()->set('exclude', ['Symfony', 'Doctrine']);
+$this->args()->set('exclude', ['Symfony', 'Sensio', 'Doctrine', 'JMS']);
 
 /** Initializing a custom coverage reporter */
 Filter::register('app.coverage', function ($chain) {
