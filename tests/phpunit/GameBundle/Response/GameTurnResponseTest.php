@@ -10,31 +10,36 @@ use EM\Tests\Environment\Factory\MockFactory;
  */
 class GameTurnResponseTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @see GameTurnResponse::setCells
-     * @test
-     */
-    public function setCellsOnConstruct()
+    public function setCellsProvider() : array
     {
-        $cells = [
-            'A1' => MockFactory::getCellMock('A1'),
-            'A2' => MockFactory::getCellMock('A2')
+        return [
+            [[MockFactory::getCellMock('A1'), MockFactory::getCellMock('A2')]]
         ];
+    }
 
+    /**
+     * @see          GameTurnResponse::setCells
+     * @test
+     *
+     * @dataProvider setCellsProvider
+     *
+     * @param Cell[] $cells
+     */
+    public function setCellsOnConstruct(array $cells)
+    {
         $this->iterateResponseCells(new GameTurnResponse(MockFactory::getGameMock(), $cells));
     }
 
     /**
-     * @see GameTurnResponse::setCells
+     * @see          GameTurnResponse::setCells
      * @test
+     *
+     * @dataProvider setCellsProvider
+     *
+     * @param Cell[] $cells
      */
-    public function setCellsOnExternalCall()
+    public function setCellsOnExternalCall(array $cells)
     {
-        $cells = [
-            'A1' => MockFactory::getCellMock('A1'),
-            'A2' => MockFactory::getCellMock('A2')
-        ];
-
         $response = new GameTurnResponse(MockFactory::getGameMock(), []);
         $response->setCells($cells);
 
@@ -61,7 +66,7 @@ class GameTurnResponseTest extends \PHPUnit_Framework_TestCase
     public function setGameResultOnConstruct()
     {
         $gameResult = MockFactory::getGameResultMock();
-        $response = new GameTurnResponse($gameResult->getGame(), []);
+        $response   = new GameTurnResponse($gameResult->getGame(), []);
 
         $this->assertSame($gameResult, $response->getResult());
     }
