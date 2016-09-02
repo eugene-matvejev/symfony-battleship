@@ -63,9 +63,7 @@ class GameControllerTest extends IntegrationTestSuite
             $this->assertInternalType('string', $battlefield->player->name);
 
             $this->assertCount(49, (array)$battlefield->cells);
-            foreach ($battlefield->cells as $coordinate => $cell) {
-                $this->assertInternalType('string', $coordinate);
-
+            foreach ($battlefield->cells as $cell) {
                 $this->assertInternalType('int', $cell->id);
                 $this->assertInternalType('int', $cell->flags);
                 $this->assertInternalType('string', $cell->coordinate);
