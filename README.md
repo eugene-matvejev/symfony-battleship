@@ -3,27 +3,35 @@
 [circle.ci-master-link]: https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master
 [codecov.io-master-badge]: https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/master/graph/badge.svg
 [codecov.io-master-link]: https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/master
+[scrutinizer-master-badge]: https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/quality-score.png?b=master
+[scrutinizer-master-link]: https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master
 
 [circle.ci-heroku-badge]: https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/heroku.svg?style=svg
 [circle.ci-heroku-link]: https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/heroku
 [codecov.io-heroku-badge]: https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/heroku/graph/badge.svg
 [codecov.io-heroku-link]: https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/heroku
+[scrutinizer-heroku-badge]: https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/quality-score.png?b=heroku
+[scrutinizer-heroku-link]: https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=heroku
 
 [circle.ci-prototype-badge]: https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/prototype_authorization.svg?style=svg
 [circle.ci-prototype-link]: https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/prototype_authorization
 [codecov.io-prototype-badge]: https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/prototype_authorization/graph/badge.svg
 [codecov.io-prototype-link]: https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/prototype_authorization
+[scrutinizer-prototype-badge]: https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/quality-score.png?b=prototype_authorization
+[scrutinizer-prototype-link]: https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=prototype_authorization
+
+|               | Master                                                                | Heroku                                                                | Authorization Prototype                                                    |
+|---            |---                                                                    |---                                                                    |---                                                                         |
+| TDD tests:    |
+| PHPUnit       |  [![build][circle.ci-master-badge]][circle.ci-master-link]            | [![build][circle.ci-heroku-badge]][circle.ci-heroku-link]             | [![build][circle.ci-prototype-badge]][circle.ci-prototype-link]            |
+| BDD tests:    |
+| Behat         |  [![build][circle.ci-master-badge]][circle.ci-master-link]            | [![build][circle.ci-heroku-badge]][circle.ci-heroku-link]             | [![build][circle.ci-prototype-badge]][circle.ci-prototype-link]            |
+| Kahlan        |  [![build][circle.ci-master-badge]][circle.ci-master-link]            | [![build][circle.ci-heroku-badge]][circle.ci-heroku-link]             | [![build][circle.ci-prototype-badge]][circle.ci-prototype-link]            |
+| Code Quality  |  [![code quality][scrutinizer-master-badge]][scrutinizer-master-link] | [![code quality][scrutinizer-heroku-badge]][scrutinizer-heroku-link]  | [![code quality][scrutinizer-prototype-badge]][scrutinizer-prototype-link] |
+| Coverage      |  [![coverage][codecov.io-master-badge]][codecov.io-master-link]       | [![coverage][codecov.io-heroku-badge]][codecov.io-heroku-link]        | [![coverage][codecov.io-prototype-badge]][codecov.io-prototype-link]       |
 
 
 
-|           | Master                                                          |  Heroku                                                       | Authorization Prototype                                              |
-|---        |---                                                              |---                                                             |---                                                                   |
-| Build     |  [![build][circle.ci-master-badge]][circle.ci-master-link]      | [![build][circle.ci-heroku-badge]][circle.ci-heroku-link]      | [![build][circle.ci-prototype-badge]][circle.ci-prototype-link]      |
-| Coverage  |  [![coverage][codecov.io-master-badge]][codecov.io-master-link] | [![coverage][codecov.io-heroku-badge]][codecov.io-heroku-link] | [![coverage][codecov.io-prototype-badge]][codecov.io-prototype-link] |
-
-
-
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
 [![Code Climate](https://codeclimate.com/github/eugene-matvejev/battleship-game-api/badges/gpa.svg)](https://codeclimate.com/github/eugene-matvejev/battleship-game-api)
 [![Build Status](https://travis-ci.org/eugene-matvejev/battleship-game-api.svg?branch=master)](https://travis-ci.org/eugene-matvejev/battleship-game-api)
 [![Build Status](https://codeship.com/projects/e893a4f0-0b28-0134-b0ad-129a07c0a376/status?branch=master)](https://codeship.com/projects/155781)
