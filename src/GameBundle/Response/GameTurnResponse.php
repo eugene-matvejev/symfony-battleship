@@ -61,15 +61,12 @@ class GameTurnResponse
     public function setCells(array $cells) : self
     {
         /** because JMS serializer don't work properly without array_values */
-        $this->cells = array_values($cells);
+        $this->cells = $cells;
 
         return $this;
     }
 
-    /**
-     * @return GameResult
-     */
-    public function getResult()
+    public function getResult() : GameResult
     {
         return $this->result;
     }
