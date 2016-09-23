@@ -1,4 +1,5 @@
 machine:
+    version: "trusty-645-0f3f4aa"
     php:
         version: "7.0.8"
 
