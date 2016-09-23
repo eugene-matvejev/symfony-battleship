@@ -3,6 +3,8 @@ machine:
         version: "7.0.8"
 
 dependencies:
+    cache_directories:
+        - "~/.composer/cache"
     pre:
         - "cp app/config/parameters.yml.dist app/config/parameters.yml"
     override:
