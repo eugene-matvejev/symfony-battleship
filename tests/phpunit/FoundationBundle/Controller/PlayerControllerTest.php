@@ -19,7 +19,7 @@ class PlayerControllerTest extends AbstractControllerTestCase
         $client = clone static::$client;
         $client->request(
             Request::METHOD_GET,
-            static::$router->generate('foundation_bundle.gui.index')
+            '/'
         );
         $this->assertRedirectedResponse($client->getResponse());
     }
