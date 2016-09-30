@@ -3,13 +3,13 @@
 namespace EM\Tests\PHPUnit\GameBundle\Controller;
 
 use EM\GameBundle\Controller\GameResultController;
-use EM\Tests\Environment\IntegrationTestSuite;
+use EM\Tests\Environment\AbstractControllerTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @see GameResultController
  */
-class GameResultControllerTest extends IntegrationTestSuite
+class GameResultControllerTest extends AbstractControllerTestCase
 {
     /**
      * @see GameResultController::orderedByDateAction

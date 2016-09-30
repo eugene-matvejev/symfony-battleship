@@ -2,13 +2,13 @@
 
 namespace EM\Tests\PHPUnit\GameBundle\Entity;
 
-use EM\Tests\Environment\IntegrationTestSuite;
+use EM\Tests\Environment\AbstractKernelTestSuite;
 use EM\Tests\Environment\Factory\MockFactory;
 
 /**
  * @see TimestampedTrait
  */
-class TimestampedTraitTest extends IntegrationTestSuite
+class TimestampedTraitTest extends AbstractKernelTestSuite
 {
     /**
      * @see TimestampedTrait::setTimestamp
