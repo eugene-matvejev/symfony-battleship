@@ -41,16 +41,16 @@ class AppKernel extends Kernel
 
     public function getCacheDir() : string
     {
-        return __DIR__ . '/../var/cache/' . $this->getEnvironment();
+        return "{$this->getRootDir()}/../var/cache/{$this->getEnvironment()}";
     }
 
     public function getLogDir() : string
     {
-        return __DIR__ . '/../var/logs';
+        return "{$this->getRootDir()}/../var/logs";
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load($this->getRootDir() . '/config/config_' . $this->getEnvironment() . '.yml');
+        $loader->load("{$this->getRootDir()}/config/config_{$this->getEnvironment()}.yml");
     }
 }
