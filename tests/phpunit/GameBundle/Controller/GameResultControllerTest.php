@@ -5,17 +5,34 @@ namespace EM\Tests\PHPUnit\GameBundle\Controller;
 use EM\GameBundle\Controller\GameResultController;
 use EM\Tests\Environment\AbstractControllerTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @see GameResultController
  */
 class GameResultControllerTest extends AbstractControllerTestCase
 {
+    public function orderedByDateActionDataProvider() : array
+    {
+        return [
+            [-1,    Response::HTTP_NOT_FOUND],
+            ['two', Response::HTTP_NOT_FOUND],
+            [0,     Response::HTTP_OK],
+            [1,     Response::HTTP_OK],
+            [99999, Response::HTTP_OK]
+        ];
+    }
+
     /**
-     * @see GameResultController::orderedByDateAction
+     * @see          GameResultController::orderedByDateAction
      * @test
+     *
+     * @dataProvider orderedByDateActionDataProvider
+     *
+     * @param int $pageId
+     * @param int $expectedResponseCode
      */
-    public function orderedByDateAction()
+    public function orderedByDateAction($pageId, int $expectedResponseCode)
     {
         $client = static::$client;
         $client->request(
@@ -26,6 +43,8 @@ class GameResultControllerTest extends AbstractControllerTestCase
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
         );
 
-        $this->assertSuccessfulJSONResponse($client->getResponse());
+        $response = $client->getResponse();
+
+        $this->assertEquals($expectedResponseCode, $response->getStatusCode());
     }
 }
