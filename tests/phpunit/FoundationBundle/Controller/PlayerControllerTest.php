@@ -16,7 +16,7 @@ class PlayerControllerTest extends AbstractControllerTestCase
      */
     public function indexAction()
     {
-        $client = clone static::$client;
+        $client = static::$client;
         $client->request(
             Request::METHOD_GET,
             '/'

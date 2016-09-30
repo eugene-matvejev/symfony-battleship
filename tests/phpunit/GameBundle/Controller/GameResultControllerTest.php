@@ -17,7 +17,7 @@ class GameResultControllerTest extends AbstractControllerTestCase
      */
     public function orderedByDateAction()
     {
-        $client = clone static::$client;
+        $client = static::$client;
         $client->request(
             Request::METHOD_GET,
             "/api/game-results/page/{$pageId}",
