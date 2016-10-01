@@ -19,7 +19,7 @@ class GameResultControllerContext extends CommonControllerContext implements Con
      */
     public function observeResultsInPage(int $page, int $expectedAmount)
     {
-        $response = json_decode(self::$_client->getResponse()->getContent());
+        $response = json_decode(self::$client->getResponse()->getContent());
 
         $this->assertInstanceOf(\stdClass::class, $response->meta);
         $this->assertEquals($page, $response->meta->currentPage);

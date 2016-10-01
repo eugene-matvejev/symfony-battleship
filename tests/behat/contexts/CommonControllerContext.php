@@ -4,24 +4,16 @@ namespace EM\Tests\Behat;
 
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
-use Symfony\Bundle\FrameworkBundle\Client;
 use EM\Tests\Environment\AbstractControllerTestCase;
 
 class CommonControllerContext extends AbstractControllerTestCase implements Context, SnippetAcceptingContext
 {
     /**
-     * @var Client
-     */
-    protected static $_client;
-
-    /**
      * @BeforeScenario
      */
     public static function beforeEachScenario()
     {
-        parent::setUpBeforeClass();
-
-        static::$_client = clone static::$client;
+        static::setUpBeforeClass();
     }
 
     /**
@@ -57,7 +49,7 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
      */
     public function requestRoute(string $routeAlias, string $method, array $routeParameters = [], array $serverParameters = [])
     {
-        static::$_client->request(
+        static::$client->request(
             $method,
             static::$router->generate($routeAlias, $routeParameters),
             [],
@@ -71,7 +63,7 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
      */
     public function observeSuccessfulResponse()
     {
-        $this->assertSuccessfulResponse(static::$_client->getResponse());
+        $this->assertSuccessfulResponse(static::$client->getResponse());
     }
 
     /**
@@ -79,7 +71,7 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
      */
     public function observeRedirectedResponse()
     {
-        $this->assertRedirectedResponse(static::$_client->getResponse());
+        $this->assertRedirectedResponse(static::$client->getResponse());
     }
 
     /**
@@ -87,7 +79,7 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
      */
     public function observeUnsuccessfulResponse()
     {
-        $this->assertUnsuccessfulResponse(static::$_client->getResponse());
+        $this->assertUnsuccessfulResponse(static::$client->getResponse());
     }
 
     /**
@@ -97,7 +89,7 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
      */
     public function observeResponseStatusCode(int $statusCode)
     {
-        $this->assertEquals($statusCode, static::$_client->getResponse()->getStatusCode());
+        $this->assertEquals($statusCode, static::$client->getResponse()->getStatusCode());
     }
 
     /**
@@ -105,6 +97,6 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
      */
     public function observeSuccessfulJsonResponse()
     {
-        $this->assertSuccessfulJSONResponse(self::$_client->getResponse());
+        $this->assertSuccessfulJSONResponse(self::$client->getResponse());
     }
 }
