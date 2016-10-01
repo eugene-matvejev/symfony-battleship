@@ -8,7 +8,7 @@ class AppKernel extends Kernel
     public function registerBundles() : array
     {
         $bundles = [
-            /** FRAMEWORK */
+            /** SYMFONY FRAMEWORK */
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
