@@ -89,9 +89,11 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ _[API]_
  * Dependency Injection
 
 ### PHP-FIG:
- * PSR-2
- * PSR-4
- * PSR-6
+ * [PSR-1](http://www.php-fig.org/psr/psr-1/)
+ * [PSR-2](http://www.php-fig.org/psr/psr-2/)
+ * [PSR-3](http://www.php-fig.org/psr/psr-3/)
+ * [PSR-4](http://www.php-fig.org/psr/psr-4/)
+ * [PSR-6](http://www.php-fig.org/psr/psr-6/)
 
 # workflow
  * new functionality merged into master branch only via pull requests
