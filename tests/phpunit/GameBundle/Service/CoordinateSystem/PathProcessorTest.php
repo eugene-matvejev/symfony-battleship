@@ -6,13 +6,14 @@ use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
-use EM\Tests\Environment\IntegrationTestSuite;
+use EM\Tests\Environment\AbstractKernelTestSuite;
 use EM\Tests\Environment\Factory\MockFactory;
+use EM\Tests\Environment\IntegrationTestSuite;
 
 /**
  * @see PathProcessor
  */
-class PathProcessorTest extends IntegrationTestSuite
+class PathProcessorTest extends AbstractKernelTestSuite
 {
     /**
      * @see          PathProcessor::$primaryPaths

@@ -2,13 +2,13 @@
 
 namespace EM\FoundationBundle\Controller;
 
-use EM\Tests\Environment\IntegrationTestSuite;
+use EM\Tests\Environment\AbstractControllerTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @see PlayerController
  */
-class PlayerControllerTest extends IntegrationTestSuite
+class PlayerControllerTest extends AbstractControllerTestCase
 {
     /**
      * @see PlayerController::indexAction

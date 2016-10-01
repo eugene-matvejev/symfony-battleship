@@ -4,13 +4,13 @@ namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\DataFixtures\ORM\LoadPlayerData;
 use EM\GameBundle\Model\PlayerModel;
-use EM\Tests\Environment\IntegrationTestSuite;
+use EM\Tests\Environment\AbstractKernelTestSuite;
 use EM\Tests\Environment\Factory\MockFactory;
 
 /**
  * @see PlayerModel
  */
-class PlayerModelTest extends IntegrationTestSuite
+class PlayerModelTest extends AbstractKernelTestSuite
 {
     /**
      * @var PlayerModel

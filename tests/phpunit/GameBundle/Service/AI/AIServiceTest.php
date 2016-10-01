@@ -7,13 +7,13 @@ use EM\GameBundle\Exception\AIException;
 use EM\GameBundle\Exception\CellException;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\AI\AIService;
-use EM\Tests\Environment\IntegrationTestSuite;
+use EM\Tests\Environment\AbstractKernelTestSuite;
 use EM\Tests\Environment\Factory\MockFactory;
 
 /**
  * @see AIService
  */
-class AIServiceTest extends IntegrationTestSuite
+class AIServiceTest extends AbstractKernelTestSuite
 {
     /**
      * @var AIService

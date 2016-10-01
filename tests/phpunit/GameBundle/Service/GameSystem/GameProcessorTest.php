@@ -9,13 +9,13 @@ use EM\GameBundle\Exception\GameProcessorException;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Service\GameSystem\GameProcessor;
-use EM\Tests\Environment\IntegrationTestSuite;
+use EM\Tests\Environment\AbstractKernelTestSuite;
 use EM\Tests\Environment\Factory\MockFactory;
 
 /**
  * @see GameProcessor
  */
-class GameProcessorTest extends IntegrationTestSuite
+class GameProcessorTest extends AbstractKernelTestSuite
 {
     /**
      * @var GameProcessor

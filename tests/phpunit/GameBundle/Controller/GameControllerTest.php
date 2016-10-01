@@ -4,14 +4,14 @@ namespace EM\Tests\PHPUnit\GameBundle\Controller;
 
 use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Model\PlayerModel;
+use EM\Tests\Environment\AbstractControllerTestCase;
 use EM\Tests\Environment\Cleaner\CellModelCleaner;
-use EM\Tests\Environment\IntegrationTestSuite;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @see GameController
  */
-class GameControllerTest extends IntegrationTestSuite
+class GameControllerTest extends AbstractControllerTestCase
 {
     /**
      * @see GameController::initAction
