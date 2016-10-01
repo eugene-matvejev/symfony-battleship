@@ -15,13 +15,13 @@ class PlayerModelTest extends AbstractKernelTestSuite
     /**
      * @var PlayerModel
      */
-    private static $playerModel;
+    private $playerModel;
 
-    public static function setUpBeforeClass()
+    protected function setUp()
     {
-        parent::setUpBeforeClass();
+        parent::setUp();
 
-        static::$playerModel = static::$container->get('battleship_game.service.player_model');
+        $this->playerModel = static::$container->get('battleship_game.service.player_model');
     }
 
     /*********************************** STATIC HELPERS ***********************************/
@@ -59,7 +59,7 @@ class PlayerModelTest extends AbstractKernelTestSuite
      */
     public function createOnRequestAIControlledOnExistingPlayer()
     {
-        $player = static::$playerModel->createOnRequestAIControlled(LoadPlayerData::TEST_AI_CONTROLLED_PLAYER_EMAIL);
+        $player = $this->playerModel->createOnRequestAIControlled(LoadPlayerData::TEST_AI_CONTROLLED_PLAYER_EMAIL);
 
         $this->assertEquals(LoadPlayerData::TEST_AI_CONTROLLED_PLAYER_EMAIL, $player->getName());
         $this->assertTrue(PlayerModel::isAIControlled($player));
@@ -79,7 +79,7 @@ class PlayerModelTest extends AbstractKernelTestSuite
      */
     public function createOnRequestAIControlledOnNonExistingPlayer()
     {
-        $player = static::$playerModel->createOnRequestAIControlled('NON-EXISTING-CPU-PLAYER');
+        $player = $this->playerModel->createOnRequestAIControlled('NON-EXISTING-CPU-PLAYER');
 
         $this->assertEquals('NON-EXISTING-CPU-PLAYER', $player->getName());
         $this->assertTrue(PlayerModel::isAIControlled($player));
@@ -101,7 +101,7 @@ class PlayerModelTest extends AbstractKernelTestSuite
      */
     public function createOnRequestAIControlledOnNonExistingHumanPlayer()
     {
-        static::$playerModel->createOnRequestAIControlled(LoadPlayerData::TEST_HUMAN_PLAYER_EMAIL);
+        $this->playerModel->createOnRequestAIControlled(LoadPlayerData::TEST_HUMAN_PLAYER_EMAIL);
     }
     /*********************************** HUMAN PLAYER ***********************************/
     /**
@@ -115,7 +115,7 @@ class PlayerModelTest extends AbstractKernelTestSuite
      */
     public function createOnRequestHumanControlledOnExistingPlayer()
     {
-        $player = static::$playerModel->createOnRequestHumanControlled(LoadPlayerData::TEST_HUMAN_PLAYER_EMAIL);
+        $player = $this->playerModel->createOnRequestHumanControlled(LoadPlayerData::TEST_HUMAN_PLAYER_EMAIL);
 
         $this->assertEquals(LoadPlayerData::TEST_HUMAN_PLAYER_EMAIL, $player->getName());
         $this->assertFalse(PlayerModel::isAIControlled($player));
@@ -135,7 +135,7 @@ class PlayerModelTest extends AbstractKernelTestSuite
      */
     public function createOnRequestHumanControlledOnNonExistingPlayer()
     {
-        $player = static::$playerModel->createOnRequestHumanControlled('NON-EXISTING-HUMAN-PLAYER');
+        $player = $this->playerModel->createOnRequestHumanControlled('NON-EXISTING-HUMAN-PLAYER');
 
         $this->assertEquals('NON-EXISTING-HUMAN-PLAYER', $player->getName());
         $this->assertFalse(PlayerModel::isAIControlled($player));
@@ -157,6 +157,6 @@ class PlayerModelTest extends AbstractKernelTestSuite
      */
     public function createOnRequestHumanControlledOnNonExistingAIPlayer()
     {
-        static::$playerModel->createOnRequestHumanControlled(LoadPlayerData::TEST_AI_CONTROLLED_PLAYER_EMAIL);
+        $this->playerModel->createOnRequestHumanControlled(LoadPlayerData::TEST_AI_CONTROLLED_PLAYER_EMAIL);
     }
 }
