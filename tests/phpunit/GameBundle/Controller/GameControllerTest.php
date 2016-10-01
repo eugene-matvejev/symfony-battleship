@@ -23,7 +23,7 @@ class GameControllerTest extends AbstractControllerTestCase
             $client = clone static::$client;
             $client->request(
                 Request::METHOD_POST,
-                static::$router->generate('battleship_game.api.init'),
+                '/api/game-init',
                 [],
                 [],
                 ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => $acceptHeader]
@@ -43,7 +43,7 @@ class GameControllerTest extends AbstractControllerTestCase
         $client = clone static::$client;
         $client->request(
             Request::METHOD_POST,
-            static::$router->generate('battleship_game.api.init'),
+            '/api/game-init',
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json'],
@@ -90,7 +90,7 @@ class GameControllerTest extends AbstractControllerTestCase
 
         $client->request(
             Request::METHOD_POST,
-            static::$router->generate('battleship_game.api.init'),
+            '/api/game-init',
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/xml'],
@@ -146,7 +146,7 @@ class GameControllerTest extends AbstractControllerTestCase
         foreach (['application/xml', 'application/json'] as $acceptHeader) {
             $client->request(
                 Request::METHOD_PATCH,
-                static::$router->generate('battleship_game.api.turn', ['cellId' => 0]),
+                '/api/game-turn/cell-id/0',
                 [],
                 [],
                 ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => $acceptHeader]
@@ -178,7 +178,7 @@ class GameControllerTest extends AbstractControllerTestCase
                 $client = clone static::$client;
                 $client->request(
                     Request::METHOD_PATCH,
-                    static::$router->generate('battleship_game.api.turn', ['cellId' => $cell->id]),
+                    "/api/game-turn/cell-id/{$cell->id}",
                     [],
                     [],
                     ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
@@ -213,7 +213,7 @@ class GameControllerTest extends AbstractControllerTestCase
                     $client = clone static::$client;
                     $client->request(
                         Request::METHOD_PATCH,
-                        static::$router->generate('battleship_game.api.turn', ['cellId' => $cell->id]),
+                        "/api/game-turn/cell-id/{$cell->id}",
                         [],
                         [],
                         ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
