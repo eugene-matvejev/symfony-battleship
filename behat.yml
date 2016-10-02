@@ -2,9 +2,6 @@ default:
     formatters:
         pretty: true
 
-    autoload:
-        - "%paths.base%/tests/behat/contexts"
-
     suites:
 # ### ### ### ### ### API ### ### ### ### ###
         api.game.mechanics:
