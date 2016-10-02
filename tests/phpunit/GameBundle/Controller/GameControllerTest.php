@@ -20,7 +20,7 @@ class GameControllerTest extends AbstractControllerTestCase
     public function unsuccessfulInitAction()
     {
         foreach (['application/xml', 'application/json'] as $acceptHeader) {
-            $client = clone static::$client;
+            $client = static::$client;
             $client->request(
                 Request::METHOD_POST,
                 '/api/game-init',
@@ -40,7 +40,7 @@ class GameControllerTest extends AbstractControllerTestCase
      */
     public function successfulInitAction_JSON()
     {
-        $client = clone static::$client;
+        $client = static::$client;
         $client->request(
             Request::METHOD_POST,
             '/api/game-init',
@@ -86,8 +86,7 @@ class GameControllerTest extends AbstractControllerTestCase
      */
     public function successfulInitAction_XML()
     {
-        $client = clone static::$client;
-
+        $client = static::$client;
         $client->request(
             Request::METHOD_POST,
             '/api/game-init',
@@ -142,7 +141,7 @@ class GameControllerTest extends AbstractControllerTestCase
      */
     public function unsuccessfulTurnActionOnNotExistingCell()
     {
-        $client = clone static::$client;
+        $client = static::$client;
         foreach (['application/xml', 'application/json'] as $acceptHeader) {
             $client->request(
                 Request::METHOD_PATCH,
@@ -175,7 +174,7 @@ class GameControllerTest extends AbstractControllerTestCase
             foreach ($battlefield->cells as $cell) {
                 CellModelCleaner::resetChangedCells();
 
-                $client = clone static::$client;
+                $client = static::$client;
                 $client->request(
                     Request::METHOD_PATCH,
                     "/api/game-turn/cell-id/{$cell->id}",
@@ -210,7 +209,7 @@ class GameControllerTest extends AbstractControllerTestCase
                 foreach ($battlefield->cells as $cell) {
                     CellModelCleaner::resetChangedCells();
 
-                    $client = clone static::$client;
+                    $client = static::$client;
                     $client->request(
                         Request::METHOD_PATCH,
                         "/api/game-turn/cell-id/{$cell->id}",
