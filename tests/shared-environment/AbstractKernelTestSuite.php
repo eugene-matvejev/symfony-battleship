@@ -130,7 +130,7 @@ abstract class AbstractKernelTestSuite extends \PHPUnit_Framework_TestCase
      * @return mixed
      * @throws \Exception
      */
-    protected function invokeMethod($object, $methodName, array $methodArguments = [])
+    protected function invokeMethod($object, string $methodName, array $methodArguments = [])
     {
         $method = (new \ReflectionClass(get_class($object)))->getMethod($methodName);
         $method->setAccessible(true);
