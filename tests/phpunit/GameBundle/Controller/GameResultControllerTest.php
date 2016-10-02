@@ -35,7 +35,6 @@ class GameResultControllerTest extends AbstractControllerTestCase
     public function orderedByDateAction($pageId, int $expectedResponseCode)
     {
         $client = static::$client;
-        $pageId = 1;
         $client->request(
             Request::METHOD_GET,
             "/api/game-results/page/{$pageId}",
