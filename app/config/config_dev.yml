@@ -7,10 +7,6 @@ framework:
         strict_requirements: true
     profiler: { only_exceptions: false }
 
-web_profiler:
-    toolbar: true
-    intercept_redirects: false
-
 monolog:
     handlers:
         main:
@@ -30,3 +26,13 @@ monolog:
         #chromephp:
         #    type:   chromephp
         #    level:  info
+
+web_profiler:
+    toolbar: true
+    intercept_redirects: false
+
+doctrine_migrations:
+    dir_name: "%kernel.root_dir%/DoctrineMigrations"
+    namespace: Application\Migrations
+    table_name: __doctrine_migrations
+    name: Doctrine Migrations
