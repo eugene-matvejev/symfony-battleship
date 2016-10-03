@@ -3,11 +3,9 @@
 namespace EM\Tests\Behat;
 
 use Behat\Behat\Context\Context;
-use Behat\Behat\Context\SnippetAcceptingContext;
 use EM\Tests\Environment\AbstractControllerTestCase;
-use Symfony\Bundle\FrameworkBundle\Client;
 
-class CommonControllerContext extends AbstractControllerTestCase implements Context, SnippetAcceptingContext
+class CommonControllerContext extends AbstractControllerTestCase implements Context
 {
     /**
      * @BeforeScenario
