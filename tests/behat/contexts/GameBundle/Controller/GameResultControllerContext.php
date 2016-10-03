@@ -12,17 +12,15 @@ use EM\Tests\Behat\CommonControllerContext;
 class GameResultControllerContext extends CommonControllerContext implements Context, SnippetAcceptingContext
 {
     /**
-     * @Then observe :expectedAmount results in page :page
+     * @Then observe :expectedAmount results in response
      *
-     * @param int $page
      * @param int $expectedAmount
      */
-    public function observeResultsInPage(int $page, int $expectedAmount)
+    public function observeResultsInPage(int $expectedAmount)
     {
         $response = json_decode(self::$client->getResponse()->getContent());
 
         $this->assertInstanceOf(\stdClass::class, $response->meta);
-        $this->assertEquals($page, $response->meta->currentPage);
         $this->assertCount($expectedAmount, $response->results);
     }
 }
