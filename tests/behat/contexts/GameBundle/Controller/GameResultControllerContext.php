@@ -2,14 +2,12 @@
 
 namespace EM\Tests\Behat\GameBundle\Controller;
 
-use Behat\Behat\Context\Context;
-use Behat\Behat\Context\SnippetAcceptingContext;
 use EM\Tests\Behat\CommonControllerContext;
 
 /**
  * @see GameResultController
  */
-class GameResultControllerContext extends CommonControllerContext implements Context, SnippetAcceptingContext
+class GameResultControllerContext extends CommonControllerContext
 {
     /**
      * @Then observe :expectedAmount results in response
