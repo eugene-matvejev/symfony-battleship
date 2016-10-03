@@ -1,6 +1,6 @@
 default:
     formatters:
-        pretty: true
+        progress: true
 
     suites:
 # ### ### ### ### ### API ### ### ### ### ###
