@@ -30,3 +30,9 @@ monolog:
         #chromephp:
         #    type:   chromephp
         #    level:  info
+
+doctrine_migrations:
+    dir_name: "%kernel.root_dir%/DoctrineMigrations"
+    namespace: Application\Migrations
+    table_name: __doctrine_migrations
+    name: Doctrine Migrations
