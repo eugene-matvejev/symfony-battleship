@@ -10,18 +10,11 @@ use Symfony\Bundle\FrameworkBundle\Client;
 class CommonControllerContext extends AbstractControllerTestCase implements Context, SnippetAcceptingContext
 {
     /**
-     * @var Client
-     */
-    protected static $_client;
-
-    /**
      * @BeforeScenario
      */
     public static function beforeEachScenario()
     {
-        parent::setUpBeforeClass();
-
-        static::$_client = clone static::$client;
+        static::setUpBeforeClass();
     }
 
     /**
@@ -48,7 +41,7 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
      */
     public function requestRoute(string $route, string $method, array $server = [])
     {
-        static::$_client->request(
+        static::$client->request(
             $method,
             $route,
             [],
@@ -64,7 +57,7 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
      */
     public function observeResponseStatusCode(int $statusCode)
     {
-        $this->assertEquals($statusCode, static::$_client->getResponse()->getStatusCode());
+        $this->assertEquals($statusCode, static::$client->getResponse()->getStatusCode());
     }
 
     /**
@@ -72,7 +65,7 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
      */
     public function observeValidJsonResponse()
     {
-        $this->assertJson(static::$_client->getResponse()->getContent());
+        $this->assertJson(static::$client->getResponse()->getContent());
     }
 
     /**
@@ -82,6 +75,6 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
      */
     public function observeRedirectionTo(string $route)
     {
-        $this->assertEquals($route, static::$_client->getResponse()->headers->get('location'));
+        $this->assertEquals($route, static::$client->getResponse()->headers->get('location'));
     }
 }
