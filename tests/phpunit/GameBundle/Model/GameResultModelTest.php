@@ -48,7 +48,7 @@ class GameResultModelTest extends AbstractKernelTestSuite
             $response = static::$gameResultModel->buildResponse($page);
 
             $this->assertEquals($page, $response->getMeta()[GameResultsResponse::META_INDEX_CURRENT_PAGE]);
-            $this->assertGreaterThanOrEqual(3, $response->getMeta()[GameResultsResponse::META_INDEX_TOTAL_PAGES]);
+            $this->assertEquals(3, $response->getMeta()[GameResultsResponse::META_INDEX_TOTAL_PAGES]);
 
             $this->assertInternalType('array', $response->getResults());
             $this->assertContainsOnlyInstancesOf(GameResult::class, $response->getResults());
