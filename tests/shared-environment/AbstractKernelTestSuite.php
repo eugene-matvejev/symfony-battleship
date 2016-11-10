@@ -23,10 +23,6 @@ abstract class AbstractKernelTestSuite extends \PHPUnit_Framework_TestCase
      */
     protected static $container;
     /**
-     * @var Registry
-     */
-    protected static $doctrine;
-    /**
      * @var ObjectManager
      */
     protected static $om;
@@ -57,8 +53,7 @@ abstract class AbstractKernelTestSuite extends \PHPUnit_Framework_TestCase
         static::$kernel->boot();
 
         static::$container = static::$kernel->getContainer();
-        static::$doctrine  = static::$container->get('doctrine');
-        static::$om        = static::$doctrine->getManager();
+        static::$om        = static::$container->get('doctrine')->getManager();
     }
 
     /**
