@@ -12,6 +12,4 @@ dependencies:
 
 test:
     override:
-        - "php bin/phpunit -c phpunit.xml --colors=always --verbose --coverage-clover=coverage.xml"
-        - "php bin/behat --strict"
-        - "php bin/kahlan"
+        - "ant test:with-coverage"
