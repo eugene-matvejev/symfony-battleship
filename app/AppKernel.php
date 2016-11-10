@@ -17,7 +17,6 @@ class AppKernel extends Kernel
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             /** 3rd PARTY */
             new JMS\SerializerBundle\JMSSerializerBundle(),
-            new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             /** APPLICATION BUNDLES */
             new EM\FoundationBundle\FoundationBundle(),
             new EM\GameBundle\GameBundle()
@@ -29,6 +28,10 @@ class AppKernel extends Kernel
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
+
+            if ('dev' === $this->getEnvironment()) {
+                $bundles[] = new Nelmio\ApiDocBundle\NelmioApiDocBundle();
+            }
         }
 
         return $bundles;

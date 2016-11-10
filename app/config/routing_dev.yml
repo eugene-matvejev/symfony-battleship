@@ -9,3 +9,6 @@ _errors:
     prefix:   /_error
 _main:
     resource: routing.yml
+_documentation.api:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/documentation
