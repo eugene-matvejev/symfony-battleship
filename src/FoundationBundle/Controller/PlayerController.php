@@ -13,6 +13,6 @@ class PlayerController extends AbstractAPIController
 {
     public function indexAction() : Response
     {
-        return $this->redirectToRoute('nelmio_api_doc_index', ['view' => 'default']);
+        return $this->prepareSerializedResponse([]);
     }
 }
