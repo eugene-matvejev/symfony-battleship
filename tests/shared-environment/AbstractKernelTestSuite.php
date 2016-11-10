@@ -64,41 +64,41 @@ abstract class AbstractKernelTestSuite extends \PHPUnit_Framework_TestCase
 
     private static function initDatabase()
     {
-//        $console = new Application(static::$kernel);
-//        $console->setAutoExit(false);
-//
-//        /**
-//         * SQLite is not supported yet
-//         *
-//         * @link https://github.com/doctrine/dbal/pull/2402
-//         */
-//        $commands = [
-//            /** create test database @see CreateDatabaseDoctrineCommand */
-//            'doctrine:database:create'    => ['--if-not-exists' => true],
-//            /** reset test database schema @see DropSchemaDoctrineCommand */
-//            'doctrine:schema:drop'        => ['--full-database' => true, '--force' => true],
-//            /** flush test database schema @see MigrationsMigrateDoctrineCommand */
-//            'doctrine:migrations:migrate' => [],
-//            /** seed test database with core data @see LoadDataFixturesDoctrineCommand */
-//            'doctrine:fixtures:load'      => []
-//        ];
-//
-//        foreach ($commands as $command => $args) {
-//            /** apply common commands options */
-//            $args['--env']            = 'test';
-//            $args['--quiet']          = true;
-//            $args['--no-interaction'] = true;
-//            $args['command']          = $command;
-//            try {
-//                $console->setCatchExceptions(false);
-//                $console->run(new ArrayInput($args));
-//            } catch (\Exception $e) {
-//                echo PHP_EOL . $e->getMessage() . PHP_EOL;
-//                echo PHP_EOL . $e->getTraceAsString() . PHP_EOL;
-//
-//                throw $e;
-//            }
-//        }
+        $console = new Application(static::$kernel);
+        $console->setAutoExit(false);
+
+        /**
+         * SQLite is not supported yet
+         *
+         * @link https://github.com/doctrine/dbal/pull/2402
+         */
+        $commands = [
+            /** create test database @see CreateDatabaseDoctrineCommand */
+            'doctrine:database:create'    => ['--if-not-exists' => true],
+            /** reset test database schema @see DropSchemaDoctrineCommand */
+            'doctrine:schema:drop'        => ['--full-database' => true, '--force' => true],
+            /** flush test database schema @see MigrationsMigrateDoctrineCommand */
+            'doctrine:migrations:migrate' => [],
+            /** seed test database with core data @see LoadDataFixturesDoctrineCommand */
+            'doctrine:fixtures:load'      => []
+        ];
+
+        foreach ($commands as $command => $args) {
+            /** apply common commands options */
+            $args['--env']            = 'test';
+            $args['--quiet']          = true;
+            $args['--no-interaction'] = true;
+            $args['command']          = $command;
+            try {
+                $console->setCatchExceptions(false);
+                $console->run(new ArrayInput($args));
+            } catch (\Exception $e) {
+                echo PHP_EOL . $e->getMessage() . PHP_EOL;
+                echo PHP_EOL . $e->getTraceAsString() . PHP_EOL;
+
+                throw $e;
+            }
+        }
     }
 
     /**
