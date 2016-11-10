@@ -2705,58 +2705,6 @@
             "time": "2016-09-28 07:17:45"
         },
         {
-            "name": "crysalead/kahlan",
-            "version": "2.5.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/crysalead/kahlan.git",
-                "reference": "64e48c213ee3af4d7d6fe1c13d907f77f11ca5d4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/crysalead/kahlan/zipball/64e48c213ee3af4d7d6fe1c13d907f77f11ca5d4",
-                "reference": "64e48c213ee3af4d7d6fe1c13d907f77f11ca5d4",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4"
-            },
-            "bin": [
-                "bin/kahlan"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Kahlan\\": "src/"
-                },
-                "files": [
-                    "src/init.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "CrysaLEAD"
-                }
-            ],
-            "description": "Behavior-Driven Development (BDD) library.",
-            "keywords": [
-                "BDD",
-                "Behavior-Driven Development",
-                "Monkey Patching",
-                "TDD",
-                "mock",
-                "stub",
-                "testing",
-                "unit test"
-            ],
-            "abandoned": "kahlan/kahlan",
-            "time": "2016-08-18 13:29:17"
-        },
-        {
             "name": "doctrine/data-fixtures",
             "version": "v1.2.1",
             "source": {
@@ -3071,6 +3019,108 @@
                 "schema"
             ],
             "time": "2016-06-02 10:59:52"
+        },
+        {
+            "name": "kahlan/kahlan",
+            "version": "2.5.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kahlan/kahlan.git",
+                "reference": "4fad70f5a81698fe6cae725b21bb08c4aa677788"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kahlan/kahlan/zipball/4fad70f5a81698fe6cae725b21bb08c4aa677788",
+                "reference": "4fad70f5a81698fe6cae725b21bb08c4aa677788",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "bin": [
+                "bin/kahlan"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Kahlan\\": "src/"
+                },
+                "files": [
+                    "src/init.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "CrysaLEAD"
+                }
+            ],
+            "description": "Behavior-Driven Development (BDD) library.",
+            "keywords": [
+                "BDD",
+                "Behavior-Driven Development",
+                "Monkey Patching",
+                "TDD",
+                "mock",
+                "stub",
+                "testing",
+                "unit test"
+            ],
+            "time": "2016-09-29 01:40:20"
+        },
+        {
+            "name": "michelf/php-markdown",
+            "version": "1.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/michelf/php-markdown.git",
+                "reference": "1f51cc520948f66cd2af8cbc45a5ee175e774220"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/michelf/php-markdown/zipball/1f51cc520948f66cd2af8cbc45a5ee175e774220",
+                "reference": "1f51cc520948f66cd2af8cbc45a5ee175e774220",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-lib": "1.4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Michelf": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Michel Fortin",
+                    "email": "michel.fortin@michelf.ca",
+                    "homepage": "https://michelf.ca/",
+                    "role": "Developer"
+                },
+                {
+                    "name": "John Gruber",
+                    "homepage": "https://daringfireball.net/"
+                }
+            ],
+            "description": "PHP Markdown",
+            "homepage": "https://michelf.ca/projects/php-markdown/",
+            "keywords": [
+                "markdown"
+            ],
+            "time": "2016-10-29 18:58:20"
         },
         {
             "name": "myclabs/deep-copy",
