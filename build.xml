@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Kafoodle Kitchen" default="test">
+    <property name="basedir" value="."/>
+
+    <property name="console" value="${basedir}/bin/console"/>
+    <property name="phpunit" value="${basedir}/bin/phpunit"/>
+    <property name="kahlan"  value="${basedir}/bin/kahlan"/>
+    <property name="behat"   value="${basedir}/bin/behat"/>
+
+    <target name="test"
+            description="execute tests"
+            depends="prepare:database:reset, tests:phpunit:no-coverage, tests:kahlan, tests:behat"
+    />
+
+    <target name="test:with-coverage"
+            description="execute tests and generate coverage report [./coverage.xml]"
+            depends="prepare:database:reset, tests:phpunit:with-coverage, tests:kahlan, tests:behat"
+    />
+
+    <target name="prepare:database:reset">
+        <exec executable="php" taskname="doctrine:database:create" failonerror="true">
+            <arg value="-n"/>
+            <arg value="${console}"/>
+            <arg value="doctrine:database:create"/>
+            <arg value="--env=test"/>
+            <arg value="--no-interaction"/>
+            <arg value="--if-not-exists"/>
+        </exec>
+
+        <exec executable="php" taskname="doctrine:schema:drop" failonerror="true">
+            <arg value="-n"/>
+            <arg value="${console}"/>
+            <arg value="doctrine:schema:drop"/>
+            <arg value="--env=test"/>
+            <arg value="--no-interaction"/>
+            <arg value="--force"/>
+            <arg value="--full-database"/>
+        </exec>
+
+        <exec executable="php" taskname="doctrine:migrations:migrate" failonerror="true">
+            <arg value="-n"/>
+            <arg value="${console}"/>
+            <arg value="doctrine:migrations:migrate"/>
+            <arg value="--env=test"/>
+            <arg value="--no-interaction"/>
+        </exec>
+
+        <exec executable="php" taskname="doctrine:fixtures:load" failonerror="true">
+            <arg value="-n"/>
+            <arg value="${console}"/>
+            <arg value="doctrine:fixtures:load"/>
+            <arg value="--env=test"/>
+            <arg value="--no-interaction"/>
+        </exec>
+    </target>
+
+    <target name="tests:phpunit:with-coverage" unless="phpunit.done">
+        <exec executable="php" taskname="phpunit" failonerror="true">
+            <arg value="-d"/>
+            <arg value="memory_limit=1G"/>
+            <arg value="${phpunit}"/>
+            <arg value="-c"/>
+            <arg value="${basedir}/phpunit.xml"/>
+            <arg value="--verbose"/>
+            <arg value="--coverage-clover=coverage.xml"/>
+        </exec>
+
+        <property name="phpunit.done" value="true"/>
+    </target>
+
+    <target name="tests:phpunit:no-coverage" unless="phpunit.done">
+        <exec executable="php" taskname="phpunit" failonerror="true">
+            <arg value="-n"/>
+            <arg value="${phpunit}"/>
+            <arg value="-c"/>
+            <arg value="${basedir}/phpunit.xml"/>
+            <arg value="--verbose"/>
+        </exec>
+
+        <property name="phpunit.done" value="true"/>
+    </target>
+
+    <target name="tests:kahlan" unless="kahlan.done">
+        <exec executable="php" taskname="kahlan" failonerror="true">
+            <arg value="-n"/>
+            <arg value="${kahlan}"/>
+        </exec>
+
+        <property name="kahlan.done" value="true"/>
+    </target>
+
+    <target name="tests:behat" unless="behat.done">
+        <exec executable="php" taskname="behat" failonerror="true">
+            <arg value="-n"/>
+            <arg value="${behat}"/>
+            <arg value="--stop-on-failure"/>
+        </exec>
+
+        <property name="behat.done" value="true"/>
+    </target>
+</project>
