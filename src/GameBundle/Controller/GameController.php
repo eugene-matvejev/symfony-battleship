@@ -9,6 +9,7 @@ use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Request\GameInitiationRequest;
 use EM\GameBundle\Response\GameInitiationResponse;
 use EM\GameBundle\Response\GameTurnResponse;
+use EM\Tests\PHPUnit\GameBundle\Controller\GameControllerTest;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,6 +23,10 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class GameController extends AbstractAPIController
 {
     /**
+     * @see GameControllerTest::unsuccessfulInitAction
+     * @see GameControllerTest::successfulInitAction_JSON
+     * @see GameControllerTest::successfulInitAction_XML
+     *
      * @ApiDoc(
      *      section = "Game:: Mechanics",
      *      description = "Creates a new game from the submitted data",
@@ -55,6 +60,9 @@ class GameController extends AbstractAPIController
     }
 
     /**
+     * @see GameControllerTest::successfulTurnAction
+     * @see GameControllerTest::unsuccessfulTurnActionOnDeadCell
+     *
      * @ApiDoc(
      *      section = "Game:: Mechanics",
      *      description = "process game turn by cellId",
