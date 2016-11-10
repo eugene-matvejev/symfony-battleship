@@ -95,6 +95,7 @@ class GameControllerTest extends AbstractControllerTestCase
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/xml'],
             static::getSharedFixtureContent('game-initiation-requests/valid/2-players-7x7.json')
         );
+
         $this->assertSuccessfulXMLResponse($client->getResponse());
 
         $response = simplexml_load_string($client->getResponse()->getContent(), 'SimpleXMLElement', LIBXML_NOCDATA);
@@ -157,12 +158,12 @@ class GameControllerTest extends AbstractControllerTestCase
     /**
      * simulate human interaction until game has been finished
      *
-     * @var     \stdClass[] $response
-     *
      * @see     GameController::turnAction
      * @test
      *
      * @depends successfulInitAction_JSON
+     *
+     * @param   \stdClass[] $response
      */
     public function successfulTurnAction(array $response)
     {
@@ -195,12 +196,12 @@ class GameControllerTest extends AbstractControllerTestCase
     /**
      * simulate human interaction until game has been finished
      *
-     * @var     \stdClass[] $response
-     *
      * @see     GameController::turnAction
      * @test
      *
      * @depends successfulInitAction_JSON
+     *
+     * @param  \stdClass[] $response
      */
     public function unsuccessfulTurnActionOnDeadCell(array $response)
     {
