@@ -10,9 +10,9 @@ class AppKernel extends Kernel
         $bundles = [
             /** SYMFONY */
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-//            new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+            /* new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(), */
+            /* new Symfony\Bundle\SecurityBundle\SecurityBundle(), */
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-//            new Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             /** EXTRA */
@@ -29,6 +29,7 @@ class AppKernel extends Kernel
 
             if ('dev' === $this->getEnvironment()) {
                 $bundles[] = new Nelmio\ApiDocBundle\NelmioApiDocBundle();
+                $bundles[] = new Symfony\Bundle\TwigBundle\TwigBundle();
                 $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
                 $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             }
