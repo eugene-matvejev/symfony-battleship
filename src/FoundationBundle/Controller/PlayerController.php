@@ -11,6 +11,11 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class PlayerController extends AbstractAPIController
 {
+    /**
+     * @see PlayerControllerTest::indexAction
+     *
+     * @return Response
+     */
     public function indexAction() : Response
     {
         return $this->prepareSerializedResponse([]);
