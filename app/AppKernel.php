@@ -29,6 +29,7 @@ class AppKernel extends Kernel
 
             if ('dev' === $this->getEnvironment()) {
                 $bundles[] = new Nelmio\ApiDocBundle\NelmioApiDocBundle();
+                $bundles[] = new Symfony\Bundle\TwigBundle\TwigBundle();
                 $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
                 $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             }
