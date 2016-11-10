@@ -31,18 +31,19 @@
         "doctrine/orm": "^2.5",
         "incenteev/composer-parameter-handler": "^2.1",
         "jms/serializer-bundle": "^1.1",
-        "nelmio/api-doc-bundle": "^2.13",
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0",
         "symfony/symfony": "^3.1",
-        "symfony/monolog-bundle": "^2.11"
+        "symfony/monolog-bundle": "^2.11",
+        "ocramius/package-versions" : "^1.1"
     },
     "require-dev": {
         "behat/behat": "^3.2",
         "composer/composer": "^1.2",
-        "crysalead/kahlan": "^2.5",
+        "kahlan/kahlan": "^2.5",
         "doctrine/doctrine-migrations-bundle": "^1.2",
         "doctrine/doctrine-fixtures-bundle": "^2.3",
+        "nelmio/api-doc-bundle": "^2.13",
         "phpunit/phpunit": "^5.5"
     },
     "scripts": {
@@ -50,23 +51,14 @@
         "post-install-cmd": "@full-deployment-cycle",
         "full-deployment-cycle": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "@framework-provision",
-            "@database-provision"
+            "@symfony-scripts"
         ],
-        "framework-provision": [
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
-        ],
-        "database-provision": [
-            "php bin/console doctrine:database:create --if-not-exists",
-            "php bin/console doctrine:migrations:migrate --no-interaction"
+        "symfony-scripts": [
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap"
         ],
         "compile": [
             "rm web/app_dev.php",
-            "php bin/console assets:install",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget",
             "php bin/console doctrine:schema:drop --full-database --force",
             "php bin/console doctrine:migrations:migrate --no-interaction"
         ]
