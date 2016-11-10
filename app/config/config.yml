@@ -90,5 +90,3 @@ doctrine:
 #            game-bundle-entity:
 #                namespace_prefix: "EM\\GameBundle\\Entity\\"
 #                path: "@GameBundle/Resources/config/serializer/entity"
-
-nelmio_api_doc: ~
