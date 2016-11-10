@@ -8,17 +8,16 @@ class AppKernel extends Kernel
     public function registerBundles() : array
     {
         $bundles = [
-            /** SYMFONY FRAMEWORK */
+            /** SYMFONY */
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
 //            new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
 //            new Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
-            /** 3rd PARTY */
+            /** EXTRA */
             new JMS\SerializerBundle\JMSSerializerBundle(),
-            new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
-            /** APPLICATION BUNDLES */
+            /** PROJECT */
             new EM\FoundationBundle\FoundationBundle(),
             new EM\GameBundle\GameBundle()
         ];
@@ -29,6 +28,10 @@ class AppKernel extends Kernel
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
+
+            if ('dev' === $this->getEnvironment()) {
+                $bundles[] = new Nelmio\ApiDocBundle\NelmioApiDocBundle();
+            }
         }
 
         return $bundles;
