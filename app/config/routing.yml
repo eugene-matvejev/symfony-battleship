@@ -1,6 +1,7 @@
-foundation:
+project.foundation-bundle:
     resource: "@FoundationBundle/Resources/config/routing.yml"
     prefix:   /
-battleship-game:
+
+project.game-bundle:
     resource: "@GameBundle/Resources/config/routing.yml"
     prefix:   /
