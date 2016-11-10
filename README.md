@@ -1,5 +1,3 @@
-# NO ACTIVE CONTRIBUTIONS: I GOT EMPLOYED AS TECH. LEAD, SO I SPEND MOST OF MY TIME ON COMPANY NEEDS
-
 [circle.ci-master-badge]: https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg
 [circle.ci-master-link]: https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master
 [codecov.io-master-badge]: https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/master/graph/badge.svg
