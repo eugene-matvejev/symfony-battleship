@@ -38,12 +38,11 @@
         "ocramius/package-versions" : "^1.1"
     },
     "require-dev": {
-        "behat/behat": "^3.2",
-        "composer/composer": "^1.2",
-        "kahlan/kahlan": "^2.5",
         "doctrine/doctrine-migrations-bundle": "^1.2",
         "doctrine/doctrine-fixtures-bundle": "^2.3",
         "nelmio/api-doc-bundle": "^2.13",
+        "behat/behat": "^3.2",
+        "kahlan/kahlan": "^2.5",
         "phpunit/phpunit": "^5.5"
     },
     "scripts": {
