@@ -14,9 +14,9 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "EM\\Tests\\Environment\\": "tests/shared-environment",
             "EM\\Tests\\PHPUnit\\": "tests/phpunit",
-            "EM\\Tests\\Behat\\": "tests/behat/contexts"
+            "EM\\Tests\\Behat\\": "tests/behat/contexts",
+            "EM\\Tests\\Environment\\": "tests/shared-environment"
         }
     },
     "authors": [
@@ -46,9 +46,9 @@
         "phpunit/phpunit": "^5.5"
     },
     "scripts": {
-        "post-update-cmd": "@full-deployment-cycle",
-        "post-install-cmd": "@full-deployment-cycle",
-        "full-deployment-cycle": [
+        "post-update-cmd": "@deployment-scripts",
+        "post-install-cmd": "@deployment-scripts",
+        "deployment-scripts": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "@symfony-scripts"
         ],
