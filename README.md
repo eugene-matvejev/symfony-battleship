@@ -115,11 +115,16 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ _[API]_
   * _NOTE:_ by default assets are installed as symlinks
 
 ### how to execute tests
+ * _$ php bin/console doctrine:database:create --env=test_
+ * _$ php bin/console doctrine:migrations:migrate --env=test_
+ * _$ php bin/console doctrine:fixtures:load --env=test_
  * _$ php bin/phpunit -c ._
- * _$ php bin/behat --strict_
+ * _$ php bin/behat_
  * _$ php bin/kahlan_
   * _NOTE:_ database\_name\_test in parameters.yml reflects database name for test env.
   * _NOTE:_ test database is wiped and seeded before tests execution
+ * OPTIONAL:
+  * _$ ant test_
 
 ### /etc/hosts
 ```
