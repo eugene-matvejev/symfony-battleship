@@ -1,12 +1,12 @@
 Feature: Battleship Game: API: Game Mechanics
 
   @api
+  @mechanics
   Scenario Outline: routes should return unsuccessful response on wrong data
-    Given request "<routeAlias>" API route via "<routeMethod>" with "<routeParam>" "<paramValue>"
-    Then observe unsuccessful response
-    And observe response status code "<expectedStatusCode>"
+    Given request API "<route>" route via "<method>"
+    Then observe response status code "<statusCode>"
 
     Examples:
-      | routeAlias               | routeMethod | routeParam | paramValue | expectedStatusCode |
-      | battleship_game.api.init | POST        | ~          | ~          | 500                |
-      | battleship_game.api.turn | PATCH       | cellId     | 1          | 500                |
+      | method | route                    | statusCode |
+      | POST   | /api/game-init           | 400        |
+      | PATCH  | /api/game-turn/cell-id/0 | 404        |

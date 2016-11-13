@@ -9,28 +9,36 @@ use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Request\GameInitiationRequest;
 use EM\GameBundle\Response\GameInitiationResponse;
 use EM\GameBundle\Response\GameTurnResponse;
+use EM\Tests\PHPUnit\GameBundle\Controller\GameResultControllerTest;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\Validator\Exception\InvalidArgumentException;
 
 /**
- * @see   GameControllerTest
+ * @see   GameResultControllerTest
  *
  * @since 1.0
  */
 class GameController extends AbstractAPIController
 {
     /**
+     * @see GameControllerTest::unsuccessfulInitAction
+     * @see GameControllerTest::successfulInitAction_JSON
+     * @see GameControllerTest::successfulInitAction_XML
+     *
      * @Security("has_role('PLAYER')")
+     *
      * @ApiDoc(
      *      section = "Game:: Mechanics",
      *      description = "Creates a new game from the submitted data",
      *      input = "EM\GameBundle\Request\GameInitiationRequest",
      *      responseMap = {
      *          201 = "EM\GameBundle\Response\GameInitiationResponse"
+     *      },
+     *      statusCodes = {
+     *          400 = "invalid request"
      *      }
      * )
      *
@@ -58,11 +66,20 @@ class GameController extends AbstractAPIController
     }
 
     /**
+     * @see GameControllerTest::successfulTurnAction
+     * @see GameControllerTest::unsuccessfulTurnActionOnDeadCell
+     *
      * @Security("has_role('PLAYER')")
+     *
      * @ApiDoc(
      *      section = "Game:: Mechanics",
      *      description = "process game turn by cellId",
-     *      output = "EM\GameBundle\Response\GameTurnResponse"
+     *      output = "EM\GameBundle\Response\GameTurnResponse",
+     *      statusCodes = {
+     *          200 = "successful turn",
+     *          404 = "cell do not exists",
+     *          422 = "cell already flagged as DEAD"
+     *      }
      * )
      *
      * @param int $cellId
@@ -74,14 +91,14 @@ class GameController extends AbstractAPIController
     public function turnAction(int $cellId) : Response
     {
         if (null === $cell = $this->getDoctrine()->getRepository('GameBundle:Cell')->find($cellId)) {
-            throw new CellException(Response::HTTP_NOT_FOUND, "cell: {$cellId} doesn't exist");
+            throw new CellException(Response::HTTP_NOT_FOUND, "cell: {$cellId} do not exist");
         }
         if ($cell->hasFlag(CellModel::FLAG_DEAD)) {
-            throw new CellException(Response::HTTP_UNPROCESSABLE_ENTITY, "cell: {$cellId} doesn't already flagged as *DEAD*");
+            throw new CellException(Response::HTTP_UNPROCESSABLE_ENTITY, "cell: {$cellId} already flagged as *DEAD*");
         }
 
         $game = $this->get('battleship_game.service.game_processor')->processTurn($cell);
-        $om = $this->getDoctrine()->getManager();
+        $om   = $this->getDoctrine()->getManager();
 
         foreach (CellModel::getChangedCells() as $cell) {
             $om->persist($cell);

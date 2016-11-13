@@ -3,13 +3,13 @@
 namespace EM\Tests\PHPUnit\GameBundle\Request;
 
 use EM\GameBundle\Request\GameInitiationRequest;
-use EM\Tests\Environment\IntegrationTestSuite;
+use EM\Tests\Environment\AbstractKernelTestSuite;
 use Symfony\Component\Finder\Finder;
 
 /**
  * @see GameInitiationRequest
  */
-class GameInitiationRequestTest extends IntegrationTestSuite
+class GameInitiationRequestTest extends AbstractKernelTestSuite
 {
     public function parseProvider() : array
     {

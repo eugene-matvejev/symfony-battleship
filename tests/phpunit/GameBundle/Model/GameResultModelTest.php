@@ -5,13 +5,13 @@ namespace EM\Tests\PHPUnit\GameBundle\Model;
 use EM\GameBundle\Entity\GameResult;
 use EM\GameBundle\Model\GameResultModel;
 use EM\GameBundle\Response\GameResultsResponse;
-use EM\Tests\Environment\IntegrationTestSuite;
+use EM\Tests\Environment\AbstractKernelTestSuite;
 use EM\Tests\Environment\Factory\MockFactory;
 
 /**
  * @see GameResultModel
  */
-class GameResultModelTest extends IntegrationTestSuite
+class GameResultModelTest extends AbstractKernelTestSuite
 {
     /**
      * @var GameResultModel
@@ -48,7 +48,7 @@ class GameResultModelTest extends IntegrationTestSuite
             $response = static::$gameResultModel->buildResponse($page);
 
             $this->assertEquals($page, $response->getMeta()[GameResultsResponse::META_INDEX_CURRENT_PAGE]);
-            $this->assertEquals(3, $response->getMeta()[GameResultsResponse::META_INDEX_TOTAL_PAGES]);
+            $this->assertGreaterThanOrEqual(3, $response->getMeta()[GameResultsResponse::META_INDEX_TOTAL_PAGES]);
 
             $this->assertInternalType('array', $response->getResults());
             $this->assertContainsOnlyInstancesOf(GameResult::class, $response->getResults());

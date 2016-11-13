@@ -1,22 +1,39 @@
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
-[![Code Climate](https://codeclimate.com/github/eugene-matvejev/battleship-game-api/badges/gpa.svg)](https://codeclimate.com/github/eugene-matvejev/battleship-game-api)
-[![Build Status](https://travis-ci.org/eugene-matvejev/battleship-game-api.svg?branch=master)](https://travis-ci.org/eugene-matvejev/battleship-game-api)
-[![Build Status](https://codeship.com/projects/e893a4f0-0b28-0134-b0ad-129a07c0a376/status?branch=master)](https://codeship.com/projects/155781)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc/mini.png)](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc)
+[circle.ci-master-badge]: https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg
+[circle.ci-master-link]: https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master
+[codecov.io-master-badge]: https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/master/graph/badge.svg
+[codecov.io-master-link]: https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/master
 
-__TDD tests__
- * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - _PHPUnit_
+[circle.ci-heroku-badge]: https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/heroku.svg?style=svg
+[circle.ci-heroku-link]: https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/heroku
+[codecov.io-heroku-badge]: https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/heroku/graph/badge.svg
+[codecov.io-heroku-link]: https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/heroku
 
-__BDD tests__
- * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - _Behat_
- * [![Circle CI](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master.svg?style=svg)](https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/master) - _Kahlan_
+[circle.ci-prototype-badge]: https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/prototype_authorization.svg?style=svg
+[circle.ci-prototype-link]: https://circleci.com/gh/eugene-matvejev/battleship-game-api/tree/prototype_authorization
+[codecov.io-prototype-badge]: https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/prototype_authorization/graph/badge.svg
+[codecov.io-prototype-link]: https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/prototype_authorization
 
-__Test Coverage__
+|                         | master                                                         | heroku                                                                | < authorization prototype >                                                    
+|---                      |---                                                             |---                                                                    |---
+| __TDD tests__           |
+| _< Circle CI >_ PHPUnit | [![build][circle.ci-master-badge]][circle.ci-master-link]      | [![build][circle.ci-heroku-badge]][circle.ci-heroku-link]             | [![build][circle.ci-prototype-badge]][circle.ci-prototype-link]
+| __BDD tests__           |
+| _< Circle CI >_ Behat   | [![build][circle.ci-master-badge]][circle.ci-master-link]      | [![build][circle.ci-heroku-badge]][circle.ci-heroku-link]             | [![build][circle.ci-prototype-badge]][circle.ci-prototype-link]
+| _< Circle CI >_ Kahlan  | [![build][circle.ci-master-badge]][circle.ci-master-link]      | [![build][circle.ci-heroku-badge]][circle.ci-heroku-link]             | [![build][circle.ci-prototype-badge]][circle.ci-prototype-link]
+| __Coverage__            |
+| codecov.io              | [![coverage][codecov.io-master-badge]][codecov.io-master-link] | [![coverage][codecov.io-heroku-badge]][codecov.io-heroku-link]        | [![coverage][codecov.io-prototype-badge]][codecov.io-prototype-link]
 
-[![Code Coverage](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
-[![codecov](https://codecov.io/gh/eugene-matvejev/battleship-game-api/branch/master/graph/badge.svg)](https://codecov.io/gh/eugene-matvejev/battleship-game-api)
+other CI engines reports _[on master]_
 
-__DEMO__ : https://battleship-game-api.herokuapp.com/ (API)
+[![scrutinizer-code-quality](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
+[![scrutinizer-code-coverage](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
+[![code-climate-code-quality](https://codeclimate.com/github/eugene-matvejev/battleship-game-api/badges/gpa.svg)](https://codeclimate.com/github/eugene-matvejev/battleship-game-api)
+[![travis-build-status-master](https://travis-ci.org/eugene-matvejev/battleship-game-api.svg?branch=master)](https://travis-ci.org/eugene-matvejev/battleship-game-api)
+[![sensio-insight-framework](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc/mini.png)](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc)
+[![codeship-build-status-master](https://codeship.com/projects/e893a4f0-0b28-0134-b0ad-129a07c0a376/status?branch=master)](https://codeship.com/projects/155781)
+
+
+__DEMO__ : https://battleship-game-api.herokuapp.com/ _[API]_
 
 # Battleship Game API
 ##### THIS IS SPARE TIME PROJECT, WORK IN PROGRESS! HIGHLY EXPERIMENTAL!!!
@@ -71,9 +88,11 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ (API)
  * Dependency Injection
 
 ### PHP-FIG:
- * PSR-2
- * PSR-4
- * PSR-6
+ * [PSR-1](http://www.php-fig.org/psr/psr-1/)
+ * [PSR-2](http://www.php-fig.org/psr/psr-2/)
+ * [PSR-3](http://www.php-fig.org/psr/psr-3/)
+ * [PSR-4](http://www.php-fig.org/psr/psr-4/)
+ * [PSR-6](http://www.php-fig.org/psr/psr-6/)
 
 # workflow
  * new functionality merged into master branch only via pull requests
@@ -96,11 +115,16 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ (API)
   * _NOTE:_ by default assets are installed as symlinks
 
 ### how to execute tests
+ * _$ php bin/console doctrine:database:create --env=test_
+ * _$ php bin/console doctrine:migrations:migrate --env=test_
+ * _$ php bin/console doctrine:fixtures:load --env=test_
  * _$ php bin/phpunit -c ._
- * _$ php bin/behat --strict_
+ * _$ php bin/behat_
  * _$ php bin/kahlan_
   * _NOTE:_ database\_name\_test in parameters.yml reflects database name for test env.
   * _NOTE:_ test database is wiped and seeded before tests execution
+ * OPTIONAL:
+  * _$ ant test_
 
 ### /etc/hosts
 ```
@@ -130,12 +154,6 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ (API)
         # to each configured DirectoryIndex file (e.g. index.php, index.html, index.pl).
         DirectoryIndex app.php
 
-        # By default, Apache does not evaluate symbolic links if you did not enable this
-        # feature in your server configuration. Uncomment the following line if you
-        # install assets as symlinks or if you experience problems related to symlinks
-        # when compiling LESS/Sass/CoffeScript assets.
-        # Options FollowSymlinks
-
         # Disabling MultiViews prevents unwanted negotiation, e.g. "/app" should not resolve
         # to the front controller "/app.php" but be rewritten to "/app.php/app".
         <IfModule mod_negotiation.c>
@@ -145,11 +163,11 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ (API)
         <IfModule mod_rewrite.c>
             RewriteEngine On
 
-            # CORS support.
+            # CORS support
             RewriteCond %{REQUEST_METHOD} OPTIONS
             RewriteRule ^(.*)$ $1 [R=200,L]
             Header always set Access-Control-Allow-Origin "*"
-            Header always set Access-Control-Allow-Methods "POST, GET, PATCH, OPTIONS"
+            Header always set Access-Control-Allow-Methods "POST, GET, PATCH"
 
             # Determine the RewriteBase automatically and set it as environment variable.
             # If you are using Apache aliases to do mass virtual hosting or installed the

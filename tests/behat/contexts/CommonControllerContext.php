@@ -3,91 +3,49 @@
 namespace EM\Tests\Behat;
 
 use Behat\Behat\Context\Context;
-use Behat\Behat\Context\SnippetAcceptingContext;
-use EM\Tests\Environment\IntegrationTestSuite;
-use Symfony\Bundle\FrameworkBundle\Client;
+use EM\Tests\Environment\AbstractControllerTestCase;
 
-class CommonControllerContext extends IntegrationTestSuite implements Context, SnippetAcceptingContext
+class CommonControllerContext extends AbstractControllerTestCase implements Context
 {
-    /**
-     * @var Client
-     */
-    protected static $_client;
-
     /**
      * @BeforeScenario
      */
     public static function beforeEachScenario()
     {
-        parent::setUpBeforeClass();
-
-        static::$_client = clone static::$client;
+        static::setUpBeforeClass();
     }
 
     /**
-     * @Given request :routeAlias API route via :method with :key :value
+     * @Given request API :route route via :method
      *
-     * @param string $routeAlias
+     * @param string $route
      * @param string $method
-     * @param string $key
-     * @param string $value
      */
-    public function requestAPIRouteWithParams(string $routeAlias, string $method, string $key, string $value)
+    public function requestAPIRoute(string $route, string $method)
     {
-        $routeParameters = [];
-        if ('~' !== $key && '~' !== $value) {
-            $routeParameters[$key] = $value;
-        }
-
         $this->requestRoute(
-            $routeAlias,
+            $route,
             $method,
-            $routeParameters,
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
         );
     }
 
     /**
-     * @Given request :routeAlias route via :method
+     * @Given request :route route via :method
      *
-     * @param string   $routeAlias
+     * @param string   $route
      * @param string   $method
-     * @param string[] $routeParameters
-     * @param string[] $serverParameters
+     * @param string[] $server
      */
-    public function requestRoute(string $routeAlias, string $method, array $routeParameters = [], array $serverParameters = [])
+    public function requestRoute(string $route, string $method, array $server = [])
     {
-        static::$_client->request(
+        static::$client->request(
             $method,
-            static::$router->generate($routeAlias, $routeParameters),
+            $route,
             [],
             [],
-            $serverParameters
+            $server
         );
-    }
-
-    /**
-     * @Then observe successful response
-     */
-    public function observeSuccessfulResponse()
-    {
-        $this->assertSuccessfulResponse(static::$_client->getResponse());
-    }
-
-    /**
-     * @Then observe redirected response
-     */
-    public function observeRedirectedResponse()
-    {
-        $this->assertRedirectedResponse(static::$_client->getResponse());
-    }
-
-    /**
-     * @Then observe unsuccessful response
-     */
-    public function observeUnsuccessfulResponse()
-    {
-        $this->assertUnsuccessfulResponse(static::$_client->getResponse());
     }
 
     /**
@@ -97,14 +55,24 @@ class CommonControllerContext extends IntegrationTestSuite implements Context, S
      */
     public function observeResponseStatusCode(int $statusCode)
     {
-        $this->assertEquals($statusCode, static::$_client->getResponse()->getStatusCode());
+        $this->assertEquals($statusCode, static::$client->getResponse()->getStatusCode());
     }
 
     /**
-     * @Then observe successful JSON response
+     * @Then observe valid JSON response
      */
-    public function observeSuccessfulJsonResponse()
+    public function observeValidJsonResponse()
     {
-        $this->assertSuccessfulJSONResponse(self::$_client->getResponse());
+        $this->assertJson(static::$client->getResponse()->getContent());
+    }
+
+    /**
+     * @Given observe redirection to :route
+     *
+     * @param string $route
+     */
+    public function observeRedirectionTo(string $route)
+    {
+        $this->assertEquals($route, static::$client->getResponse()->headers->get('location'));
     }
 }

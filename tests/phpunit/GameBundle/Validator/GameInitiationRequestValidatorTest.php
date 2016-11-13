@@ -3,13 +3,13 @@
 namespace EM\Tests\PHPUnit\GameBundle\Validator;
 
 use EM\GameBundle\Validator\GameInitiationRequestValidator;
-use EM\Tests\Environment\IntegrationTestSuite;
+use EM\Tests\Environment\AbstractKernelTestSuite;
 use Symfony\Component\Finder\Finder;
 
 /**
  * @see GameInitiationRequestValidator
  */
-class GameInitiationRequestValidatorTest extends IntegrationTestSuite
+class GameInitiationRequestValidatorTest extends AbstractKernelTestSuite
 {
     /**
      * @var GameInitiationRequestValidator

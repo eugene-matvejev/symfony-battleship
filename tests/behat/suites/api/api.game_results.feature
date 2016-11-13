@@ -2,12 +2,12 @@ Feature: Battleship Game: API: Game Results
 
   @api
   Scenario Outline: routes should return successful response
-    Given request "<routeAlias>" API route via "<routeMethod>" with "<routeParam>" "<paramValue>"
-    Then observe successful JSON response
-    And observe "<expectedAmount>" results in page "<paramValue>"
+    Given request API "<route>" route via "<method>"
+    Then observe response status code "<code>"
+    And observe valid JSON response
 
     Examples:
-      | routeAlias                       | routeMethod | routeParam | paramValue | expectedAmount |
-      | battleship_game.api.game.results | GET         | page       | 1          | 0              |
-      | battleship_game.api.game.results | GET         | page       | 2          | 0              |
-      | battleship_game.api.game.results | GET         | page       | 99         | 0              |
+      | method | route                     | code |
+      | GET    | /api/game-results/page/1  | 200  |
+      | GET    | /api/game-results/page/2  | 200  |
+      | GET    | /api/game-results/page/99 | 200  |

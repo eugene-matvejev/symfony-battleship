@@ -3,6 +3,7 @@
 namespace EM\GameBundle\Controller;
 
 use EM\FoundationBundle\Controller\AbstractAPIController;
+use EM\Tests\PHPUnit\GameBundle\Controller\GameResultControllerTest;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,12 +16,15 @@ use Symfony\Component\HttpFoundation\Response;
 class GameResultController extends AbstractAPIController
 {
     /**
-     * @Security("has_role('PLAYER')")
+     * @see GameResultControllerTest::orderedByDateAction
+     *
      * @ApiDoc(
      *      section = "Game:: Results",
      *      description = "returns game results ordered by date in desc. order",
      *      output = "EM\GameBundle\Response\GameResultsResponse"
      * )
+     *
+     * @Security("has_role('PLAYER')")
      *
      * @param int $page
      *

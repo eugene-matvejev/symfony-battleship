@@ -3,8 +3,9 @@
 namespace EM\Tests\PHPUnit\GameBundle\Controller;
 
 use EM\GameBundle\Entity\Battlefield;
+use EM\Tests\Environment\AbstractControllerTestCase;
 use EM\Tests\Environment\Cleaner\CellModelCleaner;
-use EM\Tests\Environment\IntegrationTestSuite;
+use EM\Tests\Environment\Cleaner\CellModelCleaner;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @see GameController
  */
-class GameControllerTest extends IntegrationTestSuite
+class GameControllerTest extends AbstractControllerTestCase
 {
     public function initActionProvider() : array
     {
@@ -44,7 +45,7 @@ class GameControllerTest extends IntegrationTestSuite
         $client = $this->getAuthorizedClient();
         $client->request(
             Request::METHOD_POST,
-            static::$router->generate('battleship_game.api.init'),
+            '/api/game-init',
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json'],
@@ -84,7 +85,33 @@ class GameControllerTest extends IntegrationTestSuite
      * @param string $coordinate
      * @param int    $expectedStatusCode
      *
-     * @group        asdasd
+     * @depends      successfulInitAction_JSON
+     * @depends      successfulInitAction_XML
+     */
+    public function unsuccessfulTurnActionOnNotExistingCell()
+    {
+        $client = static::$client;
+        foreach (['application/xml', 'application/json'] as $acceptHeader) {
+            $client->request(
+                Request::METHOD_PATCH,
+                '/api/game-turn/cell-id/0',
+                [],
+                [],
+                ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => $acceptHeader]
+            );
+            $this->assertUnsuccessfulResponse($client->getResponse());
+        }
+    }
+
+    /**
+     * simulate human interaction until game has been finished
+     *
+     * @see     GameController::turnAction
+     * @test
+     *
+     * @depends successfulInitAction_JSON
+     *
+     * @param   \stdClass[] $response
      */
     public function turnAction(int $expectedStatusCode, string $coordinate)
     {

@@ -62,8 +62,6 @@ class PlayerModel
             ->setEmail($email)
             ->setPasswordHash($this->generatePasswordHash($email, $password))
             ->setFlags(static::FLAG_NONE);
-
-        //return $this->createOnRequest($email, $password);
     }
 
     /**
@@ -86,13 +84,13 @@ class PlayerModel
      * @return Player
      * @throws PlayerException
      */
-    protected function createOnRequest(string $email, string $password, bool $controlledByAI = false) : Player
+    protected function createOnRequest(string $name, bool $controlledByAI) : Player
     {
         /** @var Player $player */
-        $player = $this->repository->findOneBy(['email' => $email]);
+        $player = $this->repository->findOneBy(['email' => $name]);
 
         if (null !== $player && $controlledByAI !== static::isAIControlled($player)) {
-            throw new PlayerException("player with '$email' already exists and 'controlledByAI' do not match");
+            throw new PlayerException("player with '{$name}' already exists and 'controlledByAI' do not match");
         }
 
         return $player ?? (new Player())

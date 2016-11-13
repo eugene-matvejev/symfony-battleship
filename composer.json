@@ -14,9 +14,9 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "EM\\Tests\\Environment\\": "tests/shared-environment",
             "EM\\Tests\\PHPUnit\\": "tests/phpunit",
-            "EM\\Tests\\Behat\\": "tests/behat/contexts"
+            "EM\\Tests\\Behat\\": "tests/behat/contexts",
+            "EM\\Tests\\Environment\\": "tests/shared-environment"
         }
     },
     "authors": [
@@ -27,47 +27,37 @@
     ],
     "require": {
         "php": "7.0.0 - 7.0.4 || >= 7.0.6",
-        "incenteev/composer-parameter-handler": "^2.1",
         "doctrine/doctrine-bundle": "^1.6",
-        "doctrine/doctrine-migrations-bundle": "^1.1",
         "doctrine/orm": "^2.5",
+        "incenteev/composer-parameter-handler": "^2.1",
+        "jms/serializer-bundle": "^1.1",
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0",
         "symfony/symfony": "^3.1",
-        "symfony/monolog-bundle": "^2.8",
-        "jms/serializer-bundle": "^1.1",
-        "nelmio/api-doc-bundle": "^2.12"
+        "symfony/monolog-bundle": "^2.11",
+        "ocramius/package-versions" : "^1.1"
     },
     "require-dev": {
-        "composer/composer": "^1.1",
-        "behat/behat": "^3.1",
-        "crysalead/kahlan": "^2.5",
+        "doctrine/doctrine-migrations-bundle": "^1.2",
         "doctrine/doctrine-fixtures-bundle": "^2.3",
-        "sensio/generator-bundle": "^3.0",
-        "phpunit/phpunit": "^5.4"
+        "nelmio/api-doc-bundle": "^2.13",
+        "behat/behat": "^3.2",
+        "kahlan/kahlan": "^2.5",
+        "phpunit/phpunit": "^5.5"
     },
     "scripts": {
-        "post-update-cmd": "@full-deployment-cycle",
-        "post-install-cmd": "@full-deployment-cycle",
-        "full-deployment-cycle": [
+        "post-update-cmd": "@deployment-scripts",
+        "post-install-cmd": "@deployment-scripts",
+        "deployment-scripts": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "@framework-provision",
-            "@database-provision"
+            "@symfony-scripts"
         ],
-        "framework-provision": [
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
-        ],
-        "database-provision": [
-            "php bin/console doctrine:database:create --if-not-exists",
-            "php bin/console doctrine:migrations:migrate --no-interaction"
+        "symfony-scripts": [
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap"
         ],
         "compile": [
             "rm web/app_dev.php",
-            "php bin/console assets:install",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget",
             "php bin/console doctrine:schema:drop --full-database --force",
             "php bin/console doctrine:migrations:migrate --no-interaction"
         ]

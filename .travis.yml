@@ -2,7 +2,7 @@ language: "php"
 
 php:
     - "7.0"
-    - "7.1"
+#    - "7.1"
 
 env:
 #  doctrine dabatase abstract layer has bug: https://github.com/doctrine/dbal/pull/2402
@@ -15,7 +15,7 @@ before_script:
     - "composer install --no-progress --no-interaction"
 
 script:
-    - "php bin/phpunit -c phpunit.xml --colors=always --verbose --coverage-clover=coverage.xml"
+    - "ant test:with-coverage"
 
 after_success:
     - "bash <(curl -s https://codecov.io/bash)"

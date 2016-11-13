@@ -7,14 +7,13 @@ use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Model\PlayerModel;
 use EM\GameBundle\Request\GameInitiationRequest;
 use EM\GameBundle\Service\GameSystem\GameBuilder;
+use EM\Tests\Environment\AbstractKernelTestSuite;
 use EM\Tests\Environment\Factory\MockFactory;
-use EM\Tests\Environment\IntegrationTestSuite;
-use Symfony\Component\Finder\Finder;
 
 /**
  * @see GameBuilder
  */
-class GameBuilderTest extends IntegrationTestSuite
+class GameBuilderTest extends AbstractKernelTestSuite
 {
     /**
      * @var GameBuilder

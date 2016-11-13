@@ -5,13 +5,13 @@ namespace EM\Tests\PHPUnit\GameBundle\Service\AI;
 use EM\GameBundle\Service\AI\AIStrategyProcessor;
 use EM\GameBundle\Service\AI\AIStrategyService;
 use EM\GameBundle\Service\CoordinateSystem\PathProcessor;
-use EM\Tests\Environment\IntegrationTestSuite;
+use EM\Tests\Environment\AbstractKernelTestSuite;
 use EM\Tests\Environment\Factory\MockFactory;
 
 /**
  * @see AIStrategyService
  */
-class AIStrategyServiceTest extends IntegrationTestSuite
+class AIStrategyServiceTest extends AbstractKernelTestSuite
 {
     /**
      * @var AIStrategyService
