@@ -7,6 +7,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Request\GameInitiationRequest;
+use EM\Tests\Environment\AbstractKernelTestSuite;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Finder\Finder;
@@ -23,11 +24,10 @@ class LoadGameData extends AbstractFixture implements OrderedFixtureInterface, C
      */
     public function load(ObjectManager $om)
     {
-        $finder    = new Finder();
-        $directory = dirname($this->container->getParameter('kernel.root_dir'));
+        $directory = AbstractKernelTestSuite::getSharedFixturesDirectory();
 
-        
-        $finder->files()->in("{$directory}/tests/shared-fixtures/game-initiation-requests/valid");
+        $finder = new Finder();
+        $finder->files()->in("{$directory}/game-initiation-requests/valid");
 
         $builder = $this->container->get('battleship_game.service.game_builder');
         $player  = $om->getRepository(Player::class)->findOneBy(['email' => LoadPlayerData::TEST_PLAYER_EMAIL]);

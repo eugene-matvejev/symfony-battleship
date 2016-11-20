@@ -68,7 +68,7 @@ abstract class AbstractKernelTestSuite extends \PHPUnit_Framework_TestCase
         return file_get_contents(static::getSharedFixturesDirectory() . "/{$filename}");
     }
 
-    protected function getSharedFixturesDirectory() : string
+    static public function getSharedFixturesDirectory() : string
     {
         return dirname(__DIR__) . '/shared-fixtures';
     }
