@@ -1,5 +1,5 @@
 services:
-   # Models
+    # Models
     battleship_game.service.player_model:
         class: EM\GameBundle\Model\PlayerModel
         arguments:
