@@ -2,7 +2,7 @@
 
 namespace EM\GameBundle\Model;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Common\Persistence\ObjectRepository;
 use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Exception\PlayerException;
 
@@ -14,11 +14,11 @@ class PlayerModel
     const FLAG_NONE          = 0x00;
     const FLAG_AI_CONTROLLED = 0x01;
     /**
-     * @var EntityRepository
+     * @var ObjectRepository
      */
     private $repository;
 
-    public function __construct(EntityRepository $repository)
+    public function __construct(ObjectRepository $repository)
     {
         $this->repository = $repository;
     }
