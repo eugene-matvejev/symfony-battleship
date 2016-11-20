@@ -7,7 +7,7 @@ Feature: Battleship Game: API: Game Results
     And observe valid JSON response
 
     Examples:
-      | method | route                     | code |
-      | GET    | /api/game-results/page/1  | 200  |
-      | GET    | /api/game-results/page/2  | 200  |
-      | GET    | /api/game-results/page/99 | 200  |
+      | method | route                      | code |
+      | GET    | /api/game-results/page/1   | 200  |
+      | GET    | /api/game-results/page/2   | 200  |
+      | GET    | /api/game-results/page/999 | 200  |
