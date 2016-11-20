@@ -7,7 +7,7 @@ use EM\GameBundle\Entity\PlayerSession;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 
 /**
- * @since 22.0
+ * @since 23.0
  */
 class PlayerSessionToken extends AbstractToken
 {

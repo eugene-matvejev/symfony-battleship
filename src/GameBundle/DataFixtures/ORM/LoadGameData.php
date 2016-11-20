@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Finder\Finder;
 
 /**
- * @since 22.0
+ * @since 23.0
  */
 class LoadGameData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {

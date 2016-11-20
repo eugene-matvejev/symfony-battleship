@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\CredentialsExpiredException;
 
 /**
- * @since 22.0
+ * @since 23.0
  */
 class PlayerSessionModel
 {

@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
- * @since 22.0
+ * @since 23.0
  */
 class LoadPlayerSessionData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {

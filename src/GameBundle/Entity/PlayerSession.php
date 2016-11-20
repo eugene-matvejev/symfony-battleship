@@ -11,7 +11,7 @@ use EM\GameBundle\ORM\TimestampedTrait;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
- * @since 22.0
+ * @since 23.0
  *
  * @ORM\Entity()
  * @ORM\Table(
