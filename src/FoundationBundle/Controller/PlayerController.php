@@ -3,6 +3,7 @@
 namespace EM\FoundationBundle\Controller;
 
 use Doctrine\DBAL\Exception\DatabaseObjectExistsException;
+use EM\FoundationBundle\Authorization\Token\PlayerSessionToken;
 use EM\GameBundle\Exception\PlayerException;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -124,19 +125,17 @@ class PlayerController extends AbstractAPIController
      *      }
      * )
      *
-     * @param Request $request
-     *
      * @return Response
      * @throws PlayerException
      */
-    public function logoutAction(Request $request) : Response
+    public function logoutAction() : Response
     {
-        $json = json_decode($request->getContent());
-
-        $session = $this->get('battleship_game.service.player_session_model')->authenticate($json->email, $json->password);
+        /** @var PlayerSessionToken $token */
+        $token = $this->get('security.token_storage')->getToken();
+        $session = $token->getSession();
 
         $om = $this->getDoctrine()->getManager();
-        $om->detach($session);
+        $om->remove($session);
         $om->flush();
 
         return $this->prepareSerializedResponse([], Response::HTTP_ACCEPTED);
