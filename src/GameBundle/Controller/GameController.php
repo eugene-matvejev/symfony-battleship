@@ -9,7 +9,7 @@ use EM\GameBundle\Model\CellModel;
 use EM\GameBundle\Request\GameInitiationRequest;
 use EM\GameBundle\Response\GameInitiationResponse;
 use EM\GameBundle\Response\GameTurnResponse;
-use EM\Tests\PHPUnit\GameBundle\Controller\GameResultControllerTest;
+use EM\Tests\PHPUnit\GameBundle\Controller\GameControllerTest;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
- * @see   GameResultControllerTest
+ * @see   GameControllerTest
  *
  * @since 1.0
  */
