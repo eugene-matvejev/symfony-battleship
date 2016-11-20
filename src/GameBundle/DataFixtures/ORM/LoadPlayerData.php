@@ -8,24 +8,16 @@ use Doctrine\Common\Persistence\ObjectManager;
 use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Model\PlayerModel;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * @since 3.5
  */
 class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
+    use ContainerAwareTrait;    
     const TEST_HUMAN_PLAYER_EMAIL         = 'Human';
     const TEST_AI_CONTROLLED_PLAYER_EMAIL = 'CPU 0';
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
 
     /**
      * {@inheritDoc}
