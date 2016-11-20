@@ -14,11 +14,11 @@ class PlayerSessionToken extends AbstractToken
     /**
      * @var Player
      */
-    protected $user;
+    private $user;
     /**
      * @var PlayerSession
      */
-    protected $session;
+    private $session;
 
     public function getCredentials()
     {
