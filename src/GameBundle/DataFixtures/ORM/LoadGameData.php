@@ -8,7 +8,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Request\GameInitiationRequest;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -16,15 +16,7 @@ use Symfony\Component\Finder\Finder;
  */
 class LoadGameData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
+    use ContainerAwareTrait;
 
     /**
      * {@inheritDoc}
@@ -34,10 +26,11 @@ class LoadGameData extends AbstractFixture implements OrderedFixtureInterface, C
         $finder    = new Finder();
         $directory = dirname($this->container->getParameter('kernel.root_dir'));
 
+        
         $finder->files()->in("{$directory}/tests/shared-fixtures/game-initiation-requests/valid");
 
         $builder = $this->container->get('battleship_game.service.game_builder');
-        $player  = $om->getRepository('GameBundle:Player')->findOneBy(['email' => LoadPlayerData::TEST_PLAYER_EMAIL]);
+        $player  = $om->getRepository(Player::class)->findOneBy(['email' => LoadPlayerData::TEST_PLAYER_EMAIL]);
 
         foreach ($finder as $file) {
             for ($i = 0; $i < 3; $i++) {
