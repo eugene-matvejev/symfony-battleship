@@ -8,6 +8,8 @@ use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 
 /**
  * @since 23.0
+ *
+ * @method Player getUser()
  */
 class PlayerSessionToken extends AbstractToken
 {
@@ -45,13 +47,5 @@ class PlayerSessionToken extends AbstractToken
     {
         $this->user = $player;
         $this->setAuthenticated(true);
-    }
-
-    /**
-     * @return Player
-     */
-    public function getUser()
-    {
-        return $this->user;
     }
 }
