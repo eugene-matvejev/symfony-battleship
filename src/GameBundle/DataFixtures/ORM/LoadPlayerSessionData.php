@@ -5,27 +5,27 @@ namespace EM\GameBundle\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use EM\GameBundle\Entity\Player;
-use EM\GameBundle\Model\PlayerModel;
-use EM\GameBundle\Model\PlayerSessionModel;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * @since 22.0
  */
-class LoadPlayerSessionData extends AbstractFixture implements OrderedFixtureInterface
+class LoadPlayerSessionData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
+    use ContainerAwareTrait;
+
     /**
      * {@inheritDoc}
      */
     public function load(ObjectManager $om)
     {
-        $model = new PlayerSessionModel(
-            $om->getRepository('GameBundle:PlayerSession'),
-            new PlayerModel($om->getRepository('GameBundle:Player'), 'fixtures'),
-            'fixtures'
+        $session = $this->container->get('battleship_game.service.player_session_model')->authenticate(
+            LoadPlayerData::TEST_PLAYER_EMAIL,
+            LoadPlayerData::TEST_PLAYER_PASSWORD
         );
 
-        $om->persist($model->authenticate('human', 'password'));
+        $om->persist($session);
 
         $om->flush();
     }

@@ -7,8 +7,6 @@ foundation_bundle.api.player_login:
     defaults: { _controller: "FoundationBundle:Player:login" }
     methods:  [POST]
 foundation_bundle.api.player_logout:
-    path:     player/logout/{hash}
+    path:     player/logout
     defaults: { _controller: "FoundationBundle:Player:logout" }
     methods:  [DELETE]
-    requirements:
-        hash: \[0-9a-Z]{40}\

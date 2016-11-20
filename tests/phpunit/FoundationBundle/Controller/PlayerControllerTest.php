@@ -3,6 +3,7 @@
 namespace EM\FoundationBundle\Controller;
 
 use EM\GameBundle\DataFixtures\ORM\LoadPlayerData;
+use EM\GameBundle\Entity\PlayerSession;
 use EM\Tests\Environment\AbstractControllerTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,7 +35,7 @@ class PlayerControllerTest extends AbstractControllerTestCase
         return [
             'not-existed before' => [
                 Response::HTTP_CREATED,
-                'do.not.exists'. LoadPlayerData::TEST_PLAYER_EMAIL,
+                sha1(microtime(true)) . LoadPlayerData::TEST_PLAYER_EMAIL,
                 LoadPlayerData::TEST_PLAYER_PASSWORD
             ],
             'existed before'     => [
@@ -46,7 +47,7 @@ class PlayerControllerTest extends AbstractControllerTestCase
     }
 
     /**
-     * @see PlayerController::registerAction
+     * @see          PlayerController::registerAction
      * @test
      *
      * @dataProvider registerActionProvider
@@ -58,19 +59,19 @@ class PlayerControllerTest extends AbstractControllerTestCase
     public function registerAction(int $expectedStatusCode, string $email, string $password)
     {
         $client = $this->getUnauthorizedClient();
-        //$client = clone static::$client;
         $client->request(
             Request::METHOD_POST,
-            static::$router->generate('foundation_bundle.api.player_create'),
+            '/api/player/register',
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json'],
             "{\"email\": \"{$email}\", \"password\": \"{$password}\"}"
         );
 
-        $this->assertEquals($expectedStatusCode, $client->getResponse()->getStatusCode());
-    }
+        $response = $client->getResponse();
 
+        $this->assertEquals($expectedStatusCode, $response->getStatusCode());
+    }
 
     /**
      * @see PlayerController::processLogin
@@ -81,7 +82,7 @@ class PlayerControllerTest extends AbstractControllerTestCase
         $client = $this->getUnauthorizedClient();
         $client->request(
             Request::METHOD_POST,
-            static::$router->generate('foundation_bundle.api.player_login'),
+            '/api/player/login',
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json'],
@@ -100,7 +101,7 @@ class PlayerControllerTest extends AbstractControllerTestCase
         $client = $this->getUnauthorizedClient();
         $client->request(
             Request::METHOD_POST,
-            static::$router->generate('foundation_bundle.api.player_login'),
+            '/api/player/login',
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json'],
@@ -119,7 +120,7 @@ class PlayerControllerTest extends AbstractControllerTestCase
         $client = $this->getUnauthorizedClient();
         $client->request(
             Request::METHOD_POST,
-            static::$router->generate('foundation_bundle.api.player_login'),
+            '/api/player/login',
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json'],
@@ -129,40 +130,24 @@ class PlayerControllerTest extends AbstractControllerTestCase
         $this->assertSuccessfulResponse($client->getResponse());
     }
 
-    //public function logoutAction(Request $request) : Response
-    //{
-    //}
-    //
-    ///**
-    // * @see PlayerController::logoutAction
-    // * @test
-    // */
-    //public function logoutActionOnExisted()
-    //{
-    //    $response = $this->requestLogoutRoute('asd');
-    //
-    //    $this->assertSuccessfulResponse($response);
-    //}
-    //
-    ///**
-    // * @see PlayerController::processLogin
-    // * @test
-    // */
-    //public function logoutActionOnNonExisted()
-    //{
-    //    $response = $this->requestLogoutRoute('asd');
-    //
-    //    $this->assertUnsuccessfulResponse($response);
-    //}
-
-    private function requestLogoutRoute(string $sessionHash) : Response
+    /**
+     * @see PlayerController::logoutAction
+     * @test
+     */
+    public function logoutAction()
     {
-        $client = $this->getUnauthorizedClient();
+        $client = $this->getAuthorizedClient(LoadPlayerData::TEST_PLAYER_EMAIL);
         $client->request(
             Request::METHOD_DELETE,
-            static::$router->generate('foundation_bundle.api.player_logout', ['hash' => $sessionHash])
+            "/api/player/logout"
         );
 
-        return $client->getResponse();
+        $sessionHash = $client->getServerParameter(static::AUTH_HEADER);
+        $response    = $client->getResponse();
+
+        $this->assertEquals(Response::HTTP_ACCEPTED, $response->getStatusCode());
+
+        $session = static::$om->getRepository(PlayerSession::class)->findOneBy(['hash' => $sessionHash]);
+        static::assertNull($session);
     }
 }

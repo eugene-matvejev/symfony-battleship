@@ -25,7 +25,7 @@ abstract class AbstractControllerTestCase extends AbstractKernelTestSuite
             return $this->getUnauthorizedClient();
         }
 
-        $player = static::$om->getRepository(Player::class)->findOneBy(['username' => $username]);
+        $player = static::$om->getRepository(Player::class)->findOneBy(['email' => $username]);
         if (null === $player) {
             throw new \Exception("user with username: {$username} not found");
         }

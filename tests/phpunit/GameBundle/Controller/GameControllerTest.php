@@ -2,11 +2,14 @@
 
 namespace EM\Tests\PHPUnit\GameBundle\Controller;
 
+use EM\GameBundle\DataFixtures\ORM\LoadPlayerData;
 use EM\GameBundle\Entity\Battlefield;
+use EM\GameBundle\Entity\Game;
+use EM\GameBundle\Entity\Player;
 use EM\Tests\Environment\AbstractControllerTestCase;
 use EM\Tests\Environment\Cleaner\CellModelCleaner;
-use EM\Tests\Environment\Cleaner\CellModelCleaner;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,6 +24,7 @@ class GameControllerTest extends AbstractControllerTestCase
         $finder = new Finder();
         $finder->files()->in("{$this->getSharedFixturesDirectory()}/game-initiation-requests");
 
+        /** @var SplFileInfo $file */
         foreach ($finder as $file) {
             $suites[$file->getFilename()] = [
                 $file->getRelativePath() === 'invalid' ? Response::HTTP_BAD_REQUEST : Response::HTTP_CREATED,
@@ -42,7 +46,7 @@ class GameControllerTest extends AbstractControllerTestCase
      */
     public function initAction(int $expectedStatusCode, string $content)
     {
-        $client = $this->getAuthorizedClient();
+        $client = $this->getAuthorizedClient(LoadPlayerData::TEST_PLAYER_EMAIL);
         $client->request(
             Request::METHOD_POST,
             '/api/game-init',
@@ -90,17 +94,15 @@ class GameControllerTest extends AbstractControllerTestCase
      */
     public function unsuccessfulTurnActionOnNotExistingCell()
     {
-        $client = static::$client;
-        foreach (['application/xml', 'application/json'] as $acceptHeader) {
-            $client->request(
-                Request::METHOD_PATCH,
-                '/api/game-turn/cell-id/0',
-                [],
-                [],
-                ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => $acceptHeader]
-            );
-            $this->assertUnsuccessfulResponse($client->getResponse());
-        }
+        $client = $this->getAuthorizedClient(LoadPlayerData::TEST_PLAYER_EMAIL);
+        $client->request(
+            Request::METHOD_PATCH,
+            '/api/game-turn/cell-id/0',
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
+        );
+        $this->assertUnsuccessfulResponse($client->getResponse());
     }
 
     /**
@@ -117,16 +119,16 @@ class GameControllerTest extends AbstractControllerTestCase
     {
         CellModelCleaner::resetChangedCells();
 
-        $game        = static::$om->getRepository('GameBundle:Game')->findBy([], ['id' => 'ASC'])[0];
-        $player      = static::$om->getRepository('GameBundle:Player')->findOneBy(['email' => 'CPU 0']);
-        $battlefield = static::$om->getRepository('GameBundle:Battlefield')->findOneBy(['player' => $player, 'game' => $game]);
+        $game        = static::$om->getRepository(Game::class)->findBy([], ['id' => 'ASC'])[0];
+        $player      = static::$om->getRepository(Player::class)->findOneBy(['email' => 'CPU 0']);
+        $battlefield = static::$om->getRepository(Battlefield::class)->findOneBy(['player' => $player, 'game' => $game]);
 
         $cell = $battlefield->getCellByCoordinate($coordinate);
 
-        $client = $this->getAuthorizedClient();
+        $client = $this->getAuthorizedClient(LoadPlayerData::TEST_PLAYER_EMAIL);
         $client->request(
             Request::METHOD_PATCH,
-            static::$router->generate('battleship_game.api.turn', ['cellId' => $cell ? $cell->getId() : 0]),
+            "/api/game-turn/cell-id/{$cell->getId()}",
             [],
             [],
             ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']

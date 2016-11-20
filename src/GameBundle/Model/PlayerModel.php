@@ -73,7 +73,7 @@ class PlayerModel
      */
     public function createOnRequestHumanControlled(string $email, string $password) : Player
     {
-        return $this->createOnRequest($email, $password);
+        return $this->createOnRequest($email, $password, false);
     }
 
     /**
@@ -84,13 +84,13 @@ class PlayerModel
      * @return Player
      * @throws PlayerException
      */
-    protected function createOnRequest(string $name, bool $controlledByAI) : Player
+    protected function createOnRequest(string $email, string $password, bool $controlledByAI) : Player
     {
         /** @var Player $player */
-        $player = $this->repository->findOneBy(['email' => $name]);
+        $player = $this->repository->findOneBy(['email' => $email]);
 
         if (null !== $player && $controlledByAI !== static::isAIControlled($player)) {
-            throw new PlayerException("player with '{$name}' already exists and 'controlledByAI' do not match");
+            throw new PlayerException("player with '{$email}' already exists and 'controlledByAI' do not match");
         }
 
         return $player ?? (new Player())
