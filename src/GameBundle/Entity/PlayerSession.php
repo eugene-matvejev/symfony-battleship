@@ -29,6 +29,7 @@ class PlayerSession extends AbstractEntity implements PlayerInterface, Timestamp
     use PlayerTrait, TimestampedTrait;
     /**
      * @ORM\Column(name="hash", type="string", length=40)
+     *
      * @Serializer\Expose()
      * @Serializer\Type("string")
      *
