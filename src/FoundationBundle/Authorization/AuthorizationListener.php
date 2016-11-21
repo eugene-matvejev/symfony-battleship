@@ -16,11 +16,11 @@ class AuthorizationListener implements ListenerInterface
     /**
      * @var TokenStorageInterface
      */
-    protected $storage;
+    private $storage;
     /**
      * @var PlayerSessionModel
      */
-    protected $model;
+    private $model;
 
     public function __construct(TokenStorageInterface $storage, PlayerSessionModel $model)
     {
