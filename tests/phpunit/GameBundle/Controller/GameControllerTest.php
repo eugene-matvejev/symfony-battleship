@@ -86,9 +86,6 @@ class GameControllerTest extends AbstractControllerTestCase
      *
      * @dataProvider turnActionCoordinatesProvider
      *
-     * @param string $coordinate
-     * @param int    $expectedStatusCode
-     *
      * @depends      successfulInitAction_JSON
      * @depends      successfulInitAction_XML
      */
@@ -113,7 +110,8 @@ class GameControllerTest extends AbstractControllerTestCase
      *
      * @depends successfulInitAction_JSON
      *
-     * @param   \stdClass[] $response
+     * @param int    $expectedStatusCode
+     * @param string $coordinate
      */
     public function turnAction(int $expectedStatusCode, string $coordinate)
     {
