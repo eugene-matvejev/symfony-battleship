@@ -18,7 +18,7 @@ use JMS\Serializer\Annotation as Serializer;
  *      }
  * )
  *
- * @Serializer\AccessorOrder(order="custom", custom={"id", "flag", "name"})
+ * @Serializer\AccessorOrder(order="custom", custom={"id", "flag", "email"})
  * @Serializer\XmlRoot("player")
  */
 class Player extends AbstractFlaggedEntity
