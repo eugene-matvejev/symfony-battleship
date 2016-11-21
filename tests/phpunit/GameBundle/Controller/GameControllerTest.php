@@ -62,7 +62,7 @@ class GameControllerTest extends AbstractControllerTestCase
     public function turnActionCoordinatesProvider() : array
     {
         return [
-            'not existed cell'          => [Response::HTTP_NOT_FOUND, 'A0'],
+//            'not existed cell'          => [Response::HTTP_NOT_FOUND, 'A0'],
             'first request on A1 cell'  => [Response::HTTP_OK, 'A1'],
             'second request on A1 cell' => [Response::HTTP_UNPROCESSABLE_ENTITY, 'A1'],
             //'first request on A2 cell'  => [Response::HTTP_OK, 'A2'],
@@ -85,9 +85,6 @@ class GameControllerTest extends AbstractControllerTestCase
      * @test
      *
      * @dataProvider turnActionCoordinatesProvider
-     *
-     * @depends      successfulInitAction_JSON
-     * @depends      successfulInitAction_XML
      */
     public function unsuccessfulTurnActionOnNotExistingCell()
     {
@@ -105,10 +102,10 @@ class GameControllerTest extends AbstractControllerTestCase
     /**
      * simulate human interaction until game has been finished
      *
-     * @see     GameController::turnAction
+     * @see          GameController::turnAction
      * @test
      *
-     * @depends successfulInitAction_JSON
+     * @dataProvider turnActionCoordinatesProvider
      *
      * @param int    $expectedStatusCode
      * @param string $coordinate
