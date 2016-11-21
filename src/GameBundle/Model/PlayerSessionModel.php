@@ -18,15 +18,15 @@ class PlayerSessionModel
     /**
      * @var ObjectRepository
      */
-    protected $repository;
+    private $repository;
     /**
      * @var PlayerModel
      */
-    protected $model;
+    private $model;
     /**
      * @var string
      */
-    protected $salt;
+    private $salt;
 
     public function __construct(ObjectRepository $repository, PlayerModel $model, string $salt)
     {
