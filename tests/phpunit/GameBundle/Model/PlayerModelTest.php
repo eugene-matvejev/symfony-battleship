@@ -158,6 +158,6 @@ class PlayerModelTest extends AbstractKernelTestSuite
      */
     public function createOnRequestHumanControlledOnNonExistingAIPlayer()
     {
-        static::$playerModel->createOnRequestHumanControlled(LoadPlayerData::TEST_AI_CONTROLLED_PLAYER_EMAIL);
+        static::$playerModel->createOnRequestHumanControlled(LoadPlayerData::TEST_AI_PLAYER_EMAIL);
     }
 }
