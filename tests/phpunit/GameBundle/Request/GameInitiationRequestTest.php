@@ -4,24 +4,41 @@ namespace EM\Tests\PHPUnit\GameBundle\Request;
 
 use EM\GameBundle\Request\GameInitiationRequest;
 use EM\Tests\Environment\AbstractKernelTestSuite;
+use Symfony\Component\Finder\Finder;
 
 /**
  * @see GameInitiationRequest
  */
 class GameInitiationRequestTest extends AbstractKernelTestSuite
 {
-    /**
-     * @see GameInitiationRequest::parse
-     * @test
-     */
-    public function parse()
+    public function parseDataProvider() : array
     {
-        $fixture  = $this->getSharedFixtureContent('game-initiation-requests/valid/valid-1-opponent-7x7.json');
-        $expected = json_decode($fixture);
-        $request  = new GameInitiationRequest($fixture);
+        $suites = [];
+        $finder = new Finder();
+        $finder->files()->in("{$this->getSharedFixturesDirectory()}/game-initiation-requests/valid");
 
-        $this->assertCount(count($expected->coordinates), $request->getCoordinates());
-        $this->assertEquals($expected->size, $request->getSize());
-        $this->assertEquals($expected->playerName, $request->getPlayerName());
+        foreach ($finder as $file) {
+            $suites[$file->getFilename()] = [$file->getContents()];
+        }
+
+        return $suites;
+    }
+
+    /**
+     * @see          GameInitiationRequest::parse
+     * @test
+     *
+     * @dataProvider parseDataProvider
+     *
+     * @param string $content
+     */
+    public function parse(string $content)
+    {
+        $json    = json_decode($content);
+        $request = new GameInitiationRequest($content);
+
+        $this->assertEquals($json->size, $request->getSize());
+        $this->assertEquals($json->opponents, $request->getOpponents());
+        $this->assertEquals($json->coordinates, $request->getCoordinates());
     }
 }
