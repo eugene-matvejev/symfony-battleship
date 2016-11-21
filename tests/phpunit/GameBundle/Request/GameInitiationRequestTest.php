@@ -11,7 +11,7 @@ use Symfony\Component\Finder\Finder;
  */
 class GameInitiationRequestTest extends AbstractKernelTestSuite
 {
-    public function parseProvider() : array
+    public function parseDataProvider() : array
     {
         $suites = [];
         $finder = new Finder();
@@ -28,17 +28,17 @@ class GameInitiationRequestTest extends AbstractKernelTestSuite
      * @see          GameInitiationRequest::parse
      * @test
      *
-     * @dataProvider parseProvider
+     * @dataProvider parseDataProvider
      *
      * @param string $content
      */
     public function parse(string $content)
     {
-        $expected = json_decode($content);
-        $request  = new GameInitiationRequest($content);
+        $json    = json_decode($content);
+        $request = new GameInitiationRequest($content);
 
-        $this->assertCount(count($expected->coordinates), $request->getCoordinates());
-        $this->assertEquals($expected->size, $request->getSize());
-        $this->assertEquals($expected->opponents, $request->getOpponents());
+        $this->assertEquals($json->size, $request->getSize());
+        $this->assertEquals($json->opponents, $request->getOpponents());
+        $this->assertEquals($json->coordinates, $request->getCoordinates());
     }
 }
