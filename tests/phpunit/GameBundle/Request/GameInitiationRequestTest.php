@@ -14,7 +14,7 @@ class GameInitiationRequestTest extends AbstractKernelTestSuite
      * @see GameInitiationRequest::parse
      * @test
      */
-    public function parseOnValid()
+    public function parse()
     {
         $fixture  = $this->getSharedFixtureContent('game-initiation-requests/valid/valid-1-opponent-7x7.json');
         $expected = json_decode($fixture);
