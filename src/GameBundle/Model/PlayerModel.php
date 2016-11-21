@@ -16,11 +16,11 @@ class PlayerModel
     /**
      * @var ObjectRepository
      */
-    protected $repository;
+    private $repository;
     /**
      * @var string
      */
-    protected $salt;
+    private $salt;
 
     public function __construct(ObjectRepository $repository, string $salt)
     {
