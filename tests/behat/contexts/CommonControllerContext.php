@@ -19,7 +19,8 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
      */
     public static function beforeEachScenario()
     {
-        static::$client = null;
+        static::$client    = null;
+        static::$initiated = null;
 
         static::setUpBeforeClass();
     }

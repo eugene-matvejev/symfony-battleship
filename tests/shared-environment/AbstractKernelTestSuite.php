@@ -26,10 +26,20 @@ abstract class AbstractKernelTestSuite extends \PHPUnit_Framework_TestCase
      * @var ObjectManager
      */
     protected static $om;
+    /**
+     * @var bool
+     */
+    protected static $initiated;
 
     public static function setUpBeforeClass()
     {
+        if (null !== static::$initiated) {
+            return;
+        }
+
         static::initKernel();
+
+        static::$initiated = true;
     }
 
     private static function createKernel() : \AppKernel
