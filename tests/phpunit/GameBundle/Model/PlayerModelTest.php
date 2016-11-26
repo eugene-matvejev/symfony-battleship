@@ -3,6 +3,7 @@
 namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\DataFixtures\ORM\LoadPlayerData;
+use EM\GameBundle\Entity\Player;
 use EM\GameBundle\Model\PlayerModel;
 use EM\Tests\Environment\AbstractKernelTestSuite;
 use EM\Tests\Environment\Factory\MockFactory;
@@ -24,27 +25,28 @@ class PlayerModelTest extends AbstractKernelTestSuite
         static::$playerModel = static::$container->get('battleship_game.service.player_model');
     }
 
-    /*********************************** STATIC HELPERS ***********************************/
-    /**
-     * should return false if player is not marked by @see PlayerModel::FLAG_AI_CONTROLLED flag
-     *
-     * @see PlayerModel::isAIControlled
-     * @test
-     */
-    public function isAIControlledOnFlagNone()
+    public function isAIControlledDataProvider() : array
     {
-        $this->assertFalse(PlayerModel::isAIControlled(MockFactory::getPlayerMock('')));
+        return [
+            [false, MockFactory::getPlayerMock('')],
+            [true, MockFactory::getAIPlayerMock('')]
+        ];
     }
 
     /**
-     * should return true if player marked by @see PlayerModel::FLAG_AI_CONTROLLED flag
+     * should return true if player marked by @see PlayerModel::FLAG_AI_CONTROLLED flag otherwise false
      *
-     * @see PlayerModel::isAIControlled
+     * @see          PlayerModel::isAIControlled
      * @test
+     *
+     * @dataProvider isAIControlledDataProvider
+     *
+     * @param bool   $result
+     * @param Player $player
      */
-    public function isAIControlledOnFlagAIControlled()
+    public function isAIControlled(bool $result, Player $player)
     {
-        $this->assertTrue(PlayerModel::isAIControlled(MockFactory::getAIPlayerMock('')));
+        $this->assertSame($result, PlayerModel::isAIControlled($player));
     }
 
     /*********************************** AI CONTROLLED PLAYER ***********************************/
@@ -96,9 +98,6 @@ class PlayerModelTest extends AbstractKernelTestSuite
      * @test
      *
      * @expectedException \EM\GameBundle\Exception\PlayerException
-     *
-     * @depends  isAIControlledOnFlagNone
-     * @requires isAIControlledOnFlagAIControlled
      */
     public function createOnRequestAIControlledOnNonExistingHumanPlayer()
     {

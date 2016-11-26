@@ -2,18 +2,12 @@
 
 namespace EM\FoundationBundle\Controller;
 
-use Doctrine\DBAL\Exception\DatabaseObjectExistsException;
 use EM\FoundationBundle\Authorization\Token\PlayerSessionToken;
 use EM\GameBundle\Exception\PlayerException;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\ExpressionLanguage\SyntaxError;
-use Symfony\Component\Form\Exception\AlreadySubmittedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * @see   PlayerControllerTest
@@ -41,6 +35,7 @@ class PlayerController extends AbstractAPIController
      *      input = "",
      *      responseMap = {
      *          201 = "EM\GameBundle\Entity\PlayerSession"
+     *          422 = ""
      *      }
      * )
      *
@@ -55,7 +50,7 @@ class PlayerController extends AbstractAPIController
 
         $player = $this
             ->get('battleship_game.service.player_model')
-            ->createOnRequestHumanControlled($json->email, $json->password);
+            ->createPlayer($json->email, $json->password);
 
         if (null !== $player->getId()) {
             throw new PlayerException(Response::HTTP_UNPROCESSABLE_ENTITY, "player with {$json->email} already exists");
@@ -131,7 +126,7 @@ class PlayerController extends AbstractAPIController
     public function logoutAction() : Response
     {
         /** @var PlayerSessionToken $token */
-        $token = $this->get('security.token_storage')->getToken();
+        $token   = $this->get('security.token_storage')->getToken();
         $session = $token->getSession();
 
         $om = $this->getDoctrine()->getManager();
