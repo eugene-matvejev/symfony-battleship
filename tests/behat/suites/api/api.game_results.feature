@@ -3,7 +3,7 @@ Feature: Battleship Game: API: Game Results
     @api
     Scenario Outline: routes should return successful response
         Given I am authorized
-        And request API "<route>" route via "<method>"
+        When request API "<route>" route via "<method>"
         Then observe response status code "<code>"
         And observe valid JSON response
 

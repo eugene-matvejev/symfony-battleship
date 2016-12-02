@@ -6,12 +6,16 @@ default:
         api.game.mechanics:
             paths: [ "%paths.base%/tests/behat/suites/api/api.game.feature" ]
             contexts:
-                - EM\Tests\Behat\CommonControllerContext:
+                - EM\Tests\Behat\CommonControllerContext
             filters:
                 tags: "@api"
         api.game.results:
             paths: [ "%paths.base%/tests/behat/suites/api/api.game_results.feature" ]
             contexts:
-                - EM\Tests\Behat\GameBundle\Controller\GameResultControllerContext:
+                - EM\Tests\Behat\GameBundle\Controller\GameResultControllerContext
+        api.player.management:
+            paths: [ "%paths.base%/tests/behat/suites/api/api.player_management.feature" ]
+            contexts:
+                - EM\Tests\Behat\CommonControllerContext
             filters:
                 tags: "@api"

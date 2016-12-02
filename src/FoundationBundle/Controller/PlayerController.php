@@ -124,7 +124,7 @@ class PlayerController extends AbstractAPIController
      *      description = "deletes session from database",
      *      input = "",
      *      responseMap = {
-     *          202 = ""
+     *          202 = "successful logout"
      *      }
      * )
      *
