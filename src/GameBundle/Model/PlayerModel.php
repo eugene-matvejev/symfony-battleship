@@ -4,7 +4,6 @@ namespace EM\GameBundle\Model;
 
 use Doctrine\Common\Persistence\ObjectRepository;
 use EM\GameBundle\Entity\Player;
-use EM\GameBundle\Exception\PlayerException;
 
 /**
  * @since 2.0
@@ -46,20 +45,10 @@ class PlayerModel
             ->setFlags($flag);
     }
 
-    /**
-     * @param string $email
-     *
-     * @return Player
-     * @throws PlayerException
-     */
     public function createOnRequestAIControlled(string $email) : Player
     {
         /** @var Player $player */
         $player = $this->repository->findOneBy(['email' => $email]);
-
-        if (null !== $player && static::isAIControlled($player)) {
-            throw new PlayerException("player with '{$email}' already exists and 'controlledByAI' do not match");
-        }
 
         return $player ?? $this->createPlayer($email, '', static::FLAG_AI_CONTROLLED);
     }

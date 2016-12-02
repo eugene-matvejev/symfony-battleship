@@ -3,7 +3,6 @@ default:
         progress: true
 
     suites:
-# ### ### ### ### ### API ### ### ### ### ###
         api.game.mechanics:
             paths: [ "%paths.base%/tests/behat/suites/api/api.game.feature" ]
             contexts:
@@ -16,10 +15,3 @@ default:
                 - EM\Tests\Behat\GameBundle\Controller\GameResultControllerContext:
             filters:
                 tags: "@api"
-# ### ### ### ### ### GUI ### ### ### ### ###
-        gui.game.player:
-            paths: [ "%paths.base%/tests/behat/suites/gui" ]
-            contexts:
-                - EM\Tests\Behat\CommonControllerContext:
-            filters:
-                tags: "@gui"

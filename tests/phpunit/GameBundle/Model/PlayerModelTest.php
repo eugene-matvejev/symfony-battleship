@@ -49,114 +49,59 @@ class PlayerModelTest extends AbstractKernelTestSuite
         $this->assertSame($result, PlayerModel::isAIControlled($player));
     }
 
-    /*********************************** AI CONTROLLED PLAYER ***********************************/
-    /**
-     * should return existing player controlled by AI, as it existed before
-     *
-     * @see      PlayerModel::createOnRequestAIControlled
-     * @test
-     *
-     * @depends  isAIControlledOnFlagNone
-     * @requires isAIControlledOnFlagAIControlled
-     */
-    public function createOnRequestAIControlledOnExistingPlayer()
+    public function createOnRequestAIControlledDataProvider() : array
     {
-        $player = static::$playerModel->createOnRequestAIControlled('CPU 0');
-
-        $this->assertEquals('CPU 0', $player->getEmail());
-
-        $this->assertTrue(PlayerModel::isAIControlled($player));
-
-        /** because player is already persisted */
-        $this->assertNotNull($player->getId());
+        return [
+            [LoadPlayerData::TEST_AI_PLAYER_EMAIL, 'int'],
+            [LoadPlayerData::TEST_AI_PLAYER_EMAIL . 'NON-EXISTS', 'null']
+        ];
     }
 
     /**
      * should return new player controlled by AI, as it didn't exist before
      *
-     * @see      PlayerModel::createOnRequestAIControlled
+     * @see          PlayerModel::createOnRequestAIControlled
      * @test
      *
-     * @depends  isAIControlledOnFlagNone
-     * @requires isAIControlledOnFlagAIControlled
+     * @dataProvider createOnRequestAIControlledDataProvider
+     *
+     * @param string $username
+     * @param string $idFieldType
      */
-    public function createOnRequestAIControlledOnNonExistingPlayer()
+    public function createOnRequestAIControlled(string $username, string $idFieldType)
     {
-        $player = static::$playerModel->createOnRequestAIControlled('NON-EXISTING-CPU-PLAYER');
+        $player = static::$playerModel->createOnRequestAIControlled($username);
 
-        $this->assertEquals('NON-EXISTING-CPU-PLAYER', $player->getEmail());
+        $this->assertInternalType($idFieldType, $player->getId());
         $this->assertTrue(PlayerModel::isAIControlled($player));
+        $this->assertSame($username, $player->getEmail());
+    }
+
+    public function createPlayerDataProvider(): array
+    {
+        return [
+            ['AI controlled', '', PlayerModel::FLAG_AI_CONTROLLED],
+            ['human controlled', '', PlayerModel::FLAG_NONE]
+        ];
+    }
+
+    /**
+     * @see          PlayerModel::createOnRequestHumanControlled
+     * @test
+     *
+     * @dataProvider createPlayerDataProvider
+     *
+     * @param string $username
+     * @param string $password
+     * @param int    $flag
+     */
+    public function createPlayer(string $username, string $password, int $flag)
+    {
+        $player = static::$playerModel->createPlayer($username, $password, $flag);
 
         /** because player is not persisted yet */
         $this->assertNull($player->getId());
-    }
-
-    /**
-     * should throw exception, because existed Player is not controlled By AI
-     *
-     * @see      PlayerModel::createOnRequestAIControlled
-     * @test
-     *
-     * @expectedException \EM\GameBundle\Exception\PlayerException
-     */
-    public function createOnRequestAIControlledOnNonExistingHumanPlayer()
-    {
-        static::$playerModel->createOnRequestAIControlled(LoadPlayerData::TEST_PLAYER_EMAIL);
-    }
-    /*********************************** HUMAN PLAYER ***********************************/
-    /**
-     * should return existing player controlled by Human, as it existed before
-     *
-     * @see      PlayerModel::createOnRequestHumanControlled
-     * @test
-     *
-     * @depends  isAIControlledOnFlagNone
-     * @requires isAIControlledOnFlagAIControlled
-     */
-    public function createOnRequestHumanControlledOnExistingPlayer()
-    {
-        $player = static::$playerModel->createOnRequestHumanControlled(LoadPlayerData::TEST_PLAYER_EMAIL, '');
-
-        $this->assertEquals(LoadPlayerData::TEST_PLAYER_EMAIL, $player->getEmail());
-        $this->assertFalse(PlayerModel::isAIControlled($player));
-
-        /** because player is already persisted */
-        $this->assertNotNull($player->getId());
-    }
-
-    /**
-     * should return new player controlled by Human, as it didn't exist before
-     *
-     * @see      PlayerModel::createOnRequestHumanControlled
-     * @test
-     *
-     * @depends  isAIControlledOnFlagNone
-     * @requires isAIControlledOnFlagAIControlled
-     */
-    public function createOnRequestHumanControlledOnNonExistingPlayer()
-    {
-        $player = static::$playerModel->createOnRequestHumanControlled('NON-EXISTING-HUMAN-PLAYER', '');
-
-        $this->assertEquals('NON-EXISTING-HUMAN-PLAYER', $player->getEmail());
-        $this->assertFalse(PlayerModel::isAIControlled($player));
-
-        /** because player is not persisted yet */
-        $this->assertNull($player->getId());
-    }
-
-    /**
-     * should throw exception, because existed Player is not controlled By AI
-     *
-     * @see      PlayerModel::createOnRequestHumanControlled
-     * @test
-     *
-     * @expectedException \EM\GameBundle\Exception\PlayerException
-     *
-     * @depends  isAIControlledOnFlagNone
-     * @requires isAIControlledOnFlagAIControlled
-     */
-    public function createOnRequestHumanControlledOnNonExistingAIPlayer()
-    {
-        static::$playerModel->createOnRequestHumanControlled(LoadPlayerData::TEST_AI_PLAYER_EMAIL, '');
+        $this->assertSame($username, $player->getEmail());
+        $this->assertSame($flag, $player->getFlags());
     }
 }

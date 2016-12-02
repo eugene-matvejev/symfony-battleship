@@ -9,6 +9,7 @@ services:
         class: EM\GameBundle\Model\PlayerSessionModel
         arguments:
             - "@battleship_game.repository.player_session"
+            - "@battleship_game.repository.player"
             - "@battleship_game.service.player_model"
             - "%%secret%"
     battleship_game.service.game_result_model:

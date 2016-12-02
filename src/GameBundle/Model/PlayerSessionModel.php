@@ -18,7 +18,11 @@ class PlayerSessionModel
     /**
      * @var ObjectRepository
      */
-    private $repository;
+    private $sessionRepository;
+    /**
+     * @var ObjectRepository
+     */
+    private $playerRepository;
     /**
      * @var PlayerModel
      */
@@ -28,11 +32,12 @@ class PlayerSessionModel
      */
     private $salt;
 
-    public function __construct(ObjectRepository $repository, PlayerModel $model, string $salt)
+    public function __construct(ObjectRepository $sessionRepository, ObjectRepository $playerRepository, PlayerModel $model, string $salt)
     {
-        $this->repository = $repository;
-        $this->model = $model;
-        $this->salt = $salt;
+        $this->sessionRepository = $sessionRepository;
+        $this->playerRepository  = $playerRepository;
+        $this->model             = $model;
+        $this->salt              = $salt;
     }
 
     /**
@@ -44,9 +49,12 @@ class PlayerSessionModel
      */
     public function authenticate(string $email, string $password) : PlayerSession
     {
-        $player = $this->model->createOnRequestHumanControlled($email, $password);
+        $passwordHash = $this->model->generatePasswordHash($email, $password);
 
-        if ($player->getPasswordHash() !== $this->model->generatePasswordHash($player->getEmail(), $password)) {
+        /** @var Player $player */
+        $player = $this->playerRepository->findOneBy(['email' => $email, 'passwordHash' => $passwordHash]);
+
+        if (!$player) {
             throw new BadCredentialsException();
         }
 
@@ -63,7 +71,7 @@ class PlayerSessionModel
     public function find(string $hash) : PlayerSession
     {
         /** @var PlayerSession $session */
-        if (null !== $session = $this->repository->findOneBy(['hash' => $hash])) {
+        if (null !== $session = $this->sessionRepository->findOneBy(['hash' => $hash])) {
             if ($session->getTimestamp()->getTimestamp() + static::TTL >= time()) {
                 return $session;
             }
@@ -74,7 +82,7 @@ class PlayerSessionModel
         throw new BadCredentialsException();
     }
 
-    protected function create(Player $player) : PlayerSession
+    private function create(Player $player) : PlayerSession
     {
         $session = (new PlayerSession())
             ->setPlayer($player)
@@ -83,7 +91,7 @@ class PlayerSessionModel
         return $session;
     }
 
-    protected function generateSessionHash(Player $player) : string
+    private function generateSessionHash(Player $player) : string
     {
         return sha1("{$player->getEmail()}:{$player->getPasswordHash()}:{$this->salt}:" . microtime(true));
     }

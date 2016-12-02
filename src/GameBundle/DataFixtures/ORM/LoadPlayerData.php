@@ -25,7 +25,7 @@ class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface,
     {
         $model = $this->container->get('battleship_game.service.player_model');
 
-        $humanPlayer = $model->createOnRequestHumanControlled(static::TEST_PLAYER_EMAIL, static::TEST_PLAYER_PASSWORD);
+        $humanPlayer = $model->createPlayer(static::TEST_PLAYER_EMAIL, static::TEST_PLAYER_PASSWORD);
         $om->persist($humanPlayer);
         $aiPlayer = $model->createOnRequestAIControlled(static::TEST_AI_PLAYER_EMAIL);
         $om->persist($aiPlayer);
