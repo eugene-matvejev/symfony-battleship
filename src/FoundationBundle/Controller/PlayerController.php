@@ -18,16 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 class PlayerController extends AbstractAPIController
 {
     /**
-     * @see PlayerControllerTest::indexAction
-     *
-     * @return Response
-     */
-    public function indexAction() : Response
-    {
-        return $this->prepareSerializedResponse([]);
-    }
-
-    /**
      * @since 23.0
      *
      * @ApiDoc(
@@ -36,6 +26,7 @@ class PlayerController extends AbstractAPIController
      *      input = "",
      *      responseMap = {
      *          201 = "EM\GameBundle\Entity\PlayerSession",
+     *          400 = "",
      *          422 = ""
      *      }
      * )
@@ -76,7 +67,8 @@ class PlayerController extends AbstractAPIController
      *      description = "authenticate and returns player details",
      *      input = "",
      *      responseMap = {
-     *          201 = "EM\GameBundle\Entity\PlayerSession"
+     *          201 = "EM\GameBundle\Entity\PlayerSession",
+     *          400 = ""
      *      }
      * )
      *
@@ -109,7 +101,6 @@ class PlayerController extends AbstractAPIController
 
         $om = $this->getDoctrine()->getManager();
         $om->persist($session);
-
         $om->flush();
 
         return $this->prepareSerializedResponse($session, Response::HTTP_CREATED);
