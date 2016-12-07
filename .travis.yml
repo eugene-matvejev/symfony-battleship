@@ -2,7 +2,7 @@ language: "php"
 
 php:
     - "7.0"
-#    - "7.1"
+    - "7.1"
 
 env:
 #  doctrine dabatase abstract layer has bug: https://github.com/doctrine/dbal/pull/2402
