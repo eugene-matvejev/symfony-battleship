@@ -25,9 +25,12 @@ class PlayerController extends AbstractAPIController
      *      description = "Creates a new player from submitted data",
      *      input = "",
      *      responseMap = {
-     *          201 = "EM\GameBundle\Entity\PlayerSession",
-     *          400 = "",
-     *          422 = ""
+     *          201 = "EM\GameBundle\Entity\PlayerSession"
+     *      },
+     *      statusCodes = {
+     *          201 = "successful registration",
+     *          400 = "bad request",
+     *          422 = "player with same email already exists"
      *      }
      * )
      *
@@ -68,7 +71,10 @@ class PlayerController extends AbstractAPIController
      *      input = "",
      *      responseMap = {
      *          201 = "EM\GameBundle\Entity\PlayerSession",
-     *          400 = ""
+     *      }
+     *      statusCodes = {
+     *          201 = "successfull login",
+     *          400 = "bad request"
      *      }
      * )
      *
@@ -114,8 +120,9 @@ class PlayerController extends AbstractAPIController
      *      section = "API: Foundation",
      *      description = "deletes session from database",
      *      input = "",
-     *      responseMap = {
-     *          202 = "successful logout"
+     *      statusCodes = {
+     *          202 = "successful logout",
+     *          403 = "not authorized"
      *      }
      * )
      *

@@ -21,6 +21,9 @@ class PlayerControllerTest extends AbstractControllerTestCase
 
         return [
             [Response::HTTP_CREATED, "{\"email\": \"{$freshEmail}\", \"password\": \"{$password}\"}"],
+            [Response::HTTP_BAD_REQUEST, "{\"email\": \"{$freshEmail}\"}"],
+            [Response::HTTP_BAD_REQUEST, "{\"password\": \"{$password}\"}"],
+            [Response::HTTP_BAD_REQUEST, "{}"],
             [Response::HTTP_UNPROCESSABLE_ENTITY, "{\"email\": \"{$existingEmail}\", \"password\": \"{$password}\"}"]
         ];
     }
