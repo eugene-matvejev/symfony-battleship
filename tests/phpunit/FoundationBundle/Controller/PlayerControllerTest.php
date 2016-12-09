@@ -64,6 +64,7 @@ class PlayerControllerTest extends AbstractControllerTestCase
 
         return [
             [Response::HTTP_CREATED, "{\"email\": \"{$email}\", \"password\": \"{$password}\"}"],
+            [Response::HTTP_CREATED, '{"email": "email.not.exists@example.com", "password": "wrong-password"}'],
             [Response::HTTP_BAD_REQUEST, "{\"email\": \"{$email}\"}"]
         ];
     }
