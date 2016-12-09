@@ -21,9 +21,9 @@ class PlayerControllerTest extends AbstractControllerTestCase
 
         return [
             [Response::HTTP_CREATED, "{\"email\": \"{$freshEmail}\", \"password\": \"{$password}\"}"],
-            [Response::HTTP_BAD_REQUEST, "{\"email\": \"{$freshEmail}\"}"],
-            [Response::HTTP_BAD_REQUEST, "{\"password\": \"{$password}\"}"],
-            [Response::HTTP_BAD_REQUEST, "{}"],
+            [Response::HTTP_BAD_REQUEST, '{"email": "example@example.com"}'],
+            [Response::HTTP_BAD_REQUEST, '{"password": "password"}'],
+            [Response::HTTP_BAD_REQUEST, '{}'],
             [Response::HTTP_UNPROCESSABLE_ENTITY, "{\"email\": \"{$existingEmail}\", \"password\": \"{$password}\"}"]
         ];
     }
@@ -64,8 +64,8 @@ class PlayerControllerTest extends AbstractControllerTestCase
 
         return [
             [Response::HTTP_CREATED, "{\"email\": \"{$email}\", \"password\": \"{$password}\"}"],
-            [Response::HTTP_CREATED, '{"email": "email.not.exists@example.com", "password": "wrong-password"}'],
-            [Response::HTTP_BAD_REQUEST, "{\"email\": \"{$email}\"}"]
+            [Response::HTTP_BAD_REQUEST, '{"email": "example@example.com"}'],
+            [Response::HTTP_UNAUTHORIZED, '{"email": "not-exists@example.com", "password": "password"}']
         ];
     }
 
@@ -104,7 +104,7 @@ class PlayerControllerTest extends AbstractControllerTestCase
         $client = $this->getAuthorizedClient(LoadPlayerData::TEST_PLAYER_EMAIL);
         $client->request(
             Request::METHOD_DELETE,
-            "/api/player/logout"
+            '/api/player/logout'
         );
 
         $sessionHash = $client->getServerParameter(static::AUTH_HEADER);

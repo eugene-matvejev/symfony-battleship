@@ -9,6 +9,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
 /**
  * @see   PlayerControllerTest
@@ -71,10 +72,11 @@ class PlayerController extends AbstractAPIController
      *      input = "",
      *      responseMap = {
      *          201 = "EM\GameBundle\Entity\PlayerSession",
-     *      }
+     *      },
      *      statusCodes = {
      *          201 = "successfull login",
-     *          400 = "bad request"
+     *          400 = "bad request",
+     *          401 = "unsucessfull authorization"
      *      }
      * )
      *
@@ -103,13 +105,17 @@ class PlayerController extends AbstractAPIController
      */
     private function processLogin(string $email, string $password) : Response
     {
-        $session = $this->get('battleship_game.service.player_session_model')->authenticate($email, $password);
+        try {
+            $session = $this->get('battleship_game.service.player_session_model')->authenticate($email, $password);
 
-        $om = $this->getDoctrine()->getManager();
-        $om->persist($session);
-        $om->flush();
+            $om = $this->getDoctrine()->getManager();
+            $om->persist($session);
+            $om->flush();
 
-        return $this->prepareSerializedResponse($session, Response::HTTP_CREATED);
+            return $this->prepareSerializedResponse($session, Response::HTTP_CREATED);
+        } catch (BadCredentialsException $e) {
+            return new Response(null, Response::HTTP_UNAUTHORIZED);
+        }
     }
 
     /**
