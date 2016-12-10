@@ -55,6 +55,7 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
      */
     public function prepareClient(bool $notAuthorized = false)
     {
+        static::beforeEachScenario();
         static::$client = $this->getAuthorizedClient($notAuthorized ? '' : LoadPlayerData::TEST_PLAYER_EMAIL);
     }
 
