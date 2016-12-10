@@ -11,7 +11,7 @@ services:
             - "@battleship_game.repository.player_session"
             - "@battleship_game.repository.player"
             - "@battleship_game.service.player_model"
-            - "%%secret%"
+            - "%secret%"
     battleship_game.service.game_result_model:
         class: EM\GameBundle\Model\GameResultModel
         arguments:
