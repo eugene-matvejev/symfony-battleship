@@ -1,9 +1,9 @@
 <?php
 
-namespace EM\GameBundle\ORM;
+namespace EM\FoundationBundle\ORM;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as Serializer;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @see   TimestampedTraitTest
@@ -15,7 +15,7 @@ trait TimestampedTrait
     /**
      * @ORM\Column(name="timestamp", type="datetime")
      *
-     * @Serializer\Type("DateTime")
+     * @JMS\Type("DateTime")
      *
      * @var \DateTime
      */
@@ -28,6 +28,8 @@ trait TimestampedTrait
 
     /**
      * @ORM\PrePersist
+     *
+     * @return static
      */
     public function setTimestamp() : self
     {

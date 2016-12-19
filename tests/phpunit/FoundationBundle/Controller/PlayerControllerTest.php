@@ -2,22 +2,21 @@
 
 namespace EM\FoundationBundle\Controller;
 
-use EM\GameBundle\DataFixtures\ORM\LoadPlayerData;
-use EM\GameBundle\Entity\PlayerSession;
+use EM\FoundationBundle\DataFixtures\ORM\UsersFixture;
 use EM\Tests\Environment\AbstractControllerTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @see PlayerController
+ * @see UserController
  */
-class PlayerControllerTest extends AbstractControllerTestCase
+class UserControllerTest extends AbstractControllerTestCase
 {
     public function registerActionProvider() : array
     {
-        $freshEmail    = sha1(microtime(true)) . LoadPlayerData::TEST_PLAYER_EMAIL;
-        $existingEmail = LoadPlayerData::TEST_PLAYER_EMAIL;
-        $password      = LoadPlayerData::TEST_PLAYER_PASSWORD;
+        $freshEmail    = sha1(microtime(true)) . UsersFixture::TEST_PLAYER_EMAIL;
+        $existingEmail = UsersFixture::TEST_PLAYER_EMAIL;
+        $password      = UsersFixture::TEST_PLAYER_PASSWORD;
 
         return [
             [Response::HTTP_CREATED, "{\"email\": \"{$freshEmail}\", \"password\": \"{$password}\"}"],
@@ -59,8 +58,8 @@ class PlayerControllerTest extends AbstractControllerTestCase
      */
     public function loginActionDataProvider() : array
     {
-        $email    = LoadPlayerData::TEST_PLAYER_EMAIL;
-        $password = LoadPlayerData::TEST_PLAYER_PASSWORD;
+        $email    = UsersFixture::TEST_PLAYER_EMAIL;
+        $password = UsersFixture::TEST_PLAYER_PASSWORD;
 
         return [
             [Response::HTTP_CREATED, "{\"email\": \"{$email}\", \"password\": \"{$password}\"}"],
@@ -101,7 +100,7 @@ class PlayerControllerTest extends AbstractControllerTestCase
      */
     public function logoutAction()
     {
-        $client = $this->getAuthorizedClient(LoadPlayerData::TEST_PLAYER_EMAIL);
+        $client = $this->getAuthorizedClient(UsersFixture::TEST_PLAYER_EMAIL);
         $client->request(
             Request::METHOD_DELETE,
             '/api/player/logout'
@@ -112,7 +111,7 @@ class PlayerControllerTest extends AbstractControllerTestCase
 
         $this->assertEquals(Response::HTTP_ACCEPTED, $response->getStatusCode());
 
-        $session = static::$om->getRepository(PlayerSession::class)->findOneBy(['hash' => $sessionHash]);
+        $session = static::$om->getRepository(UsersFixture::class)->findOneBy(['hash' => $sessionHash]);
         static::assertNull($session);
     }
 }

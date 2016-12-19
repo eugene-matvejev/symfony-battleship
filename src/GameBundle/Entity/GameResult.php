@@ -3,12 +3,12 @@
 namespace EM\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use EM\GameBundle\ORM\AbstractEntity;
-use EM\GameBundle\ORM\PlayerInterface;
-use EM\GameBundle\ORM\PlayerTrait;
-use EM\GameBundle\ORM\TimestampedInterface;
-use EM\GameBundle\ORM\TimestampedTrait;
-use JMS\Serializer\Annotation as Serializer;
+use EM\FoundationBundle\ORM\AbstractEntity;
+use EM\FoundationBundle\ORM\PlayerInterface;
+use EM\FoundationBundle\ORM\UserAwareTrait;
+use EM\FoundationBundle\ORM\TimestampedInterface;
+use EM\FoundationBundle\ORM\TimestampedTrait;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @since 1.0
@@ -23,8 +23,8 @@ use JMS\Serializer\Annotation as Serializer;
  * )
  * @ORM\HasLifecycleCallbacks()
  *
- * @Serializer\AccessorOrder(order="custom", custom={"id", "timestamp", "player"})
- * @Serializer\XmlRoot("game-result")
+ * @JMS\AccessorOrder(order="custom", custom={"id", "timestamp", "player"})
+ * @JMS\XmlRoot("game-result")
  */
 class GameResult extends AbstractEntity implements PlayerInterface, TimestampedInterface
 {
@@ -33,7 +33,7 @@ class GameResult extends AbstractEntity implements PlayerInterface, TimestampedI
      * @ORM\OneToOne(targetEntity="EM\GameBundle\Entity\Game", inversedBy="result")
      * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)
      *
-     * @Serializer\Exclude()
+     * @JMS\Exclude()
      *
      * @var Game
      */

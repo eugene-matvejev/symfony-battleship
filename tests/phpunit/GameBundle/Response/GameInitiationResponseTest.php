@@ -2,7 +2,7 @@
 namespace EM\Tests\PHPUnit\GameBundle\Response;
 
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Model\PlayerModel;
+use EM\GameBundle\Model\UserModel;
 use EM\GameBundle\Response\GameInitiationResponse;
 use EM\Tests\Environment\Factory\MockFactory;
 
@@ -25,7 +25,7 @@ class GameInitiationResponseTest extends \PHPUnit_Framework_TestCase
         $request = new GameInitiationResponse($game->getBattlefields());
         foreach ($request->getBattlefields() as $battlefield) {
             foreach ($battlefield->getCells() as $cell) {
-                if (PlayerModel::isAIControlled($battlefield->getPlayer())) {
+                if (UserModel::isAIControlled($battlefield->getPlayer())) {
                     $this->assertEquals(CellModel::FLAG_NONE, $cell->getFlags());
                 }
             }

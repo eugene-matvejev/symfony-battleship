@@ -1,6 +1,6 @@
 <?php
 
-namespace EM\GameBundle\ORM;
+namespace EM\FoundationBundle\ORM;
 
 /**
  * @since 3.1

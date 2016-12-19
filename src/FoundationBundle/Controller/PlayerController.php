@@ -2,9 +2,9 @@
 
 namespace EM\FoundationBundle\Controller;
 
-use EM\FoundationBundle\Authorization\Token\PlayerSessionToken;
-use EM\GameBundle\Entity\Player;
-use EM\GameBundle\Exception\PlayerException;
+use EM\FoundationBundle\Entity\User;
+use EM\FoundationBundle\Security\Authorization\Token\WsseToken;
+use EM\GameBundle\Exception\UserException;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\Exception\BadCredentialsException;
  *
  * @since 22.3
  */
-class PlayerController extends AbstractAPIController
+class UserController extends AbstractAPIController
 {
     /**
      * @since 23.0
@@ -26,7 +26,7 @@ class PlayerController extends AbstractAPIController
      *      description = "Creates a new player from submitted data",
      *      input = "",
      *      responseMap = {
-     *          201 = "EM\GameBundle\Entity\PlayerSession"
+     *          201 = "EM\FoundationBundle\Entity\UserSession"
      *      },
      *      statusCodes = {
      *          201 = "successful registration",
@@ -38,7 +38,7 @@ class PlayerController extends AbstractAPIController
      * @param Request $request
      *
      * @return Response
-     * @throws PlayerException
+     * @throws UserException
      */
     public function registerAction(Request $request) : Response
     {
@@ -47,13 +47,13 @@ class PlayerController extends AbstractAPIController
             return new Response(null, Response::HTTP_BAD_REQUEST);
         }
 
-        $player = $this->getDoctrine()->getRepository(Player::class)->findOneBy(['email' => $json->email]);
+        $player = $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $json->email]);
         if (null !== $player) {
-            throw new PlayerException(Response::HTTP_UNPROCESSABLE_ENTITY, "player with {$json->email} already exists");
+            throw new UserException(Response::HTTP_UNPROCESSABLE_ENTITY, "player with {$json->email} already exists");
         }
 
         $player = $this
-            ->get('battleship_game.service.player_model')
+            ->get('em.foundation_bundle.model.player')
             ->createPlayer($json->email, $json->password);
 
         $om = $this->getDoctrine()->getManager();
@@ -71,7 +71,7 @@ class PlayerController extends AbstractAPIController
      *      description = "authenticate and returns player details",
      *      input = "",
      *      responseMap = {
-     *          201 = "EM\GameBundle\Entity\PlayerSession",
+     *          201 = "EM\FoundationBundle\Entity\UserSession",
      *      },
      *      statusCodes = {
      *          201 = "successfull login",
@@ -83,7 +83,7 @@ class PlayerController extends AbstractAPIController
      * @param Request $request
      *
      * @return Response
-     * @throws PlayerException
+     * @throws UserException
      */
     public function loginAction(Request $request) : Response
     {
@@ -106,7 +106,7 @@ class PlayerController extends AbstractAPIController
     private function processLogin(string $email, string $password) : Response
     {
         try {
-            $session = $this->get('battleship_game.service.player_session_model')->authenticate($email, $password);
+            $session = $this->get('em.foundation_bundle.model.player_session')->authenticate($email, $password);
 
             $om = $this->getDoctrine()->getManager();
             $om->persist($session);
@@ -133,11 +133,11 @@ class PlayerController extends AbstractAPIController
      * )
      *
      * @return Response
-     * @throws PlayerException
+     * @throws UserException
      */
     public function logoutAction() : Response
     {
-        /** @var PlayerSessionToken $token */
+        /** @var WsseToken $token */
         $token   = $this->get('security.token_storage')->getToken();
         $session = $token->getSession();
 

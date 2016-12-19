@@ -3,26 +3,26 @@
 namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\DataFixtures\ORM\LoadPlayerData;
-use EM\GameBundle\Entity\Player;
-use EM\GameBundle\Model\PlayerModel;
+use EM\FoundationBundle\Entity\User;
+use EM\GameBundle\Model\UserModel;
 use EM\Tests\Environment\AbstractKernelTestSuite;
 use EM\Tests\Environment\Factory\MockFactory;
 
 /**
- * @see PlayerModel
+ * @see UserModel
  */
-class PlayerModelTest extends AbstractKernelTestSuite
+class UserModelTest extends AbstractKernelTestSuite
 {
     /**
-     * @var PlayerModel
+     * @var UserModel
      */
-    private static $playerModel;
+    private static $UserModel;
 
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
 
-        static::$playerModel = static::$container->get('battleship_game.service.player_model');
+        static::$UserModel = static::$container->get('battleship_game.service.player_model');
     }
 
     public function isAIControlledDataProvider() : array
@@ -34,9 +34,9 @@ class PlayerModelTest extends AbstractKernelTestSuite
     }
 
     /**
-     * should return true if player marked by @see PlayerModel::FLAG_AI_CONTROLLED flag otherwise false
+     * should return true if player marked by @see UserModel::FLAG_AI_CONTROLLED flag otherwise false
      *
-     * @see          PlayerModel::isAIControlled
+     * @see          UserModel::isAIControlled
      * @test
      *
      * @dataProvider isAIControlledDataProvider
@@ -46,7 +46,7 @@ class PlayerModelTest extends AbstractKernelTestSuite
      */
     public function isAIControlled(bool $result, Player $player)
     {
-        $this->assertSame($result, PlayerModel::isAIControlled($player));
+        $this->assertSame($result, UserModel::isAIControlled($player));
     }
 
     public function createOnRequestAIControlledDataProvider() : array
@@ -60,7 +60,7 @@ class PlayerModelTest extends AbstractKernelTestSuite
     /**
      * should return new player controlled by AI, as it didn't exist before
      *
-     * @see          PlayerModel::createOnRequestAIControlled
+     * @see          UserModel::createOnRequestAIControlled
      * @test
      *
      * @dataProvider createOnRequestAIControlledDataProvider
@@ -70,23 +70,23 @@ class PlayerModelTest extends AbstractKernelTestSuite
      */
     public function createOnRequestAIControlled(string $username, string $idFieldType)
     {
-        $player = static::$playerModel->createOnRequestAIControlled($username);
+        $player = static::$UserModel->createOnRequestAIControlled($username);
 
         $this->assertInternalType($idFieldType, $player->getId());
-        $this->assertTrue(PlayerModel::isAIControlled($player));
+        $this->assertTrue(UserModel::isAIControlled($player));
         $this->assertSame($username, $player->getEmail());
     }
 
     public function createPlayerDataProvider(): array
     {
         return [
-            ['AI controlled', '', PlayerModel::FLAG_AI_CONTROLLED],
-            ['human controlled', '', PlayerModel::FLAG_NONE]
+            ['AI controlled', '', UserModel::FLAG_AI_CONTROLLED],
+            ['human controlled', '', UserModel::FLAG_NONE]
         ];
     }
 
     /**
-     * @see          PlayerModel::createOnRequestHumanControlled
+     * @see          UserModel::createOnRequestHumanControlled
      * @test
      *
      * @dataProvider createPlayerDataProvider
@@ -97,7 +97,7 @@ class PlayerModelTest extends AbstractKernelTestSuite
      */
     public function createPlayer(string $username, string $password, int $flag)
     {
-        $player = static::$playerModel->createPlayer($username, $password, $flag);
+        $player = static::$UserModel->createPlayer($username, $password, $flag);
 
         /** because player is not persisted yet */
         $this->assertNull($player->getId());

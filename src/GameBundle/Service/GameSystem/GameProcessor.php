@@ -6,11 +6,11 @@ use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Entity\Game;
 use EM\GameBundle\Entity\GameResult;
-use EM\GameBundle\Entity\Player;
+use EM\FoundationBundle\Entity\User;
 use EM\GameBundle\Exception\GameProcessorException;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Model\PlayerModel;
+use EM\GameBundle\Model\UserModel;
 use EM\GameBundle\Service\AI\AIService;
 
 /**
@@ -117,7 +117,7 @@ class GameProcessor
      */
     protected function processPlayerTurn(Battlefield $battlefield, Cell $cell) : Cell
     {
-        return PlayerModel::isAIControlled($battlefield->getPlayer())
+        return UserModel::isAIControlled($battlefield->getPlayer())
             ? CellModel::switchPhase($cell)
             : $this->ai->processCPUTurn($battlefield);
     }

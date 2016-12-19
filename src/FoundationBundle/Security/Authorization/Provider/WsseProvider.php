@@ -1,8 +1,8 @@
 <?php
 
-namespace EM\FoundationBundle\Authorization\Provider;
+namespace EM\FoundationBundle\Security\Authorization\Provider;
 
-use EM\FoundationBundle\Authorization\Token\WsseToken;
+use EM\FoundationBundle\Security\Authorization\Token\WsseToken;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -23,8 +23,6 @@ class WsseProvider implements AuthenticationProviderInterface
 
     public function authenticate(TokenInterface $token)
     {
-        $user = $this->userProvider->loadUserByUsername($token->getUsername());
-
         throw new AuthenticationException('The WSSE authentication failed.');
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace EM\GameBundle\DataFixtures\ORM;
+namespace EM\FoundationBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 /**
  * @since 3.5
  */
-class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
+class UsersFixture extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
     use ContainerAwareTrait;
     const TEST_PLAYER_EMAIL    = 'test.user@example.com';
@@ -23,7 +23,7 @@ class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface,
      */
     public function load(ObjectManager $om)
     {
-        $model = $this->container->get('battleship_game.service.player_model');
+        $model = $this->container->get('em.foundation_bundle.model.player');
 
         $humanPlayer = $model->createPlayer(static::TEST_PLAYER_EMAIL, static::TEST_PLAYER_PASSWORD);
         $om->persist($humanPlayer);

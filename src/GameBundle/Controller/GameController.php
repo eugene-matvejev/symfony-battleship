@@ -24,10 +24,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class GameController extends AbstractAPIController
 {
     /**
-     * @see GameControllerTest::unsuccessfulInitAction
-     * @see GameControllerTest::successfulInitAction_JSON
-     * @see GameControllerTest::successfulInitAction_XML
-     *
      * @Security("has_role('PLAYER')")
      *
      * @ApiDoc(
@@ -66,9 +62,6 @@ class GameController extends AbstractAPIController
     }
 
     /**
-     * @see GameControllerTest::successfulTurnAction
-     * @see GameControllerTest::unsuccessfulTurnActionOnDeadCell
-     *
      * @Security("has_role('PLAYER')")
      *
      * @ApiDoc(

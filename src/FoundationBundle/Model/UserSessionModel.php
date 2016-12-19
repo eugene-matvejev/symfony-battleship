@@ -3,15 +3,15 @@
 namespace EM\GameBundle\Model;
 
 use Doctrine\Common\Persistence\ObjectRepository;
-use EM\GameBundle\Entity\Player;
-use EM\GameBundle\Entity\PlayerSession;
+use EM\FoundationBundle\Entity\User;
+use EM\FoundationBundle\Entity\UserSession;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\CredentialsExpiredException;
 
 /**
  * @since 23.0
  */
-class PlayerSessionModel
+class UserSessionModel
 {
     const TTL            = 60 * 60 * 24 * 30;
     const SESSION_HEADER = 'x-wsse';
@@ -24,7 +24,7 @@ class PlayerSessionModel
      */
     private $playerRepository;
     /**
-     * @var PlayerModel
+     * @var UserModel
      */
     private $model;
     /**
@@ -32,7 +32,7 @@ class PlayerSessionModel
      */
     private $salt;
 
-    public function __construct(ObjectRepository $sessionRepository, ObjectRepository $playerRepository, PlayerModel $model, string $salt)
+    public function __construct(ObjectRepository $sessionRepository, ObjectRepository $playerRepository, UserModel $model, string $salt)
     {
         $this->sessionRepository = $sessionRepository;
         $this->playerRepository  = $playerRepository;
@@ -44,14 +44,14 @@ class PlayerSessionModel
      * @param string $email
      * @param string $password
      *
-     * @return PlayerSession
+     * @return UserSession
      * @throws BadCredentialsException
      */
-    public function authenticate(string $email, string $password) : PlayerSession
+    public function authenticate(string $email, string $password) : UserSession
     {
         $passwordHash = $this->model->generatePasswordHash($email, $password);
 
-        /** @var Player $player */
+        /** @var User $player */
         $player = $this->playerRepository->findOneBy(['email' => $email, 'passwordHash' => $passwordHash]);
 
         if (!$player) {
@@ -64,13 +64,13 @@ class PlayerSessionModel
     /**
      * @param string $hash
      *
-     * @return PlayerSession
+     * @return UserSession
      * @throws CredentialsExpiredException
      * @throws BadCredentialsException
      */
-    public function find(string $hash) : PlayerSession
+    public function find(string $hash) : UserSession
     {
-        /** @var PlayerSession $session */
+        /** @var UserSession $session */
         if (null !== $session = $this->sessionRepository->findOneBy(['hash' => $hash])) {
             if ($session->getTimestamp()->getTimestamp() + static::TTL >= time()) {
                 return $session;
@@ -82,16 +82,17 @@ class PlayerSessionModel
         throw new BadCredentialsException();
     }
 
-    private function create(Player $player) : PlayerSession
+    private function create(User $player) : UserSession
     {
-        $session = (new PlayerSession())
-            ->setPlayer($player)
+        $session = new UserSession();
+        $session
+            ->setUser($player)
             ->setHash($this->generateSessionHash($player));
 
         return $session;
     }
 
-    private function generateSessionHash(Player $player) : string
+    private function generateSessionHash(User $player) : string
     {
         return sha1("{$player->getEmail()}:{$player->getPasswordHash()}:{$this->salt}:" . microtime(true));
     }

@@ -1,46 +1,44 @@
 <?php
 
-namespace EM\GameBundle\Entity;
+namespace EM\FoundationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use EM\GameBundle\ORM\AbstractFlaggedEntity;
-use JMS\Serializer\Annotation as Serializer;
+use EM\FoundationBundle\ORM\AbstractFlaggedEntity;
+use JMS\Serializer\Annotation as JMS;
 
 /**
- * @since 1.0
+ * @since 23.0
  *
  * @ORM\Entity()
  * @ORM\Table(
- *      name="players",
- *      indexes={
- *          @ORM\Index(name="INDEX_PLAYER_EMAIL", columns={"email"}),
- *          @ORM\Index(name="INDEX_PLAYER_EMAIL_AND_PASSWORD", columns={"email", "passwordHash"}),
+ *      name = "users",
+ *      indexes = {
+ *          @ORM\Index(name="INDEX_USER_EMAIL", columns={"email"}),
+ *          @ORM\Index(name="INDEX_USER_EMAIL_AND_PASSWORD", columns={"email", "passwordHash"}),
  *      }
  * )
  *
- * @Serializer\AccessorOrder(order="custom", custom={"id", "flag", "email"})
- * @Serializer\XmlRoot("player")
+ * @JMS\AccessorOrder(order="custom", custom={"id", "flag", "email"})
+ * @JMS\XmlRoot("user")
  */
-class Player extends AbstractFlaggedEntity
+class User extends AbstractFlaggedEntity
 {
     /**
      * @ORM\Column(name="email", type="string")
      *
-     * @Serializer\Type("string")
+     * @JMS\Type("string")
      *
      * @var string
      */
-    protected $email;
+    private $email;
     /**
-     * @since 23.0
-     *
      * @ORM\Column(name="passwordHash", type="string", length=40)
      *
-     * @Serializer\Exclude()
+     * @JMS\Exclude()
      *
      * @var string
      */
-    protected $passwordHash;
+    private $passwordHash;
 
     public function getEmail() : string
     {

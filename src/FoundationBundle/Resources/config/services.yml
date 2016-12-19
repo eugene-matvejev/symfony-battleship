@@ -1,9 +1,49 @@
 services:
-    # Event Listeners
-    foundation.authorization.listener:
-        class: EM\FoundationBundle\Authorization\AuthorizationListener
+    # Models
+    em.foundation_bundle.model.player:
+        class: EM\GameBundle\Model\UserModel
+        arguments:
+            - "@em.foundation_bundle.repository.player"
+            - "%secret%"
+    em.foundation_bundle.model.player_session:
+        class: EM\GameBundle\Model\UserSessionModel
+        arguments:
+            - "@em.foundation_bundle.repository.player_session"
+            - "@em.foundation_bundle.repository.player"
+            - "@em.foundation_bundle.model.player"
+            - "%%secret%"
+    # Repositories
+    em.foundation_bundle.repository.player:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - EM\FoundationBundle\Entity\User
+    em.foundation_bundle.repository.player_session:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - EM\FoundationBundle\Entity\UserSession
+
+    # Firewall
+    wsse.security.authentication.provider:
+        class: EM\FoundationBundle\Security\Authorization\Provider\WsseProvider
+        arguments:
+            - ''
+            - '@cache.app'
+        public: false
+
+    wsse.security.authentication.listener:
+        class: EM\FoundationBundle\Security\Authorization\Listener\WsseListener
         arguments:
             - "@security.token_storage"
-            - "@battleship_game.service.player_session_model"
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: handle }
+            - "@security.authentication.manager"
+        public: false
+#
+#    # Event Listeners
+#    foundation.authorization.listener:
+#        class: EM\FoundationBundle\Security\Authorization\AuthorizationListener
+#        arguments:
+#            - "@security.token_storage"
+#            - "@battleship_game.service.player_session_model"
+#        tags:
+#            - { name: kernel.event_listener, event: kernel.request, method: handle }

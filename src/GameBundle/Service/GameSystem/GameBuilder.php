@@ -3,10 +3,10 @@
 namespace EM\GameBundle\Service\GameSystem;
 
 use EM\GameBundle\Entity\Game;
-use EM\GameBundle\Entity\Player;
+use EM\FoundationBundle\Entity\User;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Model\PlayerModel;
+use EM\GameBundle\Model\UserModel;
 use EM\GameBundle\Request\GameInitiationRequest;
 
 /**
@@ -17,19 +17,19 @@ use EM\GameBundle\Request\GameInitiationRequest;
 class GameBuilder
 {
     /**
-     * @var PlayerModel
+     * @var UserModel
      */
-    private $playerModel;
+    private $UserModel;
 
-    public function __construct(PlayerModel $playerModel)
+    public function __construct(UserModel $UserModel)
     {
-        $this->playerModel = $playerModel;
+        $this->UserModel = $UserModel;
     }
 
     protected function attachAIBattlefields(Game $game, int $amount, int $size)
     {
         for ($i = 0; $i < $amount; $i++) {
-            $player = $this->playerModel->createOnRequestAIControlled("CPU {$i}");
+            $player = $this->UserModel->createOnRequestAIControlled("CPU {$i}");
 
             /** hard-code ship into B2 for testing purposes */
             $battlefield = BattlefieldModel::generate($size, ['B2'])

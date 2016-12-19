@@ -5,7 +5,7 @@ namespace EM\GameBundle\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use EM\GameBundle\Entity\Player;
+use EM\FoundationBundle\Entity\User;
 use EM\GameBundle\Request\GameInitiationRequest;
 use EM\Tests\Environment\AbstractKernelTestSuite;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -30,7 +30,7 @@ class LoadGameData extends AbstractFixture implements OrderedFixtureInterface, C
         $finder->files()->in("{$directory}/game-initiation-requests/valid");
 
         $builder = $this->container->get('battleship_game.service.game_builder');
-        $player  = $om->getRepository(Player::class)->findOneBy(['email' => LoadPlayerData::TEST_PLAYER_EMAIL]);
+        $player  = $om->getRepository(User::class)->findOneBy(['email' => UserLo::TEST_PLAYER_EMAIL]);
 
         foreach ($finder as $file) {
             for ($i = 0; $i < 3; $i++) {

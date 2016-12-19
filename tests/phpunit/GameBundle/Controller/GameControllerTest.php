@@ -5,7 +5,7 @@ namespace EM\Tests\PHPUnit\GameBundle\Controller;
 use EM\GameBundle\DataFixtures\ORM\LoadPlayerData;
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Game;
-use EM\GameBundle\Entity\Player;
+use EM\FoundationBundle\Entity\User;
 use EM\Tests\Environment\AbstractControllerTestCase;
 use EM\Tests\Environment\Cleaner\CellModelCleaner;
 use Symfony\Component\Finder\Finder;

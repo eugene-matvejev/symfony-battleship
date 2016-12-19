@@ -16,8 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
 class GameResultController extends AbstractAPIController
 {
     /**
-     * @see GameResultControllerTest::orderedByDateAction
-     *
      * @ApiDoc(
      *      section = "Game:: Results",
      *      description = "returns game results ordered by date in desc. order",

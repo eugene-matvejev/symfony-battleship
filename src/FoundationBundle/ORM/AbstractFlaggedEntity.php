@@ -1,9 +1,9 @@
 <?php
 
-namespace EM\GameBundle\ORM;
+namespace EM\FoundationBundle\ORM;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as Serializer;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @see   AbstractFlaggedEntityTest
@@ -17,12 +17,17 @@ abstract class AbstractFlaggedEntity extends AbstractEntity implements FlaggedIn
     /**
      * @ORM\Column(name="flags", type="integer")
      *
-     * @Serializer\Type("integer")
+     * @JMS\Type("integer")
      *
      * @var int
      */
     protected $flags;
 
+    /**
+     * @param int $flag
+     *
+     * @return static
+     */
     public function addFlag(int $flag) : self
     {
         $this->flags |= $flag;
@@ -30,6 +35,11 @@ abstract class AbstractFlaggedEntity extends AbstractEntity implements FlaggedIn
         return $this;
     }
 
+    /**
+     * @param int $flag
+     *
+     * @return static
+     */
     public function removeFlag(int $flag) : self
     {
         $this->flags &= ~$flag;
@@ -42,6 +52,11 @@ abstract class AbstractFlaggedEntity extends AbstractEntity implements FlaggedIn
         return $this->flags;
     }
 
+    /**
+     * @param int $flag
+     *
+     * @return static
+     */
     public function setFlags(int $flag) : self
     {
         $this->flags = $flag;

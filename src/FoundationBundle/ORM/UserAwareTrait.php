@@ -1,39 +1,39 @@
 <?php
 
-namespace EM\GameBundle\ORM;
+namespace EM\FoundationBundle\ORM;
 
 use Doctrine\ORM\Mapping as ORM;
-use EM\GameBundle\Entity\Player;
-use JMS\Serializer\Annotation as Serializer;
+use EM\FoundationBundle\Entity\User;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @since 2.0
  */
-trait PlayerTrait
+trait UserAwareTrait
 {
     /**
-     * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\Player", cascade={"persist"}, fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="EM\FoundationBundle\Entity\User", cascade={"persist"}, fetch="EAGER")
      * @ORM\JoinColumn(name="player", referencedColumnName="id", nullable=false)
      *
-     * @Serializer\Type("EM\GameBundle\Entity\Player")
+     * @JMS\Type("EM\FoundationBundle\Entity\User")
      *
-     * @var Player
+     * @var User
      */
-    protected $player;
+    protected $user;
 
-    public function getPlayer() : Player
+    public function getUser() : User
     {
-        return $this->player;
+        return $this->user;
     }
 
     /**
-     * @param Player $player
+     * @param User $user
      *
-     * @return $this
+     * @return static
      */
-    public function setPlayer(Player $player) : self
+    public function setUser(User $user) : self
     {
-        $this->player = $player;
+        $this->user = $user;
 
         return $this;
     }

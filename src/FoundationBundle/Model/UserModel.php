@@ -3,12 +3,12 @@
 namespace EM\GameBundle\Model;
 
 use Doctrine\Common\Persistence\ObjectRepository;
-use EM\GameBundle\Entity\Player;
+use EM\FoundationBundle\Entity\User;
 
 /**
- * @since 2.0
+ * @since 23.0
  */
-class PlayerModel
+class UserModel
 {
     const FLAG_NONE          = 0x00;
     const FLAG_AI_CONTROLLED = 0x01;
@@ -27,7 +27,7 @@ class PlayerModel
         $this->salt       = $salt;
     }
 
-    public static function isAIControlled(Player $player) : bool
+    public static function isAIControlled(User $player) : bool
     {
         return $player->hasFlag(static::FLAG_AI_CONTROLLED);
     }
@@ -37,19 +37,19 @@ class PlayerModel
         return sha1("{$username}:{$password}:{$this->salt}");
     }
 
-    public function createPlayer(string $email, string $password, int $flag = self::FLAG_NONE) : Player
+    public function createPlayer(string $email, string $password, int $flag = self::FLAG_NONE) : User
     {
-        return (new Player())
+        return (new User())
             ->setEmail($email)
             ->setPasswordHash($this->generatePasswordHash($email, $password))
             ->setFlags($flag);
     }
 
-    public function createOnRequestAIControlled(string $email) : Player
+    public function createOnRequestAIControlled(string $email) : User
     {
-        /** @var Player $player */
-        $player = $this->repository->findOneBy(['email' => $email]);
+        /** @var User $user */
+        $user = $this->repository->findOneBy(['email' => $email]);
 
-        return $player ?? $this->createPlayer($email, '', static::FLAG_AI_CONTROLLED);
+        return $user ?? $this->createPlayer($email, '', static::FLAG_AI_CONTROLLED);
     }
 }

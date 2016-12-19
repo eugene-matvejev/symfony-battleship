@@ -1,9 +1,9 @@
 <?php
 
-namespace EM\FoundationBundle\Authorization\Token;
+namespace EM\FoundationBundle\Security\Authorization\Token;
 
-use EM\GameBundle\Entity\Player;
-use EM\GameBundle\Entity\PlayerSession;
+use EM\FoundationBundle\Entity\User;
+use EM\FoundationBundle\Entity\UserSession;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 
 /**
@@ -12,11 +12,11 @@ use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 class WsseToken extends AbstractToken
 {
     /**
-     * @var Player
+     * @var User
      */
     protected $user;
     /**
-     * @var PlayerSession
+     * @var UserSession
      */
     private $session;
 
@@ -25,12 +25,12 @@ class WsseToken extends AbstractToken
         return $this->getUser();
     }
 
-    public function getSession() : PlayerSession
+    public function getSession() : UserSession
     {
         return $this->session;
     }
 
-    public function setSession(PlayerSession $session) : self
+    public function setSession(UserSession $session) : self
     {
         $this->session = $session;
         $this->setUser($session->getPlayer());
@@ -39,16 +39,16 @@ class WsseToken extends AbstractToken
     }
 
     /**
-     * @param Player $player
+     * @param User $user
      */
-    public function setUser($player)
+    public function setUser($user)
     {
-        $this->user = $player;
+        $this->user = $user;
         $this->setAuthenticated(true);
     }
 
     /**
-     * @return Player
+     * @return User
      */
     public function getUser()
     {

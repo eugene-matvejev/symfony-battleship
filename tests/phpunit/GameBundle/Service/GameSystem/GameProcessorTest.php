@@ -4,7 +4,7 @@ namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\GameResult;
-use EM\GameBundle\Entity\Player;
+use EM\FoundationBundle\Entity\User;
 use EM\GameBundle\Exception\GameProcessorException;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;

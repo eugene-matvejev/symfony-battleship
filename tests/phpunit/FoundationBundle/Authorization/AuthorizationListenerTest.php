@@ -1,6 +1,6 @@
 <?php
 
-namespace EM\FoundationBundle\Authorization;
+namespace EM\FoundationBundle\Security\Authorization;
 
 use EM\Tests\Environment\IntegrationTestSuite;
 

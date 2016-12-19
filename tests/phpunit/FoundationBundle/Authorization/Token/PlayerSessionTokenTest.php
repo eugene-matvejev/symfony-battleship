@@ -1,9 +1,9 @@
 <?php
 
-namespace EM\FoundationBundle\Authorization\Token;
+namespace EM\FoundationBundle\Security\Authorization\Token;
 
-use EM\GameBundle\Entity\Player;
-use EM\GameBundle\Entity\PlayerSession;
+use EM\FoundationBundle\Entity\User;
+use EM\FoundationBundle\Entity\UserSession;
 use EM\Tests\Environment\IntegrationTestSuite;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 

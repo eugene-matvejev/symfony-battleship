@@ -1,16 +1,16 @@
 <?php
 
-namespace EM\GameBundle\ORM;
+namespace EM\FoundationBundle\ORM;
 
 use Doctrine\ORM\Mapping as ORM;
-use EM\GameBundle\Entity\Player;
+use EM\FoundationBundle\Entity\User;
 
 /**
  * @since 3.1
  */
-interface PlayerInterface
+interface UserAwareInterface
 {
-    public function getPlayer() : Player;
+    public function getUser() : User;
 
-    public function setPlayer(Player $player);
+    public function setUser(User $user);
 }

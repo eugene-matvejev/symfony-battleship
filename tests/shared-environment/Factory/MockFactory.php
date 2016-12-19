@@ -6,10 +6,10 @@ use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Entity\Game;
 use EM\GameBundle\Entity\GameResult;
-use EM\GameBundle\Entity\Player;
+use EM\FoundationBundle\Entity\User;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Model\PlayerModel;
+use EM\GameBundle\Model\UserModel;
 
 /**
  * @since 17.3
@@ -50,7 +50,7 @@ class MockFactory
         return $gameResult;
     }
 
-    public static function getPlayerMock(string $email, int $flags = PlayerModel::FLAG_NONE) : Player
+    public static function getPlayerMock(string $email, int $flags = UserModel::FLAG_NONE) : Player
     {
         return (new Player())
             ->setEmail($email)
@@ -60,6 +60,6 @@ class MockFactory
 
     public static function getAIPlayerMock(string $email) : Player
     {
-        return static::getPlayerMock($email, PlayerModel::FLAG_AI_CONTROLLED);
+        return static::getPlayerMock($email, UserModel::FLAG_AI_CONTROLLED);
     }
 }

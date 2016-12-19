@@ -1,17 +1,5 @@
 services:
     # Models
-    battleship_game.service.player_model:
-        class: EM\GameBundle\Model\PlayerModel
-        arguments:
-            - "@battleship_game.repository.player"
-            - "%%secret%"
-    battleship_game.service.player_session_model:
-        class: EM\GameBundle\Model\PlayerSessionModel
-        arguments:
-            - "@battleship_game.repository.player_session"
-            - "@battleship_game.repository.player"
-            - "@battleship_game.service.player_model"
-            - "%%secret%"
     battleship_game.service.game_result_model:
         class: EM\GameBundle\Model\GameResultModel
         arguments:
@@ -21,7 +9,7 @@ services:
     battleship_game.service.game_builder:
         class: EM\GameBundle\Service\GameSystem\GameBuilder
         arguments:
-            - "@battleship_game.service.player_model"
+            - "@em.foundation_bundle.model.player"
     # Game Processors
     battleship_game.service.game_processor:
         class: EM\GameBundle\Service\GameSystem\GameProcessor
@@ -39,16 +27,6 @@ services:
     battleship_game.service.ai_strategy_processor:
         class: EM\GameBundle\Service\AI\AIStrategyProcessor
     # Repositories
-    battleship_game.repository.player:
-        class: Doctrine\ORM\EntityRepository
-        factory: ["@doctrine.orm.entity_manager", getRepository]
-        arguments:
-            - EM\GameBundle\Entity\Player
-    battleship_game.repository.player_session:
-        class: Doctrine\ORM\EntityRepository
-        factory: ["@doctrine.orm.entity_manager", getRepository]
-        arguments:
-            - EM\GameBundle\Entity\PlayerSession
     battleship_game.repository.game_result:
         class: EM\GameBundle\Repository\GameResultRepository
         factory: ["@doctrine.orm.entity_manager", getRepository]
