@@ -1,8 +1,9 @@
 <?php
 
-namespace EM\FoundationBundle\Authorization;
+namespace EM\FoundationBundle\Authorization\Listener;
 
 use EM\FoundationBundle\Authorization\Token\PlayerSessionToken;
+use EM\FoundationBundle\Authorization\Token\WsseToken;
 use EM\GameBundle\Model\PlayerSessionModel;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -35,7 +36,7 @@ class AuthorizationListener implements ListenerInterface
 
             $session = $this->model->find($sessionHash);
 
-            $token = (new PlayerSessionToken(['PLAYER']))
+            $token = (new WsseToken(['PLAYER']))
                 ->setSession($session);
 
             $this->storage->setToken($token);

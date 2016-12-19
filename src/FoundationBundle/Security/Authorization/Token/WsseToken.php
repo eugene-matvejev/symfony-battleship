@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 /**
  * @since 23.0
  */
-class PlayerSessionToken extends AbstractToken
+class WsseToken extends AbstractToken
 {
     /**
      * @var Player
