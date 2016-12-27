@@ -26,7 +26,7 @@ class GameProcessorTest extends AbstractKernelTestSuite
     {
         parent::setUpBeforeClass();
 
-        static::$gameProcessor = static::$container->get('battleship_game.service.game_processor');
+        static::$gameProcessor = static::$container->get('em.game_bundle.service.game_processor');
     }
 
     /**
@@ -49,11 +49,11 @@ class GameProcessorTest extends AbstractKernelTestSuite
     public function processPlayerTurnOnBattlefieldOnNotWin()
     {
         $battlefield = MockFactory::getBattlefieldMock()
-            ->setPlayer(MockFactory::getAIPlayerMock(''));
+            ->setUser(MockFactory::getAIUserMock(''));
         $battlefield->getCellByCoordinate('A1')->setFlags(CellModel::FLAG_SHIP);
         $battlefield->getCellByCoordinate('A2')->setFlags(CellModel::FLAG_SHIP);
 
-        $this->assertFalse($this->processPlayerTurnOnBattlefield($battlefield, MockFactory::getPlayerMock('')));
+        $this->assertFalse($this->processPlayerTurnOnBattlefield($battlefield, MockFactory::getUserMock('')));
     }
 
     /**
@@ -63,22 +63,22 @@ class GameProcessorTest extends AbstractKernelTestSuite
     public function processPlayerTurnOnBattlefieldToWin()
     {
         $battlefield = MockFactory::getBattlefieldMock()
-            ->setPlayer(MockFactory::getAIPlayerMock(''));
+            ->setUser(MockFactory::getAIUserMock(''));
         $battlefield->getCellByCoordinate('A1')->setFlags(CellModel::FLAG_SHIP);
 
-        $this->assertTrue($this->processPlayerTurnOnBattlefield($battlefield, MockFactory::getPlayerMock('')));
+        $this->assertTrue($this->processPlayerTurnOnBattlefield($battlefield, MockFactory::getUserMock('')));
     }
 
     /**
      * @see GameProcessor::processPlayerTurnOnBattlefield
      *
      * @param Battlefield $battlefield
-     * @param Player      $attacker
+     * @param User      $attacker
      *
      * @return bool
      * @throws GameProcessorException
      */
-    private function processPlayerTurnOnBattlefield(Battlefield $battlefield, Player $attacker)
+    private function processPlayerTurnOnBattlefield(Battlefield $battlefield, User $attacker)
     {
         return $this->invokeMethod(
             static::$gameProcessor,
@@ -112,7 +112,7 @@ class GameProcessorTest extends AbstractKernelTestSuite
     {
         $game          = MockFactory::getGameMock();
         $aiBattlefield = $game->getBattlefields()[0];
-        $aiBattlefield->setPlayer(MockFactory::getAIPlayerMock(''));
+        $aiBattlefield->setUser(MockFactory::getAIUserMock(''));
 
         foreach ($game->getBattlefields() as $battlefield) {
             $battlefield->getCellByCoordinate('A1')->addFlag(CellModel::FLAG_SHIP);
@@ -147,7 +147,7 @@ class GameProcessorTest extends AbstractKernelTestSuite
         $game->getBattlefields()[0]->getCellByCoordinate('A1')->addFlag(CellModel::FLAG_SHIP);
         $game->getBattlefields()[0]->getCellByCoordinate('A2')->addFlag(CellModel::FLAG_SHIP);
 
-        $game->getBattlefields()[1]->setPlayer(MockFactory::getAIPlayerMock(''));
+        $game->getBattlefields()[1]->setUser(MockFactory::getAIUserMock(''));
         $game->getBattlefields()[1]->getCellByCoordinate('A1')->addFlag(CellModel::FLAG_SHIP);
 
         $game = static::$gameProcessor->processTurn($game->getBattlefields()[1]->getCellByCoordinate('A1'));

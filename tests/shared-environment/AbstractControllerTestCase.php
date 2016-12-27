@@ -25,7 +25,7 @@ abstract class AbstractControllerTestCase extends AbstractKernelTestSuite
             return $this->getUnauthorizedClient();
         }
 
-        $player = static::$om->getRepository(Player::class)->findOneBy(['email' => $username]);
+        $player = static::$om->getRepository(User::class)->findOneBy(['email' => $username]);
         if (null === $player) {
             throw new \Exception("user with username: {$username} not found");
         }
@@ -53,21 +53,16 @@ abstract class AbstractControllerTestCase extends AbstractKernelTestSuite
         return $client;
     }
 
-    /**
-     * @param Player $player
-     *
-     * @return PlayerSession
-     */
-    private function mockAuthorizedSession(Player $player) : PlayerSession
+    private function mockAuthorizedSession(User $user) : UserSession
     {
         $hash    = sha1(microtime(true));
-        $session = new PlayerSession();
+        $session = new UserSession();
         $session->setHash($hash);
-        $session->setPlayer($player);
-        $player->setPasswordHash($hash);
+        $session->setUser($user);
+        $user->setPasswordHash($hash);
 
         static::$om->persist($session);
-        static::$om->persist($player);
+        static::$om->persist($user);
         static::$om->flush();
 
         return $session;

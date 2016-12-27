@@ -2,7 +2,7 @@
 
 namespace EM\Tests\PHPUnit\GameBundle\Controller;
 
-use EM\GameBundle\DataFixtures\ORM\LoadPlayerData;
+use EM\GameBundle\DataFixtures\ORM\UsersFixture;
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Game;
 use EM\FoundationBundle\Entity\User;
@@ -46,7 +46,7 @@ class GameControllerTest extends AbstractControllerTestCase
      */
     public function initAction(int $expectedStatusCode, string $content)
     {
-        $client = $this->getAuthorizedClient(LoadPlayerData::TEST_PLAYER_EMAIL);
+        $client = $this->getAuthorizedClient(UsersFixture::TEST_PLAYER_EMAIL);
         $client->request(
             Request::METHOD_POST,
             '/api/game-init',
@@ -88,7 +88,7 @@ class GameControllerTest extends AbstractControllerTestCase
      */
     public function unsuccessfulTurnActionOnNotExistingCell()
     {
-        $client = $this->getAuthorizedClient(LoadPlayerData::TEST_PLAYER_EMAIL);
+        $client = $this->getAuthorizedClient(UsersFixture::TEST_PLAYER_EMAIL);
         $client->request(
             Request::METHOD_PATCH,
             '/api/game-turn/cell-id/0',
@@ -120,7 +120,7 @@ class GameControllerTest extends AbstractControllerTestCase
 
         $cell = $battlefield->getCellByCoordinate($coordinate);
 
-        $client = $this->getAuthorizedClient(LoadPlayerData::TEST_PLAYER_EMAIL);
+        $client = $this->getAuthorizedClient(UsersFixture::TEST_PLAYER_EMAIL);
         $client->request(
             Request::METHOD_PATCH,
             "/api/game-turn/cell-id/{$cell->getId()}",

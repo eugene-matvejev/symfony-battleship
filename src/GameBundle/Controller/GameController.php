@@ -45,11 +45,11 @@ class GameController extends AbstractAPIController
      */
     public function initAction(Request $request) : Response
     {
-        if (!$this->get('battleship_game.validator.game_initiation_request')->validate($request->getContent())) {
+        if (!$this->get('em.game_bundle.validator.game_initiation_request')->validate($request->getContent())) {
             throw new HttpException(Response::HTTP_BAD_REQUEST, 'request validation failed, please check documentation');
         }
 
-        $game = $this->get('battleship_game.service.game_builder')->buildGame(
+        $game = $this->get('em.game_bundle.service.game_builder')->buildGame(
             new GameInitiationRequest($request->getContent()),
             $this->getUser()
         );
@@ -90,7 +90,7 @@ class GameController extends AbstractAPIController
             throw new CellException(Response::HTTP_UNPROCESSABLE_ENTITY, "cell: {$cellId} already flagged as *DEAD*");
         }
 
-        $game = $this->get('battleship_game.service.game_processor')->processTurn($cell);
+        $game = $this->get('em.game_bundle.service.game_processor')->processTurn($cell);
         $om   = $this->getDoctrine()->getManager();
 
         foreach (CellModel::getChangedCells() as $cell) {

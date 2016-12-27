@@ -10,7 +10,7 @@ use EM\FoundationBundle\Entity\User;
 use EM\GameBundle\Exception\GameProcessorException;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Model\UserModel;
+use EM\FoundationBundle\Model\UserModel;
 use EM\GameBundle\Service\AI\AIService;
 
 /**
@@ -45,10 +45,10 @@ class GameProcessor
         }
 
         foreach ($game->getBattlefields() as $battlefield) {
-            $attacker = $battlefield->getPlayer();
+            $attacker = $battlefield->getUser();
             if ($this->processPlayerTurnOnBattlefields($game, $attacker, $cell)) {
                 $result = (new GameResult())
-                    ->setPlayer($attacker);
+                    ->setUser($attacker);
                 $game->setResult($result);
 
                 break;

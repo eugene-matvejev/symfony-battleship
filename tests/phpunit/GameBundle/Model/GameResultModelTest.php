@@ -22,7 +22,7 @@ class GameResultModelTest extends AbstractKernelTestSuite
     {
         parent::setUpBeforeClass();
 
-        static::$gameResultModel = static::$container->get('battleship_game.service.game_result_model');
+        static::$gameResultModel = static::$container->get('em.game_bundle.service.game_result_model');
     }
 
     /**
@@ -31,13 +31,13 @@ class GameResultModelTest extends AbstractKernelTestSuite
      */
     public function prepareResponse()
     {
-        $perPage = static::$container->getParameter('battleship_game.setting.limits.per_page.game_results');
+        $perPage = static::$container->getParameter('em.game_bundle.setting.limits.per_page.game_results');
 
         /** populated 2 full pages of Game Results + 1 result */
         for ($i = 0; $i < $perPage * 2 + 1; $i++) {
             $result = MockFactory::getGameResultMock(2, 0);
-            $player = $result->getGame()->getBattlefields()[0]->getPlayer();
-            $result->setPlayer($player);
+            $user = $result->getGame()->getBattlefields()[0]->getUser();
+            $result->setUser($user);
 
             static::$om->persist($result->getGame());
         }

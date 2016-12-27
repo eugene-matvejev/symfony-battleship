@@ -53,7 +53,7 @@ class UserController extends AbstractAPIController
         }
 
         $player = $this
-            ->get('em.foundation_bundle.model.player')
+            ->get('em.foundation_bundle.model.user')
             ->createPlayer($json->email, $json->password);
 
         $om = $this->getDoctrine()->getManager();
@@ -106,7 +106,7 @@ class UserController extends AbstractAPIController
     private function processLogin(string $email, string $password) : Response
     {
         try {
-            $session = $this->get('em.foundation_bundle.model.player_session')->authenticate($email, $password);
+            $session = $this->get('em.foundation_bundle.model.user_session')->authenticate($email, $password);
 
             $om = $this->getDoctrine()->getManager();
             $om->persist($session);

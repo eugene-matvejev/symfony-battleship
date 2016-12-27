@@ -5,7 +5,7 @@ namespace EM\GameBundle\Response;
 use Doctrine\Common\Collections\Collection;
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Model\UserModel;
+use EM\FoundationBundle\Model\UserModel;
 use JMS\Serializer\Annotation as JMS;
 
 /**

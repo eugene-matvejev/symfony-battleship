@@ -3,7 +3,7 @@
 namespace EM\Tests\Behat;
 
 use Behat\Behat\Context\Context;
-use EM\GameBundle\DataFixtures\ORM\LoadPlayerData;
+use EM\FoundationBundle\DataFixtures\ORM\UsersFixture;
 use EM\Tests\Environment\AbstractControllerTestCase;
 use Symfony\Bundle\FrameworkBundle\Client;
 
@@ -55,7 +55,7 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
      */
     public function prepareClient(bool $notAuthorized = false)
     {
-        static::$client = $this->getAuthorizedClient($notAuthorized ? '' : LoadPlayerData::TEST_PLAYER_EMAIL);
+        static::$client = $this->getAuthorizedClient($notAuthorized ? '' : UsersFixture::TEST_PLAYER_EMAIL);
     }
 
     /**

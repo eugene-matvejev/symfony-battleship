@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use EM\FoundationBundle\ORM\AbstractEntity;
-use EM\FoundationBundle\ORM\PlayerInterface;
+use EM\FoundationBundle\ORM\UserAwareInterface;
 use EM\FoundationBundle\ORM\UserAwareTrait;
 use JMS\Serializer\Annotation as JMS;
 
@@ -25,9 +25,9 @@ use JMS\Serializer\Annotation as JMS;
  * @JMS\AccessorOrder(order="custom", custom={"id", "player", "cells"})
  * @JMS\XmlRoot("battlefield")
  */
-class Battlefield extends AbstractEntity implements PlayerInterface
+class Battlefield extends AbstractEntity implements UserAwareInterface
 {
-    use PlayerTrait;
+    use UserAwareTrait;
     /**
      * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\Game", inversedBy="battlefields", fetch="EAGER")
      * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)

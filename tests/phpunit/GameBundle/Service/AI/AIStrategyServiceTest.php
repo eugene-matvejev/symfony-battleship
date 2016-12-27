@@ -22,7 +22,7 @@ class AIStrategyServiceTest extends AbstractKernelTestSuite
     {
         parent::setUpBeforeClass();
 
-        static::$aiStrategyService = static::$container->get('battleship_game.service.ai_strategy');
+        static::$aiStrategyService = static::$container->get('em.game_bundle.service.ai_strategy');
     }
 
     /**

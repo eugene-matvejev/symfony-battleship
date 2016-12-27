@@ -3,7 +3,7 @@
 namespace EM\FoundationBundle\Security\Authorization\Listener;
 
 use EM\FoundationBundle\Security\Authorization\Token\WsseToken;
-use EM\GameBundle\Model\UserSessionModel;
+use EM\FoundationBundle\Model\UserSessionModel;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;

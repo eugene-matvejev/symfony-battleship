@@ -1,14 +1,14 @@
-battleship_game.api.game.results:
+em.game_bundle.api.game.results:
     path:     game-results/page/{page}
     defaults: { _controller: "GameBundle:GameResult:orderedByDate" }
     methods:  [GET]
     requirements:
         page: \d+
-battleship_game.api.init:
+em.game_bundle.api.init:
     path:     game-init
     defaults: { _controller: "GameBundle:Game:init" }
     methods:  [POST]
-battleship_game.api.turn:
+em.game_bundle.api.turn:
     path:     game-turn/cell-id/{cellId}
     defaults: { _controller: "GameBundle:Game:turn" }
     methods:  [PATCH]

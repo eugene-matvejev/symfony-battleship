@@ -3,6 +3,7 @@
 namespace EM\FoundationBundle\Controller;
 
 use EM\FoundationBundle\DataFixtures\ORM\UsersFixture;
+use EM\FoundationBundle\Entity\UserSession;
 use EM\Tests\Environment\AbstractControllerTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -111,7 +112,7 @@ class UserControllerTest extends AbstractControllerTestCase
 
         $this->assertEquals(Response::HTTP_ACCEPTED, $response->getStatusCode());
 
-        $session = static::$om->getRepository(UsersFixture::class)->findOneBy(['hash' => $sessionHash]);
+        $session = static::$om->getRepository(UserSession::class)->findOneBy(['hash' => $sessionHash]);
         static::assertNull($session);
     }
 }

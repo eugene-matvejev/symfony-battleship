@@ -33,7 +33,7 @@ class WsseToken extends AbstractToken
     public function setSession(UserSession $session) : self
     {
         $this->session = $session;
-        $this->setUser($session->getPlayer());
+        $this->setUser($session->getUser());
 
         return $this;
     }

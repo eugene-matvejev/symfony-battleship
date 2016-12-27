@@ -2,9 +2,9 @@
 
 namespace EM\Tests\PHPUnit\GameBundle\Model;
 
-use EM\GameBundle\DataFixtures\ORM\LoadPlayerData;
+use EM\FoundationBundle\DataFixtures\ORM\UsersFixture;
 use EM\FoundationBundle\Entity\User;
-use EM\GameBundle\Model\UserModel;
+use EM\FoundationBundle\Model\UserModel;
 use EM\Tests\Environment\AbstractKernelTestSuite;
 use EM\Tests\Environment\Factory\MockFactory;
 
@@ -22,14 +22,14 @@ class UserModelTest extends AbstractKernelTestSuite
     {
         parent::setUpBeforeClass();
 
-        static::$UserModel = static::$container->get('battleship_game.service.player_model');
+        static::$UserModel = static::$container->get('em.foundation_bundle.model.user');
     }
 
     public function isAIControlledDataProvider() : array
     {
         return [
-            [false, MockFactory::getPlayerMock('')],
-            [true, MockFactory::getAIPlayerMock('')]
+            [false, MockFactory::getUserMock('')],
+            [true, MockFactory::getAIUserMock('')]
         ];
     }
 
@@ -41,19 +41,19 @@ class UserModelTest extends AbstractKernelTestSuite
      *
      * @dataProvider isAIControlledDataProvider
      *
-     * @param bool   $result
-     * @param Player $player
+     * @param bool $result
+     * @param User $user
      */
-    public function isAIControlled(bool $result, Player $player)
+    public function isAIControlled(bool $result, User $user)
     {
-        $this->assertSame($result, UserModel::isAIControlled($player));
+        $this->assertSame($result, UserModel::isAIControlled($user));
     }
 
     public function createOnRequestAIControlledDataProvider() : array
     {
         return [
-            [LoadPlayerData::TEST_AI_PLAYER_EMAIL, 'int'],
-            [LoadPlayerData::TEST_AI_PLAYER_EMAIL . 'NON-EXISTS', 'null']
+            [UsersFixture::TEST_AI_PLAYER_EMAIL, 'int'],
+            [UsersFixture::TEST_AI_PLAYER_EMAIL . 'NON-EXISTS', 'null']
         ];
     }
 
@@ -77,7 +77,7 @@ class UserModelTest extends AbstractKernelTestSuite
         $this->assertSame($username, $player->getEmail());
     }
 
-    public function createPlayerDataProvider(): array
+    public function createPlayerDataProvider() : array
     {
         return [
             ['AI controlled', '', UserModel::FLAG_AI_CONTROLLED],

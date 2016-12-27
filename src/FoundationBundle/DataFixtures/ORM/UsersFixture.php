@@ -23,7 +23,7 @@ class UsersFixture extends AbstractFixture implements OrderedFixtureInterface, C
      */
     public function load(ObjectManager $om)
     {
-        $model = $this->container->get('em.foundation_bundle.model.player');
+        $model = $this->container->get('em.foundation_bundle.model.user');
 
         $humanPlayer = $model->createPlayer(static::TEST_PLAYER_EMAIL, static::TEST_PLAYER_PASSWORD);
         $om->persist($humanPlayer);

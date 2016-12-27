@@ -20,7 +20,7 @@ class UserSessionsFixture extends AbstractFixture implements ContainerAwareInter
      */
     public function load(ObjectManager $om)
     {
-        $session = $this->container->get('em.foundation_bundle.model.player_session')->authenticate(
+        $session = $this->container->get('em.foundation_bundle.model.user_session')->authenticate(
             UsersFixture::TEST_PLAYER_EMAIL,
             UsersFixture::TEST_PLAYER_PASSWORD
         );

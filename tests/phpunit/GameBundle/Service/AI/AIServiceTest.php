@@ -24,7 +24,7 @@ class AIServiceTest extends AbstractKernelTestSuite
     {
         parent::setUpBeforeClass();
 
-        static::$ai = static::$container->get('battleship_game.service.ai_core');
+        static::$ai = static::$container->get('em.game_bundle.service.ai_core');
     }
 
     /**

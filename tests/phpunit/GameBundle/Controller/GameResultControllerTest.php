@@ -3,7 +3,7 @@
 namespace EM\Tests\PHPUnit\GameBundle\Controller;
 
 use EM\GameBundle\Controller\GameResultController;
-use EM\GameBundle\DataFixtures\ORM\LoadPlayerData;
+use EM\GameBundle\DataFixtures\ORM\UsersFixture;
 use EM\Tests\Environment\AbstractControllerTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,7 +35,7 @@ class GameResultControllerTest extends AbstractControllerTestCase
      */
     public function orderedByDateAction($pageId, int $expectedResponseCode)
     {
-        $client = $this->getAuthorizedClient(LoadPlayerData::TEST_PLAYER_EMAIL);
+        $client = $this->getAuthorizedClient(UsersFixture::TEST_PLAYER_EMAIL);
         $client->request(
             Request::METHOD_GET,
             "/api/game-results/page/{$pageId}",

@@ -4,7 +4,7 @@ namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Model\UserModel;
+use EM\FoundationBundle\Model\UserModel;
 use EM\GameBundle\Request\GameInitiationRequest;
 use EM\GameBundle\Service\GameSystem\GameBuilder;
 use EM\Tests\Environment\AbstractKernelTestSuite;
@@ -24,7 +24,7 @@ class GameBuilderTest extends AbstractKernelTestSuite
     {
         parent::setUpBeforeClass();
 
-        static::$gameBuilder = static::$container->get('battleship_game.service.game_builder');
+        static::$gameBuilder = static::$container->get('em.game_bundle.service.game_builder');
     }
 
     /**
@@ -71,7 +71,7 @@ class GameBuilderTest extends AbstractKernelTestSuite
     {
         $request = new GameInitiationRequest($this->getSharedFixtureContent('game-initiation-requests/valid/valid-1-opponent-7x7.json'));
 
-        $game = static::$gameBuilder->buildGame($request, MockFactory::getPlayerMock(''));
+        $game = static::$gameBuilder->buildGame($request, MockFactory::getUserMock(''));
 
         $this->assertCount(2, $game->getBattlefields());
         foreach ($game->getBattlefields() as $battlefield) {
