@@ -91,6 +91,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ _[API]_
  * [PSR-3](http://www.php-fig.org/psr/psr-3/)
  * [PSR-4](http://www.php-fig.org/psr/psr-4/)
  * [PSR-6](http://www.php-fig.org/psr/psr-6/)
+ * [PSR-11](http://www.php-fig.org/psr/psr-11/)
 
 ## workflow
  * new functionality merged into master branch only via pull requests
