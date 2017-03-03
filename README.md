@@ -107,25 +107,25 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ _[API]_
   * pull requests follows [semantic vesion](http://semver.org)
 
 # how to install
- * __$ composer install__ # to fetches dependencies, executes mandatory deployment commands
+ * `$ composer install` to fetches dependencies, executes mandatory deployment commands
   * _NOTE:_ composer is configured to generate __parameters.yml__ using [incenteev/composer-parameter-handler](https://github.com/Incenteev/ParameterHandler)
   * _NOTE:_ composer is configured to create database [if not exists] and apply migrations; __using prod. env.__
- * optional: __$ composer dump-autoload --optimize__ # to generate [class-map autoloader](https://getcomposer.org/doc/03-cli.md#dump-autoload)
+ * optional: `$ composer dump-autoload --optimize` to generate [class-map autoloader](https://getcomposer.org/doc/03-cli.md#dump-autoload)
   * _NOTE:_ prod. env. uses [APC autoloader](http://symfony.com/doc/current/book/performance.html)
- * optional: __$ php bin/console assets:install__ # to dump assets as hard copies
+ * optional: `$ php bin/console assets:install` to dump assets as hard copies
   * _NOTE:_ by default assets are installed as symlinks
 
 ### how to execute tests
- * _$ php bin/console doctrine:database:create --env=test_
- * _$ php bin/console doctrine:migrations:migrate --env=test_
- * _$ php bin/console doctrine:fixtures:load --env=test_
- * _$ php bin/phpunit -c ._
- * _$ php bin/behat_
- * _$ php bin/kahlan_
+ * `$ php bin/console doctrine:database:create --env=test`
+ * `$ php bin/console doctrine:migrations:migrate --env=test`
+ * `$ php bin/console doctrine:fixtures:load --env=test`
+ * `$ php bin/phpunit -c .`
+ * `$ php bin/behat`
+ * `$ php bin/kahlan`
   * _NOTE:_ database\_name\_test in parameters.yml reflects database name for test env.
   * _NOTE:_ test database is wiped and seeded before tests execution
  * OPTIONAL:
-  * _$ ant test_
+  * `$ ant test` launch all tests in order [phpunit, behat, kahlan]
 
 ### /etc/hosts
 ```
