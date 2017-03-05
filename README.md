@@ -37,30 +37,28 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ _[API]_
 
 # Battleship Game API
 ##### THIS IS SPARE TIME PROJECT, WORK IN PROGRESS! HIGHLY EXPERIMENTAL!!!
-#### project purpose:
+#### project purpose
  * try out:
   * _cutting edge_ technologies such as PHP7, SF3, Doctrine2
   * _modern_ approaches such as Test Automation, Continuous Integration|Deployment
  * simulate database loading [~500 transactions per request]
  * deliver preview about my technical knowledge before the job interview
 
-#### game cheat-code:
+#### game cheat-code
 * AI players have only one ship[single-cell] which is located at __B2__ cell [_purpose: easier manual testing_]
  * if you will hit __B2__ cell - you will win
 
-# software requirements
- * supported database engines:
+## software requirements
+ * supported database engines
   * MySQL >= 5.5
   * MariaDB >= 9.0
   * PostgreSQL >= 9.3
   * SQLite >= 3
- * WIP:
-  * MongoDB
  * http server: apache/nginx with PHP7
  * Composer >= 1.0.3
 
-# technology stack
-### key technologies:
+## technology stack
+### key technologies
  * PHP7 (7.0.0 - 7.0.4 || >= 7.0.6 [7.0.5 had bugged SPL])
  * [Symfony Framework 3](http://symfony.com) [SF3]
  * [Doctrine 2](http://doctrine-orm.readthedocs.io/en/latest) with [Fixtures](http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html)
@@ -72,7 +70,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ _[API]_
  * [Behat 3](http://docs.behat.org/en/v3.0)
  * [Kahlan](http://kahlan.readthedocs.io/en/latest)
 
-### used patterns:
+### used patterns
  * Front Controller
  * MVC
  * ORM
@@ -87,14 +85,15 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ _[API]_
  * Event Dispatcher
  * Dependency Injection
 
-### PHP-FIG:
+### PHP-FIG
  * [PSR-1](http://www.php-fig.org/psr/psr-1/)
  * [PSR-2](http://www.php-fig.org/psr/psr-2/)
  * [PSR-3](http://www.php-fig.org/psr/psr-3/)
  * [PSR-4](http://www.php-fig.org/psr/psr-4/)
  * [PSR-6](http://www.php-fig.org/psr/psr-6/)
+ * [PSR-11](http://www.php-fig.org/psr/psr-11/)
 
-# workflow
+## workflow
  * new functionality merged into master branch only via pull requests
  * each pull request have callback to trigger CI engines such as Travis, Circle, CodeShip, Scrutinizer, Sensiolabs Insight, CodeCov
  * result of each pull request is ready-to-use release - using Continuous Delivery principles
@@ -105,26 +104,26 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ _[API]_
   * __prototype_*__ branch: contains new idea [pull request of prototype branch is always next _major_ version release]
   * pull requests follows [semantic vesion](http://semver.org)
 
-# how to install
- * __$ composer install__ # to fetches dependencies, executes mandatory deployment commands
+## how to install
+ * `$ composer install` to fetches dependencies, executes mandatory deployment commands
   * _NOTE:_ composer is configured to generate __parameters.yml__ using [incenteev/composer-parameter-handler](https://github.com/Incenteev/ParameterHandler)
   * _NOTE:_ composer is configured to create database [if not exists] and apply migrations; __using prod. env.__
- * optional: __$ composer dump-autoload --optimize__ # to generate [class-map autoloader](https://getcomposer.org/doc/03-cli.md#dump-autoload)
+ * optional: `$ composer dump-autoload --optimize` to generate [class-map autoloader](https://getcomposer.org/doc/03-cli.md#dump-autoload)
   * _NOTE:_ prod. env. uses [APC autoloader](http://symfony.com/doc/current/book/performance.html)
- * optional: __$ php bin/console assets:install__ # to dump assets as hard copies
+ * optional: `$ php bin/console assets:install` to dump assets as hard copies
   * _NOTE:_ by default assets are installed as symlinks
 
 ### how to execute tests
- * _$ php bin/console doctrine:database:create --env=test_
- * _$ php bin/console doctrine:migrations:migrate --env=test_
- * _$ php bin/console doctrine:fixtures:load --env=test_
- * _$ php bin/phpunit -c ._
- * _$ php bin/behat_
- * _$ php bin/kahlan_
+ * `$ php bin/console doctrine:database:create --env=test`
+ * `$ php bin/console doctrine:migrations:migrate --env=test`
+ * `$ php bin/console doctrine:fixtures:load --env=test`
+ * `$ php bin/phpunit -c .`
+ * `$ php bin/behat`
+ * `$ php bin/kahlan`
   * _NOTE:_ database\_name\_test in parameters.yml reflects database name for test env.
   * _NOTE:_ test database is wiped and seeded before tests execution
  * OPTIONAL:
-  * _$ ant test_
+  * `$ ant test` launch all tests in order [phpunit, behat, kahlan]
 
 ### /etc/hosts
 ```
