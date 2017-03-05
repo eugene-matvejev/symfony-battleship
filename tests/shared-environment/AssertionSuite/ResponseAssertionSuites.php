@@ -13,12 +13,17 @@ trait ResponseAssertionSuites
     {
         $this->assertSuccessfulResponse($response);
 
-        $this->assertJson($response->getContent());
+        $this->assertValidJSONResponse($response);
     }
 
     public function assertSuccessfulResponse(Response $response)
     {
         $this->assertTrue($response->isSuccessful());
+    }
+
+    public function assertValidJSONResponse(Response $response)
+    {
+        $this->assertJson($response->getContent());
     }
 
     public function assertSuccessfulXMLResponse(Response $response)
