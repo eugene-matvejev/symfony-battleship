@@ -39,21 +39,21 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ _[API]_
 ##### THIS IS SPARE TIME PROJECT, WORK IN PROGRESS! HIGHLY EXPERIMENTAL!!!
 #### project purpose
  * try out:
-  * _cutting edge_ technologies such as PHP7, SF3, Doctrine2
-  * _modern_ approaches such as Test Automation, Continuous Integration|Deployment
+   * _cutting edge_ technologies such as PHP7, SF3, Doctrine2
+   * _modern_ approaches such as Test Automation, Continuous Integration|Deployment
  * simulate database loading [~500 transactions per request]
  * deliver preview about my technical knowledge before the job interview
 
 #### game cheat-code
 * AI players have only one ship[single-cell] which is located at __B2__ cell [_purpose: easier manual testing_]
- * if you will hit __B2__ cell - you will win
+  * if you will hit __B2__ cell - you will win
 
 ## software requirements
  * supported database engines
-  * MySQL >= 5.5
-  * MariaDB >= 9.0
-  * PostgreSQL >= 9.3
-  * SQLite >= 3
+   * MySQL >= 5.5
+   * MariaDB >= 9.0
+   * PostgreSQL >= 9.3
+   * SQLite >= 3
  * http server: apache/nginx with PHP7
  * Composer >= 1.0.3
 
@@ -106,12 +106,12 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ _[API]_
 
 ## how to install
  * `$ composer install` to fetches dependencies, executes mandatory deployment commands
-  * _NOTE:_ composer is configured to generate __parameters.yml__ using [incenteev/composer-parameter-handler](https://github.com/Incenteev/ParameterHandler)
-  * _NOTE:_ composer is configured to create database [if not exists] and apply migrations; __using prod. env.__
+   * _NOTE:_ composer is configured to generate __parameters.yml__ using [incenteev/composer-parameter-handler](https://github.com/Incenteev/ParameterHandler)
+   * _NOTE:_ composer is configured to create database [if not exists] and apply migrations; __using prod. env.__
  * optional: `$ composer dump-autoload --optimize` to generate [class-map autoloader](https://getcomposer.org/doc/03-cli.md#dump-autoload)
-  * _NOTE:_ prod. env. uses [APC autoloader](http://symfony.com/doc/current/book/performance.html)
+   * _NOTE:_ prod. env. uses [APC autoloader](http://symfony.com/doc/current/book/performance.html)
  * optional: `$ php bin/console assets:install` to dump assets as hard copies
-  * _NOTE:_ by default assets are installed as symlinks
+   * _NOTE:_ by default assets are installed as symlinks
 
 ### how to execute tests
  * `$ php bin/console doctrine:database:create --env=test`
@@ -120,10 +120,10 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ _[API]_
  * `$ php bin/phpunit -c .`
  * `$ php bin/behat`
  * `$ php bin/kahlan`
-  * _NOTE:_ database\_name\_test in parameters.yml reflects database name for test env.
-  * _NOTE:_ test database is wiped and seeded before tests execution
+   * _NOTE:_ database\_name\_test in parameters.yml reflects database name for test env.
+   * _NOTE:_ test database is wiped and seeded before tests execution
  * OPTIONAL:
-  * `$ ant test` launch all tests in order [phpunit, behat, kahlan]
+   * `$ ant test` launch all tests in order [phpunit, behat, kahlan]
 
 ### config examples
  * [apache](https://github.com/eugene-matvejev/battleship-game-api/blob/docs/apache.config.example.md)
