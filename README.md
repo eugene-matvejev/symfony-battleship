@@ -49,13 +49,14 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ _[API]_
   * if you will hit __B2__ cell - you will win
 
 ## software requirements
- * supported database engines
+ * PHP 7.1 processor
+ * one of supported database engines
    * MySQL >= 5.5
    * MariaDB >= 9.0
    * PostgreSQL >= 9.3
    * SQLite >= 3
- * http server: apache/nginx with PHP7
- * Composer >= 1.0.3
+ * http server with CGI e.g. apache|nginx or others
+ * composer >= 1.0.3
 
 ## technology stack
 ### key technologies
