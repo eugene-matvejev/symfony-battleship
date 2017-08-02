@@ -39,23 +39,24 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ _[out of sync with master.
 ##### THIS IS SPARE TIME PROJECT, WORK IN PROGRESS! HIGHLY EXPERIMENTAL!!!
 #### project purpose
  * try out:
-  * _cutting edge_ technologies such as PHP7, SF3, Doctrine2
-  * _modern_ approaches such as Test Automation, Continuous Integration|Deployment
+   * _cutting edge_ technologies such as PHP7, SF3, Doctrine2
+   * _modern_ approaches such as Test Automation, Continuous Integration|Deployment
  * simulate database loading [~500 transactions per request]
  * deliver preview about my technical knowledge before the job interview
 
 #### game cheat-code
 * AI players have only one ship[single-cell] which is located at __B2__ cell [_purpose: easier manual testing_]
- * if you will hit __B2__ cell - you will win
+  * if you will hit __B2__ cell - you will win
 
 ## software requirements
- * supported database engines
-  * MySQL >= 5.5
-  * MariaDB >= 9.0
-  * PostgreSQL >= 9.3
-  * SQLite >= 3
- * http server: apache/nginx with PHP7
- * Composer >= 1.0.3
+ * PHP 7.1 processor
+ * one of supported database engines
+   * MySQL >= 5.5
+   * MariaDB >= 9.0
+   * PostgreSQL >= 9.3
+   * SQLite >= 3
+ * http server with CGI e.g. apache|nginx or others
+ * composer >= 1.0.3
 
 ## technology stack
 ### key technologies
@@ -106,12 +107,12 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ _[out of sync with master.
 
 ## how to install
  * `$ composer install` to fetches dependencies, executes mandatory deployment commands
-  * _NOTE:_ composer is configured to generate __parameters.yml__ using [incenteev/composer-parameter-handler](https://github.com/Incenteev/ParameterHandler)
-  * _NOTE:_ composer is configured to create database [if not exists] and apply migrations; __using prod. env.__
+   * _NOTE:_ composer is configured to generate __parameters.yml__ using [incenteev/composer-parameter-handler](https://github.com/Incenteev/ParameterHandler)
+   * _NOTE:_ composer is configured to create database [if not exists] and apply migrations; __using prod. env.__
  * optional: `$ composer dump-autoload --optimize` to generate [class-map autoloader](https://getcomposer.org/doc/03-cli.md#dump-autoload)
-  * _NOTE:_ prod. env. uses [APC autoloader](http://symfony.com/doc/current/book/performance.html)
+   * _NOTE:_ prod. env. uses [APC autoloader](http://symfony.com/doc/current/book/performance.html)
  * optional: `$ php bin/console assets:install` to dump assets as hard copies
-  * _NOTE:_ by default assets are installed as symlinks
+   * _NOTE:_ by default assets are installed as symlinks
 
 ### how to execute tests
  * `$ php bin/console doctrine:database:create --env=test`
@@ -120,100 +121,10 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ _[out of sync with master.
  * `$ php bin/phpunit -c .`
  * `$ php bin/behat`
  * `$ php bin/kahlan`
-  * _NOTE:_ database\_name\_test in parameters.yml reflects database name for test env.
-  * _NOTE:_ test database is wiped and seeded before tests execution
+   * _NOTE:_ database\_name\_test in parameters.yml reflects database name for test env.
+   * _NOTE:_ test database is wiped and seeded before tests execution
  * OPTIONAL:
-  * `$ ant test` launch all tests in order [phpunit, behat, kahlan]
+   * `$ ant test` launch all tests in order [phpunit, behat, kahlan]
 
-### /etc/hosts
-```
-127.0.0.1       api.game.local
-::1             api.game.local
-```
-
-### apache virtual host config:
-```
-<VirtualHost 127.0.0.1:80 ::1:80>
-    DocumentRoot "%PROJECT_ROOT_DIRECTORY%/web"
-    ErrorLog "%PROJECT_ROOT_DIRECTORY%/var/logs/apache_log"
-
-    ServerName api.game.local
-    ServerAlias api.game.local
-    <Directory "%PROJECT_ROOT_DIRECTORY%/web">
-        AllowOverride All
-        Order Allow,Deny
-        Allow from All
-
-        Require all granted
-
-        # Use the front controller as index file. It serves as a fallback solution when
-        # every other rewrite/redirect fails (e.g. in an aliased environment without
-        # mod_rewrite). Additionally, this reduces the matching process for the
-        # start page (path "/") because otherwise Apache will apply the rewriting rules
-        # to each configured DirectoryIndex file (e.g. index.php, index.html, index.pl).
-        DirectoryIndex app.php
-
-        # Disabling MultiViews prevents unwanted negotiation, e.g. "/app" should not resolve
-        # to the front controller "/app.php" but be rewritten to "/app.php/app".
-        <IfModule mod_negotiation.c>
-            Options -MultiViews
-        </IfModule>
-
-        <IfModule mod_rewrite.c>
-            RewriteEngine On
-
-            # CORS support
-            RewriteCond %{REQUEST_METHOD} OPTIONS
-            RewriteRule ^(.*)$ $1 [R=200,L]
-            Header always set Access-Control-Allow-Origin "*"
-            Header always set Access-Control-Allow-Methods "POST, GET, PATCH"
-
-            # Determine the RewriteBase automatically and set it as environment variable.
-            # If you are using Apache aliases to do mass virtual hosting or installed the
-            # project in a subdirectory, the base path will be prepended to allow proper
-            # resolution of the app.php file and to redirect to the correct URI. It will
-            # work in environments without path prefix as well, providing a safe, one-size
-            # fits all solution. But as you do not need it in this case, you can comment
-            # the following 2 lines to eliminate the overhead.
-            RewriteCond %{REQUEST_URI}::$1 ^(/.+)/(.*)::\2$
-            RewriteRule ^(.*) - [E=BASE:%1]
-
-            # Sets the HTTP_AUTHORIZATION header removed by Apache
-            RewriteCond %{HTTP:Authorization} .
-            RewriteRule ^ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-
-            # Redirect to URI without front controller to prevent duplicate content
-            # (with and without `/app.php`). Only do this redirect on the initial
-            # rewrite by Apache and not on subsequent cycles. Otherwise we would get an
-            # endless redirect loop (request -> rewrite to front controller ->
-            # redirect -> request -> ...).
-            # So in case you get a "too many redirects" error or you always get redirected
-            # to the start page because your Apache does not expose the REDIRECT_STATUS
-            # environment variable, you have 2 choices:
-            # - disable this feature by commenting the following 2 lines or
-            # - use Apache >= 2.3.9 and replace all L flags by END flags and remove the
-            #   following RewriteCond (best solution)
-            RewriteCond %{ENV:REDIRECT_STATUS} ^$
-            RewriteRule ^app\.php(?:/(.*)|$) %{ENV:BASE}/$1 [R=301,L]
-
-            # If the requested filename exists, simply serve it.
-            # We only want to let Apache serve files and not directories.
-            RewriteCond %{REQUEST_FILENAME} -f
-            RewriteRule ^ - [L]
-
-            # Rewrite all other queries to the front controller.
-            RewriteRule ^ %{ENV:BASE}/app.php [L]
-        </IfModule>
-
-        <IfModule !mod_rewrite.c>
-            <IfModule mod_alias.c>
-                # When mod_rewrite is not available, we instruct a temporary redirect of
-                # the start page to the front controller explicitly so that the website
-                # and the generated links can still be used.
-                RedirectMatch 302 ^/$ /app.php/
-                # RedirectTemp cannot be used instead
-            </IfModule>
-        </IfModule>
-    </Directory>
-</VirtualHost>
-```
+### config examples
+ * [apache](https://github.com/eugene-matvejev/battleship-game-api/blob/docs/apache.config.example.md)
