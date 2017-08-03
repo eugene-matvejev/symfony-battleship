@@ -33,7 +33,7 @@ other CI engines reports _[on master]_
 [![codeship-build-status-master](https://codeship.com/projects/e893a4f0-0b28-0134-b0ad-129a07c0a376/status?branch=master)](https://codeship.com/projects/155781)
 
 
-__DEMO__ : https://battleship-game-api.herokuapp.com/ _[out of sync with master. because front-end is not ready]_
+__DEMO__ : https://battleship-game-api.herokuapp.com/ _[out of sync with master, because front-end is not ready]_
 
 # Battleship Game API
 ##### THIS IS SPARE TIME PROJECT, WORK IN PROGRESS! HIGHLY EXPERIMENTAL!!!
