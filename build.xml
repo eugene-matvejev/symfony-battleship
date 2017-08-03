@@ -64,8 +64,6 @@
             <arg value="--verbose"/>
             <arg value="--coverage-clover=coverage.xml"/>
         </exec>
-
-        <property name="phpunit.done" value="true"/>
     </target>
 
     <target name="tests:phpunit:no-coverage" unless="phpunit.done">
@@ -76,8 +74,6 @@
             <arg value="${basedir}/phpunit.xml"/>
             <arg value="--verbose"/>
         </exec>
-
-        <property name="phpunit.done" value="true"/>
     </target>
 
     <target name="tests:kahlan" unless="kahlan.done">
@@ -85,8 +81,6 @@
             <arg value="-n"/>
             <arg value="${kahlan}"/>
         </exec>
-
-        <property name="kahlan.done" value="true"/>
     </target>
 
     <target name="tests:behat" unless="behat.done">
@@ -95,7 +89,5 @@
             <arg value="${behat}"/>
             <arg value="--stop-on-failure"/>
         </exec>
-
-        <property name="behat.done" value="true"/>
     </target>
 </project>
