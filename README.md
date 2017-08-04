@@ -25,8 +25,6 @@
 
 other CI engines reports _[on master]_
 
-[![scrutinizer-code-quality](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
-[![scrutinizer-code-coverage](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/eugene-matvejev/battleship-game-api/?branch=master)
 [![code-climate-code-quality](https://codeclimate.com/github/eugene-matvejev/battleship-game-api/badges/gpa.svg)](https://codeclimate.com/github/eugene-matvejev/battleship-game-api)
 [![travis-build-status-master](https://travis-ci.org/eugene-matvejev/battleship-game-api.svg?branch=master)](https://travis-ci.org/eugene-matvejev/battleship-game-api)
 [![sensio-insight-framework](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc/mini.png)](https://insight.sensiolabs.com/projects/f92d83b6-fd11-4b1b-ae86-b3ba1fb152dc)
@@ -96,7 +94,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ _[out of sync with master,
 
 ## workflow
  * new functionality merged into master branch only via pull requests
- * each pull request have callback to trigger CI engines such as Travis, Circle, CodeShip, Scrutinizer, Sensiolabs Insight, CodeCov
+ * each pull request have callback to trigger CI engines such as Travis, Circle, CodeShip, Sensiolabs Insight, CodeCov
  * result of each pull request is ready-to-use release - using Continuous Delivery principles
 
 #gitflow
