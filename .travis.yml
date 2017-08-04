@@ -1,7 +1,7 @@
 language: "php"
 
 php:
-    - "7.1"
+    - 7.1
 
 env:
 # doctrine dabatase abstract layer has bug: https://github.com/doctrine/dbal/pull/2402
@@ -10,11 +10,11 @@ env:
     - DATABASE_ENGINE=pdo_pgsql DATABASE_PORT=5432 DATABASE_USER=postgres
 
 before_script:
-    - "cp app/config/parameters.yml.dist app/config/parameters.yml"
-    - "composer install --no-progress --no-interaction"
+    - cp app/config/parameters.yml.dist app/config/parameters.yml
+    - composer install --no-progress --no-interaction
 
 script:
-    - "ant test:with-coverage"
+    - ant
 
 after_success:
-    - "bash <(curl -s https://codecov.io/bash)"
+    - bash <(curl -s https://codecov.io/bash)
