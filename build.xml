@@ -9,15 +9,15 @@
 
     <target name="test"
             description="execute tests"
-            depends="prepare:database:reset, tests:phpunit:no-coverage, tests:kahlan, tests:behat"
+            depends="prepare:database:prepare, tests:phpunit, tests:kahlan, tests:behat"
     />
 
     <target name="test:with-coverage"
-            description="execute tests and generate coverage report [./coverage.xml]"
-            depends="prepare:database:reset, tests:phpunit:with-coverage, tests:kahlan, tests:behat"
+            description="execute tests and generate coverage report [./coverage.xml] of PHPUnit tests"
+            depends="prepare:database:prepare, tests:phpunit:with-coverage, tests:kahlan, tests:behat"
     />
 
-    <target name="prepare:database:reset">
+    <target name="prepare:database:prepare">
         <exec executable="php" taskname="doctrine:database:create" failonerror="true">
             <arg value="-n"/>
             <arg value="${console}"/>
@@ -54,25 +54,23 @@
         </exec>
     </target>
 
-    <target name="tests:phpunit:with-coverage" unless="phpunit.done">
-        <exec executable="php" taskname="phpunit" failonerror="true">
-            <arg value="-d"/>
-            <arg value="memory_limit=1G"/>
-            <arg value="${phpunit}"/>
-            <arg value="-c"/>
-            <arg value="${basedir}/phpunit.xml"/>
-            <arg value="--verbose"/>
-            <arg value="--coverage-clover=coverage.xml"/>
-        </exec>
-    </target>
-
-    <target name="tests:phpunit:no-coverage" unless="phpunit.done">
+    <target name="tests:phpunit" unless="phpunit.done">
         <exec executable="php" taskname="phpunit" failonerror="true">
             <arg value="-n"/>
             <arg value="${phpunit}"/>
             <arg value="-c"/>
             <arg value="${basedir}/phpunit.xml"/>
             <arg value="--verbose"/>
+        </exec>
+    </target>
+
+    <target name="tests:phpunit:with-coverage" unless="phpunit.done">
+        <exec executable="php" taskname="phpunit" failonerror="true">
+            <arg value="${phpunit}"/>
+            <arg value="-c"/>
+            <arg value="${basedir}/phpunit.xml"/>
+            <arg value="--verbose"/>
+            <arg value="--coverage-clover=coverage.xml"/>
         </exec>
     </target>
 
