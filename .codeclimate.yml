@@ -1,4 +1,6 @@
 engines:
+    phpcodesniffer:
+        enabled: true
     phpmd:
         enabled: true
     duplication:
@@ -13,5 +15,7 @@ ratings:
 
 exclude_paths:
     - "*app/DoctrineMigrations/*"
+    - "*bin/*"
+    - "*var/*"
     - "*vendor/*"
     - "*web/*"
