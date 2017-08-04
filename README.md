@@ -106,25 +106,24 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ _[out of sync with master,
   * pull requests follows [semantic vesion](http://semver.org)
 
 ## how to install
- * `$ composer install` to fetches dependencies, executes mandatory deployment commands
+ * `$ composer install` to fetch dependencies and execute mandatory deployment steps
    * _NOTE:_ composer is configured to generate __parameters.yml__ using [incenteev/composer-parameter-handler](https://github.com/Incenteev/ParameterHandler)
-   * _NOTE:_ composer is configured to create database [if not exists] and apply migrations; __using prod. env.__
- * optional: `$ composer dump-autoload --optimize` to generate [class-map autoloader](https://getcomposer.org/doc/03-cli.md#dump-autoload)
-   * _NOTE:_ prod. env. uses [APC autoloader](http://symfony.com/doc/current/book/performance.html)
- * optional: `$ php bin/console assets:install` to dump assets as hard copies
-   * _NOTE:_ by default assets are installed as symlinks
+ * optional `$ composer dump-autoload --classmap-authoritative` to generate [class-map autoloader](https://getcomposer.org/doc/03-cli.md#dump-autoload)
 
 ### how to execute tests
+  if you've __ant__ installed locally, you can run all tests via shortcut command: `$ ant test`
+  database\_name\_test in parameters.yml reflects database name for test env.
+  test database is wiped and seeded before tests get executed
+
+the right sequence of steps to prepare test database
  * `$ php bin/console doctrine:database:create --env=test`
  * `$ php bin/console doctrine:migrations:migrate --env=test`
  * `$ php bin/console doctrine:fixtures:load --env=test`
+
+how to execute tests
  * `$ php bin/phpunit -c .`
  * `$ php bin/behat`
  * `$ php bin/kahlan`
-   * _NOTE:_ database\_name\_test in parameters.yml reflects database name for test env.
-   * _NOTE:_ test database is wiped and seeded before tests execution
- * OPTIONAL:
-   * `$ ant test` launch all tests in order [phpunit, behat, kahlan]
 
-### config examples
+### http server config examples
  * [apache](https://github.com/eugene-matvejev/battleship-game-api/blob/docs/apache.config.example.md)
