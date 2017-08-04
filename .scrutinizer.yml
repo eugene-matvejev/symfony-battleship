@@ -24,7 +24,7 @@ build:
     tests:
         override:
             -
-                command: ant
+                command: ant test:with-coverage
                 coverage:
                     file: "coverage.xml"
                     format: "php-clover"
