@@ -33,34 +33,33 @@ other CI engines reports _[on master]_
 [![codeship-build-status-master](https://codeship.com/projects/e893a4f0-0b28-0134-b0ad-129a07c0a376/status?branch=master)](https://codeship.com/projects/155781)
 
 
-__DEMO__ : https://battleship-game-api.herokuapp.com/ _[out of sync with master, because front-end is not ready]_
+__DEMO__ : https://battleship-game-api.herokuapp.com/ _[out of sync with master, because front-end is not ready yet]_
 
 # Battleship Game API
 ##### THIS IS SPARE TIME PROJECT, WORK IN PROGRESS! HIGHLY EXPERIMENTAL!!!
 #### project purpose
- * try out:
-   * _cutting edge_ technologies such as PHP7, SF3, Doctrine2
-   * _modern_ approaches such as Test Automation, Continuous Integration|Deployment
+ * to try out _cutting edge_ technologies and services,  _modern_ approaches such as Test Automation, Continuous Integration{CI}|Deployment{CD}
  * simulate database loading [~500 transactions per request]
  * deliver preview about my technical knowledge before the job interview
+ * demonstrate technical knowledege level prior job interview
 
 #### game cheat-code
 * AI players have only one ship[single-cell] which is located at __B2__ cell [_purpose: easier manual testing_]
   * if you will hit __B2__ cell - you will win
 
 ## software requirements
- * PHP 7.1 processor
+ * PHP 7.1
  * one of supported database engines
    * MySQL >= 5.5
    * MariaDB >= 9.0
    * PostgreSQL >= 9.3
    * SQLite >= 3
- * http server with CGI e.g. apache|nginx or others
+ * http server with CGI e.g. [example apache, nginx]
  * composer >= 1.0.3
 
 ## technology stack
 ### key technologies
- * PHP7 (7.0.0 - 7.0.4 || >= 7.0.6 [7.0.5 had bugged SPL])
+ * PHP 7.1
  * [Symfony Framework 3](http://symfony.com) [SF3]
  * [Doctrine 2](http://doctrine-orm.readthedocs.io/en/latest) with [Fixtures](http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html)
  * [Composer](https://getcomposer.org)
