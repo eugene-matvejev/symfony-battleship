@@ -5,20 +5,26 @@ coding_style:
     php: {  }
 
 filter:
-    excluded_paths: ["app/*", "bin/*", "tests/*", "vendor/*", "web/*", "kahlan-config.php"]
+    excluded_paths:
+        - app/*
+        - bin/*
+        - tests/*
+        - vendor/*
+        - web/*
+        - kahlan-config.php
 
 build:
     dependencies:
         before:
             -
-                command: "cp app/config/parameters.yml.dist app/config/parameters.yml"
+                command: cp app/config/parameters.yml.dist app/config/parameters.yml
     environment:
         php:
-            version: "7.1.0"
+            version: 7.1.0
     tests:
         override:
             -
-                command: "ant test:with-coverage"
+                command: ant test:with-coverage
                 coverage:
                     file: "coverage.xml"
                     format: "php-clover"
