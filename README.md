@@ -54,7 +54,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ _[out of sync with master,
    * MariaDB >= 9.0
    * PostgreSQL >= 9.3
    * SQLite >= 3
- * http server with CGI e.g. [example apache, nginx]
+ * http server with CGI e.g. [example: apache, nginx]
  * composer >= 1.0.3
 
 ## technology stack
