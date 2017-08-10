@@ -1,15 +1,15 @@
 machine:
     php:
-        version: "7.1.0"
+        version: 7.1.0
 
 dependencies:
     cache_directories:
-        - "~/.composer/cache"
+        - ~/.composer/cache
     pre:
-        - "cp app/config/parameters.yml.dist app/config/parameters.yml"
+        - cp app/config/parameters.yml.dist app/config/parameters.yml
     override:
-        - "composer install --no-progress --no-interaction"
+        - composer install --no-progress --no-interaction
 
 test:
     override:
-        - "ant test:with-coverage"
+        - ant test:with-coverage

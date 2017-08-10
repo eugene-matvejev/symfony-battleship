@@ -7,7 +7,7 @@ engines:
         enabled: true
         config:
             languages:
-                - "php"
+                - php
 
 ratings:
     paths:
