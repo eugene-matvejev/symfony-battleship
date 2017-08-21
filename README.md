@@ -96,7 +96,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ _[out of sync with master,
  * each pull request have callback to trigger CI engines such as Travis, Circle, CodeShip, Sensiolabs Insight, CodeCov
  * result of each pull request is ready-to-use release - using Continuous Delivery principles
 
-#gitflow
+## gitflow
   * __master__ branch: stable source code, contains release-ready source
   * __heroku__ branch: reflects current deployed app at heroku [Continuous Deployment]
   * __prototype_*__ branch: contains new idea [pull request of prototype branch is always next _major_ version release]
@@ -123,4 +123,4 @@ how to execute tests
  * `$ php bin/kahlan`
 
 ### http server config examples
- * [apache](https://github.com/eugene-matvejev/battleship-game-api/blob/docs/apache.config.example.md)
+ * [apache](https://github.com/eugene-matvejev/battleship-game-api/blob/master/docs/apache.config.example.md)
