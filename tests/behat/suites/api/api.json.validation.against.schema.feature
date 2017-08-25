@@ -7,5 +7,6 @@ Feature: Battleship Game: API: Game Results
     Then validate response against schema "<schema>"
 
     Examples:
-      | method | route | json                                    | schema                               |
-      | POST   | /api/ | game.initiation.request.1.opponent.json | game.initiation.response.schema.json |
+      | method | route                    | json                              | schema                            |
+      | POST   | /api/game-init           | game.init.request.1.opponent.json | game.init.response.schema.json    |
+      | GET    | /api/game-results/page/1 | game.results.request.schema.json  | game.results.response.schema.json |
