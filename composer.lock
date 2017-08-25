@@ -2658,16 +2658,16 @@
         },
         {
             "name": "eugene-matvejev/battleship-game-api-json-schema",
-            "version": "0.2.0",
+            "version": "0.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/eugene-matvejev/battleship-game-api-json-schema.git",
-                "reference": "748112745986b47dbee1aefb4cc777e2499a3951"
+                "reference": "de567549147d8173353b294cac54e31752894c1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/eugene-matvejev/battleship-game-api-json-schema/zipball/748112745986b47dbee1aefb4cc777e2499a3951",
-                "reference": "748112745986b47dbee1aefb4cc777e2499a3951",
+                "url": "https://api.github.com/repos/eugene-matvejev/battleship-game-api-json-schema/zipball/de567549147d8173353b294cac54e31752894c1e",
+                "reference": "de567549147d8173353b294cac54e31752894c1e",
                 "shasum": ""
             },
             "type": "library",
@@ -2682,10 +2682,10 @@
             ],
             "description": "json schemas and mocks for the battleship game",
             "support": {
-                "source": "https://github.com/eugene-matvejev/battleship-game-api-json-schema/tree/0.2.0",
+                "source": "https://github.com/eugene-matvejev/battleship-game-api-json-schema/tree/0.2.1",
                 "issues": "https://github.com/eugene-matvejev/battleship-game-api-json-schema/issues"
             },
-            "time": "2017-08-22T09:46:44+00:00"
+            "time": "2017-08-25T14:55:23+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
