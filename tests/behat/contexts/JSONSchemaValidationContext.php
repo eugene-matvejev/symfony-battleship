@@ -21,7 +21,7 @@ class JSONSchemaValidationContext extends CommonControllerContext
     public function submitDataFromApiGameResultsPageRouteVia(string $jsonFile, string $route, string $method)
     {
         $json = static::getJSONContent("mock/valid/{$jsonFile}");
-        $this->requestAPIRoute($method, $route, $json);
+        $this->requestAPIRoute($route, $method, $json);
     }
 
     /**
