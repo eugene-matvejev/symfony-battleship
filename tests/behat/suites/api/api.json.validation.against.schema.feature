@@ -1,8 +1,8 @@
-Feature: Battleship Game: API: Game Results
+Feature: Battleship Game: API: schema validation
 
   @api
   @jsonschema
-  Scenario Outline: responses should match schemas
+  Scenario Outline: API responses should match schemas
     Given submit data from "<json>" to API "<route>" via "<method>"
     Then validate response against schema "<schema>"
 
