@@ -119,7 +119,7 @@ sequence of steps to prepare test database
  * `$ php bin/console doctrine:fixtures:load --env=test`
 
 how to execute tests
- * `$ php bin/phpunit -c .` or `$ php bin/phpunit -c --no-coverage` - to disable coverage report
+ * `$ php bin/phpunit -c .` or `$ php bin/phpunit -c . --no-coverage` _to disable coverage report_
  * `$ php bin/behat`
  * `$ php bin/kahlan`
 
