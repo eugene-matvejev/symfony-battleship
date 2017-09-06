@@ -108,17 +108,17 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ _[out of sync with master,
  * optional `$ composer dump-autoload --classmap-authoritative` to generate [class-map autoloader](https://getcomposer.org/doc/03-cli.md#dump-autoload)
 
 ### how to execute tests
-  if you've __ant__ installed locally, you can run all tests via shortcut command: `$ ant test`
-  database\_name\_test in parameters.yml reflects database name for test env.
-  test database is wiped and seeded before tests get executed
+  if you've __ant__ installed locally, you can run all tests via shortcut command: `$ ant test` or just `$ ant`
+  database\_name\_test in parameters.yml reflects database name for the test env.
+  test database need to be wiped and seeded prior tests execution (for PHPUnit tests only, Kahlan and Behat tests can be executed on 'dirty' database)
 
-the right sequence of steps to prepare test database
+sequence of steps to prepare test database
  * `$ php bin/console doctrine:database:create --env=test`
  * `$ php bin/console doctrine:migrations:migrate --env=test`
  * `$ php bin/console doctrine:fixtures:load --env=test`
 
 how to execute tests
- * `$ php bin/phpunit -c .`
+ * `$ php bin/phpunit -c .` or `$ php bin/phpunit -c . --no-coverage` _to disable coverage report_
  * `$ php bin/behat`
  * `$ php bin/kahlan`
 
