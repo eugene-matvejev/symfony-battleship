@@ -67,6 +67,7 @@ __DEMO__ : https://battleship-game-api.herokuapp.com/ _[out of sync with master,
  * [PHPUnit 5](https://phpunit.de)
  * [Behat 3](http://docs.behat.org/en/v3.0)
  * [Kahlan](http://kahlan.readthedocs.io/en/latest)
+ * [json schema](http://json-schema.org/)
 
 ### used patterns
  * Front Controller
