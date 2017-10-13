@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "cc877fc0768436885d752b3cdecc93cb",
+    "content-hash": "d7bff4f731f0a4389e068c3305843c4f",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2658,16 +2658,16 @@
         },
         {
             "name": "eugene-matvejev/battleship-game-api-json-schema",
-            "version": "0.2.1",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/eugene-matvejev/battleship-game-api-json-schema.git",
-                "reference": "de567549147d8173353b294cac54e31752894c1e"
+                "reference": "7c30c5b65859b14f8597a6f887aff19bf4c25947"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/eugene-matvejev/battleship-game-api-json-schema/zipball/de567549147d8173353b294cac54e31752894c1e",
-                "reference": "de567549147d8173353b294cac54e31752894c1e",
+                "url": "https://api.github.com/repos/eugene-matvejev/battleship-game-api-json-schema/zipball/7c30c5b65859b14f8597a6f887aff19bf4c25947",
+                "reference": "7c30c5b65859b14f8597a6f887aff19bf4c25947",
                 "shasum": ""
             },
             "type": "library",
@@ -2682,10 +2682,10 @@
             ],
             "description": "json schemas and mocks for the battleship game",
             "support": {
-                "source": "https://github.com/eugene-matvejev/battleship-game-api-json-schema/tree/0.2.1",
+                "source": "https://github.com/eugene-matvejev/battleship-game-api-json-schema/tree/1.0.0",
                 "issues": "https://github.com/eugene-matvejev/battleship-game-api-json-schema/issues"
             },
-            "time": "2017-08-25T14:55:23+00:00"
+            "time": "2017-10-13T09:18:06+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
