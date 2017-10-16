@@ -20,13 +20,15 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
      *
      * @param string $route
      * @param string $method
+     * @param string $content
      */
-    public function requestAPIRoute(string $route, string $method)
+    public function requestAPIRoute(string $route, string $method, string $content = null)
     {
         $this->requestRoute(
             $route,
             $method,
-            ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json']
+            ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json'],
+            $content
         );
     }
 
@@ -36,15 +38,17 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
      * @param string   $route
      * @param string   $method
      * @param string[] $server
+     * @param string   $content
      */
-    public function requestRoute(string $route, string $method, array $server = [])
+    public function requestRoute(string $route, string $method, array $server = [], string $content = null)
     {
         static::$client->request(
             $method,
             $route,
             [],
             [],
-            $server
+            $server,
+            $content
         );
     }
 
