@@ -48,7 +48,7 @@
         "kahlan/kahlan": "^2.5",
         "phpunit/phpunit": "^5.5",
         "eugene-matvejev/battleship-game-api-json-schema": "^1.0.0",
-        "justinrainbow/json-schema": "5.2.1"
+        "justinrainbow/json-schema": "^5.2"
     },
     "scripts": {
         "post-update-cmd": "@deployment-scripts",
