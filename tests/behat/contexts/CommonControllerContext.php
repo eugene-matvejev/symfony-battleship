@@ -70,11 +70,11 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
      * @Given I am authorized
      * @Given I am :notAuthorized authorized
      *
-     * @param bool $notAuthorized
+     * @param bool $authorized
      */
-    public function prepareClient(bool $notAuthorized = false)
+    public function prepareClient(bool $authorized = false)
     {
-        static::$client = $this->getAuthorizedClient($notAuthorized ? '' : UsersFixture::TEST_PLAYER_EMAIL);
+        static::$client = $this->getAuthorizedClient($authorized ? '' : UsersFixture::TEST_PLAYER_EMAIL);
     }
 
     /**
