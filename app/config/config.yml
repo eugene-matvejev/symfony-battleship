@@ -6,11 +6,11 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
-    battleship_game.setting.game_size.min: 7
-    battleship_game.setting.game_size.max: 12
-    battleship_game.setting.opponents_count.min: 1 # Multiplayer in WIP!
-    battleship_game.setting.opponents_count.max: 1 # Multiplayer in WIP!
-    battleship_game.setting.limits.per_page.game_results: 5
+    em.game_bundle.setting.game_size.min: 7
+    em.game_bundle.setting.game_size.max: 12
+    em.game_bundle.setting.opponents_count.min: 1 # Multiplayer in WIP!
+    em.game_bundle.setting.opponents_count.max: 1 # Multiplayer in WIP!
+    em.game_bundle.setting.limits.per_page.game_results: 5
 
 doctrine:
     dbal:

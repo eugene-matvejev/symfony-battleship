@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
  */
 class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
-    use ContainerAwareTrait;    
+    use ContainerAwareTrait;
     const TEST_HUMAN_PLAYER_EMAIL         = 'Human';
     const TEST_AI_CONTROLLED_PLAYER_EMAIL = 'CPU 0';
 
@@ -24,7 +24,7 @@ class LoadPlayerData extends AbstractFixture implements OrderedFixtureInterface,
      */
     public function load(ObjectManager $om)
     {
-        $model = $this->container->get('battleship_game.service.player_model');
+        $model = $this->container->get('em.game_bundle.service.player_model');
 
         $om->persist($model->createOnRequestHumanControlled(static::TEST_HUMAN_PLAYER_EMAIL));
         $om->persist($model->createOnRequestAIControlled(static::TEST_AI_CONTROLLED_PLAYER_EMAIL));

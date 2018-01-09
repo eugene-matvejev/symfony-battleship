@@ -21,7 +21,7 @@ class PlayerModelTest extends AbstractKernelTestSuite
     {
         parent::setUpBeforeClass();
 
-        static::$playerModel = static::$container->get('battleship_game.service.player_model');
+        static::$playerModel = static::$container->get('em.game_bundle.service.player_model');
     }
 
     /*********************************** STATIC HELPERS ***********************************/
