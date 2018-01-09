@@ -6,9 +6,9 @@ use JsonSchema\Validator;
 
 class JSONSchemaValidationContext extends CommonControllerContext
 {
-    protected function getJSONContent(string $filename) : string
+    protected function getJSONContent(string $path) : string
     {
-        return $this->getSharedFixtureContent("../../vendor/eugene-matvejev/battleship-game-api-json-schema/${filename}");
+        return $this->getSharedFixtureContent("../../vendor/eugene-matvejev/battleship-game-api-json-schema/${path}");
     }
 
     /**

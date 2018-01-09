@@ -49,10 +49,7 @@ class GameController extends AbstractAPIController
             throw new HttpException(Response::HTTP_BAD_REQUEST, 'request validation failed, please check documentation');
         }
 
-        $game = $this->get('em.game_bundle.service.game_builder')->buildGame(
-            new GameInitiationRequest($request->getContent()),
-            $this->getUser()
-        );
+        $game = $this->get('em.game_bundle.service.game_builder')->buildGame(new GameInitiationRequest($request->getContent()), $this->getUser());
 
         $om = $this->getDoctrine()->getManager();
         $om->persist($game);
