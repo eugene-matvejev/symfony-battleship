@@ -3,7 +3,7 @@
 namespace EM\GameBundle\ORM;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as Serializer;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @since 8.0
@@ -15,7 +15,7 @@ abstract class AbstractEntity implements IdentifiableInterface
      * @ORM\Column(name="id", type="integer")
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
-     * @Serializer\Type("integer")
+     * @JMS\Type("integer")
      *
      * @var int
      */

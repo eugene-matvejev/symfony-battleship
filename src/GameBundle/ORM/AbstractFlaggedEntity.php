@@ -3,7 +3,7 @@
 namespace EM\GameBundle\ORM;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as Serializer;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @see   AbstractFlaggedEntityTest
@@ -17,7 +17,7 @@ abstract class AbstractFlaggedEntity extends AbstractEntity implements FlaggedIn
     /**
      * @ORM\Column(name="flags", type="integer")
      *
-     * @Serializer\Type("integer")
+     * @JMS\Type("integer")
      *
      * @var int
      */

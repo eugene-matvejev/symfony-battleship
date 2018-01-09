@@ -3,7 +3,7 @@
 namespace EM\GameBundle\ORM;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as Serializer;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @see   TimestampedTraitTest
@@ -15,7 +15,7 @@ trait TimestampedTrait
     /**
      * @ORM\Column(name="timestamp", type="datetime")
      *
-     * @Serializer\Type("DateTime")
+     * @JMS\Type("DateTime")
      *
      * @var \DateTime
      */
