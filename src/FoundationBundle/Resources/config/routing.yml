@@ -1,6 +1,3 @@
 foundation_bundle.api:
     resource: "@FoundationBundle/Resources/config/routing/api.yml"
     prefix:   api/
-foundation_bundle.gui:
-    resource: "@FoundationBundle/Resources/config/routing/gui.yml"
-    prefix:   /
