@@ -3,12 +3,8 @@
 namespace EM\Tests\Environment\Factory;
 
 use EM\FoundationBundle\Entity\User;
-use EM\GameBundle\Entity\Battlefield;
-use EM\GameBundle\Entity\Cell;
-use EM\GameBundle\Entity\Game;
-use EM\GameBundle\Entity\GameResult;
-use EM\GameBundle\Model\BattlefieldModel;
-use EM\GameBundle\Model\CellModel;
+use EM\GameBundle\Entity\{Battlefield, Cell, Game, GameResult};
+use EM\GameBundle\Model\{BattlefieldModel, CellModel};
 use EM\FoundationBundle\Model\UserModel;
 
 /**
@@ -16,7 +12,6 @@ use EM\FoundationBundle\Model\UserModel;
  */
 class MockFactory
 {
-
     public static function getCellMock(string $coordinate, int $mask = CellModel::FLAG_NONE) : Cell
     {
         return (new Cell())
