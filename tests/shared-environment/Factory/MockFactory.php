@@ -46,16 +46,16 @@ class MockFactory
         return $result;
     }
 
-    public static function getAIUserMock(string $email) : User
-    {
-        return static::getUserMock($email, UserModel::FLAG_AI_CONTROLLED);
-    }
-
     public static function getUserMock(string $email, int $flags = UserModel::FLAG_NONE) : User
     {
         return (new User())
             ->setEmail($email)
             ->setPasswordHash(sha1('mockedPassword'))
             ->setFlags($flags);
+    }
+
+    public static function getAIUserMock(string $email) : User
+    {
+        return static::getUserMock($email, UserModel::FLAG_AI_CONTROLLED);
     }
 }
