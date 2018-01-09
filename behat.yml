@@ -3,22 +3,32 @@ default:
         progress: true
 
     suites:
+# ### ### ### ### ### API ### ### ### ### ###
         api.game.mechanics:
-            paths:
-                - "%paths.base%/tests/behat/suites/api/api.game.feature"
+            paths: [ "%paths.base%/tests/behat/suites/api/api.game.feature" ]
             contexts:
-                - EM\Tests\Behat\CommonControllerContext
+                - EM\Tests\Behat\CommonControllerContext:
             filters:
                 tags: "@api"
         api.game.results:
-            paths:
-                - "%paths.base%/tests/behat/suites/api/api.game_results.feature"
+            paths: [ "%paths.base%/tests/behat/suites/api/api.game_results.feature" ]
             contexts:
-                - EM\Tests\Behat\GameBundle\Controller\GameResultControllerContext
+                - EM\Tests\Behat\GameBundle\Controller\GameResultControllerContext:
+            filters:
+                tags: "@api"
         api.player.management:
             paths:
                 - "%paths.base%/tests/behat/suites/api/api.player_management.feature"
+        api.response.validation.against.schema:
+            paths: [ "%paths.base%/tests/behat/suites/api/api.json.validation.against.schema.feature" ]
             contexts:
-                - EM\Tests\Behat\CommonControllerContext
+                - EM\Tests\Behat\JSONSchemaValidationContext:
             filters:
-                tags: "@api"
+                tags: "@jsonschema"
+# ### ### ### ### ### GUI ### ### ### ### ###
+        gui.game.player:
+            paths: [ "%paths.base%/tests/behat/suites/gui" ]
+            contexts:
+                - EM\Tests\Behat\CommonControllerContext:
+            filters:
+                tags: "@gui"

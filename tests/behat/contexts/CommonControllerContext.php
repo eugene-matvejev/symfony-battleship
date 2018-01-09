@@ -24,6 +24,23 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
 
         static::setUpBeforeClass();
     }
+ 
+    /**
+     * @Given request API :route route via :method
+     *
+     * @param string $route
+     * @param string $method
+     * @param string $content
+     */
+    public function requestAPIRoute(string $route, string $method, string $content = null)
+    {
+        $this->requestRoute(
+            $route,
+            $method,
+            ['CONTENT_TYPE' => 'application/json', 'HTTP_accept' => 'application/json'],
+            $content
+        );
+    }
 
     /**
      * @Given request :route route via :method
@@ -32,8 +49,9 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
      * @param string   $route
      * @param string   $method
      * @param string[] $server
+     * @param string   $content
      */
-    public function requestRoute(string $route, string $method, array $server = [])
+    public function requestRoute(string $route, string $method, array $server = [], string $content = null)
     {
         $server['CONTENT_TYPE'] = 'application/json';
         $server['HTTP_accept']  = 'application/json';
@@ -43,7 +61,8 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
             $route,
             [],
             [],
-            $server
+            $server,
+            $content
         );
     }
 
