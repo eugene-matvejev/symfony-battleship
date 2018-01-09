@@ -3,28 +3,28 @@
 namespace EM\GameBundle\Response;
 
 use EM\GameBundle\Entity\GameResult;
-use JMS\Serializer\Annotation as Serializer;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @since 5.0
  *
- * @Serializer\XmlRoot("game-results")
- * @Serializer\AccessorOrder(order="custom", custom={"results","meta"})
+ * @JMS\XmlRoot("game-results")
+ * @JMS\AccessorOrder(order="custom", custom={"results","meta"})
  */
 class GameResultsResponse
 {
     const META_INDEX_CURRENT_PAGE = 'currentPage';
     const META_INDEX_TOTAL_PAGES  = 'totalPages';
     /**
-     * @Serializer\Type("array<EM\GameBundle\Entity\GameResult>")
-     * @Serializer\XmlList(entry="result")
+     * @JMS\Type("array<EM\GameBundle\Entity\GameResult>")
+     * @JMS\XmlList(entry="result")
      *
      * @var GameResult[]
      */
     private $results = [];
     /**
-     * @Serializer\Type("array<string, integer>")
-     * @Serializer\XmlKeyValuePairs()
+     * @JMS\Type("array<string, integer>")
+     * @JMS\XmlKeyValuePairs()
      *
      * @var int[]
      */

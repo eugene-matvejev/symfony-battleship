@@ -2,7 +2,7 @@
 
 namespace EM\GameBundle\Request;
 
-use JMS\Serializer\Annotation as Serializer;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @since 18.0
@@ -10,26 +10,26 @@ use JMS\Serializer\Annotation as Serializer;
 class GameInitiationRequest
 {
     /**
-     * @Serializer\Type("integer")
+     * @JMS\Type("integer")
      *
      * @var int
      */
     private $opponents;
     /**
-     * @Serializer\Type("integer")
+     * @JMS\Type("integer")
      *
      * @var int
      */
     private $size;
     /**
-     * @Serializer\Type("string")
-     * @Serializer\SerializedName("playerName")
+     * @JMS\Type("string")
+     * @JMS\SerializedName("playerName")
      *
      * @var string
      */
     private $playerName;
     /**
-     * @Serializer\Type("array<string>")
+     * @JMS\Type("array<string>")
      *
      * @var string[]
      */
