@@ -41,7 +41,7 @@ class GameInitiationResponse
     {
         $this->battlefields[] = $battlefield;
 
-        if (UserModel::isAIControlled($battlefield->getPlayer())) {
+        if (UserModel::isAIControlled($battlefield->getUser())) {
             foreach ($battlefield->getCells() as $cell) {
                 $cell->setFlags(CellModel::FLAG_NONE);
             }
