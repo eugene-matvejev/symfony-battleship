@@ -1,4 +1,0 @@
-foundation_bundle.gui.index:
-    path:     /
-    defaults: { _controller: "FoundationBundle:Player:index" }
-    methods:  [GET]
