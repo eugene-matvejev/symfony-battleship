@@ -24,7 +24,7 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
 
         static::setUpBeforeClass();
     }
- 
+
     /**
      * @Given request API :route route via :method
      *
