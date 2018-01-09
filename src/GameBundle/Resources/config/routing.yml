@@ -1,3 +1,3 @@
-battleship_game.api:
+em.game_bundle.api:
     resource: "@GameBundle/Resources/config/routing/api.yml"
     prefix:   api/

@@ -1,51 +1,51 @@
 services:
     # Models
-    battleship_game.service.player_model:
+    em.game_bundle.service.player_model:
         class: EM\GameBundle\Model\PlayerModel
         arguments:
-            - "@battleship_game.repository.player"
-    battleship_game.service.game_result_model:
+            - "@em.game_bundle.repository.player"
+    em.game_bundle.service.game_result_model:
         class: EM\GameBundle\Model\GameResultModel
         arguments:
-            - "@battleship_game.repository.game_result"
-            - "%battleship_game.setting.limits.per_page.game_results%"
+            - "@em.game_bundle.repository.game_result"
+            - "%em.game_bundle.setting.limits.per_page.game_results%"
     # Game Builders
-    battleship_game.service.game_builder:
+    em.game_bundle.service.game_builder:
         class: EM\GameBundle\Service\GameSystem\GameBuilder
         arguments:
-            - "@battleship_game.service.player_model"
+            - "@em.game_bundle.service.player_model"
     # Game Processors
-    battleship_game.service.game_processor:
+    em.game_bundle.service.game_processor:
         class: EM\GameBundle\Service\GameSystem\GameProcessor
         arguments:
-            - "@battleship_game.service.ai_core"
+            - "@em.game_bundle.service.ai_core"
     # AI
-    battleship_game.service.ai_core:
+    em.game_bundle.service.ai_core:
         class: EM\GameBundle\Service\AI\AIService
         arguments:
-            - "@battleship_game.service.ai_strategy"
-    battleship_game.service.ai_strategy:
+            - "@em.game_bundle.service.ai_strategy"
+    em.game_bundle.service.ai_strategy:
         class: EM\GameBundle\Service\AI\AIStrategyService
         arguments:
-            - "@battleship_game.service.ai_strategy_processor"
-    battleship_game.service.ai_strategy_processor:
+            - "@em.game_bundle.service.ai_strategy_processor"
+    em.game_bundle.service.ai_strategy_processor:
         class: EM\GameBundle\Service\AI\AIStrategyProcessor
     # Repositories
-    battleship_game.repository.player:
+    em.game_bundle.repository.player:
         class: Doctrine\ORM\EntityRepository
         factory: ["@doctrine.orm.entity_manager", getRepository]
         arguments:
             - EM\GameBundle\Entity\Player
-    battleship_game.repository.game_result:
+    em.game_bundle.repository.game_result:
         class: EM\GameBundle\Repository\GameResultRepository
         factory: ["@doctrine.orm.entity_manager", getRepository]
         arguments:
             - EM\GameBundle\Entity\GameResult
     # Validators
-    battleship_game.validator.game_initiation_request:
+    em.game_bundle.validator.game_initiation_request:
         class: EM\GameBundle\Validator\GameInitiationRequestValidator
         arguments:
-            - "%battleship_game.setting.game_size.min%"
-            - "%battleship_game.setting.game_size.max%"
-            - "%battleship_game.setting.opponents_count.min%"
-            - "%battleship_game.setting.opponents_count.max%"
+            - "%em.game_bundle.setting.game_size.min%"
+            - "%em.game_bundle.setting.game_size.max%"
+            - "%em.game_bundle.setting.opponents_count.min%"
+            - "%em.game_bundle.setting.opponents_count.max%"

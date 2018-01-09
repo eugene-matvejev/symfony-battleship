@@ -20,7 +20,7 @@ class GameInitiationRequestValidatorTest extends AbstractKernelTestSuite
     {
         parent::setUpBeforeClass();
 
-        static::$validator = static::$container->get('battleship_game.validator.game_initiation_request');
+        static::$validator = static::$container->get('em.game_bundle.validator.game_initiation_request');
     }
 
     public function validFixturesProvider() : array

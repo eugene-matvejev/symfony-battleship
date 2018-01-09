@@ -24,7 +24,7 @@ class AIStrategyProcessorTest extends AbstractKernelTestSuite
     {
         parent::setUpBeforeClass();
 
-        static::$strategyProcessor = static::$container->get('battleship_game.service.ai_strategy_processor');
+        static::$strategyProcessor = static::$container->get('em.game_bundle.service.ai_strategy_processor');
     }
 
     /**

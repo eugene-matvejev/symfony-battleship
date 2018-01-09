@@ -26,7 +26,7 @@ class GameProcessorTest extends AbstractKernelTestSuite
     {
         parent::setUpBeforeClass();
 
-        static::$gameProcessor = static::$container->get('battleship_game.service.game_processor');
+        static::$gameProcessor = static::$container->get('em.game_bundle.service.game_processor');
     }
 
     /**

@@ -24,7 +24,7 @@ class GameBuilderTest extends AbstractKernelTestSuite
     {
         parent::setUpBeforeClass();
 
-        static::$gameBuilder = static::$container->get('battleship_game.service.game_builder');
+        static::$gameBuilder = static::$container->get('em.game_bundle.service.game_builder');
     }
 
     /**
