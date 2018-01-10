@@ -1,6 +1,6 @@
 <?php
 
-namespace EM\GameBundle\Entity;
+namespace EM\FoundationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use EM\FoundationBundle\ORM\AbstractFlaggedEntity;

@@ -1,6 +1,6 @@
 <?php
 
-namespace EM\Tests\PHPUnit\GameBundle\Entity;
+namespace EM\Tests\PHPUnit\FoundationBundle\ORM;
 
 use EM\Tests\Environment\AbstractKernelTestSuite;
 use EM\Tests\Environment\Factory\MockFactory;
