@@ -8,7 +8,6 @@ use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Entity\Cell;
 use EM\GameBundle\Entity\Game;
 use EM\GameBundle\Entity\GameResult;
-use EM\GameBundle\Model\PlayerModel;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
 
