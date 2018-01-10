@@ -94,7 +94,7 @@ class PlayerModelTest extends AbstractKernelTestSuite
      * @see      PlayerModel::createOnRequestAIControlled
      * @test
      *
-     * @expectedException \EM\GameBundle\Exception\PlayerException
+     * @expectedException \EM\FoundationBundle\Exception\PlayerException
      *
      * @depends  isAIControlledOnFlagNone
      * @requires isAIControlledOnFlagAIControlled
@@ -150,7 +150,7 @@ class PlayerModelTest extends AbstractKernelTestSuite
      * @see      PlayerModel::createOnRequestHumanControlled
      * @test
      *
-     * @expectedException \EM\GameBundle\Exception\PlayerException
+     * @expectedException \EM\FoundationBundle\Exception\PlayerException
      *
      * @depends  isAIControlledOnFlagNone
      * @requires isAIControlledOnFlagAIControlled

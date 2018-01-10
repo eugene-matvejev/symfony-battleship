@@ -1,6 +1,6 @@
 <?php
 
-namespace EM\GameBundle\Exception;
+namespace EM\FoundationBundle\Exception;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
