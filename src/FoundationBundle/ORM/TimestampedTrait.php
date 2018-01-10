@@ -28,6 +28,8 @@ trait TimestampedTrait
 
     /**
      * @ORM\PrePersist
+     *
+     * @return static
      */
     public function setTimestamp() : self
     {

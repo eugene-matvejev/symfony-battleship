@@ -40,7 +40,6 @@ class GameInitiationRequestValidator
 
         return
             $this->validateStructure($data)
-            && $this->validatePlayerName($data->playerName) // will be replaced by Authorization header which will reflect Player.id content
             && $this->validateOpponentsAmount($data->opponents)
             && $this->validateBattlefieldSize($data->size)
             && $this->validateCoordinates($data->coordinates);
@@ -50,13 +49,8 @@ class GameInitiationRequestValidator
     {
         return
             $data instanceof \stdClass &&
-            isset($data->opponents, $data->playerName, $data->size, $data->coordinates)
+            isset($data->opponents, $data->size, $data->coordinates)
             && is_array($data->coordinates);
-    }
-
-    protected function validatePlayerName(string $value) : bool
-    {
-        return !empty($value);
     }
 
     protected function validateBattlefieldSize(int $value) : bool

@@ -17,8 +17,8 @@ class TimestampedTraitTest extends AbstractKernelTestSuite
     public function setTimestampSetOnPersist()
     {
         $result = MockFactory::getGameResultMock(2, 0);
-        $player = $result->getGame()->getBattlefields()[0]->getPlayer();
-        $result->setPlayer($player);
+        $user = $result->getGame()->getBattlefields()[0]->getUser();
+        $result->setUser($user);
         static::$om->persist($result->getGame());
 
         $this->assertInstanceOf(\DateTime::class, $result->getTimestamp());

@@ -3,15 +3,25 @@
 namespace EM\Tests\Behat;
 
 use Behat\Behat\Context\Context;
+use EM\FoundationBundle\DataFixtures\ORM\UsersFixture;
 use EM\Tests\Environment\AbstractControllerTestCase;
+use Symfony\Bundle\FrameworkBundle\Client;
 
 class CommonControllerContext extends AbstractControllerTestCase implements Context
 {
+    /**
+     * @var Client
+     */
+    protected static $client;
+
     /**
      * @BeforeScenario
      */
     public static function beforeEachScenario()
     {
+        static::$client    = null;
+        static::$initiated = null;
+
         static::setUpBeforeClass();
     }
 
@@ -34,6 +44,7 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
 
     /**
      * @Given request :route route via :method
+     * @Given request API :route route via :method
      *
      * @param string   $route
      * @param string   $method
@@ -42,6 +53,9 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
      */
     public function requestRoute(string $route, string $method, array $server = [], string $content = null)
     {
+        $server['CONTENT_TYPE'] = 'application/json';
+        $server['HTTP_accept']  = 'application/json';
+
         static::$client->request(
             $method,
             $route,
@@ -53,13 +67,26 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
     }
 
     /**
+     * @Given I am authorized
+     * @Given I am :notAuthorized authorized
+     *
+     * @param bool $authorized
+     */
+    public function prepareClient(bool $authorized = false)
+    {
+        static::$client = $this->getAuthorizedClient($authorized ? '' : UsersFixture::TEST_PLAYER_EMAIL);
+    }
+
+    /**
      * @Then observe response status code :statusCode
      *
      * @param int $statusCode
      */
     public function observeResponseStatusCode(int $statusCode)
     {
-        $this->assertEquals($statusCode, static::$client->getResponse()->getStatusCode());
+        $response = static::$client->getResponse();
+
+        $this->assertEquals($statusCode, $response->getStatusCode());
     }
 
     /**
@@ -67,7 +94,9 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
      */
     public function observeValidJsonResponse()
     {
-        $this->assertJson(static::$client->getResponse()->getContent());
+        $response = static::$client->getResponse();
+
+        $this->assertJson($response->getContent());
     }
 
     /**
@@ -77,6 +106,8 @@ class CommonControllerContext extends AbstractControllerTestCase implements Cont
      */
     public function observeRedirectionTo(string $route)
     {
-        $this->assertEquals($route, static::$client->getResponse()->headers->get('location'));
+        $response = static::$client->getResponse();
+
+        $this->assertEquals($route, $response->headers->get('location'));
     }
 }

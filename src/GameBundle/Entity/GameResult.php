@@ -4,8 +4,8 @@ namespace EM\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use EM\FoundationBundle\ORM\AbstractEntity;
-use EM\FoundationBundle\ORM\PlayerInterface;
-use EM\FoundationBundle\ORM\PlayerTrait;
+use EM\FoundationBundle\ORM\UserAwareInterface;
+use EM\FoundationBundle\ORM\UserAwareTrait;
 use EM\FoundationBundle\ORM\TimestampedInterface;
 use EM\FoundationBundle\ORM\TimestampedTrait;
 use JMS\Serializer\Annotation as JMS;
@@ -26,9 +26,9 @@ use JMS\Serializer\Annotation as JMS;
  * @JMS\AccessorOrder(order="custom", custom={"id", "timestamp", "player"})
  * @JMS\XmlRoot("game-result")
  */
-class GameResult extends AbstractEntity implements PlayerInterface, TimestampedInterface
+class GameResult extends AbstractEntity implements UserAwareInterface, TimestampedInterface
 {
-    use PlayerTrait, TimestampedTrait;
+    use UserAwareTrait, TimestampedTrait;
     /**
      * @ORM\OneToOne(targetEntity="EM\GameBundle\Entity\Game", inversedBy="result")
      * @ORM\JoinColumn(name="game", referencedColumnName="id", nullable=false)

@@ -11,6 +11,7 @@ use EM\GameBundle\Response\GameInitiationResponse;
 use EM\GameBundle\Response\GameTurnResponse;
 use EM\Tests\PHPUnit\GameBundle\Controller\GameControllerTest;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -23,9 +24,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class GameController extends AbstractAPIController
 {
     /**
-     * @see GameControllerTest::unsuccessfulInitAction
-     * @see GameControllerTest::successfulInitAction_JSON
-     * @see GameControllerTest::successfulInitAction_XML
+     * @Security("has_role('PLAYER')")
      *
      * @ApiDoc(
      *      section = "Game:: Mechanics",
@@ -50,7 +49,7 @@ class GameController extends AbstractAPIController
             throw new HttpException(Response::HTTP_BAD_REQUEST, 'request validation failed, please check documentation');
         }
 
-        $game = $this->get('em.game_bundle.service.game_builder')->buildGame(new GameInitiationRequest($request->getContent()));
+        $game = $this->get('em.game_bundle.service.game_builder')->buildGame(new GameInitiationRequest($request->getContent()), $this->getUser());
 
         $om = $this->getDoctrine()->getManager();
         $om->persist($game);
@@ -60,8 +59,7 @@ class GameController extends AbstractAPIController
     }
 
     /**
-     * @see GameControllerTest::successfulTurnAction
-     * @see GameControllerTest::unsuccessfulTurnActionOnDeadCell
+     * @Security("has_role('PLAYER')")
      *
      * @ApiDoc(
      *      section = "Game:: Mechanics",

@@ -1,9 +1,5 @@
 services:
     # Models
-    em.game_bundle.service.player_model:
-        class: EM\GameBundle\Model\PlayerModel
-        arguments:
-            - "@em.game_bundle.repository.player"
     em.game_bundle.service.game_result_model:
         class: EM\GameBundle\Model\GameResultModel
         arguments:
@@ -13,7 +9,7 @@ services:
     em.game_bundle.service.game_builder:
         class: EM\GameBundle\Service\GameSystem\GameBuilder
         arguments:
-            - "@em.game_bundle.service.player_model"
+            - "@em.foundation_bundle.model.user"
     # Game Processors
     em.game_bundle.service.game_processor:
         class: EM\GameBundle\Service\GameSystem\GameProcessor
@@ -31,11 +27,6 @@ services:
     em.game_bundle.service.ai_strategy_processor:
         class: EM\GameBundle\Service\AI\AIStrategyProcessor
     # Repositories
-    em.game_bundle.repository.player:
-        class: Doctrine\ORM\EntityRepository
-        factory: ["@doctrine.orm.entity_manager", getRepository]
-        arguments:
-            - EM\FoundationBundle\Entity\Player
     em.game_bundle.repository.game_result:
         class: EM\GameBundle\Repository\GameResultRepository
         factory: ["@doctrine.orm.entity_manager", getRepository]

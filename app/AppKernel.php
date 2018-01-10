@@ -10,10 +10,10 @@ class AppKernel extends Kernel
         $bundles = [
             /** SYMFONY */
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-            /* new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(), */
-            /* new Symfony\Bundle\SecurityBundle\SecurityBundle(), */
+            new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
+            new Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             /** EXTRA */
             new JMS\SerializerBundle\JMSSerializerBundle(),

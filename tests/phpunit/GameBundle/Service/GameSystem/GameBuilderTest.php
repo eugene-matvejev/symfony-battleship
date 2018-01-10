@@ -4,7 +4,7 @@ namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Model\PlayerModel;
+use EM\FoundationBundle\Model\UserModel;
 use EM\GameBundle\Request\GameInitiationRequest;
 use EM\GameBundle\Service\GameSystem\GameBuilder;
 use EM\Tests\Environment\AbstractKernelTestSuite;
@@ -47,7 +47,7 @@ class GameBuilderTest extends AbstractKernelTestSuite
         foreach ($game->getBattlefields() as $battlefield) {
             $this->assertCount(49, $battlefield->getCells());
 
-            $this->assertTrue(PlayerModel::isAIControlled($battlefield->getPlayer()));
+            $this->assertTrue(UserModel::isAIControlled($battlefield->getPlayer()));
             $this->assertTrue(BattlefieldModel::hasUnfinishedShips($battlefield));
 
             foreach ($battlefield->getCells() as $coordinate => $cell) {
@@ -71,7 +71,7 @@ class GameBuilderTest extends AbstractKernelTestSuite
     {
         $request = new GameInitiationRequest($this->getSharedFixtureContent('game-initiation-requests/valid/valid-1-opponent-7x7.json'));
 
-        $game = static::$gameBuilder->buildGame($request);
+        $game = static::$gameBuilder->buildGame($request, MockFactory::getUserMock(''));
 
         $this->assertCount(2, $game->getBattlefields());
         foreach ($game->getBattlefields() as $battlefield) {

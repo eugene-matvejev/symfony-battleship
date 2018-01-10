@@ -5,7 +5,7 @@ namespace EM\GameBundle\Response;
 use Doctrine\Common\Collections\Collection;
 use EM\GameBundle\Entity\Battlefield;
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Model\PlayerModel;
+use EM\FoundationBundle\Model\UserModel;
 use JMS\Serializer\Annotation as JMS;
 
 /**
@@ -41,7 +41,7 @@ class GameInitiationResponse
     {
         $this->battlefields[] = $battlefield;
 
-        if (PlayerModel::isAIControlled($battlefield->getPlayer())) {
+        if (UserModel::isAIControlled($battlefield->getUser())) {
             foreach ($battlefield->getCells() as $cell) {
                 $cell->setFlags(CellModel::FLAG_NONE);
             }

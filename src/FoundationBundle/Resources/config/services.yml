@@ -1,0 +1,49 @@
+services:
+    # Models
+    em.foundation_bundle.model.user:
+        class: EM\FoundationBundle\Model\UserModel
+        arguments:
+            - "@em.foundation_bundle.repository.user"
+            - "%secret%"
+    em.foundation_bundle.model.user_session:
+        class: EM\FoundationBundle\Model\UserSessionModel
+        arguments:
+            - "@em.foundation_bundle.repository.user_session"
+            - "@em.foundation_bundle.repository.user"
+            - "@em.foundation_bundle.model.user"
+            - "%%secret%"
+    # Repositories
+    em.foundation_bundle.repository.user:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - EM\FoundationBundle\Entity\User
+    em.foundation_bundle.repository.user_session:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - EM\FoundationBundle\Entity\UserSession
+#
+#    # Firewall
+#    wsse.security.authentication.provider:
+#        class: EM\FoundationBundle\Security\Authorization\Provider\WsseProvider
+#        arguments:
+#            - ''
+#            - '@cache.app'
+#        public: false
+#
+#    wsse.security.authentication.listener:
+#        class: EM\FoundationBundle\Security\Authorization\Listener\WsseListener
+#        arguments:
+#            - "@security.token_storage"
+#            - "@em.foundation_bundle.model.user_session"
+#        public: false
+
+    # Event Listeners
+    em.foundation_bundle.security.authorization.listener:
+        class: EM\FoundationBundle\Security\Authorization\Listener\WsseListener
+        arguments:
+            - "@security.token_storage"
+            - "@em.foundation_bundle.model.user_session"
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: handle }

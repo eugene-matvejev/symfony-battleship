@@ -22,13 +22,6 @@ class GameInitiationRequest
      */
     private $size;
     /**
-     * @JMS\Type("string")
-     * @JMS\SerializedName("playerName")
-     *
-     * @var string
-     */
-    private $playerName;
-    /**
      * @JMS\Type("array<string>")
      *
      * @var string[]
@@ -46,7 +39,6 @@ class GameInitiationRequest
 
         $this->size = $data->size;
         $this->opponents = $data->opponents;
-        $this->playerName = $data->playerName;
         $this->coordinates = $data->coordinates;
 
         return $this;
@@ -60,11 +52,6 @@ class GameInitiationRequest
     public function getSize() : int
     {
         return $this->size;
-    }
-
-    public function getPlayerName() : string
-    {
-        return $this->playerName;
     }
 
     /**
