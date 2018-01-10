@@ -1,6 +1,6 @@
 <?php
 
-namespace EM\GameBundle\ORM;
+namespace EM\FoundationBundle\ORM;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;

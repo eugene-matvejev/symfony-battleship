@@ -5,9 +5,9 @@ namespace EM\GameBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use EM\GameBundle\ORM\AbstractEntity;
-use EM\GameBundle\ORM\PlayerInterface;
-use EM\GameBundle\ORM\PlayerTrait;
+use EM\FoundationBundle\ORM\AbstractEntity;
+use EM\FoundationBundle\ORM\PlayerInterface;
+use EM\FoundationBundle\ORM\PlayerTrait;
 use JMS\Serializer\Annotation as JMS;
 
 /**

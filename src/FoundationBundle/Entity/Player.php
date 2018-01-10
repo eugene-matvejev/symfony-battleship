@@ -3,7 +3,7 @@
 namespace EM\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use EM\GameBundle\ORM\AbstractFlaggedEntity;
+use EM\FoundationBundle\ORM\AbstractFlaggedEntity;
 use JMS\Serializer\Annotation as JMS;
 
 /**
