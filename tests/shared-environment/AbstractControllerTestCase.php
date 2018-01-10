@@ -2,7 +2,8 @@
 
 namespace EM\Tests\Environment;
 
-use EM\FoundationBundle\Entity\{User, UserSession};
+use EM\FoundationBundle\Entity\User;
+use EM\FoundationBundle\Entity\UserSession;
 use EM\Tests\Environment\AssertionSuite\ResponseAssertionSuites;
 use Symfony\Bundle\FrameworkBundle\Client;
 
