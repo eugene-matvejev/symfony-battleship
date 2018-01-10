@@ -35,7 +35,7 @@ services:
         class: Doctrine\ORM\EntityRepository
         factory: ["@doctrine.orm.entity_manager", getRepository]
         arguments:
-            - EM\GameBundle\Entity\Player
+            - EM\FoundationBundle\Entity\Player
     em.game_bundle.repository.game_result:
         class: EM\GameBundle\Repository\GameResultRepository
         factory: ["@doctrine.orm.entity_manager", getRepository]

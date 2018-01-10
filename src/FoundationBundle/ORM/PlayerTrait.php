@@ -3,7 +3,7 @@
 namespace EM\FoundationBundle\ORM;
 
 use Doctrine\ORM\Mapping as ORM;
-use EM\GameBundle\Entity\Player;
+use EM\FoundationBundle\Entity\Player;
 use JMS\Serializer\Annotation as JMS;
 
 /**
@@ -12,10 +12,10 @@ use JMS\Serializer\Annotation as JMS;
 trait PlayerTrait
 {
     /**
-     * @ORM\ManyToOne(targetEntity="EM\GameBundle\Entity\Player", cascade={"persist"}, fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="EM\FoundationBundle\Entity\Player", cascade={"persist"}, fetch="EAGER")
      * @ORM\JoinColumn(name="player", referencedColumnName="id", nullable=false)
      *
-     * @JMS\Type("EM\GameBundle\Entity\Player")
+     * @JMS\Type("EM\FoundationBundle\Entity\Player")
      *
      * @var Player
      */
