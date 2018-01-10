@@ -5,7 +5,7 @@ namespace EM\GameBundle\Service\GameSystem;
 use EM\GameBundle\Entity\Game;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Model\PlayerModel;
+use EM\FoundationBundle\Model\PlayerModel;
 use EM\GameBundle\Request\GameInitiationRequest;
 
 /**

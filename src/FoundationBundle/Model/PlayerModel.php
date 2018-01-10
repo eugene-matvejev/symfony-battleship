@@ -1,6 +1,6 @@
 <?php
 
-namespace EM\GameBundle\Model;
+namespace EM\FoundationBundle\Model;
 
 use Doctrine\Common\Persistence\ObjectRepository;
 use EM\FoundationBundle\Entity\Player;

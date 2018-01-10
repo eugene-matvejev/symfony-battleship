@@ -4,7 +4,7 @@ namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Model\PlayerModel;
+use EM\FoundationBundle\Model\PlayerModel;
 use EM\GameBundle\Request\GameInitiationRequest;
 use EM\GameBundle\Service\GameSystem\GameBuilder;
 use EM\Tests\Environment\AbstractKernelTestSuite;

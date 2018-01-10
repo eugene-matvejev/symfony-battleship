@@ -2,7 +2,7 @@
 namespace EM\Tests\PHPUnit\GameBundle\Response;
 
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Model\PlayerModel;
+use EM\FoundationBundle\Model\PlayerModel;
 use EM\GameBundle\Response\GameInitiationResponse;
 use EM\Tests\Environment\Factory\MockFactory;
 

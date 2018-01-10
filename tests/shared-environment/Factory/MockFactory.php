@@ -9,7 +9,7 @@ use EM\GameBundle\Entity\GameResult;
 use EM\FoundationBundle\Entity\Player;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Model\PlayerModel;
+use EM\FoundationBundle\Model\PlayerModel;
 
 /**
  * @since 17.3

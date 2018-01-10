@@ -10,7 +10,7 @@ use EM\FoundationBundle\Entity\Player;
 use EM\GameBundle\Exception\GameProcessorException;
 use EM\GameBundle\Model\BattlefieldModel;
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Model\PlayerModel;
+use EM\FoundationBundle\Model\PlayerModel;
 use EM\GameBundle\Service\AI\AIService;
 
 /**
