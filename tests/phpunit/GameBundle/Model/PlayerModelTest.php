@@ -3,7 +3,7 @@
 namespace EM\Tests\PHPUnit\GameBundle\Model;
 
 use EM\GameBundle\DataFixtures\ORM\LoadPlayerData;
-use EM\GameBundle\Model\PlayerModel;
+use EM\FoundationBundle\Model\PlayerModel;
 use EM\Tests\Environment\AbstractKernelTestSuite;
 use EM\Tests\Environment\Factory\MockFactory;
 

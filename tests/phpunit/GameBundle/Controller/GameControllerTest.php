@@ -3,7 +3,7 @@
 namespace EM\Tests\PHPUnit\GameBundle\Controller;
 
 use EM\GameBundle\Model\CellModel;
-use EM\GameBundle\Model\PlayerModel;
+use EM\FoundationBundle\Model\PlayerModel;
 use EM\Tests\Environment\AbstractControllerTestCase;
 use EM\Tests\Environment\Cleaner\CellModelCleaner;
 use Symfony\Component\HttpFoundation\Request;

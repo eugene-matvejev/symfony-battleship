@@ -1,7 +1,7 @@
 services:
     # Models
     em.game_bundle.service.player_model:
-        class: EM\GameBundle\Model\PlayerModel
+        class: EM\FoundationBundle\Model\PlayerModel
         arguments:
             - "@em.game_bundle.repository.player"
     em.game_bundle.service.game_result_model:
