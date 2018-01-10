@@ -3,11 +3,11 @@
 namespace EM\GameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use EM\GameBundle\ORM\AbstractEntity;
-use EM\GameBundle\ORM\PlayerInterface;
-use EM\GameBundle\ORM\PlayerTrait;
-use EM\GameBundle\ORM\TimestampedInterface;
-use EM\GameBundle\ORM\TimestampedTrait;
+use EM\FoundationBundle\ORM\AbstractEntity;
+use EM\FoundationBundle\ORM\PlayerInterface;
+use EM\FoundationBundle\ORM\PlayerTrait;
+use EM\FoundationBundle\ORM\TimestampedInterface;
+use EM\FoundationBundle\ORM\TimestampedTrait;
 use JMS\Serializer\Annotation as JMS;
 
 /**
