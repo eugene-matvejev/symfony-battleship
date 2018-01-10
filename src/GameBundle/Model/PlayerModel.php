@@ -3,7 +3,7 @@
 namespace EM\GameBundle\Model;
 
 use Doctrine\Common\Persistence\ObjectRepository;
-use EM\GameBundle\Entity\Player;
+use EM\FoundationBundle\Entity\Player;
 use EM\GameBundle\Exception\PlayerException;
 
 /**
