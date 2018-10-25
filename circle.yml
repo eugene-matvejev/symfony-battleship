@@ -1,15 +1,18 @@
-machine:
-    php:
-        version: 7.1.9
-
-dependencies:
-    cache_directories:
-        - ~/.composer/cache
-    pre:
-        - cp app/config/parameters.yml.dist app/config/parameters.yml
-    override:
-        - composer install --no-progress --no-interaction
-
-test:
-    override:
-        - ant test:with-coverage
+version: 2
+jobs:
+  test:
+    docker:
+      - image: circleci/php:7.2
+    steps:
+      - checkout
+      - run: cp app/config/parameters.yml.dist app/config/parameters.yml
+      - run: composer install --no-progress --no-interaction
+      - run: ant test:with-coverage
+      - store_artifacts:
+          path: coverage
+          prefix: coverage
+workflows:
+  version: 2
+  test-only:
+    jobs:
+      - test
